@@ -1,0 +1,70 @@
+{
+  "id": "mmr-bgd",
+  "status": "partial",
+  "events": [
+    {
+      "date": "1978",
+      "title": "1978: first large exodus",
+      "note": "UNHCR's series for refugees from Myanmar in Bangladesh starts in 1978. Most of those who fled that year went back within about two years.",
+      "source_id": "unhcr-pop-2026",
+      "to_check": "source for 'went back within about two years' (UNHCR returns data starts later)"
+    },
+    {
+      "date": "1982-10-15",
+      "title": "Myanmar citizenship law",
+      "note": "Myanmar's 1982 citizenship law did not list the Rohingya among the recognised national groups, leaving most of them without citizenship.",
+      "source_id": "burma-citizenship-law-1982"
+    },
+    {
+      "date": "1991",
+      "date_end": "1992",
+      "title": "1991 to 1992: second exodus",
+      "note": "A second large wave of arrivals. Returns to Myanmar followed from 1993, according to UNHCR's returns data.",
+      "source_id": "unhcr-pop-2026",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unhcr-solutions-2026"
+      ]
+    },
+    {
+      "date": "2017-08",
+      "title": "August 2017: mass flight",
+      "note": "After attacks by the Arakan Rohingya Salvation Army (ARSA) and the military operations that followed, the largest flight of Rohingya to Bangladesh began. UCDP records an armed conflict between the government and ARSA in 2016 and 2017.",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L329",
+      "to_check": "a source for the start date (25 August 2017)"
+    },
+    {
+      "date": "2021-02-01",
+      "title": "Military takeover in Myanmar",
+      "note": "Myanmar's military seized power. UCDP records new armed conflicts in 2021, including with the National Unity Government (NUG).",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L292"
+    }
+  ],
+  "limitations": [
+    {
+      "kind": "method",
+      "text": "Counted by country, not by ethnic group",
+      "detail": "UNHCR counts refugees from Myanmar. The figures here are all refugees from Myanmar in Bangladesh, not only Rohingya."
+    },
+    {
+      "kind": "politics",
+      "text": "Bangladesh has not signed the 1951 Refugee Convention",
+      "detail": "Rohingya in Bangladesh are recorded through joint registration with the government; their legal status in Bangladesh differs from refugee status under the Convention.",
+      "to_check": "wording on legal status (Bangladesh's own term for this group)"
+    },
+    {
+      "kind": "method",
+      "text": "Statelessness is a separate series",
+      "detail": "Most Rohingya are described as stateless. UNHCR's stateless figures are a separate series and are not added to the refugee figures here."
+    }
+  ],
+  "missing": [
+    "camp vs non-camp split",
+    "births in the camps by year"
+  ],
+  "reading": [
+    "ibrahim-2016"
+  ]
+}

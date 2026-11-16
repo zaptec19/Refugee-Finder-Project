@@ -1,0 +1,59 @@
+{
+  "id": "syr-tur",
+  "status": "partial",
+  "events": [
+    {
+      "date": "2011-03",
+      "title": "2011: uprising and war in Syria",
+      "note": "Protests from March 2011 turned into armed conflict. UCDP records the conflict between the government and Syrian insurgents at war level from 2011.",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L1266"
+    },
+    {
+      "date": "2014-10-22",
+      "title": "Türkiye's temporary protection regulation",
+      "note": "Türkiye set out temporary protection for Syrians in a regulation, rather than granting refugee status case by case.",
+      "source_id": "turkey-tp-2014",
+      "to_check": "Official Gazette number and date"
+    },
+    {
+      "date": "2016-03-18",
+      "title": "EU–Türkiye statement",
+      "note": "The EU and Türkiye agreed that new irregular arrivals to the Greek islands could be returned to Türkiye, alongside EU funding for refugees in Türkiye.",
+      "source_id": "eu-turkey-2016",
+      "to_check": "press release number"
+    },
+    {
+      "date": "2023-02-06",
+      "title": "Earthquakes in Türkiye and Syria",
+      "note": "Two large earthquakes struck south-eastern Türkiye and northern Syria, where many Syrian refugees live. IDMC records the disaster displacement for both countries.",
+      "source_id": "idmc-disaster-2026"
+    },
+    {
+      "date": "2024-12-08",
+      "title": "Fall of the Assad government",
+      "note": "The government of Bashar al-Assad fell. Returns from Türkiye to Syria rose afterwards in UNHCR's returns data.",
+      "source_id": "unhcr-solutions-2026",
+      "to_check": "a source for the date"
+    }
+  ],
+  "limitations": [
+    {
+      "kind": "method",
+      "text": "Temporary protection, reported as refugees",
+      "detail": "Türkiye registers Syrians under temporary protection rather than full refugee status. UNHCR reports them as refugees.",
+      "to_check": "UNHCR's footnote wording for Türkiye"
+    },
+    {
+      "kind": "coverage",
+      "text": "Registered people only",
+      "detail": "The figures count Syrians registered with the Turkish authorities; people who are not registered are not included."
+    }
+  ],
+  "missing": [
+    "unregistered Syrians"
+  ],
+  "reading": [
+    "kirisci-2014"
+  ]
+}

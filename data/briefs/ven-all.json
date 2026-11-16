@@ -1,0 +1,93 @@
+{
+  "id": "ven-all",
+  "what": [
+    {
+      "text": "Venezuelan people moved from Venezuela to host countries in Latin America and the Caribbean.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, host countries included Colombia with 2810778 people, Peru with 1098014, Chile with 662504, Brazil with 549534, and Ecuador with 432888.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The number of Venezuelan people in need of international protection reached 6042706 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources don't say why people moved from Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-ov-26.1"
+      ]
+    },
+    {
+      "text": "No conflict episodes or event descriptions are recorded in the data.",
+      "source_ids": [
+        "ucdp-ov-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "In 2018, there were 21047 refugees, 464223 asylum seekers, and 2592947 people in need of international protection.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By 2025, the number of refugees was 417010, asylum seekers were 1181156, and people in need of international protection reached 6042706.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "New disaster displacements included 31707 movements in 2018 and 32592 movements in 2021.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Refugees are counted at the end of the year under UNHCR mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers are people who asked for international protection whose claims have not been decided at the end of the year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "People in need of international protection are outside their country and not counted as refugees or asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-ov-26.1",
+    "idmc-disaster-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "022ecdc9708ce5a3",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

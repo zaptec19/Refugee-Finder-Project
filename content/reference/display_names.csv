@@ -1,0 +1,38 @@
+iso3,short_name,demonym,note
+AFG,Afghanistan,Afghan,
+ARE,United Arab Emirates,Emirati,
+BFA,Burkina Faso,Burkinabe,
+BGD,Bangladesh,Bangladeshi,
+BIH,Bosnia and Herzegovina,,no single demonym; titles use "from Bosnia and Herzegovina"
+BOL,Bolivia,Bolivian,
+CAF,Central African Republic,Central African,
+COD,Democratic Republic of the Congo,,"""Congolese"" is ambiguous with the Republic of the Congo; titles use ""from the Democratic Republic of the Congo"""
+COG,Republic of the Congo,,"""Congolese"" is ambiguous; titles use ""from the Republic of the Congo"""
+CIV,Côte d'Ivoire,Ivorian,
+GBR,United Kingdom,British,
+HKG,"Hong Kong SAR, China",,
+IRN,Iran,Iranian,
+KOR,Republic of Korea,South Korean,
+LAO,Lao PDR,Lao,
+LKA,Sri Lanka,Sri Lankan,
+MAC,"Macao SAR, China",,
+MDA,Republic of Moldova,Moldovan,
+MMR,Myanmar,,"no demonym used: titles use ""from Myanmar"" (UNHCR counts by country, not ethnic group)"
+NER,Niger,Nigerien,
+NLD,Netherlands,Dutch,
+NZL,New Zealand,New Zealander,
+PAK,Pakistan,Pakistani,
+PRK,Democratic People's Republic of Korea,North Korean,
+PSE,State of Palestine,Palestinian,
+RUS,Russian Federation,Russian,
+SRB,Serbia and Kosovo,,"UNHCR reports Kosovo under Serbia (S/RES/1244 (1999)); titles use ""from Serbia and Kosovo"""
+SSD,South Sudan,South Sudanese,
+SYR,Syria,Syrian,
+TIB,Tibet,Tibetan,UNHCR code TIB (not ISO): Tibetan refugees
+TLS,Timor-Leste,Timorese,
+TZA,United Republic of Tanzania,Tanzanian,
+UNK,Unknown origin,,
+USA,United States,American,
+VEN,Venezuela,Venezuelan,
+VNM,Viet Nam,Vietnamese,
+XXA,Stateless,,

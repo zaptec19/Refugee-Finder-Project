@@ -1,0 +1,289 @@
+[
+ {
+  "id": "balan-athray-2022",
+  "type": "book chapter",
+  "authors": "Balan & Athray",
+  "year": 2022,
+  "title": "Life of Sri Lankan refugee women in the camps of Tamil Nadu",
+  "csl": {
+   "id": "balan-athray-2022",
+   "type": "chapter",
+   "author": [
+    {
+     "family": "Balan",
+     "given": "D."
+    },
+    {
+     "family": "Athray"
+    }
+   ],
+   "editor": [
+    {
+     "family": "Rajan",
+     "given": "S. I."
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2022
+     ]
+    ]
+   },
+   "title": "Life of Sri Lankan refugee women in the camps of Tamil Nadu",
+   "container-title": "The Routledge Handbook of Refugees in India",
+   "publisher": "Routledge"
+  },
+  "to_check": "Second author's initials; page range."
+ },
+ {
+  "id": "valatheeswaran-rajan-2011",
+  "type": "journal article",
+  "authors": "Valatheeswaran & Rajan",
+  "year": 2011,
+  "title": "Sri Lankan Tamil refugees in India",
+  "csl": {
+   "id": "valatheeswaran-rajan-2011",
+   "type": "article-journal",
+   "author": [
+    {
+     "family": "Valatheeswaran",
+     "given": "C."
+    },
+    {
+     "family": "Rajan",
+     "given": "S. I."
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2011
+     ]
+    ]
+   },
+   "title": "Sri Lankan Tamil refugees in India"
+  },
+  "to_check": "Full title, journal, volume, issue, pages and DOI (left out until confirmed)."
+ },
+ {
+  "id": "suryanarayan-sudarsen-2000",
+  "type": "book",
+  "authors": "Suryanarayan & Sudarsen",
+  "year": 2000,
+  "title": "Between fear and hope",
+  "csl": {
+   "id": "suryanarayan-sudarsen-2000",
+   "type": "book",
+   "author": [
+    {
+     "family": "Suryanarayan",
+     "given": "V."
+    },
+    {
+     "family": "Sudarsen",
+     "given": "V."
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2000
+     ]
+    ]
+   },
+   "title": "Between fear and hope"
+  },
+  "to_check": "Subtitle and publisher (left out until confirmed)."
+ },
+ {
+  "id": "caa-2019",
+  "type": "legislation",
+  "authors": "Government of India",
+  "year": 2019,
+  "title": "The Citizenship (Amendment) Act, 2019 (No. 47 of 2019)",
+  "csl": {
+   "id": "caa-2019",
+   "type": "legislation",
+   "author": [
+    {
+     "literal": "Government of India"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2019,
+      12,
+      12
+     ]
+    ]
+   },
+   "title": "The Citizenship (Amendment) Act, 2019",
+   "container-title": "The Gazette of India, Extraordinary",
+   "number": "No. 47 of 2019"
+  },
+  "to_check": "Gazette page reference."
+ },
+ {
+  "id": "burma-citizenship-law-1982",
+  "type": "legislation",
+  "authors": "Government of Burma",
+  "year": 1982,
+  "title": "Burma Citizenship Law (Pyithu Hluttaw Law No. 4 of 1982)",
+  "csl": {
+   "id": "burma-citizenship-law-1982",
+   "type": "legislation",
+   "author": [
+    {
+     "literal": "Government of Burma"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      1982,
+      10,
+      15
+     ]
+    ]
+   },
+   "title": "Burma Citizenship Law",
+   "number": "Pyithu Hluttaw Law No. 4 of 1982"
+  }
+ },
+ {
+  "id": "ibrahim-2016",
+  "type": "book",
+  "authors": "Ibrahim",
+  "year": 2016,
+  "title": "The Rohingyas: Inside Myanmar's hidden genocide",
+  "csl": {
+   "id": "ibrahim-2016",
+   "type": "book",
+   "author": [
+    {
+     "family": "Ibrahim",
+     "given": "Azeem"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2016
+     ]
+    ]
+   },
+   "title": "The Rohingyas: Inside Myanmar's hidden genocide",
+   "publisher": "Hurst"
+  },
+  "to_check": "edition"
+ },
+ {
+  "id": "kirisci-2014",
+  "type": "report",
+  "authors": "Kirişci",
+  "year": 2014,
+  "title": "Syrian refugees and Turkey's challenges: Going beyond hospitality",
+  "csl": {
+   "id": "kirisci-2014",
+   "type": "report",
+   "author": [
+    {
+     "family": "Kirişci",
+     "given": "Kemal"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2014
+     ]
+    ]
+   },
+   "title": "Syrian refugees and Turkey's challenges: Going beyond hospitality",
+   "publisher": "Brookings Institution"
+  }
+ },
+ {
+  "id": "turkey-tp-2014",
+  "type": "legislation",
+  "authors": "Republic of Türkiye",
+  "year": 2014,
+  "title": "Temporary Protection Regulation",
+  "csl": {
+   "id": "turkey-tp-2014",
+   "type": "legislation",
+   "author": [
+    {
+     "literal": "Republic of Türkiye"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2014,
+      10,
+      22
+     ]
+    ]
+   },
+   "title": "Temporary Protection Regulation"
+  },
+  "to_check": "Official Gazette number"
+ },
+ {
+  "id": "eu-turkey-2016",
+  "type": "press release",
+  "authors": "European Council",
+  "year": 2016,
+  "title": "EU-Turkey statement, 18 March 2016",
+  "csl": {
+   "id": "eu-turkey-2016",
+   "type": "document",
+   "author": [
+    {
+     "literal": "European Council"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2016,
+      3,
+      18
+     ]
+    ]
+   },
+   "title": "EU-Turkey statement, 18 March 2016",
+   "publisher": "European Council"
+  },
+  "to_check": "press release number and URL"
+ },
+ {
+  "id": "monsutti-2005",
+  "type": "book",
+  "authors": "Monsutti",
+  "year": 2005,
+  "title": "War and migration: Social networks and economic strategies of the Hazaras of Afghanistan",
+  "csl": {
+   "id": "monsutti-2005",
+   "type": "book",
+   "author": [
+    {
+     "family": "Monsutti",
+     "given": "Alessandro"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2005
+     ]
+    ]
+   },
+   "title": "War and migration: Social networks and economic strategies of the Hazaras of Afghanistan",
+   "publisher": "Routledge"
+  }
+ }
+]

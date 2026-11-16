@@ -1,0 +1,101 @@
+{
+  "id": "chn-idp",
+  "what": [
+    {
+      "text": "Forced displacement from China includes refugees, asylum seekers, and internally displaced people.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "In 2025, UNHCR recorded 153962 refugees and 99716 asylum seekers from China.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which specific countries host refugees or asylum seekers from China.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Conflict episodes recorded in the data include Government of China vs ETIM in 2008.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Conflict episodes also include Government of China vs Government of India in 2020.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The sources don't say why all individuals moved.",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Disaster movements were reported at 18659649 in 2008 and 3501695 in 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "People displaced by disasters at the end of the year were recorded at 217356 in 2019, 157542 in 2020, 942638 in 2021, and 639183 in 2023.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Refugee numbers were recorded at 1200000 in 1964 and 153962 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Disaster displacement counts movements forced by disaster events such as floods, storms, and earthquakes.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers are counted as people whose protection claims have not been decided at the end of the year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say how displaced people moved or where they live.",
+      "source_ids": [
+        "idmc-disaster-2026",
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-disaster-2026",
+    "ucdp-acd-26.1"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "7c09378ce7037ebd",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

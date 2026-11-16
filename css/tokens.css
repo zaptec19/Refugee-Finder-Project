@@ -1,0 +1,153 @@
+/* Design tokens. Every colour, size and space used by the site comes from here.
+   Light is the default for reading pages; dark is used on the home page and when the
+   reader picks the dark theme. People-type colours mean the same thing everywhere. */
+
+:root {
+  color-scheme: light;
+
+  /* surfaces and ink (light) */
+  --bg: #F6F4EF;
+  --surface: #FFFFFF;
+  --surface-2: #EFECE5;
+  --ink: #1C1C1E;
+  --muted: #625E56;          /* darkened from #6B675F for AA on --surface-2 */
+  --line: #E2DED5;
+  --line-strong: #CFCAC0;
+  --accent: #2563A8;         /* links and actions only */
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E3ECF7;
+  --focus: #2563A8;
+  --scrim: rgba(28, 28, 30, 0.38);
+  --shadow-pop: 0 12px 32px rgba(28, 28, 30, 0.14), 0 2px 6px rgba(28, 28, 30, 0.08);
+
+  /* people types: same meaning everywhere */
+  --c-refugees: #2F6DB5;
+  --c-asylum: #C98A0E;
+  --c-idp: #B5452B;
+  --c-oip: #1F9988;
+  --c-stateless: #7B5EA7;
+  --c-context: #8C877D;
+  --c-refugees-fill: rgba(47, 109, 181, 0.16);
+  --c-idp-fill: rgba(181, 69, 43, 0.14);
+  --c-context-band: rgba(140, 135, 125, 0.30);
+
+  /* mini globe (never reuses people-type colours) */
+  --g-origin: #D8C3A0;
+  --g-origin-line: #8F7650;
+  --g-host: #3B4252;
+  --g-host-line: #252A35;
+  --g-land: #E6E2D9;
+  --g-land-line: #FFFFFF;
+  --g-ocean: #FBFAF7;
+  --g-graticule: rgba(28, 28, 30, 0.06);
+
+  /* guide mode */
+  --guide-bg: #FBF1D0;
+  --guide-line: #E1C46A;
+  --guide-ink: #4A3900;
+  --guide-dot: #B07A00;
+
+  /* states */
+  --ok: #2E7D4F;
+  --warn: #A15C00;
+  --danger: #B3261E;
+  --ai-bg: #EEEAF6;
+  --ai-ink: #4C3C78;
+
+  /* type */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --fs-13: 0.8125rem;
+  --fs-15: 0.9375rem;
+  --fs-16: 1rem;
+  --fs-17: 1.0625rem;
+  --fs-20: 1.25rem;
+  --fs-26: 1.625rem;
+  --fs-34: 2.125rem;
+  --lh-body: 1.55;
+  --lh-tight: 1.25;
+  --measure: 68ch;
+
+  /* space: 4 px grid */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  /* shape */
+  --r-control: 6px;
+  --r-card: 10px;
+  --r-pill: 999px;
+  --hair: 1px solid var(--line);
+
+  /* layout */
+  --topbar-h: 56px;
+  --rail-w: 200px;
+  --col-max: 760px;
+  --side-w: 248px;
+  --page-max: 1360px;
+  --gutter: 16px;
+
+  /* motion */
+  --t-fast: 120ms;
+  --t-med: 220ms;
+  --t-slow: 420ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* dark set: used by the home page always, and by reading pages on request */
+:root[data-theme="dark"],
+.surface-dark {
+  color-scheme: dark;
+  --bg: #0E1116;
+  --surface: #161B22;
+  --surface-2: #1E242D;
+  --ink: #E8E6E1;
+  --muted: #9AA3AE;
+  --line: #2A313C;
+  --line-strong: #3A4350;
+  --accent: #6EA8FF;
+  --accent-ink: #0E1116;
+  --accent-soft: #1B2A40;
+  --focus: #6EA8FF;
+  --scrim: rgba(0, 0, 0, 0.55);
+  --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  --c-refugees: #5B93D6;
+  --c-asylum: #E0A532;
+  --c-idp: #D86A4E;
+  --c-oip: #3DB8A6;
+  --c-stateless: #9E85C6;
+  --c-context: #A39E94;
+  --c-refugees-fill: rgba(91, 147, 214, 0.20);
+  --c-idp-fill: rgba(216, 106, 78, 0.18);
+  --c-context-band: rgba(163, 158, 148, 0.24);
+
+  --g-land: #2A313C;
+  --g-land-line: #0E1116;
+  --g-ocean: #12161C;
+  --g-graticule: rgba(232, 230, 225, 0.06);
+  --g-host: #8A93A6;
+  --g-host-line: #C5CCD8;
+
+  --guide-bg: #2E2712;
+  --guide-line: #6B5719;
+  --guide-ink: #F2E2A8;
+  --guide-dot: #E0B43C;
+  --ai-bg: #2A2540;
+  --ai-ink: #D6CCF5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 0ms;
+    --t-med: 0ms;
+    --t-slow: 0ms;
+  }
+}

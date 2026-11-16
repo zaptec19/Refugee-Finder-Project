@@ -1,0 +1,101 @@
+{
+  "id": "syr-all",
+  "what": [
+    {
+      "text": "People from Syria were displaced internally and to host countries including Türkiye, Germany, Lebanon, Jordan, and Iraq.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, there were 4865764 refugees from Syria across all host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, Türkiye hosted 2347756 refugees from Syria.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Conflict episodes involved the Government of Syria against Syrian insurgents, PYD, IS, and SDF.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Conflict also involved the Government of Israel against the Government of Syria in the Golan Heights.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "People were also forced to move by disaster events inside the country.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The refugee count was 1200 in 1968 and reached 19931 in 2011.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugee totals peaked at 6848865 in 2021 and stood at 4865764 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "New conflict displacement movements were recorded at 156000 in 2011 and 2400000 in 2012.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Refugees are counted at the end of the year under UNHCR's mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Disaster displacement measures count movements rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Internal displacement is reported by both UNHCR and IDMC.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "a3875fee644c9d61",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

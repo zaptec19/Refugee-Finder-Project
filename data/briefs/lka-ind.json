@@ -1,0 +1,101 @@
+{
+  "id": "lka-ind",
+  "what": [
+    {
+      "text": "Sri Lankan refugees moved from Sri Lanka to India.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "UNHCR reported 200000 refugees in India in 1990 and 89507 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, India hosted 60.3 percent of all Sri Lankan refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Anti-Tamil violence occurred across Sri Lanka in July 1983.",
+      "source_ids": [
+        "valatheeswaran-rajan-2011"
+      ]
+    },
+    {
+      "text": "Sri Lanka experienced armed conflict involving the Government of Sri Lanka against the LTTE, EPRLF, TELO, and the JVP.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The Sri Lankan army defeated the LTTE in May 2009, ending the conflict.",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "valatheeswaran-rajan-2011"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Large-scale flight to India began in July 1983, followed by a wave of arrivals from 1990 to 1994.",
+      "source_ids": [
+        "valatheeswaran-rajan-2011",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The recorded refugee population stood at 200000 in 1990 and 1991, then decreased to 50730 in 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The refugee population was recorded at 69609 in 2006, 93259 in 2020, and 89507 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Tamils crossed the Palk Strait to Tamil Nadu.",
+      "source_ids": [
+        "valatheeswaran-rajan-2011"
+      ]
+    },
+    {
+      "text": "In 2016, the Government of India reported 64144 refugees in government camps and 36861 registered refugees outside camps.",
+      "source_ids": [
+        "mea-2016"
+      ]
+    },
+    {
+      "text": "UNHCR recorded 63162 refugees in India in 2016.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "valatheeswaran-rajan-2011",
+    "ucdp-acd-26.1",
+    "mea-2016"
+  ],
+  "model": "gemini-3.8-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "e4ac3790c41a9873",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

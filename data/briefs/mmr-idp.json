@@ -1,0 +1,102 @@
+{
+  "id": "mmr-idp",
+  "what": [
+    {
+      "text": "Internal displacement occurred within Myanmar, and people also sought protection abroad as refugees and asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, UNHCR recorded 3628840 internally displaced persons and 1524378 refugees originating from Myanmar.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which specific countries hosted these refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Conflict episodes involved the Government of Myanmar (Burma) and groups such as KNU, KNPP, MNDAA, KIO, and NUG.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Disaster events were also recorded as causing displacement movements inside the country.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say additional details about specific individual reasons for moving.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Refugee figures were recorded at 160000 in 1978 and 1156742 in 2017.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Internal displacement reported by UNHCR stood at 671011 in 2021 and 3628840 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "New disaster displacements were recorded at 2250000 in 2008.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Displaced populations are counted through end-of-year totals and new movement counts by UNHCR and IDMC.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, UNHCR recorded 64 returns.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say what physical means of travel were used or what types of shelter people live in.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026",
+    "unhcr-solutions-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "487db7696eee3bfd",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

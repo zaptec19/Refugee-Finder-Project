@@ -1,0 +1,13 @@
+# Secrets
+.env
+.env.*
+
+# Vercel local settings
+.vercel/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+node_modules/

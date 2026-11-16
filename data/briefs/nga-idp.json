@@ -1,0 +1,126 @@
+{
+  "id": "nga-idp",
+  "what": [
+    {
+      "text": "People were internally displaced within Nigeria, while others sought refuge or asylum abroad.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, UNHCR reported 3544519 internally displaced persons inside the country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, IDMC estimated 3495705 people living in internal displacement.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The refugee population from Nigeria reached 478150 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Conflict episodes involved the Government of Nigeria against Ahlul Sunnah Jamaa in 2004 and against NDPVF in 2004.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Conflict was also recorded between the Government of Nigeria and JAS in 2009 and from 2011 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Other conflict episodes included the Government of Nigeria against IS from 2015 to 2025, and against IPOB from 2021 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Disaster events were also recorded alongside conflict movements in various years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "New displacement movements from conflict occurred across many years, including 975300 in 2014 and 353624 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Disaster displacement movements were recorded in multiple years, including 3894063 in 2012 and 2437411 in 2022.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Refugee figures ranged from 51100 in 1968 to 478150 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers were reported at 87289 in 2024 and 56176 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "UNHCR reports on internally displaced people protected or assisted inside Nigeria.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC measures end-of-year internal displacement from conflict as well as disaster displacement movements.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Disaster counts measure movements rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people live or how they moved.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "725ea3706174cdce",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

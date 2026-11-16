@@ -1,0 +1,682 @@
+[
+ {
+  "id": "unhcr-pop-2026",
+  "short": "UNHCR",
+  "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
+  "dataset": "Refugee Data Finder: population figures by country of origin and asylum",
+  "release": "2026 release (data to end-2025)",
+  "url": "https://www.unhcr.org/refugee-statistics/download/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "provided",
+  "raw": "unhcr all countries to all countries data/persons_of_concern.csv + footnotes.csv (team download)",
+  "clean_file": "data/clean/unhcr_population.csv.gz",
+  "csl": {
+   "id": "unhcr-pop-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Refugee Data Finder: Population figures",
+   "publisher": "United Nations High Commissioner for Refugees",
+   "URL": "https://www.unhcr.org/refugee-statistics/"
+  },
+  "accessed": "2026-10-08 (team download)",
+  "years": [
+   1951,
+   2025
+  ],
+  "rows": 544925,
+  "clean_file_bytes": 3374174,
+  "measures": [
+   "refugees",
+   "asylum_seekers",
+   "idps_unhcr",
+   "oip",
+   "stateless",
+   "others_of_concern",
+   "host_community"
+  ]
+ },
+ {
+  "id": "unhcr-solutions-2026",
+  "short": "UNHCR",
+  "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
+  "dataset": "Refugee Data Finder: solutions (returns, resettlement, naturalisation)",
+  "release": "2026 release (data to end-2025)",
+  "url": "https://api.unhcr.org/population/v1/solutions/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/unhcr-api/2026/solutions/<year>.zip",
+  "clean_file": "data/clean/unhcr_solutions.csv",
+  "csl": {
+   "id": "unhcr-solutions-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Refugee Data Finder: Solutions",
+   "publisher": "United Nations High Commissioner for Refugees",
+   "URL": "https://www.unhcr.org/refugee-statistics/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   1959,
+   2025
+  ],
+  "rows": 23477,
+  "clean_file_bytes": 1837085,
+  "measures": [
+   "returned_refugees",
+   "returned_idps",
+   "resettlement",
+   "naturalisation"
+  ]
+ },
+ {
+  "id": "unhcr-demographics-2026",
+  "short": "UNHCR",
+  "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
+  "dataset": "Refugee Data Finder: demographics (sex and age) by population type",
+  "release": "2026 release (data to end-2025)",
+  "url": "https://api.unhcr.org/population/v1/demographics/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/unhcr-api/2026/demographics/<year>.zip",
+  "clean_file": "data/clean/unhcr_demographics.csv.gz",
+  "csl": {
+   "id": "unhcr-demographics-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Refugee Data Finder: Demographics",
+   "publisher": "United Nations High Commissioner for Refugees",
+   "URL": "https://www.unhcr.org/refugee-statistics/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   2001,
+   2025
+  ],
+  "rows": 1482383,
+  "clean_file_bytes": 7444518,
+  "measures": [
+   "demographics"
+  ]
+ },
+ {
+  "id": "unhcr-asylum-applications-2026",
+  "short": "UNHCR",
+  "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
+  "dataset": "Refugee Data Finder: asylum applications",
+  "release": "2026 release (data to end-2025)",
+  "url": "https://api.unhcr.org/population/v1/asylum-applications/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/unhcr-api/2026/asylum-applications/<year>.zip",
+  "clean_file": "data/clean/unhcr_asylum_applications.csv",
+  "csl": {
+   "id": "unhcr-asylum-applications-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Refugee Data Finder: Asylum applications",
+   "publisher": "United Nations High Commissioner for Refugees",
+   "URL": "https://www.unhcr.org/refugee-statistics/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   2000,
+   2025
+  ],
+  "rows": 120597,
+  "clean_file_bytes": 13594976,
+  "measures": [
+   "asylum_applications"
+  ]
+ },
+ {
+  "id": "unhcr-asylum-decisions-2026",
+  "short": "UNHCR",
+  "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
+  "dataset": "Refugee Data Finder: asylum decisions",
+  "release": "2026 release (data to end-2025)",
+  "url": "https://api.unhcr.org/population/v1/asylum-decisions/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/unhcr-api/2026/asylum-decisions/<year>.zip",
+  "clean_file": "data/clean/unhcr_asylum_decisions.csv.gz",
+  "csl": {
+   "id": "unhcr-asylum-decisions-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Refugee Data Finder: Asylum decisions",
+   "publisher": "United Nations High Commissioner for Refugees",
+   "URL": "https://www.unhcr.org/refugee-statistics/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   2000,
+   2025
+  ],
+  "rows": 569645,
+  "clean_file_bytes": 3687213,
+  "measures": [
+   "asylum_decisions"
+  ]
+ },
+ {
+  "id": "idmc-conflict-2026",
+  "short": "IDMC",
+  "organisation": "IDMC (Internal Displacement Monitoring Centre)",
+  "dataset": "Global Internal Displacement Database (GIDD): internal displacement associated with conflict and violence",
+  "release": "2026 release (data to end-2025), as published by IDMC on HDX",
+  "url": "https://data.humdata.org/dataset/idmc-internal-displacements-new-displacements-idps",
+  "licence": "CC BY 3.0 IGO (IDMC terms of use); CC BY-IGO on HDX",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/igo/",
+  "origin": "fetched",
+  "raw": "data/raw/idmc/2026/conflict.csv",
+  "clean_file": "data/clean/idmc_conflict.csv",
+  "csl": {
+   "id": "idmc-conflict-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "Internal Displacement Monitoring Centre"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Global Internal Displacement Database: Conflict and violence",
+   "publisher": "Internal Displacement Monitoring Centre",
+   "URL": "https://www.internal-displacement.org/database/displacement-data/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   2009,
+   2025
+  ],
+  "rows": 1798,
+  "clean_file_bytes": 131636,
+  "measures": [
+   "idps_idmc_conflict",
+   "idmc_conflict_new"
+  ]
+ },
+ {
+  "id": "idmc-disaster-2026",
+  "short": "IDMC",
+  "organisation": "IDMC (Internal Displacement Monitoring Centre)",
+  "dataset": "Global Internal Displacement Database (GIDD): internal displacement associated with disasters, by event and hazard",
+  "release": "2026 release (data to end-2025), as published by IDMC on HDX",
+  "url": "https://data.humdata.org/dataset/idmc-internal-displacements-new-displacements-associated-with-disasters",
+  "licence": "CC BY 3.0 IGO (IDMC terms of use); CC BY-IGO on HDX",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/igo/",
+  "origin": "fetched",
+  "raw": "data/raw/idmc/2026/disaster.csv",
+  "clean_file": "data/clean/idmc_disaster.csv",
+  "csl": {
+   "id": "idmc-disaster-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "Internal Displacement Monitoring Centre"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Global Internal Displacement Database: Disasters",
+   "publisher": "Internal Displacement Monitoring Centre",
+   "URL": "https://www.internal-displacement.org/database/displacement-data/"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   2008,
+   2025
+  ],
+  "rows": 37253,
+  "clean_file_bytes": 2967796,
+  "measures": [
+   "idps_idmc_disaster",
+   "idmc_disaster_new"
+  ]
+ },
+ {
+  "id": "ucdp-acd-26.1",
+  "short": "UCDP",
+  "organisation": "UCDP (Uppsala Conflict Data Program) and PRIO",
+  "dataset": "UCDP/PRIO Armed Conflict Dataset",
+  "release": "version 26.1 (1946 to 2025)",
+  "url": "https://ucdp.uu.se/downloads/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "provided",
+  "raw": "conflicts of all countries data/UcdpPrioConflict_v26_1.csv (team download)",
+  "clean_file": "data/clean/ucdp_acd.csv",
+  "csl": {
+   "id": "ucdp-acd-26.1",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "Uppsala Conflict Data Program"
+    },
+    {
+     "literal": "Peace Research Institute Oslo"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "UCDP/PRIO Armed Conflict Dataset",
+   "version": "26.1",
+   "publisher": "Uppsala University",
+   "URL": "https://ucdp.uu.se/downloads/"
+  },
+  "cite_also": [
+   {
+    "id": "davies2026",
+    "type": "article-journal",
+    "author": [
+     {
+      "family": "Davies",
+      "given": "Shawn"
+     },
+     {
+      "family": "Pettersson",
+      "given": "Therése"
+     },
+     {
+      "family": "Öberg",
+      "given": "Magnus"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "title": "Organized violence 1989–2025, and violent political protests",
+    "container-title": "Journal of Peace Research",
+    "DOI": "10.1093/jopres/xjag046"
+   },
+   {
+    "id": "gleditsch2002",
+    "type": "article-journal",
+    "author": [
+     {
+      "family": "Gleditsch",
+      "given": "Nils Petter"
+     },
+     {
+      "family": "Wallensteen",
+      "given": "Peter"
+     },
+     {
+      "family": "Eriksson",
+      "given": "Mikael"
+     },
+     {
+      "family": "Sollenberg",
+      "given": "Margareta"
+     },
+     {
+      "family": "Strand",
+      "given": "Håvard"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       2002
+      ]
+     ]
+    },
+    "title": "Armed conflict 1946–2001: A new dataset",
+    "container-title": "Journal of Peace Research",
+    "volume": "39",
+    "issue": "5"
+   }
+  ],
+  "accessed": "2026-03-30 (team download)",
+  "years": [
+   1946,
+   2025
+  ],
+  "rows": 5952,
+  "clean_file_bytes": 488767,
+  "measures": [
+   "ucdp_conflict_intensity",
+   "ucdp_conflict_type"
+  ]
+ },
+ {
+  "id": "ucdp-ov-26.1",
+  "short": "UCDP",
+  "organisation": "UCDP (Uppsala Conflict Data Program)",
+  "dataset": "UCDP Country-Year Dataset on Organized Violence within Country Borders",
+  "release": "version 26.1 (1989 to 2025)",
+  "url": "https://ucdp.uu.se/downloads/",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/ucdp/26.1/organizedviolencecy-261-csv.zip",
+  "clean_file": "data/clean/ucdp_organized_violence.csv",
+  "csl": {
+   "id": "ucdp-ov-26.1",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "Uppsala Conflict Data Program"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "UCDP Country-Year Dataset on Organized Violence within Country Borders",
+   "version": "26.1",
+   "publisher": "Uppsala University",
+   "URL": "https://ucdp.uu.se/downloads/"
+  },
+  "cite_also": [
+   {
+    "id": "davies2026",
+    "type": "article-journal",
+    "author": [
+     {
+      "family": "Davies",
+      "given": "Shawn"
+     },
+     {
+      "family": "Pettersson",
+      "given": "Therése"
+     },
+     {
+      "family": "Öberg",
+      "given": "Magnus"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "title": "Organized violence 1989–2025, and violent political protests",
+    "container-title": "Journal of Peace Research",
+    "DOI": "10.1093/jopres/xjag046"
+   },
+   {
+    "id": "sundberg2013",
+    "type": "article-journal",
+    "author": [
+     {
+      "family": "Sundberg",
+      "given": "Ralph"
+     },
+     {
+      "family": "Melander",
+      "given": "Erik"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       2013
+      ]
+     ]
+    },
+    "title": "Introducing the UCDP Georeferenced Event Dataset",
+    "container-title": "Journal of Peace Research",
+    "volume": "50",
+    "issue": "4"
+   }
+  ],
+  "accessed": "2026-11-13",
+  "years": [
+   1989,
+   2025
+  ],
+  "rows": 42792,
+  "clean_file_bytes": 3853037,
+  "measures": [
+   "ucdp_deaths_total",
+   "ucdp_deaths_total_low",
+   "ucdp_deaths_total_high",
+   "ucdp_deaths_state_based",
+   "ucdp_deaths_non_state",
+   "ucdp_deaths_one_sided"
+  ]
+ },
+ {
+  "id": "wb-pop-2026",
+  "short": "World Bank",
+  "organisation": "World Bank",
+  "dataset": "World Development Indicators: Population, total (SP.POP.TOTL)",
+  "release": "API pull, November 2026",
+  "url": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+  "licence": "CC BY 4.0",
+  "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "origin": "fetched",
+  "raw": "data/raw/worldbank/2026-11/SP.POP.TOTL.json",
+  "clean_file": "data/clean/worldbank_population.csv",
+  "csl": {
+   "id": "wb-pop-2026",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "World Bank"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Population, total (SP.POP.TOTL)",
+   "container-title": "World Development Indicators",
+   "publisher": "World Bank",
+   "URL": "https://data.worldbank.org/indicator/SP.POP.TOTL"
+  },
+  "accessed": "2026-11-13",
+  "years": [
+   1960,
+   2025
+  ],
+  "rows": 14292,
+  "clean_file_bytes": 1070820,
+  "measures": [
+   "population_total"
+  ]
+ },
+ {
+  "id": "mea-2016",
+  "short": "Govt. of India",
+  "organisation": "Government of India, Ministry of External Affairs",
+  "dataset": "Answer in Parliament on Sri Lankan refugees in India (camp and non-camp figures)",
+  "release": "2016 (date and question number to confirm)",
+  "url": "",
+  "licence": "Official parliamentary record; figures quoted with citation",
+  "licence_url": "",
+  "origin": "typed",
+  "raw": "content/gov_figures.csv (typed by the team from the official answer)",
+  "clean_file": "data/clean/gov_figures.csv",
+  "status": "to_confirm",
+  "csl": {
+   "id": "mea-2016",
+   "type": "document",
+   "author": [
+    {
+     "literal": "Ministry of External Affairs, Government of India"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2016
+     ]
+    ]
+   },
+   "title": "Answer in Parliament on Sri Lankan refugees in India",
+   "publisher": "Parliament of India"
+  },
+  "accessed": "typed by the team",
+  "years": [
+   2016,
+   2016
+  ],
+  "rows": 3,
+  "clean_file_bytes": 1041,
+  "measures": [
+   "gov_refugees_in_camps",
+   "gov_refugees_outside_camps",
+   "gov_refugees_total"
+  ]
+ },
+ {
+  "id": "un-m49",
+  "short": "UN M49",
+  "organisation": "United Nations Statistics Division",
+  "dataset": "Standard country or area codes for statistical use (M49)",
+  "release": "online version, accessed 2026",
+  "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+  "licence": "UN reference classification; cited",
+  "licence_url": "",
+  "origin": "fetched",
+  "raw": "data/raw/un-m49/current/m49_overview.html",
+  "clean_file": "data/clean/countries.csv",
+  "csl": {
+   "id": "un-m49",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "United Nations Statistics Division"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Standard country or area codes for statistical use (M49)",
+   "URL": "https://unstats.un.org/unsd/methodology/m49/overview/"
+  },
+  "accessed": "2026-11-13",
+  "years": null,
+  "rows": 0,
+  "clean_file_bytes": 33602,
+  "measures": []
+ },
+ {
+  "id": "unhcr-footnotes",
+  "short": "UNHCR",
+  "organisation": "UNHCR",
+  "dataset": "Footnotes to UNHCR figures",
+  "clean_file": "data/clean/unhcr_footnotes.csv",
+  "licence": "CC BY 4.0",
+  "origin": "provided + fetched",
+  "clean_file_bytes": 417342
+ },
+ {
+  "id": "ucdp-acd-conflicts",
+  "short": "UCDP",
+  "organisation": "UCDP and PRIO",
+  "dataset": "UCDP/PRIO armed conflicts: parties, type and dates per conflict-year",
+  "clean_file": "data/clean/ucdp_acd_conflicts.csv",
+  "licence": "CC BY 4.0",
+  "origin": "provided",
+  "clean_file_bytes": 475591
+ },
+ {
+  "id": "team-content",
+  "short": "Team",
+  "organisation": "Website v1 team",
+  "dataset": "Context events, readings, definitions crosswalk and glossary, each with its source",
+  "clean_file": null,
+  "licence": "CC BY 4.0 (team-written)",
+  "origin": "typed",
+  "files": [
+   "content/events and content/situations/*.json",
+   "content/crosswalk.json",
+   "content/glossary.json"
+  ],
+  "clean_file_bytes": null
+ }
+]

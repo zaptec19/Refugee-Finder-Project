@@ -1,0 +1,50 @@
+{
+  "id": "sdn-idp",
+  "status": "partial",
+  "events": [
+    {
+      "date": "2003",
+      "title": "War in Darfur",
+      "note": "Armed groups in Darfur, including JEM and SLM/A, fought the government. UCDP records the conflict at war level.",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L1400"
+    },
+    {
+      "date": "2011-07-09",
+      "title": "South Sudan becomes independent",
+      "note": "South Sudan separated from Sudan. Figures for Sudan before and after 2011 cover different territory.",
+      "source_id": "unhcr-pop-2026",
+      "to_check": "a source for the date"
+    },
+    {
+      "date": "2023-04-15",
+      "title": "War between the army and the RSF",
+      "note": "Fighting broke out between the Sudanese Armed Forces and the Rapid Support Forces (RSF). UCDP records the RSF among the government's opponents in 2023.",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L1419",
+      "to_check": "a source for the start date"
+    }
+  ],
+  "limitations": [
+    {
+      "kind": "method",
+      "text": "UNHCR and IDMC give the same figure in 2023 and 2024",
+      "detail": "The two sources report identical numbers for these years, so they are likely based on the same underlying count. They are still shown side by side, never added."
+    },
+    {
+      "kind": "method",
+      "text": "New displacements count movements",
+      "detail": "IDMC's new displacements count each forced move, so one person displaced twice counts twice. Compare them with year-end totals with care."
+    },
+    {
+      "kind": "coverage",
+      "text": "A series break in 2011",
+      "detail": "South Sudan's independence changed the territory counted as Sudan."
+    }
+  ],
+  "missing": [
+    "IDPs by state",
+    "returns inside Sudan by year"
+  ],
+  "reading": []
+}

@@ -1,0 +1,67 @@
+{
+  "id": "afg-irn-pak",
+  "status": "partial",
+  "events": [
+    {
+      "date": "1979-12-27",
+      "title": "Soviet intervention",
+      "note": "Soviet forces entered Afghanistan. UCDP records an armed conflict involving the Soviet Union from this date; UNHCR's figures for Afghans in Iran and Pakistan rise steeply from 1980.",
+      "source_id": "ucdp-acd-26.1",
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L2492"
+    },
+    {
+      "date": "2002",
+      "title": "2002: largest return year",
+      "note": "After the fall of the Taliban government, returns from Pakistan and Iran were the largest in UNHCR's returns data for Afghanistan.",
+      "source_id": "unhcr-solutions-2026"
+    },
+    {
+      "date": "2021-08-15",
+      "title": "Taliban take Kabul",
+      "note": "The Taliban took control of Kabul. New arrivals in Iran and Pakistan followed; UNHCR's figures for 2022 also reflect a recount in Iran (see Limitations).",
+      "source_id": "unhcr-pop-2026",
+      "to_check": "a source for the date"
+    },
+    {
+      "date": "2023-10",
+      "title": "Pakistan's repatriation plan",
+      "note": "Pakistan announced a plan to return foreigners without valid documents, which led to large returns of Afghans.",
+      "source_id": "unhcr-solutions-2026",
+      "to_check": "a source for the plan and its date"
+    },
+    {
+      "date": "2025",
+      "title": "2025: mass returns from Iran and Pakistan",
+      "note": "UNHCR's returns data for 2025 shows returns to Afghanistan on the scale of 2002, mostly from Iran.",
+      "source_id": "unhcr-solutions-2026"
+    }
+  ],
+  "limitations": [
+    {
+      "kind": "method",
+      "text": "Iran's 2022 figure follows a recount",
+      "detail": "UNHCR's footnote for 2022 says the figure includes Afghans reported as people in a refugee-like situation after a government recount. Read the footnote before comparing 2021 and 2022."
+    },
+    {
+      "kind": "method",
+      "text": "Same figure in Iran for 2017, 2018 and 2019",
+      "detail": "The figure repeats exactly for three years, which suggests it was carried forward rather than recounted; the sources don't say."
+    },
+    {
+      "kind": "method",
+      "text": "Many Afghans are not counted as refugees",
+      "detail": "Afghans in Iran and Pakistan hold different documents, or none. UNHCR's footnotes say refugee figures differ from wider operational totals."
+    },
+    {
+      "kind": "coverage",
+      "text": "A second group from 2025",
+      "detail": "From 2025 UNHCR also counts some Afghans in Iran and Pakistan as 'other people in need of international protection'. This page follows refugees only."
+    }
+  ],
+  "missing": [
+    "undocumented Afghans"
+  ],
+  "reading": [
+    "monsutti-2005"
+  ]
+}

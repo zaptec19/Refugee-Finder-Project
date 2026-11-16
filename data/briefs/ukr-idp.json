@@ -1,0 +1,111 @@
+{
+  "id": "ukr-idp",
+  "what": [
+    {
+      "text": "People in Ukraine were displaced internally and as refugees.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, UNHCR reported 5224131 refugees from Ukraine.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, both UNHCR and IDMC reported 3712000 internal IDPs.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside the country displaced people live.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Conflict episodes involved the Government of Ukraine against Maidan, DPR, LPR, and Novorossiya between 2014 and 2022.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Conflict episodes between the Government of Russia (Soviet Union) and Government of Ukraine (Crimea) occurred between 2022 and 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Disasters were also recorded between 2008 and 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC reported 646500 new conflict displacements in 2014 and 942418 in 2015.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2022, IDMC reported 16870323 new conflict displacements, and UNHCR reported 5684177 refugees.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns were recorded at 660000 in 2022 and 139251 in 2025.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "UNHCR counts refugees under its mandate at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC conflict new displacement figures count movements rather than individual people.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say how people traveled or what housing they use.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026",
+    "unhcr-solutions-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "6b1c138f3a4877e2",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "yem-idp",
+  "what": [
+    {
+      "text": "People were displaced internally within Yemen, while others were recorded as refugees or asylum seekers abroad.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Internal displacement from conflict or violence reached 4795983 people at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, there were also 57327 refugees and 25860 asylum seekers originating from Yemen.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Recorded conflict episodes include the Government of Yemen (North Yemen) fighting Ansarallah, AQAP, and other groups between 2008 and 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Additional conflicts involved IS (Islamic State), STC (South Yemen), Israel, the United Kingdom, and the United States of America.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Disaster events occurred in the same years, with 263991 new disaster movements recorded in 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Conflict-related internal displacement stood at 175000 people in 2009 and reached 4795983 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "New conflict movements were 2174968 in 2015 and 56798 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "New disaster movements reached 492443 in 2024.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, UNHCR reported protecting or assisting 4795983 internally displaced people inside Yemen.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Disaster displacement figures showed 10836 people remaining displaced by disasters at the end of 2021.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say what specific routes people took or how they live.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "model": "gemini-3.5-flash",
+  "generated_on": "2026-11-16",
+  "factpack_hash": "47c5923916f56d42",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "extends": "lka-ind",
+    "title": "Sri Lankan refugees in India",
+    "aliases": ["Sri Lankan Tamils in India", "Sri Lankan Tamil refugees in Tamil Nadu", "Eelam Tamil refugees in India"]
+  },
+  {
+    "extends": "mmr-bgd",
+    "title": "Rohingya refugees in Bangladesh",
+    "aliases": ["Rohingya in Bangladesh", "Rohingya in Cox's Bazar", "Refugees from Myanmar in Bangladesh"],
+    "note": "UNHCR counts refugees by country of origin (Myanmar), not by ethnic group. The figures are all refugees from Myanmar in Bangladesh."
+  },
+  {
+    "extends": "syr-tur",
+    "aliases": ["Syrian refugees in Turkey", "Syrians under temporary protection in Türkiye"]
+  },
+  {
+    "id": "afg-irn-pak",
+    "title": "Afghan refugees in Iran and Pakistan",
+    "origin_iso3": "AFG",
+    "hosts": ["IRN", "PAK"],
+    "aliases": ["Afghans in Iran and Pakistan", "Afghan refugees in neighbouring countries"]
+  },
+  {
+    "extends": "sdn-idp",
+    "title": "Internal displacement in Sudan",
+    "aliases": ["Sudan war 2023", "Sudanese IDPs", "People displaced inside Sudan"]
+  }
+]

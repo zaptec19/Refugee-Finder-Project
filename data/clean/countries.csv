@@ -1,0 +1,256 @@
+iso3,name,nationality,other_names,m49_code,m49_region,m49_subregion,m49_intermediate,unhcr_major_area,unhcr_region,gwno,is_special_code,in_unhcr,in_idmc,in_ucdp,in_worldbank
+AB9,AB9,,,,,,,,,,,,true,,
+ABW,Aruba,,,533,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,,,true
+AFG,Afghanistan,Afghan,Islamic Republic of Afghanistan,004,Asia,Southern Asia,,Asia,Southern Asia,700,,true,true,true,true
+AGO,Angola,Angolan,Republic of Angola,024,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,540,,true,true,true,true
+AIA,Anguilla,,,660,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,
+ALA,Åland Islands,,,248,Europe,Northern Europe,,,,,,,,,
+ALB,Albania,Albanian,Republic of Albania,008,Europe,Southern Europe,,Europe,Southern Europe,339,,true,true,true,true
+AND,Andorra,Andorran,Principality of Andorra,020,Europe,Southern Europe,,Europe,Southern Europe,232,,true,true,true,true
+ARE,United Arab Emirates,of the United Arab Emirates,,784,Asia,Western Asia,,Asia,Western Asia,696,,true,true,true,true
+ARG,Argentina,Argentine,Argentine Republic,032,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,160,,true,true,true,true
+ARM,Armenia,Armenian,Republic of Armenia,051,Asia,Western Asia,,Asia,Western Asia,371,,true,true,true,true
+ASM,American Samoa,,,016,Oceania,Polynesia,,,,,,,true,,true
+ATA,Antarctica,,,010,,,,,,,,,,,
+ATF,French Southern Territories,,,260,Africa,Sub-Saharan Africa,Eastern Africa,,,,,,true,,
+ATG,Antigua and Barbuda,of Antigua and Barbuda,Antigua & Barbuda,028,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,58,,true,true,true,true
+AUS,Australia,Australian,,036,Oceania,Australia and New Zealand,,Oceania,Australia-New Zealand,900,,true,true,true,true
+AUT,Austria,Austrian,Republic of Austria,040,Europe,Western Europe,,Europe,Western Europe,305,,true,true,true,true
+AZE,Azerbaijan,Azerbaijani,Republic of Azerbaijan,031,Asia,Western Asia,,Asia,Western Asia,373,,true,true,true,true
+BDI,Burundi,Burundian,Republic of Burundi,108,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,516,,true,true,true,true
+BEL,Belgium,Belgian,Kingdom of Belgium,056,Europe,Western Europe,,Europe,Western Europe,211,,true,true,true,true
+BEN,Benin,Beninese,Republic of Benin,204,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,434,,true,true,true,true
+BES,"Bonaire, Saint Eustatius and Saba",,"Bonaire, Sint Eustatius and Saba",535,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,,,,
+BFA,Burkina Faso,of Burkina Faso,Burkina Faso (Upper Volta),854,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,439,,true,true,true,true
+BGD,Bangladesh,of Bangladesh,People's Republic of Bangladesh,050,Asia,Southern Asia,,Asia,Southern Asia,771,,true,true,true,true
+BGR,Bulgaria,Bulgarian,Republic of Bulgaria,100,Europe,Eastern Europe,,Europe,Eastern Europe,355,,true,true,true,true
+BHR,Bahrain,Bahraini,Kingdom of Bahrain,048,Asia,Western Asia,,Asia,Western Asia,692,,true,,true,true
+BHS,Bahamas,Bahamian,"Bahamas, The|Commonwealth of the Bahamas",044,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,31,,true,true,true,true
+BIH,Bosnia and Herzegovina,of Bosnia and Herzegovina,Bosnia-Herzegovina|Republic of Bosnia and Herzegovina,070,Europe,Southern Europe,,Europe,Southern Europe,346,,true,true,true,true
+BLM,Saint Barthélemy,,,652,Americas,Latin America and the Caribbean,Caribbean,,,,,,,,
+BLR,Belarus,Belarusian,Belarus (Byelorussia)|Republic of Belarus,112,Europe,Eastern Europe,,Europe,Eastern Europe,370,,true,true,true,true
+BLZ,Belize,Belizean,,084,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,80,,true,true,true,true
+BMU,Bermuda,,,060,Americas,Northern America,,Northern America,Northern America,,,true,true,,true
+BOL,Bolivia (Plurinational State of),Bolivian,"Bolivia|Bolivia, Plurinational State of|Plurinational State of Bolivia",068,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,145,,true,true,true,true
+BRA,Brazil,Brazilian,Federative Republic of Brazil,076,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,140,,true,true,true,true
+BRB,Barbados,Barbadian,,052,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,53,,true,true,true,true
+BRN,Brunei Darussalam,of Brunei Darussalam,Brunei,096,Asia,South-eastern Asia,,Asia,South-eastern Asia,835,,true,true,true,true
+BTN,Bhutan,Bhutanese,Kingdom of Bhutan,064,Asia,Southern Asia,,Asia,Southern Asia,760,,true,true,true,true
+BVT,Bouvet Island,,,074,Americas,Latin America and the Caribbean,South America,,,,,,,,
+BWA,Botswana,of Botswana,Republic of Botswana,072,Africa,Sub-Saharan Africa,Southern Africa,Africa,Southern Africa,571,,true,true,true,true
+CAF,Central African Rep.,of the Central African Republic,Central African Republic,140,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,482,,true,true,true,true
+CAN,Canada,Canadian,,124,Americas,Northern America,,Northern America,Northern America,20,,true,true,true,true
+CCK,Cocos (Keeling) Islands,,,166,Oceania,Australia and New Zealand,,,,,,,,,
+CHE,Switzerland,Swiss,Swiss Confederation,756,Europe,Western Europe,,Europe,Western Europe,225,,true,true,true,true
+CHI,CHI,,Channel Islands,,,,,,,,,,,,true
+CHL,Chile,Chilean,Republic of Chile,152,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,155,,true,true,true,true
+CHN,China,Chinese,People's Republic of China|Tibet,156,Asia,Eastern Asia,,Asia,Eastern Asia,710|711,,true,true,true,true
+CIV,Cote d'Ivoire,Ivorian,Cote D'Ivoire|Côte d'Ivoire|Côte d’Ivoire|Republic of Côte d'Ivoire,384,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,437,,true,true,true,true
+CMR,Cameroon,Cameroonian,Republic of Cameroon,120,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,471,,true,true,true,true
+COD,Dem. Rep. of the Congo,of the Democratic Republic of the Congo,"Congo Democratic Republic (Zaire)|Congo, Dem. Rep.|Congo, The Democratic Republic of the|Democratic Republic of the Congo",180,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,490,,true,true,true,true
+COG,Congo,Congolese,"Congo, Rep.|Republic of the Congo",178,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,484,,true,true,true,true
+COK,Cook Islands,of the Cook Islands,,184,Oceania,Polynesia,,Oceania,Polynesia,,,true,true,,
+COL,Colombia,Colombian,Republic of Colombia,170,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,100,,true,true,true,true
+COM,Comoros,Comorian,Union of the Comoros,174,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,581,,true,true,true,true
+CPV,Cabo Verde,Cape Verdean,Cape Verde|Republic of Cabo Verde,132,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,402,,true,true,true,true
+CRI,Costa Rica,Costa Rican,Republic of Costa Rica,188,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,94,,true,true,true,true
+CUB,Cuba,Cuban,Republic of Cuba,192,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,40,,true,true,true,true
+CUW,Curacao,,Curaçao,531,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,,,true
+CXR,Christmas Island,,,162,Oceania,Australia and New Zealand,,,,,,,,,
+CYM,Cayman Islands,,,136,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,true
+CYP,Cyprus,Cypriot,Republic of Cyprus,196,Asia,Western Asia,,Asia,Western Asia,352,,true,true,true,true
+CZE,Czechia,Czechia,Czech Republic|Czechoslovakia,203,Europe,Eastern Europe,,Europe,Eastern Europe,315|316,,true,true,true,true
+DEU,Germany,German,Federal Republic of Germany|German Democratic Republic|German Federal Republic|Germany (Prussia),276,Europe,Western Europe,,Europe,Western Europe,255|260|265,,true,true,true,true
+DJI,Djibouti,of Djibouti,Republic of Djibouti,262,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,522,,true,true,true,true
+DMA,Dominica,of Dominica,Commonwealth of Dominica,212,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,54,,true,true,true,true
+DNK,Denmark,Danish,Kingdom of Denmark,208,Europe,Northern Europe,,Europe,Northern Europe,390,,true,true,true,true
+DOM,Dominican Rep.,Dominican,Dominican Republic,214,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,42,,true,true,true,true
+DZA,Algeria,Algerian,People's Democratic Republic of Algeria,012,Africa,Northern Africa,,Africa,Northern Africa,615,,true,true,true,true
+ECU,Ecuador,Ecuadorian,Republic of Ecuador,218,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,130,,true,true,true,true
+EGY,Egypt,Egyptian,"Arab Republic of Egypt|Egypt, Arab Rep.",818,Africa,Northern Africa,,Africa,Northern Africa,651,,true,true,true,true
+ERI,Eritrea,Eritrean,the State of Eritrea,232,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,531,,true,true,true,true
+ESH,Western Sahara,,,732,Africa,Northern Africa,,Africa,Northern Africa,,,true,,,
+ESP,Spain,Spanish,Kingdom of Spain,724,Europe,Southern Europe,,Europe,Southern Europe,230,,true,true,true,true
+EST,Estonia,Estonian,Republic of Estonia,233,Europe,Northern Europe,,Europe,Northern Europe,366,,true,,true,true
+ETH,Ethiopia,Ethiopian,Federal Democratic Republic of Ethiopia,231,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,530,,true,true,true,true
+FIN,Finland,Finnish,Republic of Finland,246,Europe,Northern Europe,,Europe,Northern Europe,375,,true,true,true,true
+FJI,Fiji,of Fiji,Republic of Fiji,242,Oceania,Melanesia,,Oceania,Melanesia,950,,true,true,true,true
+FLK,Falkland Islands (Malvinas),,,238,Americas,Latin America and the Caribbean,South America,,,,,,,,
+FRA,France,French,French Republic,250,Europe,Western Europe,,Europe,Western Europe,220,,true,true,true,true
+FRO,Faeroe Islands,,Faroe Islands,234,Europe,Northern Europe,,Europe,Northern Europe,,,,,,true
+FSM,Micronesia (Federated States of),of the Federated States of Micronesia,"Federated States of Micronesia|Micronesia, Fed. Sts.|Micronesia, Federated States of",583,Oceania,Micronesia,,Oceania,Micronesia,987,,true,true,true,true
+GAB,Gabon,Gabonese,Gabonese Republic,266,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,481,,true,true,true,true
+GBR,United Kingdom of Great Britain and Northern Ireland,of the United Kingdom (of Great Britain and Northern Ireland),United Kingdom,826,Europe,Northern Europe,,Europe,Northern Europe,200,,true,true,true,true
+GEO,Georgia,Georgian,,268,Asia,Western Asia,,Asia,Western Asia,372,,true,true,true,true
+GGY,Guernsey,,,831,Europe,Northern Europe,,,,,,,,,
+GHA,Ghana,Ghanaian,Republic of Ghana,288,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,452,,true,true,true,true
+GIB,Gibraltar,,,292,Europe,Southern Europe,,Europe,Southern Europe,,,true,,,true
+GIN,Guinea,Guinean,Republic of Guinea,324,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,438,,true,true,true,true
+GLP,Guadeloupe,,,312,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,
+GMB,Gambia,Gambian,"Gambia, The|Republic of the Gambia",270,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,420,,true,true,true,true
+GNB,Guinea-Bissau,of Guinea-Bissau,Republic of Guinea-Bissau,624,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,404,,true,true,true,true
+GNQ,Equatorial Guinea,of Equatorial Guinea,Republic of Equatorial Guinea,226,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,411,,true,true,true,true
+GRC,Greece,Greek,Hellenic Republic,300,Europe,Southern Europe,,Europe,Southern Europe,350,,true,true,true,true
+GRD,Grenada,Grenadian,,308,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,55,,true,true,true,true
+GRL,Greenland,,,304,Americas,Northern America,,Northern America,Northern America,,,,true,,true
+GTM,Guatemala,Guatemalan,Republic of Guatemala,320,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,90,,true,true,true,true
+GUF,French Guiana,,,254,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,,,true,true,,
+GUM,Guam,,,316,Oceania,Micronesia,,Oceania,Micronesia,,,,true,,true
+GUY,Guyana,Guyanese,Republic of Guyana,328,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,110,,true,true,true,true
+HKG,"China, Hong Kong SAR",,"China, Hong Kong Special Administrative Region|Hong Kong|Hong Kong SAR, China|Hong Kong Special Administrative Region|Hong Kong Special Administrative Region of China",344,Asia,Eastern Asia,,Asia,Eastern Asia,,,true,true,,true
+HMD,Heard Island and McDonald Islands,,,334,Oceania,Australia and New Zealand,,,,,,,,,
+HND,Honduras,Honduran,Republic of Honduras,340,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,91,,true,true,true,true
+HRV,Croatia,Croatian,Republic of Croatia,191,Europe,Southern Europe,,Europe,Southern Europe,344,,true,true,true,true
+HTI,Haiti,Haitian,Republic of Haiti,332,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,41,,true,true,true,true
+HUN,Hungary,Hungarian,,348,Europe,Eastern Europe,,Europe,Eastern Europe,310,,true,true,true,true
+IDN,Indonesia,Indonesian,Republic of Indonesia,360,Asia,South-eastern Asia,,Asia,South-eastern Asia,850,,true,true,true,true
+IMN,Isle of Man,,,833,Europe,Northern Europe,,,,,,,true,,true
+IND,India,Indian,Hyderabad|Republic of India,356,Asia,Southern Asia,,Asia,Southern Asia,750|751,,true,true,true,true
+IOT,British Indian Ocean Territory,,,086,Africa,Sub-Saharan Africa,Eastern Africa,,,,,,,,
+IRL,Ireland,Irish,,372,Europe,Northern Europe,,Europe,Northern Europe,205,,true,true,true,true
+IRN,Iran (Islamic Rep. of),Iranian,"Iran|Iran (Islamic Republic of)|Iran (Persia)|Iran, Islamic Rep.|Iran, Islamic Republic of|Islamic Republic of Iran",364,Asia,Southern Asia,,Asia,Southern Asia,630,,true,true,true,true
+IRQ,Iraq,Iraqi,Republic of Iraq,368,Asia,Western Asia,,Asia,Western Asia,645,,true,true,true,true
+ISL,Iceland,Icelandic,Republic of Iceland,352,Europe,Northern Europe,,Europe,Northern Europe,395,,true,true,true,true
+ISR,Israel,Israeli,State of Israel,376,Asia,Western Asia,,Asia,Western Asia,666,,true,true,true,true
+ITA,Italy,Italian,Italian Republic,380,Europe,Southern Europe,,Europe,Southern Europe,325,,true,true,true,true
+JAM,Jamaica,Jamaican,,388,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,51,,true,true,true,true
+JEY,Jersey,,,832,Europe,Northern Europe,,,,,,,true,,
+JOR,Jordan,Jordanian,Hashemite Kingdom of Jordan,400,Asia,Western Asia,,Asia,Western Asia,663,,true,true,true,true
+JPN,Japan,Japanese,,392,Asia,Eastern Asia,,Asia,Eastern Asia,740,,true,true,true,true
+KAZ,Kazakhstan,Kazak,Republic of Kazakhstan,398,Asia,Central Asia,,Asia,Central Asia,705,,true,true,true,true
+KEN,Kenya,Kenyan,Republic of Kenya,404,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,501,,true,true,true,true
+KGZ,Kyrgyzstan,Kyrgyz,Kyrgyz Republic,417,Asia,Central Asia,,Asia,Central Asia,703,,true,true,true,true
+KHM,Cambodia,Cambodian,Cambodia (Kampuchea)|Kingdom of Cambodia,116,Asia,South-eastern Asia,,Asia,South-eastern Asia,811,,true,true,true,true
+KIR,Kiribati,of Kiribati,Republic of Kiribati,296,Oceania,Micronesia,,Oceania,Micronesia,970,,true,true,true,true
+KNA,Saint Kitts and Nevis,of Saint Kitts and Nevis,St. Kitts and Nevis,659,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,60,,true,true,true,true
+KOR,Rep. of Korea,of the Republic of Korea,"Korea, Rep.|Korea, Republic of|Republic of Korea|South Korea",410,Asia,Eastern Asia,,Asia,Eastern Asia,732,,true,true,true,true
+KWT,Kuwait,Kuwaiti,State of Kuwait,414,Asia,Western Asia,,Asia,Western Asia,690,,true,true,true,true
+LAO,Lao People's Dem. Rep.,Lao,Lao PDR|Lao People's Democratic Republic|Laos,418,Asia,South-eastern Asia,,Asia,South-eastern Asia,812,,true,true,true,true
+LBN,Lebanon,Lebanese,Lebanese Republic,422,Asia,Western Asia,,Asia,Western Asia,660,,true,true,true,true
+LBR,Liberia,Liberian,Republic of Liberia,430,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,450,,true,true,true,true
+LBY,Libya,Libyan,Libyan Arab Jamahiriya,434,Africa,Northern Africa,,Africa,Northern Africa,620,,true,true,true,true
+LCA,Saint Lucia,Saint Lucian,St. Lucia,662,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,56,,true,true,true,true
+LIE,Liechtenstein,of Liechtenstein,Principality of Liechtenstein,438,Europe,Western Europe,,Europe,Western Europe,223,,true,,true,true
+LKA,Sri Lanka,of Sri Lanka,Democratic Socialist Republic of Sri Lanka|Sri Lanka (Ceylon),144,Asia,Southern Asia,,Asia,Southern Asia,780,,true,true,true,true
+LSO,Lesotho,of Lesotho,Kingdom of Lesotho,426,Africa,Sub-Saharan Africa,Southern Africa,Africa,Southern Africa,570,,true,true,true,true
+LTU,Lithuania,Lithuanian,Republic of Lithuania,440,Europe,Northern Europe,,Europe,Northern Europe,368,,true,true,true,true
+LUX,Luxembourg,of Luxembourg,Grand Duchy of Luxembourg,442,Europe,Western Europe,,Europe,Western Europe,212,,true,true,true,true
+LVA,Latvia,Latvian,Republic of Latvia,428,Europe,Northern Europe,,Europe,Northern Europe,367,,true,true,true,true
+MAC,"China, Macao SAR",,"China, Macao Special Administrative Region|Macao|Macao SAR, China|Macao Special Administrative Region|Macao Special Administrative Region of China",446,Asia,Eastern Asia,,Asia,Eastern Asia,,,true,true,,true
+MAF,Saint-Martin (French part),,Saint Martin (French Part)|Saint Martin (French part)|St. Martin (French part),663,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,,true,,true
+MAR,Morocco,Moroccan,Kingdom of Morocco,504,Africa,Northern Africa,,Africa,Northern Africa,600,,true,true,true,true
+MCO,Monaco,Monegasque,Principality of Monaco,492,Europe,Western Europe,,Europe,Western Europe,221,,true,,true,true
+MDA,Rep. of Moldova,Moldovan,"Moldova|Moldova, Republic of|Republic of Moldova",498,Europe,Eastern Europe,,Europe,Eastern Europe,359,,true,true,true,true
+MDG,Madagascar,Malagasy,Madagascar (Malagasy)|Republic of Madagascar,450,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,580,,true,true,true,true
+MDV,Maldives,Maldivian,Republic of Maldives,462,Asia,Southern Asia,,Asia,Southern Asia,781,,true,true,true,true
+MEX,Mexico,Mexican,United Mexican States,484,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,70,,true,true,true,true
+MHL,Marshall Islands,Oceania,Republic of the Marshall Islands,584,Oceania,Micronesia,,Oceania,Micronesia,983,,true,true,true,true
+MKD,North Macedonia,North Macedonia,Macedonia (FYROM/North Macedonia)|Republic of North Macedonia,807,Europe,Southern Europe,,Europe,Southern Europe,343,,true,true,true,true
+MLI,Mali,Malian,Republic of Mali,466,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,432,,true,true,true,true
+MLT,Malta,Maltese,Republic of Malta,470,Europe,Southern Europe,,Europe,Southern Europe,338,,true,,true,true
+MMR,Myanmar,of Myanmar,Myanmar (Burma)|Republic of Myanmar,104,Asia,South-eastern Asia,,Asia,South-eastern Asia,775,,true,true,true,true
+MNE,Montenegro,,The Republic of Montenegro,499,Europe,Southern Europe,,Europe,Southern Europe,341,,true,true,true,true
+MNG,Mongolia,Mongolian,,496,Asia,Eastern Asia,,Asia,Eastern Asia,712,,true,true,true,true
+MNP,Northern Mariana Islands,,Commonwealth of the Northern Mariana Islands,580,Oceania,Micronesia,,Oceania,Micronesia,,,,true,,true
+MOZ,Mozambique,Mozambican,Republic of Mozambique,508,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,541,,true,true,true,true
+MRT,Mauritania,Mauritanian,Islamic Republic of Mauritania,478,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,435,,true,true,true,true
+MSR,Montserrat,,,500,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,,,
+MTQ,Martinique,,,474,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,
+MUS,Mauritius,Mauritian,Republic of Mauritius,480,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,590,,true,true,true,true
+MWI,Malawi,Malawian,Republic of Malawi,454,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,553,,true,true,true,true
+MYS,Malaysia,Malaysian,,458,Asia,South-eastern Asia,,Asia,South-eastern Asia,820,,true,true,true,true
+MYT,Mayotte,,,175,Africa,Sub-Saharan Africa,Eastern Africa,,,,,,true,,
+NAM,Namibia,Namibian,Republic of Namibia,516,Africa,Sub-Saharan Africa,Southern Africa,Africa,Southern Africa,565,,true,true,true,true
+NCL,New Caledonia,,,540,Oceania,Melanesia,,Oceania,Melanesia,,,true,true,,true
+NER,Niger,of the Niger,Republic of the Niger,562,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,436,,true,true,true,true
+NFK,Norfolk Island,,,574,Oceania,Australia and New Zealand,,,,,,,,,
+NGA,Nigeria,Nigerian,Federal Republic of Nigeria,566,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,475,,true,true,true,true
+NIC,Nicaragua,Nicaraguan,Republic of Nicaragua,558,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,93,,true,true,true,true
+NIU,Niue,of Nieu,,570,Oceania,Polynesia,,Oceania,Polynesia,,,true,,,
+NLD,Netherlands (Kingdom of the),Netherlands,Kingdom of the Netherlands|Netherlands,528,Europe,Western Europe,,Europe,Western Europe,210,,true,true,true,true
+NOR,Norway,Norwegian,Kingdom of Norway,578,Europe,Northern Europe,,Europe,Northern Europe,385,,true,true,true,true
+NPL,Nepal,Nepalese,Federal Democratic Republic of Nepal,524,Asia,Southern Asia,,Asia,Southern Asia,790,,true,true,true,true
+NRU,Nauru,Nauruan,Naoero|Republic of Nauru,520,Oceania,Micronesia,,Oceania,Micronesia,971,,true,,true,true
+NZL,New Zealand,of New Zealand,,554,Oceania,Australia and New Zealand,,Oceania,Australia-New Zealand,920,,true,true,true,true
+OMN,Oman,Omani,Sultanate of Oman,512,Asia,Western Asia,,Asia,Western Asia,698,,true,true,true,true
+PAK,Pakistan,of Pakistan,Islamic Republic of Pakistan,586,Asia,Southern Asia,,Asia,Southern Asia,770,,true,true,true,true
+PAN,Panama,Panamanian,Republic of Panama,591,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,95,,true,true,true,true
+PCN,Pitcairn,,,612,Oceania,Polynesia,,,,,,,,,
+PER,Peru,Peruvian,Republic of Peru,604,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,135,,true,true,true,true
+PHL,Philippines,Philippine,Republic of the Philippines,608,Asia,South-eastern Asia,,Asia,South-eastern Asia,840,,true,true,true,true
+PLW,Palau,of Palau,Republic of Palau,585,Oceania,Micronesia,,Oceania,Micronesia,986,,true,true,true,true
+PNG,Papua New Guinea,of Papua New Guinea,Independent State of Papua New Guinea,598,Oceania,Melanesia,,Oceania,Melanesia,910,,true,true,true,true
+POL,Poland,Polish,Republic of Poland,616,Europe,Eastern Europe,,Europe,Eastern Europe,290,,true,true,true,true
+PRI,Puerto Rico,,Puerto Rico (US),630,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,true
+PRK,Dem. People's Rep. of Korea,of the Democratic People's Republic of Korea,"Democratic People's Republic of Korea|Korea, Dem. People's Rep.|Korea, Democratic People's Republic of|Korea, People's Republic of|North Korea",408,Asia,Eastern Asia,,Asia,Eastern Asia,731,,true,true,true,true
+PRT,Portugal,Portuguese,Portuguese Republic,620,Europe,Southern Europe,,Europe,Southern Europe,235,,true,true,true,true
+PRY,Paraguay,Paraguayan,Republic of Paraguay,600,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,150,,true,true,true,true
+PSE,State of Palestine,Palestinians,"Palestine, State of|Palestinian|West Bank and Gaza|the State of Palestine",275,Asia,Western Asia,,Asia,Western Asia,,,true,true,,true
+PYF,French Polynesia,,,258,Oceania,Polynesia,,Oceania,Polynesia,,,true,true,,true
+QAT,Qatar,of Qatar,State of Qatar,634,Asia,Western Asia,,Asia,Western Asia,694,,true,,true,true
+REU,Reunion,,Réunion,638,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,,,,true,,
+ROU,Romania,Romanian,Rumania,642,Europe,Eastern Europe,,Europe,Eastern Europe,360,,true,true,true,true
+RUS,Russian Federation,of the Russian Federation,Russia (Soviet Union),643,Europe,Eastern Europe,,Europe,Eastern Europe,365,,true,true,true,true
+RWA,Rwanda,Rwandan,Rwandese Republic,646,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,517,,true,true,true,true
+SAU,Saudi Arabia,Saudi Arabian,Kingdom of Saudi Arabia,682,Asia,Western Asia,,Asia,Western Asia,670,,true,true,true,true
+SDN,Sudan,Sudanese,Republic of the Sudan,729,Africa,Northern Africa,,Africa,Northern Africa,625,,true,true,true,true
+SEN,Senegal,Senegalese,Republic of Senegal,686,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,433,,true,true,true,true
+SGP,Singapore,Singaporean,Republic of Singapore,702,Asia,South-eastern Asia,,Asia,South-eastern Asia,830,,true,,true,true
+SGS,South Georgia and the South Sandwich Islands,,,239,Americas,Latin America and the Caribbean,South America,,,,,,,,
+SHN,Saint Helena,,"Saint Helena, Ascension and Tristan da Cunha",654,Africa,Sub-Saharan Africa,Western Africa,,,,,,,,
+SJM,Svalbard and Jan Mayen,,Svalbard and Jan Mayen Islands,744,Europe,Northern Europe,,Europe,Northern Europe,,,,true,,
+SLB,Solomon Islands,of Solomon Islands,,090,Oceania,Melanesia,,Oceania,Melanesia,940,,true,true,true,true
+SLE,Sierra Leone,Sierra Leonean,Republic of Sierra Leone,694,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,451,,true,true,true,true
+SLV,El Salvador,Salvadoran,Republic of El Salvador,222,Americas,Latin America and the Caribbean,Central America,Latin America and the Caribbean,Central America,92,,true,true,true,true
+SMR,San Marino,of San Marino,Republic of San Marino,674,Europe,Southern Europe,,Europe,Southern Europe,331,,true,,true,true
+SOM,Somalia,Somali,"Federal Republic of Somalia|Somalia, Fed. Rep.",706,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,520,,true,true,true,true
+SPM,Saint-Pierre-et-Miquelon,,Saint Pierre and Miquelon,666,Americas,Northern America,,Northern America,Northen America,,,,,,
+SRB,Serbia and Kosovo: S/RES/1244 (1999),,Kosovo|Republic of Serbia|Serbia|Yugoslavia (Serbia),688,Europe,Southern Europe,,Europe,Southern Europe,340|345|347,,true,true,true,true
+SSD,South Sudan,,Republic of South Sudan,728,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,626,,true,true,true,true
+STP,Sao Tome and Principe,of Sao Tome and Principe,Democratic Republic of Sao Tome and Principe,678,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,403,,true,true,true,true
+SUR,Suriname,Surinamese,Republic of Suriname,740,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,115,,true,true,true,true
+SVK,Slovakia,Slovak,Slovak Republic,703,Europe,Eastern Europe,,Europe,Eastern Europe,317,,true,true,true,true
+SVN,Slovenia,Slovene,Republic of Slovenia,705,Europe,Southern Europe,,Europe,Southern Europe,349,,true,true,true,true
+SWE,Sweden,Swedish,Kingdom of Sweden,752,Europe,Northern Europe,,Europe,Northern Europe,380,,true,true,true,true
+SWZ,Eswatini,Eswatini,Kingdom of Eswatini|Swaziland (Eswatini),748,Africa,Sub-Saharan Africa,Southern Africa,Africa,Southern Africa,572,,true,true,true,true
+SXM,Sint Maarten (Dutch part),,Saint Maarten,534,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,true
+SYC,Seychelles,of Seychelles,Republic of Seychelles,690,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,591,,true,true,true,true
+SYR,Syrian Arab Rep.,Syrian,Syria|Syrian Arab Republic,760,Asia,Western Asia,,Asia,Western Asia,652,,true,true,true,true
+TCA,Turks and Caicos Islands,,,796,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,true
+TCD,Chad,Chadian,Republic of Chad,148,Africa,Sub-Saharan Africa,Middle Africa,Africa,Middle Africa,483,,true,true,true,true
+TGO,Togo,Togolese,Togolese Republic,768,Africa,Sub-Saharan Africa,Western Africa,Africa,Western Africa,461,,true,true,true,true
+THA,Thailand,Thai,Kingdom of Thailand,764,Asia,South-eastern Asia,,Asia,South-eastern Asia,800,,true,true,true,true
+TIB,Tibetan,,Tibet,,,,,Asia,Various,,true,true,,,
+TJK,Tajikistan,Tajik,Republic of Tajikistan,762,Asia,Central Asia,,Asia,Central Asia,702,,true,true,true,true
+TKL,Tokelau,,,772,Oceania,Polynesia,,,,,,,,,
+TKM,Turkmenistan,Turkmen,,795,Asia,Central Asia,,Asia,Central Asia,701,,true,true,true,true
+TLS,Timor-Leste,,Democratic Republic of Timor-Leste|East Timor,626,Asia,South-eastern Asia,,Asia,South-eastern Asia,860,,true,true,true,true
+TON,Tonga,Tongan,Kingdom of Tonga,776,Oceania,Polynesia,,Oceania,Polynesia,972,,true,true,true,true
+TTO,Trinidad and Tobago,of Trinidad and Tobago,Republic of Trinidad and Tobago,780,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,52,,true,true,true,true
+TUN,Tunisia,Tunisian,Republic of Tunisia,788,Africa,Northern Africa,,Africa,Northern Africa,616,,true,true,true,true
+TUR,Türkiye,Turkish,Republic of Türkiye|Turkey (Ottoman Empire)|Turkiye,792,Asia,Western Asia,,Asia,Western Asia,640,,true,true,true,true
+TUV,Tuvalu,Tuvaluan,,798,Oceania,Polynesia,,Oceania,Polynesia,973,,true,true,true,true
+TWN,Taiwan (Province of China),,"Taiwan|Taiwan, Province of China",,,,,,,713,,,true,true,
+TZA,United Rep. of Tanzania,Tanzanian,"Tanzania|Tanzania (Tanganyika)|Tanzania, United Republic of|United Republic of Tanzania|Zanzibar",834,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,510|511,,true,true,true,true
+UGA,Uganda,Ugandan,Republic of Uganda,800,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,500,,true,true,true,true
+UKR,Ukraine,Ukrainian,,804,Europe,Eastern Europe,,Europe,Eastern Europe,369,,true,true,true,true
+UMI,United States Minor Outlying Islands,,,581,Oceania,Micronesia,,,,,,,,,
+UNK,Unknown,,,,,,,,,,true,true,,,
+URY,Uruguay,Uruguayan,Eastern Republic of Uruguay,858,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,165,,true,true,true,true
+USA,United States of America,of the United States (of America),United States,840,Americas,Northern America,,Northern America,Northern America,2,,true,true,true,true
+UZB,Uzbekistan,Uzbek,Republic of Uzbekistan,860,Asia,Central Asia,,Asia,Central Asia,704,,true,true,true,true
+VAT,Holy See,of the Holy See,Holy See (Vatican City State)|Holy See (the)|Vatican City State,336,Europe,Southern Europe,,Europe,Southern Europe,327,,true,,true,
+VCT,Saint Vincent and the Grenadines,of Saint Vincent and the Grenadines,St. Vincent and the Grenadines,670,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,57,,true,true,true,true
+VEN,Venezuela (Bolivarian Republic of),Venezuelan,"Bolivarian Republic of Venezuela|Venezuela|Venezuela, Bolivarian Republic of|Venezuela, RB",862,Americas,Latin America and the Caribbean,South America,Latin America and the Caribbean,South America,101,,true,true,true,true
+VGB,British Virgin Islands,,"Virgin Islands, British",092,Americas,Latin America and the Caribbean,Caribbean,Latin America and the Caribbean,Caribbean,,,true,true,,true
+VIR,United States Virgin Islands,,"Virgin Islands (U.S.)|Virgin Islands of the United States|Virgin Islands, U.S.",850,Americas,Latin America and the Caribbean,Caribbean,,,,,,true,,true
+VNM,Viet Nam,Vietnamese,"Socialist Republic of Viet Nam|Vietnam|Vietnam (Annam/Cochin China/Tonkin)|Vietnam, Republic of (South Vietnam)",704,Asia,South-eastern Asia,,Asia,South-eastern Asia,816|817,,true,true,true,true
+VUT,Vanuatu,of Vanuatu,Republic of Vanuatu,548,Oceania,Melanesia,,Oceania,Melanesia,935,,true,true,true,true
+WLF,Wallis and Futuna Islands,,Wallis and Futuna,876,Oceania,Polynesia,,,,,,,,,
+WSM,Samoa,Samoan,Independent State of Samoa|Samoa (Western Samoa),882,Oceania,Polynesia,,Oceania,Polynesia,990,,true,true,true,true
+XKX,XKX,,Kosovo,,,,,,,,,,true,,true
+XXA,Stateless (no country),,Stateless,,,,,Stateless,Stateless,,true,true,,,
+YEM,Yemen,Yemeni,"Republic of Yemen|Yemen (Arab Republic of Yemen)|Yemen, People's Republic of (South Yemen)|Yemen, Rep.",887,Asia,Western Asia,,Asia,Western Asia,678|680,,true,true,true,true
+ZAF,South Africa,South African,Republic of South Africa,710,Africa,Sub-Saharan Africa,Southern Africa,Africa,Southern Africa,560,,true,true,true,true
+ZMB,Zambia,Zambian,Republic of Zambia,894,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,551,,true,true,true,true
+ZWE,Zimbabwe,Zimbabwean,Republic of Zimbabwe|Zimbabwe (Rhodesia),716,Africa,Sub-Saharan Africa,Eastern Africa,Africa,Eastern Africa,552,,true,true,true,true

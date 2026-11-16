@@ -1,0 +1,82 @@
+{
+ "title": "How sources define it",
+ "columns": [
+  {
+   "id": "unhcr",
+   "label": "UNHCR",
+   "source_ids": [
+    "unhcr-pop-2026"
+   ]
+  },
+  {
+   "id": "idmc",
+   "label": "IDMC",
+   "source_ids": [
+    "idmc-conflict-2026",
+    "idmc-disaster-2026"
+   ]
+  },
+  {
+   "id": "gov_india",
+   "label": "Government of India",
+   "source_ids": [
+    "mea-2016"
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "term": "Refugee",
+   "glossary_id": "refugee",
+   "unhcr": "People outside their country who need international protection, counted under UNHCR's mandate at year end (from 1951).",
+   "idmc": "Not counted (IDMC covers people inside their own country).",
+   "gov_india": "No national refugee law. Figures for Sri Lankan refugees count camp residents and those registered outside camps, on one stated date."
+  },
+  {
+   "term": "Asylum seeker",
+   "glossary_id": "asylum_seeker",
+   "unhcr": "Pending claims for international protection at year end (from 1993).",
+   "idmc": "Not counted.",
+   "gov_india": "Not used in the figures on this site."
+  },
+  {
+   "term": "IDP",
+   "glossary_id": "idp",
+   "unhcr": "Conflict IDPs that UNHCR protects or assists ('of concern'), year end (from 1993). Disasters not included.",
+   "idmc": "All people displaced inside their country by conflict and violence (from 2009) or disasters (from 2008). Stock at year end plus new displacements during the year. Mostly estimates.",
+   "gov_india": "Not used in the figures on this site."
+  },
+  {
+   "term": "Other people in need of international protection",
+   "glossary_id": "oip",
+   "unhcr": "People forced across a border who are not counted as refugees or asylum seekers (from 2018).",
+   "idmc": "Not counted.",
+   "gov_india": "Not used."
+  },
+  {
+   "term": "Stateless person",
+   "glossary_id": "stateless",
+   "unhcr": "Not considered a national by any country under its law (from 2004). Can overlap with refugees.",
+   "idmc": "Not counted.",
+   "gov_india": "Not used in the figures on this site."
+  },
+  {
+   "term": "Causes covered",
+   "glossary_id": null,
+   "unhcr": "Conflict and persecution.",
+   "idmc": "Conflict, violence and disasters.",
+   "gov_india": "Not stated in the figures used here."
+  },
+  {
+   "term": "Type of figure",
+   "glossary_id": "stock",
+   "unhcr": "Mostly year-end stocks; returns, resettlement and asylum claims are yearly flows.",
+   "idmc": "Year-end stock and yearly new displacements (movements, not people).",
+   "gov_india": "A count on one stated date."
+  }
+ ],
+ "notes": [
+  "UNHCR and IDMC IDP figures overlap, so they are shown side by side and never added.",
+  "The IDP definition (UN Guiding Principles on Internal Displacement, 1998) sets no minimum distance."
+ ]
+}
