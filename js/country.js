@@ -17,7 +17,7 @@ const TYPE = { pair: "Situations", named: "Situations", origin: "Groups", idp: "
 
 try {
   const c = await getJSON(`data/web/country/${encodeURIComponent(iso)}.json`);
-  document.title = `${c.name} · Website v1`;
+  document.title = `${c.name} · Refugee Finder`;
   const last = (arr) => (arr && arr.length ? arr[arr.length - 1] : null);
   const card = (label, pair, sub) => (pair ? `<article class="card kn kn--small"><div class="kn__label">${esc(label)}, ${pair[0]}</div>
       <div class="kn__value" style="cursor:default">${numHTML(pair[1])}</div><div class="kn__sub">${esc(sub)}</div></article>` : "");

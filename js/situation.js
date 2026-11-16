@@ -51,7 +51,7 @@ async function main() {
   MEAS = Object.fromEntries(measures.map((x) => [x.id, x]));
   REFS = Object.fromEntries(refs.map((x) => [x.id, x]));
   GLOSS = glossary;
-  document.title = `${s.title} · Website v1`;
+  document.title = `${s.title} · Refugee Finder`;
   const steps = STEPS.filter(([k]) => s.steps?.[k] !== false);
 
   const mainEl = document.getElementById("main");

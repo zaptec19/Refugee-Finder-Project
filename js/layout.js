@@ -87,7 +87,7 @@ function topbarHTML(page, dark, theme) {
   const cur = (p) => (p === page ? ' aria-current="page"' : "");
   return `
   <div class="topbar__inner">
-    <a class="brand" href="index.html"${cur("home")}>Website v1</a>
+    <a class="brand" href="index.html"${cur("home")}>Refugee Finder</a>
     <div class="seg topbar__fmt" role="group" aria-label="Number format">
       <button type="button" data-fmt="ind" aria-pressed="${m === "ind"}" title="Indian format: lakh and crore">1,00,000</button>
       <button type="button" data-fmt="intl" aria-pressed="${m === "intl"}" title="International format">100,000</button>

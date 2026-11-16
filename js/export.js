@@ -167,7 +167,7 @@ async function toDocx(list, opts, onStatus) {
   const P = (text, o = {}) => new d.Paragraph({ spacing: { after: 100 }, children: [new d.TextRun({ text, size: 22, ...o })] });
   const children = [
     new d.Paragraph({ heading: d.HeadingLevel.HEADING_1, children: [new d.TextRun({ text: "My collection" })] }),
-    P(`Exported from Website v1 on ${stamp()}. Numbers are in ${mode() === "ind" ? "Indian (1,00,000)" : "international (100,000)"} format. Every figure comes from the dataset named in the Source column; full references follow.`, { color: "625E56" }),
+    P(`Exported from Refugee Finder on ${stamp()}. Numbers are in ${mode() === "ind" ? "Indian (1,00,000)" : "international (100,000)"} format. Every figure comes from the dataset named in the Source column; full references follow.`, { color: "625E56" }),
     table,
   ];
   if (opts.refs) {
@@ -207,7 +207,7 @@ async function toDocx(list, opts, onStatus) {
     }
   }
   onStatus?.("Writing the Word file…");
-  const doc = new d.Document({ creator: "Website v1", title: "My collection", styles: { default: { document: { run: { font: "Calibri" } } } },
+  const doc = new d.Document({ creator: "Refugee Finder", title: "My collection", styles: { default: { document: { run: { font: "Calibri" } } } },
     sections: [{ properties: { page: { size: { orientation: d.PageOrientation.LANDSCAPE } } }, children }] });
   const blob = await d.Packer.toBlob(doc);
   const name = `my-collection-${stamp()}.docx`;
@@ -235,7 +235,7 @@ async function toXlsx(list, opts, onStatus) {
   const ExcelJS = await loadExcelJS();
   const rows = await rowsFor(list, opts);
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Website v1";
+  wb.creator = "Refugee Finder";
   wb.created = new Date();
   const ws = wb.addWorksheet("Collection", { views: [{ state: "frozen", ySplit: 1 }] });
   const cols = [
@@ -292,7 +292,7 @@ async function toXlsx(list, opts, onStatus) {
     }
   }
   const note = wb.addWorksheet("About");
-  note.addRow([`Exported from Website v1 on ${stamp()}.`]);
+  note.addRow([`Exported from Refugee Finder on ${stamp()}.`]);
   note.addRow([`Numbers are real numbers shown in ${mode() === "ind" ? "Indian" : "international"} format. Every figure comes from the dataset in its Source column.`]);
   note.getColumn(1).width = 110;
   onStatus?.("Writing the Excel file…");
