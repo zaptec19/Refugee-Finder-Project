@@ -329,6 +329,13 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
   .topbar__guide { grid-area: guide; height: 30px; padding: 0 10px; }
   .topbar__coll { grid-area: coll; padding: 0 6px; }
   .topbar__right .label-wide { display: none; }
+  /* Narrow phones: the guide pill's dot (and aria-pressed) still show on/off, so drop the word to make room for the name. */
+  @media (max-width: 420px) {
+    .topbar__inner { column-gap: 6px; }
+    .topbar__inner > .brand { font-size: 0.875rem; }
+    .topbar__fmt button { padding: 0 5px; }
+    .topbar__guide .pill__state { display: none; }
+  }
   body.page-home { --topbar-h: 56px; }
   body.page-home .topbar__inner { grid-template-rows: 56px; grid-template-areas: "brand fmt guide coll"; }
   body.page-home .topbar__learn, body.page-home .topbar__ask-slot { display: none; }
