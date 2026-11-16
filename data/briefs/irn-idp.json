@@ -107,7 +107,6 @@
     "unhcr-pop-2026",
     "ucdp-acd-26.1"
   ],
-  "model": "gemini-3.5-flash",
   "generated_on": "2026-11-16",
   "factpack_hash": "6ed5313acf0b03e5",
   "status": "unchecked",

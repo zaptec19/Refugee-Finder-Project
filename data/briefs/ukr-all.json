@@ -87,7 +87,6 @@
     "idmc-conflict-2026",
     "ucdp-acd-26.1"
   ],
-  "model": "gemini-3.5-flash",
   "generated_on": "2026-11-16",
   "factpack_hash": "b31624942aeea421",
   "status": "unchecked",

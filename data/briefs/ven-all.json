@@ -80,7 +80,6 @@
     "ucdp-ov-26.1",
     "idmc-disaster-2026"
   ],
-  "model": "gemini-3.5-flash",
   "generated_on": "2026-11-16",
   "factpack_hash": "022ecdc9708ce5a3",
   "status": "unchecked",

@@ -88,7 +88,6 @@
     "ucdp-acd-26.1",
     "mea-2016"
   ],
-  "model": "gemini-3.8-flash",
   "generated_on": "2026-11-16",
   "factpack_hash": "e4ac3790c41a9873",
   "status": "unchecked",
