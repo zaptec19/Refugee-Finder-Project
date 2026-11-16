@@ -186,9 +186,9 @@ body:not(.guide-on) .tip { display: none; }
   display: flex; gap: var(--s-2); align-items: flex-start; padding: var(--s-2) var(--s-3);
   background: var(--surface-2); border-radius: var(--r-control); color: var(--muted); font-size: var(--fs-13);
 }
-.ai-label {
+.brief-label {
   display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--r-pill);
-  background: var(--ai-bg); color: var(--ai-ink); font-size: var(--fs-13);
+  background: var(--label-bg); color: var(--label-ink); font-size: var(--fs-13);
 }
 .no-data { color: var(--muted); font-family: var(--font-sans); font-style: italic; }
 .status { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-13); color: var(--muted); }

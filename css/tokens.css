@@ -51,8 +51,8 @@
   --ok: #2E7D4F;
   --warn: #A15C00;
   --danger: #B3261E;
-  --ai-bg: #EEEAF6;
-  --ai-ink: #4C3C78;
+  --label-bg: #EEEAF6;
+  --label-ink: #4C3C78;
 
   /* type */
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -140,8 +140,8 @@
   --guide-line: #6B5719;
   --guide-ink: #F2E2A8;
   --guide-dot: #E0B43C;
-  --ai-bg: #2A2540;
-  --ai-ink: #D6CCF5;
+  --label-bg: #2A2540;
+  --label-ink: #D6CCF5;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -272,15 +272,14 @@ function briefHTML(brief) {
     return `<div class="brief__k">${p.toUpperCase()}</div><div class="brief__v">${one(sentences[0])}${rest.length
       ? ` <span class="brief__rest" hidden>${rest.map(one).join(" ")}</span>` : ""}</div>`;
   };
-  const label = brief.status === "checked" ? `Checked by ${esc(brief.checked_by || "the team")}`
-    : `Written by Gemini from ${esc(srcs.map((id) => SRC[id]?.short || REFS[id]?.authors || id).join(", ") || "the data")}, not yet checked`;
+  const label = brief.status === "checked" ? `Checked by ${esc(brief.checked_by || "the team")}` : "";
   const more = brief.more ? `<details class="brief__more"><summary>Read more</summary><div class="brief__v">${esc(brief.more)}</div></details>` : "";
   const anyRest = ["what", "why", "when", "how"].some((p) => Array.isArray(brief[p]) && brief[p].length > 1);
   return `<div class="brief" id="brief-body">${["what", "why", "when", "how"].map(part).join("")}</div>${more}
     ${anyRest ? `<button class="linklike brief__toggle" type="button" aria-expanded="false" aria-controls="brief-body"
       onclick="const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',open);this.textContent=open?'Show less ⌃':'Read more ⌄';document.querySelectorAll('#brief-body .brief__rest').forEach(e=>e.hidden=!open)">Read more ⌄</button>` : ""}
-    <p style="margin-top:16px"><span class="ai-label">${icon("info", { size: 14 })}${label}</span></p>
-    <p class="small muted">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
+    ${label ? `<p style="margin-top:16px"><span class="brief-label">${icon("info", { size: 14 })}${label}</span></p>` : ""}
+    <p class="small muted" style="margin-top:16px">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
 }
 
 /** Brief text with its counts turned into live numbers (so the Indian / international switch reaches them).
