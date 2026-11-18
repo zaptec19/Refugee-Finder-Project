@@ -2,20 +2,21 @@
   "id": "mmr-idp",
   "what": [
     {
-      "text": "Internal displacement occurred within Myanmar, and people also sought protection abroad as refugees and asylum seekers.",
+      "text": "This page follows people displaced inside Myanmar, counted by IDMC and UNHCR side by side.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, UNHCR recorded 3628840 internally displaced persons and 1524378 refugees originating from Myanmar.",
-      "source_ids": [
+        "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "The sources don't say which specific countries hosted these refugees.",
+      "text": "At the end of 2025, IDMC estimated 3639400 people living in internal displacement because of conflict and violence, and UNHCR counted 3628840.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Myanmar live mainly in Bangladesh, Malaysia and Thailand.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,74 +24,67 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes involved the Government of Myanmar (Burma) and groups such as KNU, KNPP, MNDAA, KIO, and NUG.",
+      "text": "UCDP records armed conflict over the government of Myanmar from 2021 to 2025, at war level from 2022, with the NUG, PSLF, CNF and PNLO among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Disaster events were also recorded as causing displacement movements inside the country.",
+      "text": "It also records armed conflicts over Karen, Kachin and Arakan territory, with the KNU, KIO and ULA among the groups fighting the government in recent years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Earthquakes, floods, mass movements and storms are the disasters recorded for Myanmar in IDMC's data.",
       "source_ids": [
         "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say additional details about specific individual reasons for moving.",
-      "source_ids": [
-        "ucdp-acd-26.1"
       ]
     }
   ],
   "when": [
     {
-      "text": "Refugee figures were recorded at 160000 in 1978 and 1156742 in 2017.",
+      "text": "IDMC's figure rose from 470000 in 2009 to its highest, 3639400, at the end of 2025.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     },
     {
-      "text": "Internal displacement reported by UNHCR stood at 671011 in 2021 and 3628840 in 2025.",
+      "text": "The largest changes came between 2021 and 2023, and the main years of displacement in the data are 2023 to 2025.",
       "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "New disaster displacements were recorded at 2250000 in 2008.",
-      "source_ids": [
-        "idmc-disaster-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Displaced populations are counted through end-of-year totals and new movement counts by UNHCR and IDMC.",
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
       "source_ids": [
-        "unhcr-pop-2026",
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "In 2025, UNHCR recorded 64 returns.",
+      "text": "The sources don't say where displaced people are living inside Myanmar.",
       "source_ids": [
-        "unhcr-solutions-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say what physical means of travel were used or what types of shelter people live in.",
-      "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-conflict-2026",
+    "unhcr-pop-2026",
     "ucdp-acd-26.1",
-    "idmc-disaster-2026",
-    "unhcr-solutions-2026"
+    "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "487db7696eee3bfd",
+  "numbers": [
+    470000,
+    3628840,
+    3639400
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "b70a9a74256a5dc2",
   "status": "unchecked",
   "checked_by": null,
   "check": {

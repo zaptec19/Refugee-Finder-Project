@@ -41,7 +41,9 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
       <a class="results__quick" href="situation.html?id=${esc(top.id)}" role="option" data-opt>
         <span class="eyebrow">Quick answer</span>
         <span class="results__qa"><span>${esc(top.title)}, ${top.latest.year}:</span> <strong class="num">${numHTML(top.latest.value)}</strong></span>
-        <span class="small muted">${esc(m?.label || "")}${m?.kind === "stock" ? " at year end" : m?.kind === "flow" ? " during the year" : ""} · Source: ${esc(sourceShort(top.latest.measure_id))}</span>
+        <span class="small muted">${m?.kind === "flow"
+          ? `New displacements${/disaster/.test(top.latest.measure_id) ? " from disasters" : /conflict/.test(top.latest.measure_id) ? " from conflict" : ""} in ${top.latest.year}, a yearly count (movements, not people)`
+          : `${esc(m?.label || "")}${m?.kind === "stock" ? " at year end" : ""}`} · Source: ${esc(sourceShort(top.latest.measure_id))}</span>
       </a>` : "";
     const groupHTML = ["situation", "country", "group"].filter((g) => groups[g].length).map((g) => `
       <div class="results__group"><p class="eyebrow">${GROUP_LABEL[g]}</p>

@@ -2,48 +2,41 @@
   "id": "ukr-idp",
   "what": [
     {
-      "text": "People in Ukraine were displaced internally and as refugees.",
+      "text": "This page follows people displaced inside Ukraine, counted by IDMC and UNHCR side by side.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, UNHCR reported 5224131 refugees from Ukraine.",
-      "source_ids": [
+        "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, both UNHCR and IDMC reported 3712000 internal IDPs.",
+      "text": "At the end of 2025, both sources gave the same figure: 3712000 people living in internal displacement because of conflict.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "The sources don't say where inside the country displaced people live.",
+      "text": "Others left the country: refugees from Ukraine live mainly in Germany and Poland.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
+        "unhcr-pop-2026"
       ]
     }
   ],
   "why": [
     {
-      "text": "Conflict episodes involved the Government of Ukraine against Maidan, DPR, LPR, and Novorossiya between 2014 and 2022.",
+      "text": "UCDP records an interstate armed conflict between Russia and Ukraine from 2022 to 2025, at war level in each of those years.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Conflict episodes between the Government of Russia (Soviet Union) and Government of Ukraine (Crimea) occurred between 2022 and 2025.",
+      "text": "Before that, it records armed conflict over Novorossiya territory from 2014 to 2022, with the DPR and LPR among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Disasters were also recorded between 2008 and 2025.",
+      "text": "Wildfires are the disasters recorded for Ukraine in IDMC's data.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
@@ -51,55 +44,48 @@
   ],
   "when": [
     {
-      "text": "IDMC reported 646500 new conflict displacements in 2014 and 942418 in 2015.",
-      "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2022, IDMC reported 16870323 new conflict displacements, and UNHCR reported 5684177 refugees.",
+      "text": "IDMC's figure peaked at 5913638 in 2022, the first year of the interstate war, and fell to 3665165 by 2024.",
       "source_ids": [
         "idmc-conflict-2026",
-        "unhcr-pop-2026"
+        "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Returns were recorded at 660000 in 2022 and 139251 in 2025.",
+      "text": "IDMC recorded its highest number of new conflict displacements, a count of movements, in 2022.",
       "source_ids": [
-        "unhcr-solutions-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "UNHCR counts refugees under its mandate at the end of each year.",
-      "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "IDMC conflict new displacement figures count movements rather than individual people.",
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "The sources don't say how people traveled or what housing they use.",
+      "text": "The sources don't say where displaced people are living inside Ukraine.",
       "source_ids": [
-        "unhcr-pop-2026",
         "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-conflict-2026",
+    "unhcr-pop-2026",
     "ucdp-acd-26.1",
-    "idmc-disaster-2026",
-    "unhcr-solutions-2026"
+    "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "6b1c138f3a4877e2",
+  "numbers": [
+    3665165,
+    3712000,
+    5913638
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "3a48b39944144d29",
   "status": "unchecked",
   "checked_by": null,
   "check": {

@@ -2,19 +2,19 @@
   "id": "ven-all",
   "what": [
     {
-      "text": "Venezuelan people moved from Venezuela to host countries in Latin America and the Caribbean.",
+      "text": "This page follows Venezuelans abroad whom UNHCR counts as other people in need of international protection, a group separate from refugees and asylum seekers.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, host countries included Colombia with 2810778 people, Peru with 1098014, Chile with 662504, Brazil with 549534, and Ecuador with 432888.",
+      "text": "At the end of 2025 there were 6042706 people in this group, and Colombia hosts the largest share, 46.5%.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "The number of Venezuelan people in need of international protection reached 6042706 in 2025.",
+      "text": "Peru, Chile, Brazil and Ecuador are the next largest hosts.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -22,66 +22,57 @@
   ],
   "why": [
     {
-      "text": "The sources don't say why people moved from Venezuela.",
+      "text": "The sources here don't say why people left Venezuela.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "ucdp-ov-26.1"
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "No conflict episodes or event descriptions are recorded in the data.",
+      "text": "UNHCR's figures describe the scale of the movement, not its causes.",
       "source_ids": [
-        "ucdp-ov-26.1"
+        "unhcr-pop-2026"
       ]
     }
   ],
   "when": [
     {
-      "text": "In 2018, there were 21047 refugees, 464223 asylum seekers, and 2592947 people in need of international protection.",
+      "text": "UNHCR's figures for this group start in 2018 at 2592947 and reach 6042706 in 2025.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "By 2025, the number of refugees was 417010, asylum seekers were 1181156, and people in need of international protection reached 6042706.",
+      "text": "The main years in the data are 2019 to 2025.",
       "source_ids": [
         "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "New disaster displacements included 31707 movements in 2018 and 32592 movements in 2021.",
-      "source_ids": [
-        "idmc-disaster-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Refugees are counted at the end of the year under UNHCR mandate.",
+      "text": "These are year-end totals reported to UNHCR; refugees and asylum seekers from Venezuela are counted in separate series and are not added here.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Asylum seekers are people who asked for international protection whose claims have not been decided at the end of the year.",
-      "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "People in need of international protection are outside their country and not counted as refugees or asylum seekers.",
+      "text": "The sources don't say how people travelled.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
-    "ucdp-ov-26.1",
-    "idmc-disaster-2026"
+    "unhcr-pop-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "022ecdc9708ce5a3",
+  "numbers": [
+    2592947,
+    6042706
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "1b4e545550831936",
   "status": "unchecked",
   "checked_by": null,
   "check": {

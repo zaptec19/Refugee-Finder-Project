@@ -72,6 +72,8 @@ main.innerHTML = `<div class="page page--narrow learn">
     <div class="orgs">${ORGS.map((o) => `<article class="card org" id="org-${o.id}"><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p><p class="small"><strong>Limits:</strong> ${esc(o.limits)}</p></article>`).join("")}</div></section>
 
   <section id="tour" class="learn__section"><h2>The 2-minute tour</h2>
+    <p><button class="btn btn--primary" type="button" data-start-tour>Start the interactive tour</button>
+      <span class="small muted">A card at a time, pointing at each part of the site. Or read the steps below.</span></p>
     <ol class="tour">
       <li><strong>Ask.</strong> Type a place, a group or a question on the home page. A quick answer comes straight from the data.</li>
       <li><strong>Read the brief.</strong> What happened, why people moved, when and how, before any numbers. <a href="situation.html?id=lka-ind#brief">See an example</a></li>

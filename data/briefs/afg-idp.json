@@ -2,21 +2,21 @@
   "id": "afg-idp",
   "what": [
     {
-      "text": "People were displaced internally in Afghanistan and across borders as refugees and asylum seekers.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, IDMC recorded 4355147 people displaced by conflict or violence and 2591571 displaced by disasters.",
+      "text": "This page follows people displaced inside Afghanistan, counted by IDMC and UNHCR side by side.",
       "source_ids": [
         "idmc-conflict-2026",
-        "idmc-disaster-2026"
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, UNHCR recorded 3199023 displaced people inside the country and 2671560 refugees abroad.",
+      "text": "At the end of 2025, IDMC estimated 4355147 people living in internal displacement because of conflict and violence, and UNHCR counted 3199023.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Many Afghans also live abroad, mainly in Pakistan and Iran.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -24,74 +24,65 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes occurred between the Government of Afghanistan and groups including Taleban, NRF, AFF, and Hizb-i Islami-yi Afghanistan from 2003 to 2025.",
+      "text": "UCDP records armed conflict over the government of Afghanistan in every year from 2003 to 2025, with the Taleban, Hizb-i Islami-yi Afghanistan, NRF and AFF among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "The Government of Afghanistan also fought IS (Islamic State) from 2015 to 2025, and the Government of Pakistan in 2024 and 2025.",
+      "text": "It also records armed conflict with the Islamic State group from 2015 to 2025, and an interstate armed conflict between Afghanistan and Pakistan in 2024 and 2025.",
       "source_ids": [
         "ucdp-acd-26.1"
-      ]
-    },
-    {
-      "text": "Disaster events were also recorded as reasons for internal movements.",
-      "source_ids": [
-        "idmc-disaster-2026"
       ]
     }
   ],
   "when": [
     {
-      "text": "Conflict-related internal displacement reported by IDMC rose from 297000 in 2009 to 4513270 in 2022.",
+      "text": "IDMC's figure rose from 297000 in 2009 to a peak of 4513270 in 2022.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "New conflict movements were recorded at 723082 in 2021 and 168265 in 2025.",
+      "text": "New conflict displacements were highest in 2021, and new disaster displacements in 2024, in IDMC's records.",
       "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "Returns included 1957955 in 2002 and 1947183 in 2025.",
-      "source_ids": [
-        "unhcr-solutions-2026"
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "IDMC counts people living in internal displacement at the end of the year.",
+      "text": "In 2025 IDMC counts 1156124 more internally displaced people than UNHCR; the figures are never added together.",
       "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "UNHCR counts internally displaced people whom UNHCR protects or assists at the end of the year.",
-      "source_ids": [
+        "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "The sources don't say how people traveled or where they reside.",
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
       "source_ids": [
-        "unhcr-pop-2026",
         "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-conflict-2026",
-    "idmc-disaster-2026",
+    "unhcr-pop-2026",
     "ucdp-acd-26.1",
-    "unhcr-solutions-2026"
+    "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "811ae0eefce04ee4",
+  "numbers": [
+    297000,
+    1156124,
+    3199023,
+    4355147,
+    4513270
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "d64eb2cafa88fb35",
   "status": "unchecked",
   "checked_by": null,
   "check": {

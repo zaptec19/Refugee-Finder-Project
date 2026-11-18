@@ -1,0 +1,85 @@
+{
+  "id": "ssd-all",
+  "what": [
+    {
+      "text": "This page follows refugees from South Sudan in all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 2386499 refugees from South Sudan, and Uganda hosts the largest share, 43.3%.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Sudan, Ethiopia and Kenya are the next largest hosts.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of South Sudan from 2011 to 2021 and again in 2025, with groups such as SPLM/A - IO and NAS among the government's opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP records the conflict at war level in 2014.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for refugees from South Sudan starts in 2012 at 87007 and peaks at 2439888 in 2017.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The largest changes came between 2013 and 2014, 2015 and 2016, and 2016 and 2017, and the main years of displacement in the data are 2016 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees; asylum seekers from South Sudan are counted in a separate series.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    87007,
+    2386499,
+    2439888
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "9dd48773f7242b0b",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

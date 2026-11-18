@@ -1,0 +1,102 @@
+{
+  "id": "syr-tur",
+  "what": [
+    {
+      "text": "This page follows refugees from Syria living in Türkiye.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 2347756 Syrian refugees in Türkiye, the largest group of Syrian refugees in any single country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Germany, Lebanon and Jordan are the next largest hosts.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Protests from March 2011 turned into armed conflict, which UCDP records at war level from 2011 between the government and Syrian insurgents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP also records armed conflict with the Islamic State group in Syria from 2013 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The number of Syrian refugees in Türkiye peaked at 3737369 in 2021 and was lower by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Türkiye set out temporary protection for Syrians in a regulation on 22 October 2014, and the EU–Türkiye statement followed on 18 March 2016.",
+      "source_ids": [
+        "turkey-tp-2014",
+        "eu-turkey-2016"
+      ]
+    },
+    {
+      "text": "After the government of Bashar al-Assad fell on 8 December 2024, returns from Türkiye to Syria rose in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "Türkiye registers Syrians under temporary protection rather than full refugee status, and UNHCR reports them as refugees.",
+      "source_ids": [
+        "turkey-tp-2014",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figures count registered people only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Large earthquakes struck south-eastern Türkiye and northern Syria on 6 February 2023, where many Syrian refugees live; IDMC counts that displacement in a separate series.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "turkey-tp-2014",
+    "eu-turkey-2016",
+    "unhcr-solutions-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    2347756,
+    3737369
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "ffec60b1503409d9",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

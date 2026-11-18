@@ -16,6 +16,12 @@
       "source_id": "unhcr-solutions-2026"
     },
     {
+      "date": "2012-05",
+      "title": "Regional solutions strategy",
+      "note": "Afghanistan, Iran and Pakistan, with UNHCR, launched the Solutions Strategy for Afghan Refugees, a shared framework for return, reintegration and support to host countries.",
+      "source_id": "unhcr-ssar-2012"
+    },
+    {
       "date": "2021-08-15",
       "title": "Taliban take Kabul",
       "note": "The Taliban took control of Kabul. New arrivals in Iran and Pakistan followed; UNHCR's figures for 2022 also reflect a recount in Iran (see Limitations).",
@@ -24,10 +30,13 @@
     },
     {
       "date": "2023-10",
-      "title": "Pakistan's repatriation plan",
-      "note": "Pakistan announced a plan to return foreigners without valid documents, which led to large returns of Afghans.",
+      "title": "Pakistan's 'Illegal Foreigners Repatriation Plan'",
+      "note": "Pakistan announced a plan to return foreigners without valid documents, with a deadline of 1 November 2023; large returns of Afghans followed.",
       "source_id": "unhcr-solutions-2026",
-      "to_check": "a source for the plan and its date"
+      "source_ids": [
+        "unhcr-pak-afg-returns-9",
+        "unhcr-solutions-2026"
+      ]
     },
     {
       "date": "2025",
@@ -62,6 +71,16 @@
     "undocumented Afghans"
   ],
   "reading": [
-    "monsutti-2005"
-  ]
+    "monsutti-2005",
+    "unhcr-ssar-2012"
+  ],
+  "explainers": {
+    "refugees": {
+      "reliability": "Figures are registered refugees reported by the governments of Iran and Pakistan to UNHCR. Afghans with other documents, or none, are counted differently or not at all (see Limitations).",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unhcr-pak-afg-returns-9"
+      ]
+    }
+  }
 }

@@ -1,0 +1,90 @@
+{
+  "id": "afg-all",
+  "what": [
+    {
+      "text": "This page follows refugees from Afghanistan in all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 2671560 Afghan refugees, and Pakistan hosts the largest share, 43.4%, followed by Iran.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Germany, France and the United Kingdom are the next largest hosts.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Afghanistan in every year from 1978 to 2025, with opponents over that span that include the PDPA, Hizb-i Islami-yi Afghanistan and the Taleban.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP also records armed conflict with the Islamic State group from 2015 to 2025, and an interstate armed conflict between Afghanistan and Pakistan in 2024 and 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The number of Afghan refugees peaked at 6403144 in 2023 and fell to 2671560 by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 1981 to 1993, 2000 to 2001 and 2022 to 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Large changes appear between 2021 and 2022 and again between 2024 and 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "From 2025, UNHCR also counts some Afghans as other people in need of international protection, a separate series that is not added to the refugee figures.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    2671560,
+    6403144
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "e0534993008cb797",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "ven-col",
+  "what": [
+    {
+      "text": "This page follows Venezuelans in Colombia whom UNHCR counts as other people in need of international protection, a group separate from refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025 there were 2810778 people in this group, 46.5% of all Venezuelans in it worldwide.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Most Venezuelans in Colombia are counted in this group rather than as refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources here don't say why people left Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's figures describe the scale of the movement, not its causes.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figures for this group in Colombia start in 2018 at 1171552 and peak at 2851160 in 2023.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The largest change came between 2018 and 2019, and by 2025 the figure was slightly below its peak.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals reported to UNHCR, and UNHCR adds notes to some of the figures.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figures have no breakdown by gender or age.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say how people travelled or where in Colombia they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    1171552,
+    2810778,
+    2851160
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "e60c64c0db3793e4",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

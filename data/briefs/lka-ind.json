@@ -2,19 +2,20 @@
   "id": "lka-ind",
   "what": [
     {
-      "text": "Sri Lankan refugees moved from Sri Lanka to India.",
+      "text": "This page follows refugees from Sri Lanka living in India, where Tamils fleeing violence crossed the Palk Strait to Tamil Nadu.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "valatheeswaran-rajan-2011"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 89507 Sri Lankan refugees in India, 60.3% of all refugees from Sri Lanka.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "UNHCR reported 200000 refugees in India in 1990 and 89507 in 2025.",
-      "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "In 2025, India hosted 60.3 percent of all Sri Lankan refugees.",
+      "text": "France is the next largest host.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -22,19 +23,19 @@
   ],
   "why": [
     {
-      "text": "Anti-Tamil violence occurred across Sri Lanka in July 1983.",
+      "text": "Anti-Tamil violence across Sri Lanka in July 1983 is widely described as the start of large-scale flight to India.",
       "source_ids": [
         "valatheeswaran-rajan-2011"
       ]
     },
     {
-      "text": "Sri Lanka experienced armed conflict involving the Government of Sri Lanka against the LTTE, EPRLF, TELO, and the JVP.",
+      "text": "UCDP records armed conflict over Eelam territory, with the LTTE among the government's opponents, in 1984 to 2001, in 2003 and from 2005 to 2009.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "The Sri Lankan army defeated the LTTE in May 2009, ending the conflict.",
+      "text": "The Sri Lankan army defeated the LTTE in May 2009, which UCDP records as the last year of this conflict.",
       "source_ids": [
         "ucdp-acd-26.1",
         "valatheeswaran-rajan-2011"
@@ -43,20 +44,20 @@
   ],
   "when": [
     {
-      "text": "Large-scale flight to India began in July 1983, followed by a wave of arrivals from 1990 to 1994.",
+      "text": "UNHCR's series for this group starts in 1990 at its highest point, 200000, during a second wave of arrivals from 1990 to 1994.",
       "source_ids": [
-        "valatheeswaran-rajan-2011",
-        "unhcr-pop-2026"
+        "unhcr-pop-2026",
+        "valatheeswaran-rajan-2011"
       ]
     },
     {
-      "text": "The recorded refugee population stood at 200000 in 1990 and 1991, then decreased to 50730 in 2005.",
+      "text": "Former Prime Minister Rajiv Gandhi was assassinated at Sriperumbudur, Tamil Nadu, by an LTTE suicide bomber on 21 May 1991.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "suryanarayan-sudarsen-2000"
       ]
     },
     {
-      "text": "The refugee population was recorded at 69609 in 2006, 93259 in 2020, and 89507 in 2025.",
+      "text": "The figure then fell, and changed only slowly and steadily from 2010 to 2019.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -64,21 +65,23 @@
   ],
   "how": [
     {
-      "text": "Tamils crossed the Palk Strait to Tamil Nadu.",
+      "text": "India has not signed the 1951 Refugee Convention, and UNHCR's total does not separate refugees in government camps from those outside them.",
       "source_ids": [
-        "valatheeswaran-rajan-2011"
+        "unhcr-pop-2026",
+        "balan-athray-2022"
       ]
     },
     {
-      "text": "In 2016, the Government of India reported 64144 refugees in government camps and 36861 registered refugees outside camps.",
+      "text": "For 2016, the Government of India's figures are 37843 higher than UNHCR's; the sources count on different dates.",
       "source_ids": [
-        "mea-2016"
-      ]
-    },
-    {
-      "text": "UNHCR recorded 63162 refugees in India in 2016.",
-      "source_ids": [
+        "mea-2016",
         "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "India's Citizenship (Amendment) Act, passed on 12 December 2019, does not cover Sri Lankan Tamil refugees.",
+      "source_ids": [
+        "caa-2019"
       ]
     }
   ],
@@ -86,10 +89,20 @@
     "unhcr-pop-2026",
     "valatheeswaran-rajan-2011",
     "ucdp-acd-26.1",
-    "mea-2016"
+    "suryanarayan-sudarsen-2000",
+    "balan-athray-2022",
+    "mea-2016",
+    "caa-2019"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "e4ac3790c41a9873",
+  "numbers": [
+    37843,
+    89507,
+    200000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "3c1881c2ae3ea046",
   "status": "unchecked",
   "checked_by": null,
   "check": {

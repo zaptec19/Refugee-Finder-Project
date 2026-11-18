@@ -17,12 +17,15 @@
       "to_check": "a source for the date"
     },
     {
-      "date": "2023-04-15",
+      "date": "2023-04",
       "title": "War between the army and the RSF",
-      "note": "Fighting broke out between the Sudanese Armed Forces and the Rapid Support Forces (RSF). UCDP records the RSF among the government's opponents in 2023.",
+      "note": "Fighting broke out in April 2023 between the Sudanese Armed Forces (SAF) and the Rapid Support Forces (RSF). UCDP records the RSF among the government's opponents in 2023.",
       "source_id": "ucdp-acd-26.1",
       "raw_ref": "UcdpPrioConflict_v26_1.csv#L1419",
-      "to_check": "a source for the start date"
+      "source_ids": [
+        "idmc-grid-2025",
+        "ucdp-acd-26.1"
+      ]
     }
   ],
   "limitations": [
@@ -46,5 +49,46 @@
     "IDPs by state",
     "returns inside Sudan by year"
   ],
-  "reading": []
+  "reading": [
+    "flint-dewaal-2008",
+    "idmc-grid-2025"
+  ],
+  "explainers": {
+    "idps_idmc_conflict": {
+      "reliability": "IDMC's estimate of everyone living in internal displacement because of conflict and violence at year end. Most IDMC figures are estimates.",
+      "source_id": "idmc-conflict-2026"
+    },
+    "idps_unhcr": {
+      "reliability": "UNHCR's count covers internally displaced people it protects or assists, so it can differ from IDMC's estimate. The two are shown side by side and never added.",
+      "source_id": "unhcr-pop-2026"
+    }
+  },
+  "compare_why": {
+    "columns": [
+      "unhcr-pop-2026",
+      "idmc-conflict-2026"
+    ],
+    "rows": [
+      {
+        "label": "Who is counted",
+        "unhcr-pop-2026": "IDPs displaced by conflict whom UNHCR protects or assists",
+        "idmc-conflict-2026": "Everyone living in displacement inside Sudan because of conflict and violence"
+      },
+      {
+        "label": "Disasters",
+        "unhcr-pop-2026": "Not included",
+        "idmc-conflict-2026": "Counted in a separate IDMC disaster series"
+      },
+      {
+        "label": "Coverage",
+        "unhcr-pop-2026": "Year-end total (31 December)",
+        "idmc-conflict-2026": "Year-end total (31 December)"
+      },
+      {
+        "label": "How to read them",
+        "unhcr-pop-2026": "Shown next to IDMC, never added",
+        "idmc-conflict-2026": "Shown next to UNHCR, never added"
+      }
+    ]
+  }
 }

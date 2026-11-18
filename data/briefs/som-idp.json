@@ -1,0 +1,95 @@
+{
+  "id": "som-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Somalia.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR and IDMC gave the same figure: 3347408 people living in internal displacement because of conflict.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Somalia live mainly in Kenya and Ethiopia.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Somalia in every year from 2006 to 2025, with ARS/UIC, Al-Shabaab and Hizbul Islam among the government's opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP also records armed conflict with the Islamic State group in 2019 to 2021 and in 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Drought and floods are the disasters recorded for Somalia in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures rose from 1500000 in 2009 to a peak of 3864000 in 2022.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2018 to 2025, and new displacements from disasters were highest in 2023 in IDMC's records.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where displaced people in Somalia are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    1500000,
+    3347408,
+    3864000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "a438ef4c5d71ad6c",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

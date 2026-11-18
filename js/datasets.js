@@ -4,6 +4,7 @@ import { getJSON, measures as loadMeasures } from "./data.js";
 import { esc, numHTML, applyNumbers } from "./format.js";
 import { cite } from "./cite.js";
 import { icon } from "./icons.js";
+import { unverifiedTag } from "./review.js";
 
 initPage({ page: "datasets" });
 document.body.classList.add("page-datasets");
@@ -20,7 +21,7 @@ main.innerHTML = `<div class="page page--narrow">
     const ms = (d.measures || []).map((m) => M[m]?.label).filter(Boolean);
     return `<article class="card dset" id="${esc(d.id)}">
       <div class="dset__head"><div><p class="eyebrow">${esc(d.short || "")}</p><h2>${esc(d.dataset)}</h2><p class="muted small">${esc(d.organisation || "")}</p></div>
-        ${d.status === "to_confirm" ? '<span class="status status--to_confirm">to confirm</span>' : ""}</div>
+        ${d.status === "to_confirm" ? unverifiedTag(d.to_check) : ""}</div>
       <dl class="dset__dl">
         ${ms.length ? `<dt>Covers</dt><dd>${ms.map(esc).join(" · ")}</dd>` : ""}
         ${d.years ? `<dt>Years</dt><dd class="tabular">${d.years[0]} to ${d.years[1]}</dd>` : ""}

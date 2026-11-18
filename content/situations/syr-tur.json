@@ -47,13 +47,30 @@
     {
       "kind": "coverage",
       "text": "Registered people only",
-      "detail": "The figures count Syrians registered with the Turkish authorities; people who are not registered are not included."
+      "detail": "The figures count Syrians registered with the Turkish authorities; people who are not registered are not included.",
+      "source_id": "icduygu-2015"
+    },
+    {
+      "kind": "method",
+      "text": "Earthquake displacement is a separate series",
+      "detail": "People displaced by the February 2023 earthquakes are counted by IDMC as disaster displacement inside Türkiye and Syria. Those figures are not part of the refugee totals here and are never added to them.",
+      "source_id": "idmc-disaster-2026"
     }
   ],
   "missing": [
     "unregistered Syrians"
   ],
   "reading": [
-    "kirisci-2014"
-  ]
+    "kirisci-2014",
+    "icduygu-2015"
+  ],
+  "explainers": {
+    "refugees": {
+      "reliability": "Türkiye registers Syrians under temporary protection, and UNHCR reports the government's registration figures; people who never registered are not in them.",
+      "source_ids": [
+        "turkey-tp-2014",
+        "icduygu-2015"
+      ]
+    }
+  }
 }

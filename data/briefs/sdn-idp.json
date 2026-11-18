@@ -1,0 +1,111 @@
+{
+  "id": "sdn-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Sudan, as counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 9116896 people living in internal displacement because of conflict and violence, while UNHCR counted 9139309 internally displaced people it protects or assists.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Many others crossed a border: the largest numbers of refugees from Sudan live in Chad and South Sudan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Fighting broke out in April 2023 between the Sudanese Armed Forces (SAF) and the Rapid Support Forces (RSF).",
+      "source_ids": [
+        "idmc-grid-2025",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP records armed conflict over the government of Sudan from 2020 to 2025, with the RSF, SLM/A, SPLM/A-North and SFA among the government's opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Earlier, armed groups in Darfur, including JEM and SLM/A, fought the government from 2003, a conflict UCDP records at war level.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures show internal displacement rising from 4900000 in 2009 to a peak of 11559970 in 2024.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2023 to 2025, after the war between the army and the RSF began.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-grid-2025"
+      ]
+    },
+    {
+      "text": "South Sudan became independent on 9 July 2011, so figures for Sudan before and after 2011 cover different territory.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took inside Sudan or where they are now living.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements, which count each forced move rather than each person, so someone displaced twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR and IDMC give the same figure in 2023 and 2024; this page shows both side by side and never adds them.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "idmc-grid-2025",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    4900000,
+    9116896,
+    9139309,
+    11559970
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "61fe8745f4df2934",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

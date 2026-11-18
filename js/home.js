@@ -6,6 +6,7 @@ import { fmt } from "./format.js";
 import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
+import { showCountryCard, hideCountryCard } from "./globe-card.js";
 
 initPage({ page: "home", dark: true });
 document.body.classList.add("page-home");
@@ -29,10 +30,10 @@ main.innerHTML = `
       ${TRY.map(([t, q]) => `<button class="chip" type="button" data-q="${q}">${t}</button>`).join("")}
     </div>
     <figure class="home__globe" style="margin-bottom:0">
-      <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; click a country to open it."></svg>
+      <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it to open it."></svg>
     </figure>
     <div class="home__foot">
-      <span><a href="learn.html#tour">New here? Take the 2-minute tour &rsaquo;</a> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
+      <span><button class="linklike" type="button" data-start-tour>New here? Take the 2-minute tour &rsaquo;</button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
         <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">1951 – 2025</button>
@@ -75,9 +76,12 @@ if (preset) { input.value = preset; searchUI.run(); }
   const cap = document.getElementById("globe-cap");
   const setCap = (y) => { cap.textContent = `People displaced, by country, ${y} · click a country to open it`; };
   setCap(last);
+  let year = last;
   const g = await createGlobe(document.getElementById("globe"), {
     values: globe[String(last)],
     onPick: (iso) => { location.href = `country.html?iso=${iso}`; },
+    onHover: (f) => showCountryCard(f, year),
+    onHoverEnd: hideCountryCard,
   });
   btn.addEventListener("click", () => {
     pop.hidden = !pop.hidden;
@@ -86,6 +90,7 @@ if (preset) { input.value = preset; searchUI.run(); }
   });
   slider.addEventListener("input", () => {
     const y = slider.value;
+    year = +y;
     out.textContent = y;
     g.setValues(globe[y] || {});
     setCap(y);

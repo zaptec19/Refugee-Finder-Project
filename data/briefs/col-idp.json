@@ -2,26 +2,21 @@
   "id": "col-idp",
   "what": [
     {
-      "text": "People in Colombia experienced internal displacement, while others sought refuge or asylum outside the country.",
+      "text": "This page follows people displaced inside Colombia, counted by IDMC and UNHCR side by side.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, IDMC reported 7210702 people living in internal displacement due to conflict or violence.",
-      "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In the same year, UNHCR reported 7157716 internally displaced people inside Colombia.",
-      "source_ids": [
+        "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Additionally, UNHCR recorded 79669 refugees and 303273 asylum seekers from Colombia in 2025.",
+      "text": "At the end of 2025, IDMC estimated 7210702 people living in internal displacement because of conflict and violence, and UNHCR counted 7157716.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Colombia live mainly in Ecuador and Venezuela.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -29,83 +24,70 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes in Colombia involved the government fighting armed groups including ELN and FARC.",
+      "text": "UCDP records armed conflict over the government of Colombia in every year from 2003 to 2025, with the ELN, FARC, FARC-EMC and FARC - Segunda Marquetalia among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "People were forced from their homes by conflict or violence as well as disaster events.",
+      "text": "UCDP records the conflict at war level from 2003 to 2005.",
       "source_ids": [
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
+        "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "In 2025, IDMC recorded 394106 new conflict-related displacement movements and 88043 new disaster-related displacement movements.",
+      "text": "Floods, storms, droughts, earthquakes, erosion, mass movements and wildfires are the disasters recorded for Colombia in IDMC's data.",
       "source_ids": [
-        "idmc-conflict-2026",
         "idmc-disaster-2026"
       ]
     }
   ],
   "when": [
     {
-      "text": "UNHCR tracked internal displacement in Colombia from 2000 to 2025.",
-      "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "IDMC recorded conflict IDPs from 2009, when there were 4915579 people, reaching 7264767 in 2024.",
+      "text": "IDMC's figure rose from 4915579 in 2009 to a peak of 7264767 in 2024.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "New disaster movements occurred across multiple years, including 3000000 movements in 2010.",
+      "text": "New displacements from conflict were highest in 2025 in IDMC's records.",
       "source_ids": [
-        "idmc-disaster-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Internally displaced people stay inside their own country.",
+      "text": "In 2025 IDMC counts 52986 more internally displaced people than UNHCR; the figures are never added together.",
       "source_ids": [
-        "unhcr-pop-2026",
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC's figure is a year-end total of everyone still displaced, so it includes people displaced in earlier years.",
+      "source_ids": [
         "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "UNHCR counts conflict IDPs whom it protects or assists at the end of each year.",
-      "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "IDMC measures both total people displaced at year end and individual movement events during the year.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "The sources note that IDMC and UNHCR IDP figures overlap and are counted differently.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "unhcr-pop-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-conflict-2026",
+    "unhcr-pop-2026",
     "ucdp-acd-26.1",
     "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "7a2ebe3878b70788",
+  "numbers": [
+    52986,
+    4915579,
+    7157716,
+    7210702,
+    7264767
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "2ac439394f039b80",
   "status": "unchecked",
   "checked_by": null,
   "check": {

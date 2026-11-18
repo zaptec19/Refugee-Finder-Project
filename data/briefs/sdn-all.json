@@ -1,0 +1,85 @@
+{
+  "id": "sdn-all",
+  "what": [
+    {
+      "text": "This page follows refugees from Sudan in all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 2820737 refugees from Sudan, the highest figure in its records for this group.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Chad hosts the largest share, 47.2%, followed by South Sudan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Sudan in most years since 1983, most recently from 2020 to 2025, with the RSF, SLM/A, SPLM/A-North and SFA among the government's opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "An earlier armed conflict over Southern Sudan territory, with the SSLM, is recorded from 1963 to 1972.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series starts in 1963 at 13000 and reaches its highest point, 2820737, in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sharpest recent change came between 2022 and 2023, in the same years as the latest conflict over the government.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees; asylum seekers from Sudan are counted in a separate series.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took to reach Chad, South Sudan or other countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    13000,
+    2820737
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "d4155617489ffa7a",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -285,5 +285,264 @@
    "title": "War and migration: Social networks and economic strategies of the Hazaras of Afghanistan",
    "publisher": "Routledge"
   }
+ },
+ {
+  "id": "unhrc-ffm-myanmar-2018",
+  "type": "report",
+  "authors": "UN Human Rights Council",
+  "year": 2018,
+  "title": "Report of the Independent International Fact-Finding Mission on Myanmar (A/HRC/39/64)",
+  "csl": {
+   "id": "unhrc-ffm-myanmar-2018",
+   "type": "report",
+   "author": [
+    {
+     "literal": "UN Human Rights Council"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2018,
+      9,
+      12
+     ]
+    ]
+   },
+   "title": "Report of the Independent International Fact-Finding Mission on Myanmar",
+   "number": "A/HRC/39/64",
+   "publisher": "United Nations",
+   "URL": "https://digitallibrary.un.org/record/1648304"
+  }
+ },
+ {
+  "id": "rakhine-commission-2017",
+  "type": "report",
+  "authors": "Advisory Commission on Rakhine State",
+  "year": 2017,
+  "title": "Towards a peaceful, fair and prosperous future for the people of Rakhine: Final report",
+  "csl": {
+   "id": "rakhine-commission-2017",
+   "type": "report",
+   "author": [
+    {
+     "literal": "Advisory Commission on Rakhine State"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2017,
+      8
+     ]
+    ]
+   },
+   "title": "Towards a peaceful, fair and prosperous future for the people of Rakhine: Final report of the Advisory Commission on Rakhine State"
+  },
+  "to_check": "URL of the official copy"
+ },
+ {
+  "id": "unhcr-rohingya-emergency",
+  "type": "web page",
+  "authors": "UNHCR",
+  "year": 2026,
+  "title": "Rohingya emergency",
+  "csl": {
+   "id": "unhcr-rohingya-emergency",
+   "type": "webpage",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "title": "Rohingya emergency",
+   "URL": "https://www.unhcr.org/rohingya-emergency",
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      11,
+      17
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "id": "unhcr-bgd-registration-2019",
+  "type": "press release",
+  "authors": "UNHCR",
+  "year": 2019,
+  "title": "More than half a million Rohingya refugees receive identity documents, most for the first time",
+  "csl": {
+   "id": "unhcr-bgd-registration-2019",
+   "type": "document",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2019
+     ]
+    ]
+   },
+   "title": "More than half a million Rohingya refugees receive identity documents, most for the first time",
+   "publisher": "UNHCR"
+  },
+  "to_check": "exact date (August 2019?) and URL"
+ },
+ {
+  "id": "icduygu-2015",
+  "type": "report",
+  "authors": "İçduygu",
+  "year": 2015,
+  "title": "Syrian refugees in Turkey: The long road ahead",
+  "csl": {
+   "id": "icduygu-2015",
+   "type": "report",
+   "author": [
+    {
+     "family": "İçduygu",
+     "given": "Ahmet"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2015,
+      4
+     ]
+    ]
+   },
+   "title": "Syrian refugees in Turkey: The long road ahead",
+   "publisher": "Migration Policy Institute",
+   "publisher-place": "Washington, DC",
+   "URL": "https://www.migrationpolicy.org/publication/syrian-refugees-turkey-long-road-ahead"
+  }
+ },
+ {
+  "id": "unhcr-ssar-2012",
+  "type": "report",
+  "authors": "UNHCR",
+  "year": 2012,
+  "title": "Solutions Strategy for Afghan Refugees",
+  "csl": {
+   "id": "unhcr-ssar-2012",
+   "type": "report",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2012,
+      5
+     ]
+    ]
+   },
+   "title": "Solutions Strategy for Afghan Refugees to support voluntary repatriation, sustainable reintegration and assistance to host countries",
+   "publisher": "UNHCR"
+  },
+  "to_check": "exact full title and URL"
+ },
+ {
+  "id": "unhcr-pak-afg-returns-9",
+  "type": "report",
+  "authors": "UNHCR",
+  "year": 2024,
+  "title": "Pakistan–Afghanistan returns emergency response update #9",
+  "csl": {
+   "id": "unhcr-pak-afg-returns-9",
+   "type": "report",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2024,
+      1
+     ]
+    ]
+   },
+   "title": "Pakistan–Afghanistan returns emergency response update #9",
+   "publisher": "UNHCR",
+   "URL": "https://www.unhcr.org/sites/default/files/2024-01/UNHCR%20Pakistan-Afghanistan%20Returns%20Emergency%20Response%20Update%20%239.pdf"
+  }
+ },
+ {
+  "id": "flint-dewaal-2008",
+  "type": "book",
+  "authors": "Flint & de Waal",
+  "year": 2008,
+  "title": "Darfur: A new history of a long war",
+  "csl": {
+   "id": "flint-dewaal-2008",
+   "type": "book",
+   "author": [
+    {
+     "family": "Flint",
+     "given": "Julie"
+    },
+    {
+     "family": "de Waal",
+     "given": "Alex"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2008
+     ]
+    ]
+   },
+   "title": "Darfur: A new history of a long war",
+   "edition": "Rev. and updated ed.",
+   "publisher": "Zed Books",
+   "publisher-place": "London"
+  }
+ },
+ {
+  "id": "idmc-grid-2025",
+  "type": "report",
+  "authors": "IDMC",
+  "year": 2025,
+  "title": "2025 Global Report on Internal Displacement",
+  "csl": {
+   "id": "idmc-grid-2025",
+   "type": "report",
+   "author": [
+    {
+     "literal": "Internal Displacement Monitoring Centre"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2025,
+      5,
+      13
+     ]
+    ]
+   },
+   "title": "2025 Global Report on Internal Displacement",
+   "publisher": "Internal Displacement Monitoring Centre",
+   "publisher-place": "Geneva",
+   "URL": "https://www.internal-displacement.org/publications/2025-global-report-on-internal-displacement-grid"
+  }
  }
 ]

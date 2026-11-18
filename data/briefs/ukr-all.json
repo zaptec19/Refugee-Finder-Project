@@ -2,20 +2,19 @@
   "id": "ukr-all",
   "what": [
     {
-      "text": "People from Ukraine were forcibly displaced internally and across international borders.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, there were 5224131 refugees from Ukraine recorded globally.",
+      "text": "This page follows refugees from Ukraine in all host countries combined.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, the largest host country was Germany with 1173192 refugees, followed by Poland with 972287 refugees.",
+      "text": "At the end of 2025, UNHCR counted 5224131 Ukrainian refugees; Germany hosts the largest share, 22.5%, followed by Poland.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Czechia, the United Kingdom and Spain are the next largest hosts.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,19 +22,13 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes in 2014 include Government of Ukraine vs Maidan, Government of Ukraine vs DPR (Donetsk), and Government of Ukraine vs LPR (Lugansk).",
+      "text": "UCDP records an interstate armed conflict between Russia and Ukraine from 2022 to 2025, at war level in each of those years.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Between 2014 and 2022, conflict was recorded involving Government of Ukraine vs DPR, LPR (Novorossiya).",
-      "source_ids": [
-        "ucdp-acd-26.1"
-      ]
-    },
-    {
-      "text": "Between 2022 and 2025, conflict was recorded between Government of Russia (Soviet Union) and Government of Ukraine (Crimea).",
+      "text": "Before that, it records armed conflict over Novorossiya territory from 2014 to 2022, with the DPR and LPR among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
@@ -43,52 +36,51 @@
   ],
   "when": [
     {
-      "text": "Refugee totals were 5154 in 2013, standing at 237617 in 2014 and 321399 in 2015.",
+      "text": "The number of Ukrainian refugees rose sharply between 2021 and 2022 and peaked at 5960362 in 2023.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "After standing at 27562 in 2021, refugee figures reached 5684177 in 2022 and peaked at 5960362 in 2023.",
+      "text": "By the end of 2025 the figure was 5224131.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In the same timeframe, new internal conflict displacement movements reached 16870323 in 2022.",
+      "text": "Returns to Ukraine were highest in 2022 in UNHCR's returns data.",
       "source_ids": [
-        "idmc-conflict-2026"
+        "unhcr-solutions-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "In 2025, UNHCR reported 3712000 internally displaced people within Ukraine.",
+      "text": "These are year-end totals of refugees in each host country, added up across all host countries.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "IDMC reported 3712000 internally displaced people from conflict at the end of 2025.",
+      "text": "The sources don't say which routes people took.",
       "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "Regarding specific transit routes or conditions of movement, the sources don't say.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
+        "unhcr-pop-2026"
       ]
     }
   ],
   "sources": [
     "unhcr-pop-2026",
-    "idmc-conflict-2026",
-    "ucdp-acd-26.1"
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "b31624942aeea421",
+  "numbers": [
+    5224131,
+    5960362
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "11ab1c2d7bbb703e",
   "status": "unchecked",
   "checked_by": null,
   "check": {

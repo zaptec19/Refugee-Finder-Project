@@ -40,6 +40,12 @@
   --g-land-line: #FFFFFF;
   --g-ocean: #FBFAF7;
   --g-graticule: rgba(28, 28, 30, 0.06);
+  /* home globe: five classes of people displaced (fixed thresholds); no data stays plain land */
+  --g-ramp-0: #D3DCE6;
+  --g-ramp-1: #AABFD6;
+  --g-ramp-2: #7A9DC3;
+  --g-ramp-3: #4A76A6;
+  --g-ramp-4: #1F4C7C;
 
   /* guide mode */
   --guide-bg: #FBF1D0;
@@ -133,6 +139,11 @@
   --g-land-line: #0E1116;
   --g-ocean: #12161C;
   --g-graticule: rgba(232, 230, 225, 0.06);
+  --g-ramp-0: #283341;
+  --g-ramp-1: #2B3E55;
+  --g-ramp-2: #30506F;
+  --g-ramp-3: #3D6A93;
+  --g-ramp-4: #6B98CC;
   --g-host: #8A93A6;
   --g-host-line: #C5CCD8;
 

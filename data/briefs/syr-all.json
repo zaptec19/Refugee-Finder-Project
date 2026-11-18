@@ -2,20 +2,19 @@
   "id": "syr-all",
   "what": [
     {
-      "text": "People from Syria were displaced internally and to host countries including Türkiye, Germany, Lebanon, Jordan, and Iraq.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "In 2025, there were 4865764 refugees from Syria across all host countries.",
+      "text": "This page follows refugees from Syria in all host countries combined.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, Türkiye hosted 2347756 refugees from Syria.",
+      "text": "At the end of 2025, UNHCR counted 4865764 Syrian refugees, and Türkiye hosts the largest share, 48.3%.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Germany, Lebanon and Jordan are the next largest hosts.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,73 +22,71 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes involved the Government of Syria against Syrian insurgents, PYD, IS, and SDF.",
+      "text": "UCDP records armed conflict over the government of Syria from 2011 to 2025, between the government and Syrian insurgents, at war level from 2011.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Conflict also involved the Government of Israel against the Government of Syria in the Golan Heights.",
+      "text": "It also records armed conflict with the Islamic State group from 2013 to 2025, and over Rojava Kurdistan territory with the PYD from 2012 to 2015.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "People were also forced to move by disaster events inside the country.",
+      "text": "An earlier armed conflict over the government, with the Muslim Brotherhood, is recorded from 1979 to 1982.",
       "source_ids": [
-        "idmc-disaster-2026"
+        "ucdp-acd-26.1"
       ]
     }
   ],
   "when": [
     {
-      "text": "The refugee count was 1200 in 1968 and reached 19931 in 2011.",
+      "text": "UNHCR's figure peaked at 6848865 in 2021 and was 4865764 at the end of 2025.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Refugee totals peaked at 6848865 in 2021 and stood at 4865764 in 2025.",
+      "text": "The main years of displacement in the data are 2014 to 2025, after the largest changes between 2011 and 2014.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "New conflict displacement movements were recorded at 156000 in 2011 and 2400000 in 2012.",
+      "text": "Returns to Syria were highest in 2025 in UNHCR's returns data.",
       "source_ids": [
-        "idmc-conflict-2026"
+        "unhcr-solutions-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Refugees are counted at the end of the year under UNHCR's mandate.",
+      "text": "These are year-end totals of refugees; asylum seekers from Syria are counted in a separate series.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Disaster displacement measures count movements rather than individual people.",
+      "text": "The sources don't say which routes people took.",
       "source_ids": [
-        "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "Internal displacement is reported by both UNHCR and IDMC.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
+        "unhcr-pop-2026"
       ]
     }
   ],
   "sources": [
     "unhcr-pop-2026",
-    "idmc-conflict-2026",
     "ucdp-acd-26.1",
-    "idmc-disaster-2026"
+    "unhcr-solutions-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "a3875fee644c9d61",
+  "numbers": [
+    4865764,
+    6848865
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "fcae88381819b82d",
   "status": "unchecked",
   "checked_by": null,
   "check": {

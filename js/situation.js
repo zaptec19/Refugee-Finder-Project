@@ -8,6 +8,7 @@ import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN } from "./char
 import { openPopover, openPanel, closePanel, bindGlossary } from "./popouts.js";
 import { pin, syncPins } from "./collection.js";
 import { cite, referenceList, loadCiteEngine } from "./cite.js";
+import { REVIEW, reviewNote, unverifiedTag } from "./review.js";
 
 export const STEPS = [
   ["brief", "Brief"], ["key_numbers", "Key numbers"], ["over_time", "Over time"],
@@ -184,14 +185,15 @@ function openTrace(pt) {
   const body = `
     <p class="trace__value">${value}</p>
     <p class="trace__label">${esc(pt.label)}</p>
-    ${pt.status === "to_confirm" ? `<p class="note">${icon("alert", { size: 16 })}<span>This figure is still to be confirmed against the original document.</span></p>` : ""}
+    ${pt.status === "to_confirm" ? `<p>${unverifiedTag()}</p>${reviewNote("This figure is still to be confirmed against the original document.")}` : ""}
     <dl class="trace__dl">
       <dt>Dataset</dt><dd>${esc(src.dataset || pt.source_id)} <span class="muted">(${esc(src.release || "")})</span></dd>
       <dt>Published by</dt><dd>${esc(src.organisation || "")}</dd>
       <dt>Definition</dt><dd>${esc(MEAS[pt.measure_id]?.label || "")}${kind ? `, ${kind}` : ""}. ${esc(m.plain || "")}
         ${glossaryId ? `<a href="learn.html#g-${glossaryId}">See glossary</a>` : ""}</dd>
       ${m.zero_note && pt.value === 0 ? `<dt>Note</dt><dd>${esc(m.zero_note)}</dd>` : ""}
-      <dt>Footnote</dt><dd>${fns.length ? fns.map((f) => `<p class="small verbatim">${esc(f)}</p>`).join("") + '<p class="small muted">Quoted exactly as UNHCR wrote it.</p>' : "None for this row"}</dd>
+      <dt>Footnote</dt><dd>${fns.length ? fns.map((f) => `<p class="small verbatim">${esc(f)}</p>`).join("") + '<p class="small muted">Quoted exactly as UNHCR wrote it.</p>' : "None for this row"}
+        ${!fns.length && src.caveat ? `<p class="small">Dataset note (${esc(src.caveat_source || src.short || "")}): <span class="verbatim">“${esc(src.caveat)}”</span></p>` : ""}</dd>
       ${pt.as_of_date ? `<dt>Date</dt><dd>As on ${esc(pt.as_of_date)}</dd>` : ""}
     </dl>
     ${rowHTML}
@@ -267,28 +269,33 @@ function briefHTML(brief) {
     const v = brief[p];
     if (!v) return "";
     const sentences = Array.isArray(v) ? v : [{ text: v, source_ids: brief.part_sources?.[p] || srcs.slice(0, 1) }];
-    const one = (x) => `${liveNumbers(x.text)}${marker(x.source_ids)}`;
+    const one = (x) => `${liveNumbers(x.text, brief.numbers)}${marker(x.source_ids)}`;
     const rest = sentences.slice(1);
     return `<div class="brief__k">${p.toUpperCase()}</div><div class="brief__v">${one(sentences[0])}${rest.length
       ? ` <span class="brief__rest" hidden>${rest.map(one).join(" ")}</span>` : ""}</div>`;
   };
-  const label = brief.status === "checked" ? `Checked by ${esc(brief.checked_by || "the team")}` : "";
+  const srcNames = [...new Set(srcs.map((id) => SRC[id]?.short || REFS[id]?.authors || id))];
+  const label = brief.status === "checked"
+    ? `Checked by ${esc(brief.checked_by || "the team")}${brief.checked_on ? `, ${esc(formatDate(brief.checked_on))}` : ""}`
+    : `Written by ${esc(brief.writer || "Gemini")} from ${esc(srcNames.join(", ") || "the data")}, not yet checked by the team`;
   const more = brief.more ? `<details class="brief__more"><summary>Read more</summary><div class="brief__v">${esc(brief.more)}</div></details>` : "";
   const anyRest = ["what", "why", "when", "how"].some((p) => Array.isArray(brief[p]) && brief[p].length > 1);
   return `<div class="brief" id="brief-body">${["what", "why", "when", "how"].map(part).join("")}</div>${more}
     ${anyRest ? `<button class="linklike brief__toggle" type="button" aria-expanded="false" aria-controls="brief-body"
       onclick="const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',open);this.textContent=open?'Show less ⌃':'Read more ⌄';document.querySelectorAll('#brief-body .brief__rest').forEach(e=>e.hidden=!open)">Read more ⌄</button>` : ""}
-    ${label ? `<p style="margin-top:16px"><span class="brief-label">${icon("info", { size: 14 })}${label}</span></p>` : ""}
-    <p class="small muted" style="margin-top:16px">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
+    <p style="margin-top:16px"><span class="brief-label" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
+    <p class="small muted">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
 }
 
 /** Brief text with its counts turned into live numbers (so the Indian / international switch reaches them).
  *  Years (1900-2099 without separators) and decimals are left as written. */
-function liveNumbers(text) {
+function liveNumbers(text, counts = []) {
+  const known = new Set(counts);
   return String(text).split(/(\d{1,3}(?:,\d{2,3})+(?:\.\d+)?|\d+(?:\.\d+)?)/).map((part, i) => {
     if (i % 2 === 0) return esc(part);
     if (part.includes(".")) return esc(part);
     const n = Number(part.replace(/,/g, ""));
+    if (known.has(n)) return numHTML(n);
     const isYear = !part.includes(",") && /^(19|20)\d{2}$/.test(part);
     return isYear || n < 1000 ? esc(part) : numHTML(n);
   }).join("");
@@ -353,7 +360,8 @@ function openExplainer(kn, anchorEl) {
       <h4>Type of figure</h4><p>${esc(e.type)}</p>
       <h4>Not included</h4><p>${esc(e.not_included || "Not stated.")}</p>
       <h4>How reliable</h4><p>${esc(e.reliability || "Not stated.")}</p>
-      ${e.to_check ? `<p class="small muted">Team note: ${esc(e.to_check)}</p>` : ""}
+      ${e.reliability_sources?.length ? `<p class="small muted">Source: ${esc(e.reliability_sources.map(srcLabel).join("; "))}</p>` : ""}
+      ${reviewNote(e.to_check)}
       <a href="learn.html#stocks-flows">Learn: stocks vs flows &rsaquo;</a></div>`, anchorEl, { label: "What this number means", wide: true });
   applyNumbers(document.getElementById("pop"));
 }
@@ -491,7 +499,7 @@ function onEventClick(e) {
   const srcTxt = srcIds.map((id) => (SRC[id] ? `${SRC[id].short}: ${SRC[id].dataset.split(":")[0]}` : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id)).join("; ");
   openPopover(`<div class="evpop"><p class="eyebrow">${esc(formatDate(ev.date))}${ev.date_end ? ` to ${esc(ev.date_end)}` : ""}</p>
     <h3>${esc(ev.title)}</h3><p>${esc(ev.note || "")}</p><p class="small muted">Source: ${esc(srcTxt)}</p>
-    ${ev.to_check ? `<p class="small muted">To check: ${esc(ev.to_check)}</p>` : ""}</div>`, g, { label: ev.title });
+    ${reviewNote(ev.to_check)}</div>`, g, { label: ev.title });
 }
 function formatDate(d) {
   const [y, m, day] = d.split("-");
@@ -608,7 +616,7 @@ function compareSources(el) {
       : `<span class="cbar__seg" style="width:${(100 * c.value / max).toFixed(2)}%;background:${color};opacity:0.85"></span>`;
     return `<div class="cbar">
       <div class="cbar__label">${esc(src.short === "Govt. of India" ? "Govt. of India (MEA)" : src.short || c.source_id)}
-        ${c.status === "to_confirm" ? '<span class="status status--to_confirm">to confirm</span>' : ""}</div>
+        ${c.status === "to_confirm" ? unverifiedTag() : ""}</div>
       <div class="cbar__track">${segs}<button class="cbar__val" type="button" data-cmp="${i}" aria-label="${esc(src.short)}: where this number comes from">${numHTML(c.value)}</button></div>
       ${c.parts?.length ? `<div class="cbar__parts small muted">${c.parts.map((p) => `${numHTML(p.value)} ${esc(p.label.replace(/ \(Govt\. of India\)/, "").toLowerCase())}`).join(" + ")}</div>` : ""}
     </div>`;
@@ -647,7 +655,8 @@ function context(el) {
   const host = document.createElement("div");
   el.append(host);
   const conf = S.conflict;
-  const names = [...new Map(conf.map((c) => [c.conflict_id, c.conflict_name])).entries()];
+  // one line per conflict, plain names, most relevant first (active in the main displacement years, then intensity)
+  const names = (S.conflicts || []).map((c) => [c.conflict_id, c.name]);
   const deaths = (S.violence_deaths || []).filter((d) => d.year >= (S.years?.[0] || 1989) - 5);
   if (deaths.length) {
     const peak = deaths.reduce((a, b) => (b.value > a.value ? b : a));
@@ -673,7 +682,7 @@ function context(el) {
   const evs = S.events.length ? `<h3 class="sub-h">Events</h3><ol class="ev-list">${S.events.map((e) => {
     const srcIds = e.source_ids || [e.source_id];
     return `<li><span class="ev-list__date tabular">${esc(formatDate(e.date))}</span><div><strong>${esc(e.title)}</strong><p>${esc(e.note || "")}</p>
-      <p class="small muted">Source: ${esc(srcIds.map((id) => (SRC[id] ? SRC[id].short : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id)).join("; "))}${e.to_check ? ` · to check: ${esc(e.to_check)}` : ""}</p></div></li>`;
+      <p class="small muted">Source: ${esc(srcIds.map((id) => (SRC[id] ? SRC[id].short : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id)).join("; "))}</p>${reviewNote(e.to_check)}</div></li>`;
   }).join("")}</ol>` : "";
   el.insertAdjacentHTML("beforeend", list + evs + `<p class="note" style="margin-top:16px">${icon("info", { size: 16 })}<span>${CORRELATION}</span></p>`);
 }
@@ -746,13 +755,18 @@ function otherAngles(el) {
 }
 
 // =================================================================== 10 limitations
+const srcLabel = (id) => (SRC[id] ? SRC[id].short : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id);
+const limSources = (l) => {
+  const ids = l.source_ids || (l.source_id ? [l.source_id] : []);
+  return ids.length ? `<div class="small muted">Source: ${esc(ids.map(srcLabel).join("; "))}</div>` : "";
+};
 const KIND_ICON = { politics: "alert", method: "alert", missing: "question", coverage: "question" };
 function limitationsHTML() {
   const items = S.limitations.map((l) => {
     const ic = l.text.startsWith("Very slow") ? "steady" : KIND_ICON[l.kind] || "info";
     return `<li class="lim"><span class="lim__icon lim__icon--${esc(l.kind)}">${icon(ic, { size: 20 })}</span>
       <div><div class="lim__text">${esc(l.text)}</div><div class="lim__detail muted">${fillTemplate({ text: l.detail || "", nums: l.nums, pcts: l.pcts })}</div>
-      ${l.to_check ? `<div class="small muted">To check: ${esc(l.to_check)}</div>` : ""}</div></li>`;
+      ${limSources(l)}${reviewNote(l.to_check)}</div></li>`;
   }).join("");
   const pct = Math.round((S.demographics_coverage || 0) * 1000) / 10;
   const sexPct = Math.round((S.sex_coverage || 0) * 1000) / 10;
@@ -771,10 +785,10 @@ function limitationsHTML() {
 function sourcesHTML(el) {
   const ds = S.datasets.map((d) => SRC[d]).filter(Boolean);
   const rows = ds.map((d) => `<tr><td><a href="datasets.html#${esc(d.id)}">${esc(d.dataset)}</a><div class="small muted">${esc(d.organisation)}</div></td>
-      <td class="tabular">${d.years ? `${d.years[0]} to ${d.years[1]}` : ""}</td><td>${esc(d.release)}${d.status === "to_confirm" ? ' <span class="status status--to_confirm">to confirm</span>' : ""}</td></tr>`).join("");
+      <td class="tabular">${d.years ? `${d.years[0]} to ${d.years[1]}` : ""}</td><td>${esc(d.release)}${d.status === "to_confirm" ? ` ${unverifiedTag(d.to_check)}` : ""}</td></tr>`).join("");
   const reading = (S.reading || []).map((r) => `<article class="card reading">
       <div><div class="reading__by">${esc(r.authors)} (${r.year})</div><div class="reading__title">${esc(r.title)}</div>
-        ${r.to_check ? `<div class="small muted">To check: ${esc(r.to_check)}</div>` : ""}</div>
+        ${reviewNote(r.to_check)}</div>
       <div class="reading__meta"><span class="small muted">${esc(r.type)}</span>
         <button class="pin-btn" type="button" data-pin-key="read:${esc(r.id)}" data-read="${esc(r.id)}" aria-pressed="false" aria-label="Add ${esc(r.authors)} (${r.year}) to my collection">${icon("pin", { size: 16 })}</button></div>
     </article>`).join("");

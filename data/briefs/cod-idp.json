@@ -1,0 +1,104 @@
+{
+  "id": "cod-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside the Democratic Republic of the Congo, counted by IDMC and UNHCR side by side.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 4275850 people living in internal displacement because of conflict and violence, and UNHCR counted 5669479 internally displaced people it protects or assists.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from the country live mainly in Uganda, Burundi, Zambia and Rwanda.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of DR Congo in 2005 to 2008, 2011 to 2014 and from 2016 to 2025, with groups such as M23, CNPSC and Kamuina Nsapu among the government's opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP also records armed conflict with the Islamic State group in the country from 2017 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Floods and storms are the disasters recorded for the country in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's estimate peaked at 6737292 in 2023 and fell to 4275850 by the end of 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2017 and 2019 to 2025, in the same years as the conflicts above.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC also counts new displacements in each year, which count movements rather than people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025 the sources differ: IDMC counts 1393629 fewer internally displaced people than UNHCR, and the figures are never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    1393629,
+    4275850,
+    5669479,
+    6737292
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-18",
+  "factpack_hash": "3cb1cd1fca46c896",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

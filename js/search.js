@@ -54,7 +54,17 @@ function load() {
       searchOptions: { prefix: (t) => t.length >= 4, fuzzy: (t) => (t.length >= 5 ? 0.2 : 0) } });
     cs.addAll([...span.keys()].filter((iso) => countries[iso]).map((iso) => ({ id: iso, iso, name: countries[iso].name, names: names(iso) })));
     const rowIndex = new Map(meta.ids.map((id, i) => [id, i]));
-    return { sits, byId, ms, cs, span, vectors, meta, rowIndex };
+    // country names and demonyms (from countries.json), to notice which places a question names
+    const placeNames = [];
+    for (const iso of span.keys()) {
+      const c = countries[iso];
+      if (!c) continue;
+      for (const n of new Set([c.name, c.demonym, ...(c.other_names || [])].filter(Boolean))) {
+        const t = norm(n).replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+        if (t.length >= 4) placeNames.push([iso, ` ${t} `]);
+      }
+    }
+    return { sits, byId, ms, cs, span, vectors, meta, rowIndex, placeNames };
   })();
   ready.then(startModel).catch((e) => { console.error(e); setState("keyword"); });
   return ready;
@@ -120,12 +130,25 @@ const stripYears = (q) => q.replace(/\b(?:since|after|from|before|in)?\s*(?:19|2
 // ------------------------------------------------------------------ search
 const TYPE_WEIGHT = { named: 1.04, pair: 1, idp: 1, origin: 0.98 };
 let KW_WEIGHT = 0.7;             // how much exact-name matches add to the semantic score
+// Quick answer only when the top match clearly wins: a minimum score and a lead over the next match
+// (tuned on tests/search_queries.json; see tests/search_eval.py).
+let QA_MIN = 0.6;
+let QA_GAP = 0.05;
+// questions about disasters (not conflict) lean towards internal displacement with IDMC disaster data
+const DISASTER_RE = /\b(floods?|flooding|flooded|cyclones?|typhoons?|hurricanes?|storms?|earthquakes?|quakes?|droughts?|landslides?|tsunamis?|wildfires?|disasters?|monsoons?)\b/i;
+const DISASTER_BOOST = 1.15;
+const PLACE_BONUS = 0.2;          // added when the situation's origin or host is a country the question names
+const PLACE_DAMP = 0.85;          // applied to situations in none of the countries the question names
+const DISASTER_DAMP = 0.9;
 
 /** @returns {Promise<{items: object[], quick: object|null, years: number[]|null, mode: string}>} */
 export async function search(q) {
   const idx = await load();
   const years = parseYears(q);
   const text = stripYears(q) || q;
+  const disaster = DISASTER_RE.test(q);
+  const qn = ` ${norm(text).replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim()} `;
+  const named = new Set(idx.placeNames.filter(([, n]) => qn.includes(n)).map(([iso]) => iso));
   // keyword scores, normalised to 0..1
   const kwRes = idx.ms.search(text, { combineWith: "OR" });
   const kwMax = kwRes[0]?.score || 1;
@@ -163,6 +186,12 @@ export async function search(q) {
       score = k;
     }
     score *= TYPE_WEIGHT[s.type] || 1;
+    if (disaster) score *= s.type === "idp" && s.disaster_latest ? DISASTER_BOOST : s.type === "idp" ? 1 : DISASTER_DAMP;
+    if (named.size) {
+      // the question names a country: situations about it move up, situations elsewhere move down
+      if ([s.origin_iso3, s.host_iso3, ...(s.hosts || [])].some((iso) => named.has(iso))) score += PLACE_BONUS;
+      else score *= PLACE_DAMP;
+    }
     score += Math.log10(((s.latest && s.latest.value) || 0) + 10) * 0.004;     // tiny tie-break toward larger situations
     scored.push({ s, score });
   }
@@ -176,12 +205,20 @@ export async function search(q) {
   for (const c of cRes) {
     items.push({ group: "country", title: `${c.name}: people hosted, people from here`, href: `country.html?iso=${c.iso}`, years: idx.span.get(c.iso) });
   }
-  return { items, quick: top[0]?.s || null, years, mode };
+  // Quick answer: only when the top match clearly beats the next one. With keyword matching only (model still
+  // loading) the scores are not comparable, so it waits for the model.
+  const [a, b] = scored;
+  const clear = sem && a && a.score >= QA_MIN && (!b || a.score - b.score >= QA_GAP);
+  let quick = clear ? a.s : null;
+  if (quick && disaster && quick.type === "idp" && quick.disaster_latest) quick = { ...quick, latest: quick.disaster_latest };
+  return { items, quick, years, mode, disaster, gap: a && b ? a.score - b.score : null, topScore: a?.score ?? null };
 }
 
 /** Ranked situation ids only. */
 export async function rank(q, k = 3) {
   const r = await search(q);
-  return { mode: r.mode, ids: r.items.filter((i) => i.s).slice(0, k).map((i) => i.s.id) };
+  return { mode: r.mode, ids: r.items.filter((i) => i.s).slice(0, k).map((i) => i.s.id), quick: r.quick?.id ?? null,
+           quickMeasure: r.quick?.latest?.measure_id ?? null, gap: r.gap, top: r.topScore };
 }
-globalThis.wv1Search = { rank, engineState, warmUp, setKwWeight: (w) => { KW_WEIGHT = w; } };
+globalThis.wv1Search = { rank, engineState, warmUp, setKwWeight: (w) => { KW_WEIGHT = w; },
+                         setQuick: (min, gap) => { QA_MIN = min; QA_GAP = gap; } };

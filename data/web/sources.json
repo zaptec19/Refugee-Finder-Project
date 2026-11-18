@@ -225,7 +225,9 @@
    2009,
    2025
   ],
-  "rows": 1798
+  "rows": 1798,
+  "caveat": "Please note that most of the figures are estimates.",
+  "caveat_source": "IDMC dataset caveats on HDX"
  },
  {
   "id": "idmc-disaster-2026",
@@ -263,7 +265,9 @@
    2008,
    2025
   ],
-  "rows": 37253
+  "rows": 37253,
+  "caveat": "Please note that most of the figures are estimates.",
+  "caveat_source": "IDMC dataset caveats on HDX"
  },
  {
   "id": "ucdp-acd-26.1",
@@ -512,7 +516,7 @@
   "short": "Govt. of India",
   "organisation": "Government of India, Ministry of External Affairs",
   "dataset": "Answer in Parliament on Sri Lankan refugees in India (camp and non-camp figures)",
-  "release": "2016 (date and question number to confirm)",
+  "release": "2016",
   "url": "",
   "licence": "Official parliamentary record; figures quoted with citation",
   "licence_url": "",
@@ -543,7 +547,8 @@
    2016,
    2016
   ],
-  "rows": 3
+  "rows": 3,
+  "to_check": "Date of the answer, house and question number (Rajya Sabha answers of 2 Mar and 4 May 2016 give the camp and non-camp figures as on 01.01.2016; the Lok Sabha answer of 10 Aug 2016 is unconfirmed)."
  },
  {
   "id": "un-m49",

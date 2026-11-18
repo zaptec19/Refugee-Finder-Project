@@ -1,0 +1,109 @@
+{
+  "id": "mmr-bgd",
+  "what": [
+    {
+      "text": "This page follows refugees from Myanmar in Bangladesh, the Rohingya refugee situation; UNHCR counts refugees by country, not by ethnic group, so the figures cover all refugees from Myanmar in Bangladesh.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 1178003, which is 77.3% of all refugees from Myanmar.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Malaysia, Thailand and India are the next largest hosts.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Myanmar's citizenship law of 15 October 1982 did not list the Rohingya among the recognised national groups, leaving most of them without citizenship.",
+      "source_ids": [
+        "burma-citizenship-law-1982"
+      ]
+    },
+    {
+      "text": "On 25 August 2017, after attacks by the Arakan Rohingya Salvation Army (ARSA) and the military operations that followed, the largest flight of Rohingya to Bangladesh began.",
+      "source_ids": [
+        "unhcr-rohingya-emergency",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP records armed conflict over Arakan territory with ARSA and ULA from 2016 to 2020, and new armed conflicts after the military seized power on 1 February 2021, including with the NUG.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series starts in 1978, the year of the first large exodus, at 160000.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "A second wave followed in 1991 to 1992, and returns to Myanmar followed from 1993.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unhcr-solutions-2026"
+      ]
+    },
+    {
+      "text": "The largest recent change came between 2016 and 2017, and the figure was at its highest, 1178003, at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "UNHCR counts refugees in the camps of Cox's Bazar and on Bhasan Char together, as one national total.",
+      "source_ids": [
+        "unhcr-rohingya-emergency",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Bangladesh and UNHCR completed a joint registration in Cox's Bazar in 2019, and most refugees received an identity document for the first time.",
+      "source_ids": [
+        "unhcr-bgd-registration-2019"
+      ]
+    },
+    {
+      "text": "Bangladesh has not signed the 1951 Refugee Convention, and statelessness is counted in a separate series.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "burma-citizenship-law-1982",
+    "unhcr-rohingya-emergency",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "unhcr-bgd-registration-2019"
+  ],
+  "numbers": [
+    160000,
+    1178003
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "c65463f228743801",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

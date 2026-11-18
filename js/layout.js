@@ -11,8 +11,10 @@ import { icon } from "./icons.js";
 export function initPage({ page, dark = false } = {}) {
   const root = document.documentElement;
   const forced = new URLSearchParams(location.search).get("theme");       // ?theme=light (used for chart exports)
-  const theme = dark ? "dark" : forced === "light" || forced === "dark" ? forced : store.get("theme", "light");
+  // the home page starts dark; once someone picks a theme it is used on every page
+  const theme = forced === "light" || forced === "dark" ? forced : store.get("theme", dark ? "dark" : "light");
   root.dataset.theme = theme;
+  document.body.dataset.page = page;
   document.body.classList.toggle("guide-on", store.get("guide", false) === true);
 
   const header = document.createElement("header");
@@ -24,6 +26,17 @@ export function initPage({ page, dark = false } = {}) {
   skip.href = "#main";
   skip.textContent = "Skip to content";
   document.body.prepend(skip);
+
+  // the interactive tour: loaded only when one is running (or asked for with ?tour=1)
+  let touring = new URLSearchParams(location.search).get("tour") === "1";
+  try { touring = touring || !!localStorage.getItem("wv1:tour"); } catch { /* ignore */ }
+  if (touring) import("./tour.js").then((m) => m.resumeTour());
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-start-tour]");
+    if (!b) return;
+    e.preventDefault();
+    import("./tour.js").then((m) => m.startTour());
+  });
 
   // number format switch
   header.querySelectorAll("[data-fmt]").forEach((b) => {
@@ -45,7 +58,7 @@ export function initPage({ page, dark = false } = {}) {
     document.dispatchEvent(new CustomEvent("guide-change", { detail: on }));
   });
 
-  // theme (reading pages only)
+  // theme toggle (every page)
   const themeBtn = header.querySelector("#theme-toggle");
   themeBtn?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
@@ -100,8 +113,8 @@ function topbarHTML(page, dark, theme) {
     </form>`}
     <nav class="topbar__right" aria-label="Site">
       <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
-      ${dark ? "" : `<button class="icon-btn topbar__theme" id="theme-toggle" type="button"
-          aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}">${icon(theme === "dark" ? "sun" : "moon")}</button>`}
+      <button class="icon-btn topbar__theme" id="theme-toggle" type="button"
+          aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}">${icon(theme === "dark" ? "sun" : "moon")}</button>
       <button class="pill topbar__guide" id="guide-toggle" type="button" aria-pressed="${guideOn}"
         title="Guide mode shows short tips step by step"><span class="dot" aria-hidden="true"></span><span class="pill__text">Guide<span class="pill__state">${guideOn ? " on" : " off"}</span></span></button>
       <a class="collection-btn topbar__coll" href="collection.html"${cur("collection")}>

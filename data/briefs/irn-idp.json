@@ -2,27 +2,20 @@
   "id": "irn-idp",
   "what": [
     {
-      "text": "People in Iran were displaced internally by conflict, violence, and disasters.",
+      "text": "This page follows internal displacement in Iran, where IDMC's data records mostly displacement by disasters, plus a conflict figure for 2025.",
       "source_ids": [
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
+        "idmc-disaster-2026",
+        "idmc-conflict-2026"
       ]
     },
     {
-      "text": "Other people from Iran sought international protection as refugees and asylum seekers.",
+      "text": "IDMC records 10000000 new displacements from conflict and violence in Iran in 2025, a yearly count of movements rather than people.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     },
     {
-      "text": "In 2025, there were 10000000 new conflict displacements and 4491 new disaster displacements in Iran.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say which specific host countries hosted refugees from Iran.",
+      "text": "Refugees from Iran live mainly in Germany and the United Kingdom.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -30,25 +23,19 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes involved the Government of Iran fighting against PJAK, Jondullah, and Jaish al-Adl.",
+      "text": "UCDP records an interstate armed conflict between Iran and Israel from 2018 to 2025, at war level in 2025.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Other conflicts involved the Government of Iran against KDPI (Kurdistan) and IS (Islamic State).",
+      "text": "It also records armed conflict over the government of Iran, with PJAK and Jaish al-Adl among the government's opponents in 2018 to 2021, and Jaish al-Adl in 2023 to 2025.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "The Government of Iran also engaged in conflict with the Government of Israel.",
-      "source_ids": [
-        "ucdp-acd-26.1"
-      ]
-    },
-    {
-      "text": "Disaster events also led to internal displacement.",
+      "text": "Floods are the disasters recorded for Iran in IDMC's data.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
@@ -56,63 +43,52 @@
   ],
   "when": [
     {
-      "text": "Refugee numbers from Iran were 48 in 1980 and reached 157912 in 2025.",
+      "text": "The 2025 conflict figure falls in the same year that UCDP records the conflict with Israel at war level.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "New disaster displacement reached 519724 in 2019 and was 4491 in 2025.",
+      "text": "Disaster displacement was highest in 2019, when IDMC counted 178025 people still displaced by disasters at year end; by 2024 it counted 421.",
       "source_ids": [
         "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "In 2025, 10000000 new conflict displacements were recorded.",
-      "source_ids": [
-        "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "Conflict between the Government of Iran and the Government of Israel occurred between 2018 and 2025.",
-      "source_ids": [
-        "ucdp-acd-26.1"
       ]
     }
   ],
   "how": [
     {
-      "text": "New conflict displacement figures count movements rather than individual people, meaning one person can be counted more than once.",
+      "text": "IDMC gives no year-end total for people displaced by conflict in Iran, so the sources don't say how many people were still displaced at the end of 2025.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "Refugees are counted under UNHCR mandate at the end of the year.",
+      "text": "A new-displacement figure counts each forced move, so one person can be counted more than once.",
       "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say how people moved or where they live.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
-    "idmc-conflict-2026",
     "idmc-disaster-2026",
+    "idmc-conflict-2026",
     "unhcr-pop-2026",
     "ucdp-acd-26.1"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "6ed5313acf0b03e5",
+  "numbers": [
+    421,
+    178025,
+    10000000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "329aa5b529b8b18e",
   "status": "unchecked",
   "checked_by": null,
   "check": {
-    "attempts": 2,
+    "attempts": 1,
     "bad_numbers": [],
     "bad_sources": []
   }

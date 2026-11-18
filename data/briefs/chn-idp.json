@@ -2,20 +2,19 @@
   "id": "chn-idp",
   "what": [
     {
-      "text": "Forced displacement from China includes refugees, asylum seekers, and internally displaced people.",
+      "text": "This page follows people displaced inside China by disasters; IDMC's data has no conflict displacement for China.",
       "source_ids": [
-        "unhcr-pop-2026",
         "idmc-disaster-2026"
       ]
     },
     {
-      "text": "In 2025, UNHCR recorded 153962 refugees and 99716 asylum seekers from China.",
+      "text": "In 2025 IDMC recorded 3501695 new displacements from disasters, a yearly count of movements rather than people.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-disaster-2026"
       ]
     },
     {
-      "text": "The sources don't say which specific countries host refugees or asylum seekers from China.",
+      "text": "Refugees from China live mainly in India and the United States.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,73 +22,60 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes recorded in the data include Government of China vs ETIM in 2008.",
+      "text": "Earthquakes, floods, mass movements, storms and wildfires are the disasters recorded for China in IDMC's data.",
       "source_ids": [
-        "ucdp-acd-26.1"
+        "idmc-disaster-2026"
       ]
     },
     {
-      "text": "Conflict episodes also include Government of China vs Government of India in 2020.",
+      "text": "The sources here don't say which disasters caused the largest displacements in each year.",
       "source_ids": [
-        "ucdp-acd-26.1"
-      ]
-    },
-    {
-      "text": "The sources don't say why all individuals moved.",
-      "source_ids": [
-        "ucdp-acd-26.1",
         "idmc-disaster-2026"
       ]
     }
   ],
   "when": [
     {
-      "text": "Disaster movements were reported at 18659649 in 2008 and 3501695 in 2025.",
+      "text": "IDMC's highest yearly figure for new disaster displacements is for 2008, at 18659649.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
     },
     {
-      "text": "People displaced by disasters at the end of the year were recorded at 217356 in 2019, 157542 in 2020, 942638 in 2021, and 639183 in 2023.",
+      "text": "The largest change in the year-end figures came between 2020 and 2021.",
       "source_ids": [
         "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "Refugee numbers were recorded at 1200000 in 1964 and 153962 in 2025.",
-      "source_ids": [
-        "unhcr-pop-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Disaster displacement counts movements forced by disaster events such as floods, storms, and earthquakes.",
+      "text": "IDMC reports the number of people still displaced by disasters at year end only for some years; it fell from 942638 in 2021 to 639183 in 2023.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
     },
     {
-      "text": "Asylum seekers are counted as people whose protection claims have not been decided at the end of the year.",
+      "text": "A new-displacement figure counts each forced move, so one person can be counted more than once.",
       "source_ids": [
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say how displaced people moved or where they live.",
-      "source_ids": [
-        "idmc-disaster-2026",
-        "unhcr-pop-2026"
+        "idmc-disaster-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-disaster-2026",
-    "ucdp-acd-26.1"
+    "unhcr-pop-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "7c09378ce7037ebd",
+  "numbers": [
+    639183,
+    942638,
+    3501695,
+    18659649
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "c97dac731b8d11fc",
   "status": "unchecked",
   "checked_by": null,
   "check": {

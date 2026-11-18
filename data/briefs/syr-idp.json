@@ -2,20 +2,21 @@
   "id": "syr-idp",
   "what": [
     {
-      "text": "Internal displacement was recorded in Syria, while other people fled as refugees and asylum seekers.",
+      "text": "This page follows people displaced inside Syria, counted by IDMC and UNHCR side by side.",
       "source_ids": [
         "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Internal displacement associated with conflict was 433000 in 2009 and reached 7600000 in 2014.",
+      "text": "At the end of 2025, IDMC estimated 5963668 people living in internal displacement because of conflict and violence, and UNHCR counted 5542227.",
       "source_ids": [
-        "idmc-conflict-2026"
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "By 2025, UNHCR reported 4865764 refugees from Syria.",
+      "text": "Others left the country: refugees from Syria live mainly in Türkiye, Germany and Lebanon.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,19 +24,19 @@
   ],
   "why": [
     {
-      "text": "Conflict episodes included fighting between the Government of Syria and Syrian insurgents, PYD, IS, and SDF.",
+      "text": "UCDP records armed conflict over the government of Syria from 2011 to 2025, between the government and Syrian insurgents, at war level from 2011.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Another conflict episode involved the Government of Israel and the Government of Syria in 2025.",
+      "text": "It also records armed conflict with the Islamic State group from 2013 to 2025.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Disaster events were also recorded, including 702205 new disaster movements in 2023.",
+      "text": "Earthquakes, floods, storms and wildfires are the disasters recorded for Syria in IDMC's data.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
@@ -43,41 +44,28 @@
   ],
   "when": [
     {
-      "text": "IDMC recorded 156000 new conflict displacements in 2011, which reached 3500000 in 2013.",
+      "text": "IDMC's figure rose from 433000 in 2009 to a peak of 7600000 in 2014.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "In 2025, 531246 new conflict displacements were recorded, and 1341148 returns occurred in the same year.",
+      "text": "New displacements from disasters were highest in 2023 in IDMC's records.",
       "source_ids": [
-        "idmc-conflict-2026",
-        "unhcr-solutions-2026"
-      ]
-    },
-    {
-      "text": "The number of refugees stood at 6848865 in 2021 and was 4865764 in 2025.",
-      "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-disaster-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "UNHCR counts internally displaced people inside Syria whom it protects or assists.",
+      "text": "In 2025 IDMC counts 421441 more internally displaced people than UNHCR; the figures are never added together.",
       "source_ids": [
+        "idmc-conflict-2026",
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "IDMC tracks internal displacement associated with conflict and disaster events separately.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say where displaced people live or how they traveled.",
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
@@ -87,11 +75,19 @@
     "idmc-conflict-2026",
     "unhcr-pop-2026",
     "ucdp-acd-26.1",
-    "idmc-disaster-2026",
-    "unhcr-solutions-2026"
+    "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "d8b666252a392e69",
+  "numbers": [
+    421441,
+    433000,
+    5542227,
+    5963668,
+    7600000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "99be0d46d21faaa0",
   "status": "unchecked",
   "checked_by": null,
   "check": {

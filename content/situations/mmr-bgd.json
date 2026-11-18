@@ -5,9 +5,8 @@
     {
       "date": "1978",
       "title": "1978: first large exodus",
-      "note": "UNHCR's series for refugees from Myanmar in Bangladesh starts in 1978. Most of those who fled that year went back within about two years.",
-      "source_id": "unhcr-pop-2026",
-      "to_check": "source for 'went back within about two years' (UNHCR returns data starts later)"
+      "note": "UNHCR's series for refugees from Myanmar in Bangladesh starts in 1978, the year of the first large exodus.",
+      "source_id": "unhcr-pop-2026"
     },
     {
       "date": "1982-10-15",
@@ -28,11 +27,32 @@
     },
     {
       "date": "2017-08",
+      "title": "Rakhine advisory commission reports",
+      "note": "The Advisory Commission on Rakhine State, chaired by Kofi Annan, published its final report on citizenship, rights and development in Rakhine State.",
+      "source_id": "rakhine-commission-2017"
+    },
+    {
+      "date": "2017-08-25",
       "title": "August 2017: mass flight",
       "note": "After attacks by the Arakan Rohingya Salvation Army (ARSA) and the military operations that followed, the largest flight of Rohingya to Bangladesh began. UCDP records an armed conflict between the government and ARSA in 2016 and 2017.",
       "source_id": "ucdp-acd-26.1",
       "raw_ref": "UcdpPrioConflict_v26_1.csv#L329",
-      "to_check": "a source for the start date (25 August 2017)"
+      "source_ids": [
+        "unhcr-rohingya-emergency",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "date": "2018-09-12",
+      "title": "UN fact-finding mission report",
+      "note": "The UN Human Rights Council's fact-finding mission on Myanmar reported on the 2017 military operations in Rakhine State and called for the military leadership to be investigated.",
+      "source_id": "unhrc-ffm-myanmar-2018"
+    },
+    {
+      "date": "2019",
+      "title": "Joint registration completed",
+      "note": "Bangladesh and UNHCR completed a joint registration of Rohingya refugees in Cox's Bazar; most received an identity document for the first time.",
+      "source_id": "unhcr-bgd-registration-2019"
     },
     {
       "date": "2021-02-01",
@@ -58,6 +78,12 @@
       "kind": "method",
       "text": "Statelessness is a separate series",
       "detail": "Most Rohingya are described as stateless. UNHCR's stateless figures are a separate series and are not added to the refugee figures here."
+    },
+    {
+      "kind": "coverage",
+      "text": "Camps in Cox's Bazar and Bhasan Char are counted together",
+      "detail": "UNHCR describes refugees in Cox's Bazar and on Bhasan Char island; the figures here are one national total for Bangladesh.",
+      "source_id": "unhcr-rohingya-emergency"
     }
   ],
   "missing": [
@@ -65,6 +91,14 @@
     "births in the camps by year"
   ],
   "reading": [
-    "ibrahim-2016"
-  ]
+    "ibrahim-2016",
+    "unhrc-ffm-myanmar-2018",
+    "rakhine-commission-2017"
+  ],
+  "explainers": {
+    "refugees": {
+      "reliability": "Since the joint Government of Bangladesh and UNHCR registration completed in 2019, refugees in the Cox's Bazar camps are registered one by one with identity cards; earlier years rest on other counts.",
+      "source_id": "unhcr-bgd-registration-2019"
+    }
+  }
 }

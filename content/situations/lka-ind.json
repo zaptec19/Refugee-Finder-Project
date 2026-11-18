@@ -1,42 +1,100 @@
 {
   "id": "lka-ind",
   "status": "verified",
-  "status_note": "Every UNHCR number on this page is checked against the Refugee Data Finder by tests/test_acceptance.py. The Government of India figure is still to confirm.",
+  "status_note": "Every UNHCR number on this page has been checked against UNHCR's Refugee Data Finder.",
   "events": [
-    {"date": "1983-07", "title": "July 1983 riots: first large wave",
-     "note": "Anti-Tamil violence across Sri Lanka in July 1983 is widely described as the start of large-scale flight of Tamils across the Palk Strait to Tamil Nadu.",
-     "source_id": "valatheeswaran-rajan-2011", "to_check": "page number"},
-    {"date": "1990", "date_end": "1994", "title": "1990 to 1994: second wave",
-     "note": "A second large wave of arrivals. UNHCR's series for this group in India starts in 1990, at its highest point.",
-     "source_id": "unhcr-pop-2026", "source_ids": ["unhcr-pop-2026", "valatheeswaran-rajan-2011"], "to_check": "reading page number"},
-    {"date": "1991-05-21", "title": "Rajiv Gandhi assassinated",
-     "note": "Former Prime Minister Rajiv Gandhi was assassinated at Sriperumbudur, Tamil Nadu, by an LTTE suicide bomber.",
-     "source_id": "suryanarayan-sudarsen-2000", "to_check": "page number"},
-    {"date": "2009-05", "title": "War ends",
-     "note": "The Sri Lankan army defeated the LTTE in May 2009. UCDP records 2009 as the last year of this armed conflict.",
-     "source_id": "ucdp-acd-26.1", "source_ids": ["ucdp-acd-26.1", "valatheeswaran-rajan-2011"],
-     "raw_ref": "UcdpPrioConflict_v26_1.csv#L1933", "to_check": "reading page for 'May 2009'"},
-    {"date": "2019-12-12", "title": "Citizenship (Amendment) Act passed",
-     "note": "India's Citizenship (Amendment) Act, 2019 gives a faster path to citizenship to some non-Muslim migrants from Afghanistan, Bangladesh and Pakistan. Sri Lankan Tamil refugees are not covered.",
-     "source_id": "caa-2019"}
+    {
+      "date": "1983-07",
+      "title": "July 1983 riots: first large wave",
+      "note": "Anti-Tamil violence across Sri Lanka in July 1983 is widely described as the start of large-scale flight of Tamils across the Palk Strait to Tamil Nadu.",
+      "source_id": "valatheeswaran-rajan-2011",
+      "to_check": "page number"
+    },
+    {
+      "date": "1990",
+      "date_end": "1994",
+      "title": "1990 to 1994: second wave",
+      "note": "A second large wave of arrivals. UNHCR's series for this group in India starts in 1990, at its highest point.",
+      "source_id": "unhcr-pop-2026",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "valatheeswaran-rajan-2011"
+      ],
+      "to_check": "reading page number"
+    },
+    {
+      "date": "1991-05-21",
+      "title": "Rajiv Gandhi assassinated",
+      "note": "Former Prime Minister Rajiv Gandhi was assassinated at Sriperumbudur, Tamil Nadu, by an LTTE suicide bomber.",
+      "source_id": "suryanarayan-sudarsen-2000",
+      "to_check": "page number"
+    },
+    {
+      "date": "2009-05",
+      "title": "War ends",
+      "note": "The Sri Lankan army defeated the LTTE in May 2009. UCDP records 2009 as the last year of this armed conflict.",
+      "source_id": "ucdp-acd-26.1",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "valatheeswaran-rajan-2011"
+      ],
+      "raw_ref": "UcdpPrioConflict_v26_1.csv#L1933",
+      "to_check": "reading page for 'May 2009'"
+    },
+    {
+      "date": "2019-12-12",
+      "title": "Citizenship (Amendment) Act passed",
+      "note": "India's Citizenship (Amendment) Act, 2019 gives a faster path to citizenship to some non-Muslim migrants from Afghanistan, Bangladesh and Pakistan. Sri Lankan Tamil refugees are not covered.",
+      "source_id": "caa-2019"
+    }
   ],
   "limitations": [
-    {"kind": "politics", "text": "India has not signed the 1951 Refugee Convention",
-     "detail": "UNHCR has a limited role in India, so its figures for this group rely on government data.",
-     "to_check": "Confirm UNHCR's source note for Sri Lankan refugees in India."},
-    {"kind": "method", "text": "Camp and non-camp refugees are not separated",
-     "detail": "UNHCR gives one total; the Government of India counts camp residents and registered non-camp refugees separately."},
-    {"kind": "method", "text": "The two sources count on different dates",
-     "detail": "UNHCR counts on 31 December. The Government of India figure found so far is 'as on 1 January 2016', so UNHCR's end-2015 figure is the closest in time."}
+    {
+      "kind": "politics",
+      "text": "India has not signed the 1951 Refugee Convention",
+      "detail": "UNHCR has a limited role in India, so its figures for this group rely on government data.",
+      "to_check": "Confirm UNHCR's source note for Sri Lankan refugees in India."
+    },
+    {
+      "kind": "method",
+      "text": "Camp and non-camp refugees are not separated",
+      "detail": "UNHCR gives one total; the Government of India counts camp residents and registered non-camp refugees separately."
+    },
+    {
+      "kind": "method",
+      "text": "The two sources count on different dates",
+      "detail": "UNHCR counts on 31 December. The Government of India figure found so far is 'as on 1 January 2016', so UNHCR's end-2015 figure is the closest in time."
+    }
   ],
-  "missing": ["detention"],
+  "missing": [
+    "detention"
+  ],
   "compare_why": {
-    "columns": ["unhcr-pop-2026", "mea-2016"],
+    "columns": [
+      "unhcr-pop-2026",
+      "mea-2016"
+    ],
     "rows": [
-      {"label": "Who is counted", "unhcr-pop-2026": "Refugees from Sri Lanka recorded by UNHCR", "mea-2016": "Camp residents plus refugees registered outside camps"},
-      {"label": "Method", "unhcr-pop-2026": "Reported to UNHCR", "mea-2016": "State records, given in an answer in Parliament"},
-      {"label": "Coverage", "unhcr-pop-2026": "Year-end total (31 December)", "mea-2016": "One date (1 January 2016, to confirm)"},
-      {"label": "Definition", "unhcr-pop-2026": "UNHCR refugee definition", "mea-2016": "No national refugee law"}
+      {
+        "label": "Who is counted",
+        "unhcr-pop-2026": "Refugees from Sri Lanka recorded by UNHCR",
+        "mea-2016": "Camp residents plus refugees registered outside camps"
+      },
+      {
+        "label": "Method",
+        "unhcr-pop-2026": "Reported to UNHCR",
+        "mea-2016": "State records, given in an answer in Parliament"
+      },
+      {
+        "label": "Coverage",
+        "unhcr-pop-2026": "Year-end total (31 December)",
+        "mea-2016": "One date: as on 1 January 2016"
+      },
+      {
+        "label": "Definition",
+        "unhcr-pop-2026": "UNHCR refugee definition",
+        "mea-2016": "No national refugee law"
+      }
     ]
   },
   "explainers": {
@@ -45,6 +103,14 @@
       "to_check": "Confirm with UNHCR's source note."
     }
   },
-  "reading": ["balan-athray-2022", "valatheeswaran-rajan-2011", "suryanarayan-sudarsen-2000"],
-  "brief_sources": ["balan-athray-2022", "mea-2016"]
+  "reading": [
+    "balan-athray-2022",
+    "valatheeswaran-rajan-2011",
+    "suryanarayan-sudarsen-2000"
+  ],
+  "brief_sources": [
+    "balan-athray-2022",
+    "mea-2016"
+  ],
+  "status_review": "Every UNHCR number on this page is checked against the Refugee Data Finder by tests/test_acceptance.py. The Government of India figure is still to confirm."
 }

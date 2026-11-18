@@ -2,21 +2,20 @@
   "id": "yem-idp",
   "what": [
     {
-      "text": "People were displaced internally within Yemen, while others were recorded as refugees or asylum seekers abroad.",
+      "text": "This page follows people displaced inside Yemen.",
       "source_ids": [
-        "unhcr-pop-2026",
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "Internal displacement from conflict or violence reached 4795983 people at the end of 2025.",
+      "text": "At the end of 2025, UNHCR and IDMC gave the same figure: 4795983 people living in internal displacement because of conflict.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026"
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2025, there were also 57327 refugees and 25860 asylum seekers originating from Yemen.",
+      "text": "Refugees from Yemen live mainly in Somalia and the Netherlands.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -24,19 +23,19 @@
   ],
   "why": [
     {
-      "text": "Recorded conflict episodes include the Government of Yemen (North Yemen) fighting Ansarallah, AQAP, and other groups between 2008 and 2025.",
+      "text": "UCDP records armed conflict over the government of Yemen in every year from 2008 to 2025, with Ansarallah, AQAP and other groups among the government's opponents.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Additional conflicts involved IS (Islamic State), STC (South Yemen), Israel, the United Kingdom, and the United States of America.",
+      "text": "It also records armed conflict with the Islamic State group in 2015, 2017 and 2020.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Disaster events occurred in the same years, with 263991 new disaster movements recorded in 2025.",
+      "text": "Floods and wildfires are the disasters recorded for Yemen in IDMC's data.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
@@ -44,54 +43,46 @@
   ],
   "when": [
     {
-      "text": "Conflict-related internal displacement stood at 175000 people in 2009 and reached 4795983 in 2025.",
+      "text": "IDMC's figure rose from 175000 in 2009 to 4795983 in 2025.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "New conflict movements were 2174968 in 2015 and 56798 in 2025.",
+      "text": "New displacements from conflict were highest in 2015, the year of one of the largest changes in the data.",
       "source_ids": [
         "idmc-conflict-2026"
-      ]
-    },
-    {
-      "text": "New disaster movements reached 492443 in 2024.",
-      "source_ids": [
-        "idmc-disaster-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "In 2025, UNHCR reported protecting or assisting 4795983 internally displaced people inside Yemen.",
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     },
     {
-      "text": "Disaster displacement figures showed 10836 people remaining displaced by disasters at the end of 2021.",
+      "text": "The sources don't say where displaced people are living inside Yemen.",
       "source_ids": [
-        "idmc-disaster-2026"
-      ]
-    },
-    {
-      "text": "The sources don't say what specific routes people took or how they live.",
-      "source_ids": [
-        "unhcr-pop-2026",
-        "idmc-conflict-2026",
-        "idmc-disaster-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
-    "unhcr-pop-2026",
     "idmc-conflict-2026",
+    "unhcr-pop-2026",
     "ucdp-acd-26.1",
     "idmc-disaster-2026"
   ],
-  "generated_on": "2026-11-16",
-  "factpack_hash": "47c5923916f56d42",
+  "numbers": [
+    175000,
+    4795983
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-19",
+  "factpack_hash": "7b496d1d3ca45eb7",
   "status": "unchecked",
   "checked_by": null,
   "check": {
