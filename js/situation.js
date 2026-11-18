@@ -274,7 +274,7 @@ function briefHTML(brief) {
     return `<div class="brief__k">${p.toUpperCase()}</div><div class="brief__v">${one(sentences[0])}${rest.length
       ? ` <span class="brief__rest" hidden>${rest.map(one).join(" ")}</span>` : ""}</div>`;
   };
-  const srcNames = [...new Set(srcs.map((id) => SRC[id]?.short || REFS[id]?.authors || id))];
+  const srcNames = [...new Set(srcs.map((id) => (SRC[id]?.short || REFS[id]?.authors || id).replace(/^Government of /, "Govt. of ")))];
   const label = brief.status === "checked"
     ? `Checked by ${esc(brief.checked_by || "the team")}${brief.checked_on ? `, ${esc(formatDate(brief.checked_on))}` : ""}`
     : `Written by ${esc(brief.writer || "Gemini")} from ${esc(srcNames.join(", ") || "the data")}, not yet checked by the team`;
