@@ -5,12 +5,11 @@
 import { renderMiniGlobe } from "./minimap.js";
 import { getJSON } from "./data.js";
 import { esc, fmt, mode, setMode } from "./format.js";
-import { closePopover, closePanel } from "./popouts.js";
+import { createPopout } from "./popout.js";
 
 let dlg = null;
+let pop = null;          // the shared pop-out (js/popout.js): opening, closing, Esc, backdrop, focus
 let busy = false;
-const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-const phone = () => document.documentElement.clientWidth < 600;
 const last = (s) => (Array.isArray(s) && s.length ? s[s.length - 1] : null);
 
 /** Figures for the map, straight from the situation file. */
@@ -91,10 +90,8 @@ function build() {
       </footer>
     </div>`;
   document.body.append(dlg);
-  dlg.addEventListener("cancel", (e) => { e.preventDefault(); close(); });       // Esc
-  dlg.addEventListener("click", (e) => {
-    if (e.target === dlg || e.target.closest("[data-close]")) close();         // the dimmed background, or X
-  });
+  pop = createPopout(dlg, { box: ".map-dialog__box", sheetClass: "map-dialog--sheet" });
+  dlg.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) pop.close(); });    // X
   return dlg;
 }
 
@@ -104,8 +101,6 @@ let ctx = null;   // { trigger, map, S, MEAS, SRC, fig, table }
 export async function openMapDialog({ S, MEAS, SRC, trigger }) {
   if (busy || dlg?.open) return;
   busy = true;
-  closePopover();
-  closePanel();
   build();
   const fig = figuresFor(S, MEAS, SRC);
   const hostNames = hostNamesFor(S, fig.hostIsos);
@@ -129,10 +124,8 @@ export async function openMapDialog({ S, MEAS, SRC, trigger }) {
   mapEl.innerHTML = '<p class="small muted map-dialog__loading">Loading the map…</p>';
 
   syncFmt();
-  dlg.classList.toggle("map-dialog--sheet", phone());
-  dlg.showModal();
   ctx = { trigger, S, MEAS, SRC, fig, hostNames };
-  await animateOpen(trigger);
+  await pop.open({ el: trigger }, { focus: dlg.querySelector(".map-dialog__close") });
   const out = await renderMiniGlobe(mapEl, {
     size: "large", origin: S.origin_iso3, hosts: fig.hostIsos, originName: S.origin_name, hostNames,
     figures: { measureWord: fig.measureWord, hosts: fig.hosts, originText: fig.originText, extra: fig.extra },
@@ -141,7 +134,6 @@ export async function openMapDialog({ S, MEAS, SRC, trigger }) {
   wire();
   busy = false;
   globalThis.wv1MapDialog = { controls: ctx.map, drawn: () => ctx.map?.drawn };
-  dlg.querySelector(".map-dialog__close").focus({ preventScroll: true });
 }
 
 function syncFmt() {
@@ -219,42 +211,4 @@ function renderTable() {
       <thead><tr><th scope="col">Country</th><th scope="col">Role</th><th scope="col">Figure (${esc(fig.measureWord)})</th><th scope="col">Year</th><th scope="col">Source</th></tr></thead>
       <tbody>${rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th><td>${esc(r[1])}</td><td class="tabular">${r[2]}</td><td class="tabular">${esc(String(r[3]))}</td><td>${esc(r[4])}</td></tr>`).join("")}</tbody>
     </table>`;
-}
-
-// ------------------------------------------------------------------ animation
-const box = () => dlg.querySelector(".map-dialog__box");
-
-function flipFrom(trigger) {
-  const from = trigger.getBoundingClientRect();
-  const to = box().getBoundingClientRect();
-  const s = Math.max(0.05, from.width / to.width);
-  const dx = from.left + from.width / 2 - (to.left + to.width / 2);
-  const dy = from.top + from.height / 2 - (to.top + to.height / 2);
-  return `translate(${dx}px, ${dy}px) scale(${s})`;
-}
-
-async function animateOpen(trigger) {
-  const back = dlg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: "ease-out", pseudoElement: "::backdrop" });
-  let a;
-  if (reduced()) a = box().animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: "linear" });
-  else if (dlg.classList.contains("map-dialog--sheet")) a = box().animate([{ transform: "translateY(100%)" }, { transform: "none" }], { duration: 300, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
-  else a = box().animate([{ transform: flipFrom(trigger), opacity: 0.6 }, { transform: "none", opacity: 1 }], { duration: 300, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
-  await Promise.allSettled([a.finished, back.finished]);
-}
-
-async function close() {
-  if (!dlg?.open || busy) return;
-  busy = true;
-  const trigger = ctx?.trigger;
-  const back = dlg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: "ease-in", pseudoElement: "::backdrop", fill: "forwards" });
-  let a;
-  if (reduced() || !trigger?.isConnected) a = box().animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, fill: "forwards" });
-  else if (dlg.classList.contains("map-dialog--sheet")) a = box().animate([{ transform: "none" }, { transform: "translateY(100%)" }], { duration: 260, easing: "ease-in", fill: "forwards" });
-  else a = box().animate([{ transform: "none", opacity: 1 }, { transform: flipFrom(trigger), opacity: 0.6 }], { duration: 260, easing: "cubic-bezier(0.4, 0, 0.6, 1)", fill: "forwards" });
-  await Promise.allSettled([a.finished, back.finished]);
-  dlg.close();
-  a.cancel();
-  back.cancel();
-  busy = false;
-  trigger?.focus({ preventScroll: true });
 }

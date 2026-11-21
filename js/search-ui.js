@@ -5,6 +5,7 @@ import { getJSON } from "./data.js";
 import { esc, numHTML, fmt } from "./format.js";
 import { icon } from "./icons.js";
 import { search, engineState, onEngineChange } from "./search.js";
+import { leaveMorph } from "./morph.js";
 
 const GROUP_LABEL = { situation: "Situation", country: "Country", group: "Group" };
 
@@ -56,9 +57,19 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
       ? `${quick}${groupHTML}${filt}${note}<a class="results__req" href="request.html?q=${encodeURIComponent(q)}">Can't find it? Request data &rsaquo;</a>`
       : `<div class="results__empty"><p><strong>No results for "${esc(q)}"</strong></p><p class="small muted">Try a country, a group of people or a year.</p>
          <a href="request.html?q=${encodeURIComponent(q)}">Request data &rsaquo;</a></div>${note}`;
+    const opening = panel.hidden;
     panel.hidden = false;
     input.setAttribute("aria-expanded", "true");
     active = -1;
+    // opening: the panel scales and fades in, the results follow in a short stagger (not on every keystroke)
+    if (opening) {
+      opts().forEach((o, i) => o.style.setProperty("--i", String(Math.min(i, 10))));
+      panel.classList.remove("is-opening");
+      void panel.offsetWidth;
+      panel.classList.add("is-opening");
+      clearTimeout(panel._t);
+      panel._t = setTimeout(() => panel.classList.remove("is-opening"), 600);
+    }
   }
   function close() {
     panel.hidden = true;
@@ -83,10 +94,11 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     else if (e.key === "Enter") {
       const o = opts();
       const target = o[active >= 0 ? active : 0];
-      if (target) { e.preventDefault(); location.href = target.getAttribute("href"); }
+      if (target) { e.preventDefault(); morphName(target); location.href = target.getAttribute("href"); }
     }
   });
   document.addEventListener("click", (e) => { if (!panelParent.contains(e.target)) close(); });
+  panel.addEventListener("click", (e) => { const a = e.target.closest("a[data-opt]"); if (a) morphName(a); });
   onEngineChange(() => { if (last && !panel.hidden) run(); });
   return { run };
 }
@@ -94,4 +106,14 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
 function sourceShort(measureId) {
   if (measureId?.startsWith("idmc") || measureId?.includes("idmc")) return "IDMC";
   return "UNHCR";
+}
+
+/** The chosen result's title becomes the next page's title in a cross-document view transition. */
+function morphName(a) {
+  document.querySelectorAll("[style*=view-transition-name]").forEach((x) => { x.style.viewTransitionName = ""; });
+  const here = document.querySelector(".sit-title, .country-head h1");     // only one element may carry the name
+  if (here) here.style.viewTransitionName = "none";
+  const t = a.querySelector(".results__qa > span") || a.querySelector("span");
+  if (t) t.style.viewTransitionName = "sit-title";
+  if (/situation\.html/.test(a.getAttribute("href") || "") && document.body.dataset.page === "home") leaveMorph(t);
 }

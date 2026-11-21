@@ -4,6 +4,7 @@
 import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/+esm";
 import { esc, fmt, fmtPct, fmtShort, numHTML, pctHTML, mode } from "./format.js";
 import { icon } from "./icons.js";
+import { fxOff } from "./fx.js";
 
 export { Plot };
 
@@ -17,6 +18,9 @@ export const MEASURE_COLOR = {
   idps_unhcr: C.idp, idps_idmc_conflict: C.idp, idps_idmc_disaster: C.idp, idmc_conflict_new: C.idp, idmc_disaster_new: C.idp,
 };
 
+/** The text-safe variant of a people-type colour (for small labels drawn in that colour). */
+export const inkOf = (c) => String(c).replace(/^var\(--c-([a-z]+)\)$/, "var(--c-$1-ink)");
+
 export const MARGIN = { left: 60, right: 96, top: 18, bottom: 30 };
 
 /** Plot options shared by all charts. */
@@ -26,7 +30,7 @@ export function base(width, height = 300, extra = {}) {
     marginLeft: MARGIN.left, marginRight: width < 520 ? 64 : MARGIN.right, marginTop: MARGIN.top, marginBottom: MARGIN.bottom,
     style: { background: "transparent", fontFamily: "IBM Plex Sans, system-ui, sans-serif", fontSize: "12px", color: "var(--muted)", overflow: "visible" },
     x: { label: null, tickFormat: (d) => String(d), ticks: width < 520 ? 4 : 7 },
-    y: { label: null, tickFormat: (d) => fmtShort(d), ticks: 4, grid: false },
+    y: { label: null, tickFormat: (d) => fmtShort(d), ticks: 4, grid: true },     // faint horizontal gridlines only
     ...extra,
   };
 }
@@ -84,6 +88,7 @@ export function chartBlock(host, spec) {
     try {
       const el = spec.draw(w);
       body.replaceChildren(el);
+      polish(el, fig.id);
       // hide Plot's drawing from screen readers (the figure has a text summary and a Data view);
       // interactive extras such as the events strip stay reachable
       [el, ...(el.querySelectorAll?.("svg") || [])].forEach((s) => {
@@ -110,6 +115,7 @@ export function chartBlock(host, spec) {
   };
   fig._redraw = redraw;
   blocks.add(fig);
+  drawInWhenSeen(fig);
   new ResizeObserver(() => {
     const w = body.clientWidth;
     if (w && Math.abs(w - (fig._w || 0)) > 8) { fig._w = w; redraw(); }
@@ -176,12 +182,7 @@ async function downloadPNG(fig, spec, btn) {
   btn.disabled = true;
   btn.textContent = "Saving…";
   try {
-    const { toPng } = await import("https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm");
-    const bg = getComputedStyle(document.body).backgroundColor;
-    const url = await toPng(fig, {
-      backgroundColor: bg, pixelRatio: 2,
-      filter: (n) => !(n.classList && (n.classList.contains("chart__tools") || n.classList.contains("chart__data"))),
-    });
+    const url = await figurePNG(fig);          // always the clean light theme, for papers
     const a = document.createElement("a");
     a.href = url;
     a.download = `${spec.filename || spec.id || "chart"}.png`;
@@ -209,8 +210,16 @@ export function save(blob, name) {
 /** Make a PNG data URL of a chart figure (used by exports). */
 export async function figurePNG(fig) {
   const { toPng } = await import("https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm");
-  return toPng(fig, { backgroundColor: "#ffffff", pixelRatio: 2,
-    filter: (n) => !(n.classList && (n.classList.contains("chart__tools") || n.classList.contains("chart__data"))) });
+  // the light token set on this figure only, no glow or pulse, nothing mid-animation
+  fig.classList.add("surface-light", "capturing");
+  fig.getAnimations({ subtree: true }).forEach((a) => a.finish?.());
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  try {
+    return await toPng(fig, { backgroundColor: "#ffffff", pixelRatio: 2,
+      filter: (n) => !(n.classList && (n.classList.contains("chart__tools") || n.classList.contains("chart__data"))) });
+  } finally {
+    fig.classList.remove("surface-light", "capturing");
+  }
 }
 
 // lets the collection page capture a chart on this page as PNG (used by exports, same origin only)
@@ -225,4 +234,104 @@ export function yearAt(plotEl, evt) {
   const vb = svg.viewBox?.baseVal;
   const sx = vb && vb.width ? vb.width / r.width : 1;
   return Math.round(x.invert((evt.clientX - r.left) * sx));
+}
+
+// ------------------------------------------------------------------ look: gradients, solid bars, the last point
+let gid = 0;
+const COLOR_OF_FILL = (f) => {
+  const m = /var\(--c-([a-z]+)(?:-fill)?\)/.exec(f || "");
+  return m ? `var(--c-${m[1]})` : null;
+};
+/** Make a Plot drawing crisp: area fills become a vertical gradient (45% to 0% of the type colour), bars are solid
+ *  with a slightly brighter top edge, and each line's last point gets a small dot (glowing and slowly pulsing in
+ *  the dark theme). Purely visual: nothing about the data or scales changes. */
+function polish(root, id) {
+  const svgs = root.tagName?.toLowerCase() === "svg" ? [root] : [...root.querySelectorAll("svg")].filter((x) => !x.closest(".events"));
+  for (const svg of svgs) {
+    const NS = "http://www.w3.org/2000/svg";
+    let defs = svg.querySelector("defs.polish");
+    if (!defs) { defs = document.createElementNS(NS, "defs"); defs.setAttribute("class", "polish"); svg.prepend(defs); }
+    // areas
+    svg.querySelectorAll('g[aria-label="area"]').forEach((g) => {
+      const c = COLOR_OF_FILL(g.getAttribute("fill"));
+      if (!c) return;
+      const gradId = `${id || "c"}-g${++gid}`;
+      const lg = document.createElementNS(NS, "linearGradient");
+      lg.setAttribute("id", gradId);
+      lg.setAttribute("x1", "0"); lg.setAttribute("y1", "0"); lg.setAttribute("x2", "0"); lg.setAttribute("y2", "1");
+      lg.innerHTML = `<stop offset="0" style="stop-color:${c};stop-opacity:0.45"/><stop offset="1" style="stop-color:${c};stop-opacity:0"/>`;
+      defs.append(lg);
+      g.setAttribute("fill", `url(#${gradId})`);
+      g.setAttribute("fill-opacity", "1");
+      g.classList.add("is-area");
+    });
+    // bars: solid, with a brighter top edge (vertical bars only)
+    svg.querySelectorAll('g[aria-label="bar"]').forEach((g) => {
+      g.setAttribute("fill-opacity", "1");
+      g.classList.add("is-bar");
+      const rects = [...g.querySelectorAll("rect")];
+      const bottoms = new Set(rects.map((r) => Math.round(+r.getAttribute("y") + +r.getAttribute("height"))));
+      if (rects.length < 2 || bottoms.size > 2) return;
+      const top = document.createElementNS(NS, "g");
+      top.setAttribute("class", "bar-top");
+      top.setAttribute("stroke", g.getAttribute("fill") || "currentColor");
+      top.innerHTML = rects.filter((r) => +r.getAttribute("height") > 2).map((r) => {
+        const x = +r.getAttribute("x"); const y = +r.getAttribute("y"); const w = +r.getAttribute("width");
+        return `<line x1="${x}" x2="${x + w}" y1="${y + 1}" y2="${y + 1}"/>`;
+      }).join("");
+      g.after(top);
+    });
+    // lines: a dot on the last point
+    svg.querySelectorAll('g[aria-label="text"]').forEach((g) => g.classList.add("is-text"));
+    svg.querySelectorAll('g[aria-label="line"]').forEach((g) => {
+      g.classList.add("is-line");
+      const stroke = g.getAttribute("stroke") || g.querySelector("path")?.getAttribute("stroke");
+      g.querySelectorAll("path").forEach((p) => {
+        const len = p.getTotalLength?.();
+        if (!len) return;
+        const pt = p.getPointAtLength(len);
+        const dot = document.createElementNS(NS, "g");
+        dot.setAttribute("class", "pt-last");
+        dot.setAttribute("style", `color:${stroke}`);
+        dot.innerHTML = `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.5" fill="${stroke}"/>`;
+        g.after(dot);
+      });
+    });
+  }
+}
+
+// ------------------------------------------------------------------ draw-in, once per chart, the first time it is seen
+const exporting = (() => { try { return new URLSearchParams(location.search).has("theme"); } catch { return false; } })();
+function drawInWhenSeen(fig) {
+  if (fxOff() || exporting || !("IntersectionObserver" in window)) return;
+  const body = fig.querySelector(".chart__body");
+  const io = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    drawIn(body);
+  }, { threshold: 0.25 });
+  io.observe(fig);
+}
+function drawIn(body) {
+  const svg = [...body.querySelectorAll("svg")].find((x) => !x.closest(".events"));
+  if (!svg || fxOff()) return;
+  const ease = "cubic-bezier(0.3, 0.7, 0.2, 1)";
+  svg.querySelectorAll("g.is-line path").forEach((p) => {
+    if (p.getAttribute("stroke-dasharray") || p.closest("[stroke-dasharray]")) {
+      p.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out", fill: "backwards" });
+      return;
+    }
+    const len = p.getTotalLength?.() || 0;
+    if (!len) return;
+    p.animate([{ strokeDasharray: `${len} ${len}`, strokeDashoffset: len }, { strokeDasharray: `${len} ${len}`, strokeDashoffset: 0 }],
+      { duration: 700, easing: ease });
+  });
+  svg.querySelectorAll("g.is-area").forEach((g) => g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 150, easing: "ease-out", fill: "backwards" }));
+  svg.querySelectorAll("g.is-bar rect").forEach((r, i, all) => {
+    r.style.transformBox = "fill-box";
+    r.style.transformOrigin = "center bottom";
+    r.animate([{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }],
+      { duration: 600, delay: Math.min(250, (i / Math.max(1, all.length)) * 250), easing: ease, fill: "backwards" });
+  });
+  svg.querySelectorAll(".bar-top, .pt-last, g.is-text").forEach((g) => g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 560, fill: "backwards" }));
 }

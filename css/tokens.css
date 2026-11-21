@@ -1,70 +1,101 @@
 /* Design tokens. Every colour, size and space used by the site comes from here.
-   Light is the default for reading pages; dark is used on the home page and when the
-   reader picks the dark theme. People-type colours mean the same thing everywhere. */
+   Dark is the main look (the home page starts dark); light is crisp and cool for reading and print.
+   People-type colours mean the same thing everywhere. Neon (the accent) is for interaction and data
+   highlights only: never body text, never warnings. Conflict is always neutral grey, never red.
+   Every text/background pair is checked against WCAG AA by tests/contrast_check.py. */
 
-:root {
+/* ------------------------------------------------------------------ light */
+:root,
+.surface-light {
   color-scheme: light;
 
-  /* surfaces and ink (light) */
-  --bg: #F6F4EF;
+  /* surfaces and ink */
+  --bg: #F6F8FB;
+  --bg-raised: #FFFFFF;      /* top bar */
   --surface: #FFFFFF;
-  --surface-2: #EFECE5;
-  --ink: #1C1C1E;
-  --muted: #625E56;          /* darkened from #6B675F for AA on --surface-2 */
-  --line: #E2DED5;
-  --line-strong: #CFCAC0;
-  --accent: #2563A8;         /* links and actions only */
+  --surface-2: #EEF2F7;
+  --ink: #0B1220;
+  --muted: #475569;
+  --line: #E2E8F0;
+  --line-strong: #CBD5E1;
+  --accent: #0E7490;         /* links, active and selected states (deepened from #0891B2 to pass 4.5:1 as link text) */
+  --accent-ui: #0891B2;      /* focus rings and indicators (3:1 is enough for non-text UI) */
   --accent-ink: #FFFFFF;
-  --accent-soft: #E3ECF7;
-  --focus: #2563A8;
-  --scrim: rgba(28, 28, 30, 0.38);
-  --shadow-pop: 0 12px 32px rgba(28, 28, 30, 0.14), 0 2px 6px rgba(28, 28, 30, 0.08);
+  --accent-soft: rgba(8, 145, 178, 0.08);
+  --accent-glow: 0 0 0 1px rgba(8, 145, 178, 0.45);
+  --focus: #0891B2;
+  --scrim: rgba(11, 18, 32, 0.40);
+  --shadow-card: 0 1px 2px rgba(11, 18, 32, 0.06), 0 8px 24px rgba(11, 18, 32, 0.08);
+  --shadow-pop: 0 1px 2px rgba(11, 18, 32, 0.06), 0 8px 24px rgba(11, 18, 32, 0.08), 0 24px 48px rgba(11, 18, 32, 0.10);
+  --glass-bg: rgba(255, 255, 255, 0.86);
+  --glass-filter: blur(14px) saturate(140%);
+  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
   /* people types: same meaning everywhere */
-  --c-refugees: #2F6DB5;
-  --c-asylum: #C98A0E;
-  --c-idp: #B5452B;
-  --c-oip: #1F9988;
-  --c-stateless: #7B5EA7;
-  --c-context: #8C877D;
-  --c-refugees-fill: rgba(47, 109, 181, 0.16);
-  --c-idp-fill: rgba(181, 69, 43, 0.14);
-  --c-context-band: rgba(140, 135, 125, 0.30);
+  --c-refugees: #0B6BFF;
+  --c-asylum: #C27400;       /* from #E08A00 so bars and lines keep 3:1 on white */
+  --c-idp: #E8412A;
+  --c-oip: #009E82;          /* from #00A88A so lines and bars keep 3:1 on the page */
+  --c-stateless: #8B4DFF;
+  --c-context: #6B7280;
+  /* the same colours for small chart text (labels at the end of a line): darker in light mode to pass 4.5:1 */
+  --c-refugees-ink: #0A5FE0;
+  --c-asylum-ink: #9A5B00;
+  --c-idp-ink: #C7311C;
+  --c-oip-ink: #007A64;
+  --c-stateless-ink: #7337E6;
+  --c-context-ink: #475569;
+  --c-refugees-fill: rgba(11, 107, 255, 0.16);
+  --c-idp-fill: rgba(232, 65, 42, 0.14);
+  --c-context-band: rgba(107, 114, 128, 0.30);
 
-  /* mini globe (never reuses people-type colours) */
-  --g-origin: #D8C3A0;
-  --g-origin-line: #8F7650;
-  --g-host: #3B4252;
-  --g-host-line: #252A35;
-  --g-host-label: #FFFFFF;
-  --g-host-x: #8E96A6;
-  --g-land: #E6E2D9;
+  /* mini globe and larger map (never reuses people-type colours) */
+  --g-origin: #D62FB4;
+  --g-origin-fill: rgba(214, 47, 180, 0.35);
+  --g-origin-line: #D62FB4;
+  --g-host: #0891B2;
+  --g-host-fill: rgba(8, 145, 178, 0.35);
+  --g-host-line: #0E7490;    /* outline deepened from #0891B2 for 3:1 on land; the fill keeps #0891B2 */
+  --g-host-label: #0B1220;
+  --g-host-x: #CBD5E1;
+  --g-glow-o: none;
+  --g-glow-h: none;
+  --g-arrow: #0B1220;
+  --g-arrow-base: rgba(11, 18, 32, 0.45);
+  --g-arrow-glow: none;
+  --g-land: #E2E8F0;
   --g-land-line: #FFFFFF;
-  --g-ocean: #FBFAF7;
-  --g-graticule: rgba(28, 28, 30, 0.06);
-  /* home globe: five classes of people displaced (fixed thresholds); no data stays plain land */
-  --g-ramp-0: #D3DCE6;
-  --g-ramp-1: #AABFD6;
-  --g-ramp-2: #7A9DC3;
-  --g-ramp-3: #4A76A6;
-  --g-ramp-4: #1F4C7C;
+  --g-ocean: #FFFFFF;
+  --g-graticule: rgba(11, 18, 32, 0.06);
+  --g-atmo: rgba(11, 107, 255, 0.16);
+  --g-dots: rgba(11, 18, 32, 0.16);
+  /* home globe: five classes of people displaced (fixed thresholds), land up to refugee blue */
+  --g-ramp-0: #C9DAF8;
+  --g-ramp-1: #98BAFA;
+  --g-ramp-2: #659AFC;
+  --g-ramp-3: #3A80FF;
+  --g-ramp-4: #0B6BFF;
 
   /* guide mode */
-  --guide-bg: #FBF1D0;
-  --guide-line: #E1C46A;
-  --guide-ink: #4A3900;
-  --guide-dot: #B07A00;
+  --guide-bg: #FFF7DB;
+  --guide-line: #E9C55B;
+  --guide-ink: #3D2F00;
+  --guide-dot: #8A6100;
 
   /* states */
-  --ok: #2E7D4F;
+  --ok: #2F6B00;             /* from #3F8F00 so the badge text passes 4.5:1 on its own tinted pill */
+  --ok-soft: rgba(54, 122, 0, 0.10);
   --warn: #A15C00;
   --danger: #B3261E;
   --label-bg: #EEEAF6;
   --label-ink: #4C3C78;
+}
 
+:root {
   /* type */
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --fs-11: 0.6875rem;
   --fs-13: 0.8125rem;
   --fs-15: 0.9375rem;
   --fs-16: 1rem;
@@ -89,8 +120,8 @@
   --s-16: 64px;
 
   /* shape */
-  --r-control: 6px;
-  --r-card: 10px;
+  --r-control: 8px;
+  --r-card: 12px;
   --r-pill: 999px;
   --hair: 1px solid var(--line);
 
@@ -103,61 +134,101 @@
   --gutter: 16px;
 
   /* motion */
-  --t-fast: 120ms;
+  --t-fast: 140ms;
   --t-med: 220ms;
   --t-slow: 420ms;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* dark set: used by the home page always, and by reading pages on request */
+/* ------------------------------------------------------------------ dark (the main look) */
 :root[data-theme="dark"],
 .surface-dark {
   color-scheme: dark;
-  --bg: #0E1116;
-  --surface: #161B22;
-  --surface-2: #1E242D;
-  --ink: #E8E6E1;
-  --muted: #9AA3AE;
-  --line: #2A313C;
-  --line-strong: #3A4350;
-  --accent: #6EA8FF;
-  --accent-ink: #0E1116;
-  --accent-soft: #1B2A40;
-  --focus: #6EA8FF;
-  --scrim: rgba(0, 0, 0, 0.55);
-  --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --bg: #05070B;
+  --bg-raised: #0A0E14;
+  --surface: #0E131B;
+  --surface-2: #141B26;
+  --ink: #EEF3FA;
+  --muted: #93A1B5;
+  --line: rgba(148, 180, 255, 0.10);
+  --line-strong: rgba(148, 180, 255, 0.22);
+  --accent: #22D3EE;
+  --accent-ui: #22D3EE;
+  --accent-ink: #031014;
+  --accent-soft: rgba(34, 211, 238, 0.12);
+  --accent-glow: 0 0 0 1px rgba(34, 211, 238, 0.55), 0 0 18px rgba(34, 211, 238, 0.35);
+  --focus: #22D3EE;
+  --scrim: rgba(2, 4, 8, 0.62);
+  --shadow-card: none;
+  --shadow-pop: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --glass-bg: rgba(14, 19, 27, 0.78);
+  --glass-filter: blur(14px) saturate(140%);
+  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
-  --c-refugees: #5B93D6;
-  --c-asylum: #E0A532;
-  --c-idp: #D86A4E;
-  --c-oip: #3DB8A6;
-  --c-stateless: #9E85C6;
-  --c-context: #A39E94;
-  --c-refugees-fill: rgba(91, 147, 214, 0.20);
-  --c-idp-fill: rgba(216, 106, 78, 0.18);
-  --c-context-band: rgba(163, 158, 148, 0.24);
+  --c-refugees: #3B9BFF;
+  --c-asylum: #FFB020;
+  --c-idp: #FF5C39;
+  --c-oip: #12E0B5;
+  --c-stateless: #B07CFF;
+  --c-context: #7C8796;
+  --c-refugees-ink: #3B9BFF;
+  --c-asylum-ink: #FFB020;
+  --c-idp-ink: #FF5C39;
+  --c-oip-ink: #12E0B5;
+  --c-stateless-ink: #B07CFF;
+  --c-context-ink: #93A1B5;
+  --c-refugees-fill: rgba(59, 155, 255, 0.20);
+  --c-idp-fill: rgba(255, 92, 57, 0.18);
+  --c-context-band: rgba(238, 243, 250, 0.22);
 
-  --g-land: #2A313C;
-  --g-land-line: #0E1116;
-  --g-ocean: #12161C;
-  --g-graticule: rgba(232, 230, 225, 0.06);
-  --g-ramp-0: #283341;
-  --g-ramp-1: #2B3E55;
-  --g-ramp-2: #30506F;
-  --g-ramp-3: #3D6A93;
-  --g-ramp-4: #6B98CC;
-  --g-host: #8A93A6;
-  --g-host-line: #C5CCD8;
-  --g-host-label: #12161C;
-  --g-host-x: #4A5262;
+  --g-origin: #FF4FD8;
+  --g-origin-fill: rgba(255, 79, 216, 0.35);
+  --g-origin-line: #FF4FD8;
+  --g-host: #2DE2E6;
+  --g-host-fill: rgba(45, 226, 230, 0.35);
+  --g-host-line: #2DE2E6;
+  --g-host-label: #EEF3FA;
+  --g-host-x: rgba(148, 180, 255, 0.22);
+  --g-glow-o: drop-shadow(0 0 5px rgba(255, 79, 216, 0.55));
+  --g-glow-h: drop-shadow(0 0 5px rgba(45, 226, 230, 0.55));
+  --g-arrow: #FFFFFF;
+  --g-arrow-base: rgba(255, 255, 255, 0.55);
+  --g-arrow-glow: drop-shadow(0 0 4px rgba(255, 255, 255, 0.55));
+  --g-land: #101724;
+  --g-land-line: rgba(148, 180, 255, 0.25);
+  --g-ocean: #05070B;
+  --g-graticule: rgba(148, 180, 255, 0.06);
+  --g-atmo: rgba(59, 155, 255, 0.55);
+  --g-dots: rgba(148, 180, 255, 0.22);
+  --g-ramp-0: #16304F;
+  --g-ramp-1: #1D4A7E;
+  --g-ramp-2: #2565AE;
+  --g-ramp-3: #2E80DD;
+  --g-ramp-4: #3B9BFF;
 
-  --guide-bg: #2E2712;
-  --guide-line: #6B5719;
+  --guide-bg: #1C1806;
+  --guide-line: #5A4A12;
   --guide-ink: #F2E2A8;
   --guide-dot: #E0B43C;
-  --label-bg: #2A2540;
+  --ok: #B6FF3B;
+  --ok-soft: rgba(182, 255, 59, 0.10);
+  --warn: #E0A532;
+  --danger: #F08A7A;
+  --label-bg: #1C1A33;
   --label-ink: #D6CCF5;
 }
+
+/* Reduce effects (the display menu) and reduced motion: no blur, no glow, no pulsing */
+:root.fx-off {
+  --accent-glow: 0 0 0 1px var(--accent-ui);
+  --glass-filter: none;
+  --g-glow-o: none;
+  --g-glow-h: none;
+  --g-arrow-glow: none;
+}
+:root.fx-off[data-theme="dark"] { --glass-bg: rgba(14, 19, 27, 0.97); }
+:root.fx-off:not([data-theme="dark"]) { --glass-bg: #FFFFFF; }
 
 @media (prefers-reduced-motion: reduce) {
   :root {

@@ -67,15 +67,18 @@ export function esc(s) {
 }
 
 /** A number that re-formats itself when the switch changes. */
-export function numHTML(n, { decimals = 0, cls = "num" } = {}) {
+export function numHTML(n, { decimals = 0, cls = "num", year = null } = {}) {
   if (isMissing(n)) return `<span class="no-data">${NO_DATA}</span>`;
-  return `<span class="${cls}" data-num="${Number(n)}" data-dec="${decimals}">${esc(fmt(n, { decimals }))}</span>`;
+  return `<span class="${cls}" data-num="${Number(n)}" data-dec="${decimals}"${yearAttr(year)}>${esc(fmt(n, { decimals }))}</span>`;
 }
 
-export function pctHTML(p, decimals = 1, cls = "num") {
+export function pctHTML(p, decimals = 1, cls = "num", year = null) {
   if (isMissing(p)) return `<span class="no-data">${NO_DATA}</span>`;
-  return `<span class="${cls}" data-pct="${Number(p)}" data-dec="${decimals}">${esc(fmtPct(p, decimals))}</span>`;
+  return `<span class="${cls}" data-pct="${Number(p)}" data-dec="${decimals}"${yearAttr(year)}>${esc(fmtPct(p, decimals))}</span>`;
 }
+
+// the year a number belongs to (lets a number in a sentence open its own source trace)
+const yearAttr = (y) => (y === null || y === undefined ? "" : ` data-year="${Number(y)}"`);
 
 /** Fill a template from the pipeline: {"text": "... {n0} ... {p0}", "nums": [...], "pcts": [...]}. */
 export function fillTemplate(t, { plain = false } = {}) {
@@ -86,7 +89,10 @@ export function fillTemplate(t, { plain = false } = {}) {
   if (plain) {
     return text.replace(/\{n(\d+)\}/g, (_, i) => fmt(nums[+i])).replace(/\{p(\d+)\}/g, (_, i) => fmtPct(pcts[+i]));
   }
-  return esc(text).replace(/\{n(\d+)\}/g, (_, i) => numHTML(nums[+i])).replace(/\{p(\d+)\}/g, (_, i) => pctHTML(pcts[+i]));
+  // "years" lines up with the numbers when the template has only one kind of number
+  const years = t.years && !(nums.length && pcts.length) ? t.years : [];
+  return esc(text).replace(/\{n(\d+)\}/g, (_, i) => numHTML(nums[+i], { year: years[+i] }))
+    .replace(/\{p(\d+)\}/g, (_, i) => pctHTML(pcts[+i], 1, "num", years[+i]));
 }
 
 /** Re-format every live number under root (called when the switch changes). */

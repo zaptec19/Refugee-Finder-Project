@@ -50,7 +50,10 @@ function emptyHTML() {
 }
 
 function valueCell(i) {
-  if (i.kind === "number") return i.unit === "percent" ? pctHTML(i.value) : numHTML(i.value);
+  if (i.kind === "number") {
+    const v = i.unit === "percent" ? pctHTML(i.value) : numHTML(i.value);
+    return i.situation_id ? `<button class="num-link" type="button" data-trace-key="${esc(i.key)}">${v}<span class="sr-only">: see where this number comes from</span></button>` : v;
+  }
   if (i.kind === "chart") return `<span class="muted">${icon("chart", { size: 14 })} chart</span>`;
   if (i.kind === "reading") return `<span class="muted">reading</span>`;
   return `<span class="muted">note</span>`;
@@ -97,6 +100,16 @@ function wire() {
     main.querySelector("tbody tr:last-child textarea")?.focus();
   });
   main.querySelector("#export")?.addEventListener("click", openExport);
+  // a saved number opens the same source trace as on its situation page
+  main.querySelectorAll("[data-trace-key]").forEach((b) => b.addEventListener("click", async () => {
+    const it = items().find((x) => x.key === b.dataset.traceKey);
+    if (!it) return;
+    const before = items().length;
+    const { openTraceForItem } = await import("./trace.js");
+    openTraceForItem(it, { el: b, flyFrom: b.querySelector("[data-num], [data-pct]") }, {
+      onClosed: () => { if (items().length !== before) render(); },        // pinned or unpinned inside the trace
+    }).catch((e) => console.error(e));
+  }));
   main.querySelectorAll("[data-remove]").forEach((b) => b.addEventListener("click", () => { remove(b.dataset.remove); render(); }));
   main.querySelectorAll("[data-up]").forEach((b) => b.addEventListener("click", () => { move(b.dataset.up, -1); render(); }));
   main.querySelectorAll("[data-note]").forEach((t) => {

@@ -7,6 +7,7 @@ import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
 import { showCountryCard, hideCountryCard } from "./globe-card.js";
+import { fxOff } from "./fx.js";
 
 initPage({ page: "home", dark: true });
 document.body.classList.add("page-home");
@@ -46,6 +47,7 @@ main.innerHTML = `
     </div>
   </div>`;
 
+intro();
 warmUp();                       // load the search data and model in the background
 const input = document.getElementById("q");
 const searchUI = await attachSearch(input);
@@ -101,3 +103,26 @@ if (preset) { input.value = preset; searchUI.run(); }
   console.error(e);
   document.getElementById("globe-cap").textContent = "The globe could not load. Search still works.";
 });
+
+/** The first visit in a session: the page fades up from black, the globe blooms in (its glow with it), then the
+ *  question, the search box and the try-chips rise in, 60 ms apart. About 1.2 s; skipped on repeat visits in
+ *  the same session, with Reduce effects, and when coming back with the back button. */
+function intro() {
+  let seen = true;
+  try { seen = !!sessionStorage.getItem("wv1:intro-seen"); sessionStorage.setItem("wv1:intro-seen", "1"); } catch { /* storage blocked */ }
+  const back = performance.getEntriesByType?.("navigation")?.[0]?.type === "back_forward";
+  if (seen || back || fxOff()) return;
+  const ease = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+  const veil = document.createElement("div");
+  veil.className = "intro-veil";
+  veil.setAttribute("aria-hidden", "true");
+  document.body.append(veil);
+  veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, easing: "ease-out", fill: "forwards" }).finished.then(() => veil.remove(), () => veil.remove());
+  document.querySelector(".home__globe")?.animate(
+    [{ opacity: 0, transform: "scale(0.96)", filter: "brightness(0.6)" }, { opacity: 1, transform: "none", filter: "none" }],
+    { duration: 950, delay: 150, easing: ease, fill: "backwards" });
+  [".home__q", ".home__search", ".home__try", ".home__foot"].forEach((sel, i) => {
+    document.querySelector(sel)?.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }],
+      { duration: 520, delay: 420 + i * 60, easing: ease, fill: "backwards" });
+  });
+}

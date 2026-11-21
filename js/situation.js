@@ -1,11 +1,14 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
 import { initPage, guideTip } from "./layout.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
-import { esc, fmt, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
+import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
+import { fxOff } from "./fx.js";
+import { arriveMorph } from "./morph.js";
 import { icon } from "./icons.js";
 import { renderMiniGlobe } from "./minimap.js";
-import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN } from "./charts.js";
-import { openPopover, openPanel, closePanel, bindGlossary } from "./popouts.js";
+import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf } from "./charts.js";
+import { openPopover, openPanel, bindGlossary } from "./popouts.js";
+import { traceContext, openTrace as openTraceIn, linkNumbers, LABEL } from "./trace.js";
 import { pin, syncPins } from "./collection.js";
 import { cite, referenceList, loadCiteEngine } from "./cite.js";
 import { REVIEW, reviewNote, unverifiedTag } from "./review.js";
@@ -19,25 +22,25 @@ export const STEPS = [
 const anchor = (k) => k.replace(/_/g, "-");
 const TYPE_LABEL = { pair: "Situation", named: "Situation", origin: "Group", idp: "Internal displacement" };
 const CORRELATION = "Shows timing and patterns, not proven causes.";
-const LABEL = {
-  refugees: "Refugees", asylum_seekers: "Asylum seekers", oip: "Other people in need of international protection",
-  idps_unhcr: "IDPs (UNHCR)", idps_idmc_conflict: "IDPs, conflict (IDMC)", idps_idmc_disaster: "IDPs, disasters (IDMC)",
-};
 
 let S;            // situation
 let SRC = {};     // sources by id
 let MEAS = {};    // measures by id
 let GLOSS = [];
 let REFS = {};    // readings by id
+let CTX;          // trace helpers for this situation (js/trace.js)
 
 initPage({ page: "situation" });
 document.body.classList.add("page-situation");
-main().catch((e) => {
+// Coming from the home page, stand-ins of the clicked title and the globe morph into the real ones (js/morph.js).
+const morph = arriveMorph();
+const ready = main().catch((e) => {
   console.error(e);
   document.getElementById("main").innerHTML = `<div class="page"><div class="empty-state" style="margin-top:48px">
     <h3>We couldn't open this situation</h3><p class="muted">${esc(e.status === 404 ? "There is no situation with this id." : e.message)}</p>
     <p><a href="index.html">Back to search</a> · <a href="request.html">Request data</a></p></div></div>`;
 });
+ready.then(() => morph.land());
 
 async function main() {
   const id = new URLSearchParams(location.search).get("id") || "lka-ind";
@@ -52,6 +55,7 @@ async function main() {
   MEAS = Object.fromEntries(measures.map((x) => [x.id, x]));
   REFS = Object.fromEntries(refs.map((x) => [x.id, x]));
   GLOSS = glossary;
+  CTX = traceContext(S, SRC, MEAS, GLOSS);
   document.title = `${s.title} · Refugee Finder`;
   const steps = STEPS.filter(([k]) => s.steps?.[k] !== false);
 
@@ -93,13 +97,16 @@ async function main() {
     }
   }
   applyNumbers(mainEl);
+  // numbers in the brief, chart titles and summaries open their source trace too
+  mainEl.querySelectorAll("#brief-body, .chart__title, .step__lede, .split, .cbar__parts, .lim__detail")
+    .forEach((el) => linkNumbers(el, CTX, openTrace));
   bindGlossary(mainEl, GLOSS);
   wirePins(mainEl);
   syncPins(mainEl);
   setupRail();
 
   const hosts = s.type === "named" ? s.hosts : s.host_iso3 ? [s.host_iso3] : [];
-  renderMiniGlobe(document.getElementById("mini-globe"), {
+  const mini = renderMiniGlobe(document.getElementById("mini-globe"), {
     origin: s.origin_iso3, hosts, originName: s.origin_name,
     // click (or Enter/Space) opens the larger map in a pop-out; the module loads only when asked for
     onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn })),
@@ -107,12 +114,14 @@ async function main() {
   }).then(() => document.getElementById("mini-globe").removeAttribute("aria-busy"))
     .catch((e) => { console.error(e); document.getElementById("mini-globe").innerHTML = '<p class="small muted">Map could not load.</p>'; });
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+  requestAnimationFrame(() => { revealSteps(); countUp(mainEl.querySelector('[data-body="key_numbers"]')); });
   setTimeout(() => loadCiteEngine(), 2000);          // get citations ready in the background
+  await Promise.race([mini, new Promise((r) => setTimeout(r, 1200))]);   // the morph lands on the drawn mini globe
 }
 
 // =================================================================== helpers
-const place = () => (S.type === "pair" ? S.host_name : S.type === "named" ? S.hosts.map((h) => hostName(h)).join(" and ") : S.origin_name);
-const hostName = (iso) => S.hosts_latest.find((x) => x.host_iso3 === iso)?.name || (iso === S.host_iso3 ? S.host_name : iso);
+const place = () => CTX.place();
+const hostName = (iso) => CTX.hostName(iso);
 const srcShort = (id) => SRC[id]?.short || id;
 const series = (k) => S.series?.[k] || [];
 const yearsRange = (pts) => (pts.length ? [pts[0].year, pts[pts.length - 1].year] : null);
@@ -123,113 +132,13 @@ function sourceLine(ids, extra = "") {
   return `Source: ${uniq.map((id) => `${esc(SRC[id]?.organisation?.split(" (")[0] || id)}, ${esc(SRC[id]?.dataset?.split(":")[0] || "")} (${esc(SRC[id]?.release?.split(" (")[0] || "")})`).join("; ")}${extra ? `. ${extra}` : ""}`;
 }
 
-/** A traceable figure: everything the source-trace panel and the collection need. */
-function point(p, measure, label, extra = {}) {
-  return { value: p.value, unit: "people", year: p.year, measure_id: measure, source_id: p.source_id, footnote: p.footnote,
-    raw_ref: p.raw_ref, note: p.note, label, ...extra };
-}
-
-const INSIDE = ["idps_unhcr", "idps_idmc_conflict", "idps_idmc_disaster", "idmc_conflict_new", "idmc_disaster_new"];
-function pointLabel(measure, year, hostIso = null) {
-  if (hostIso) return `${S.title.split(" in ")[0]} in ${hostName(hostIso)}, ${year}`;
-  if (S.type === "pair" && measure === S.main_measure) return `${S.title}, ${year}`;
-  if (S.type === "origin" && measure === S.main_measure) return `${S.title}, ${year}`;
-  const what = LABEL[measure] || MEAS[measure]?.label || measure;
-  if (INSIDE.includes(measure)) return `${what} in ${S.origin_name}, ${year}`;
-  if (S.type === "pair") return `${what} from ${S.origin_name} in ${S.host_name}, ${year}`;
-  return `${what} from ${S.origin_name}, ${year}`;
-}
-
-function itemFromPoint(pt) {
-  const src = SRC[pt.source_id] || {};
-  const where = pt.place || place();
-  return {
-    kind: "number", key: `num:${S.id}:${pt.measure_id}:${pt.year}:${pt.source_id}:${pt.unit}`,
-    value: pt.value, unit: pt.unit, label: pt.label, place: where, year: pt.year, measure_id: pt.measure_id,
-    definition: MEAS[pt.measure_id]?.plain || "", source_id: pt.source_id, source_short: src.short,
-    source_label: `${src.short || ""} ${src.release?.match(/\d{4}/)?.[0] || ""}`.trim(), release: src.release, raw_ref: pt.raw_ref,
-    note: "", situation_id: S.id, situation_title: S.title, csl: src.csl,
-    cite_detail: citeDetail(pt), limitations: S.limitations.map((l) => l.text),
-  };
-}
-
-function citeDetail(pt) {
-  if (S.type === "pair") return `${S.origin_name} to ${S.host_name}, ${pt.year}`;
-  if (S.type === "named") return `${S.origin_name} to ${S.hosts.map(hostName).join(" and ")}, ${pt.year}`;
-  return `${S.origin_name}, ${pt.year}`;
-}
-
-// =================================================================== source trace (screen 7)
-function openTrace(pt) {
-  const src = SRC[pt.source_id] || {};
-  const m = MEAS[pt.measure_id] || {};
-  const kind = pt.unit === "percent" ? "a share of two year-end figures" : m.kind === "flow" ? "a yearly count (flow)" : m.kind === "stock" ? "a year-end total (stock)" : "";
-  const fns = (pt.footnote || "").split(";").filter(Boolean).map((f) => S.footnotes?.[f]).filter(Boolean);
-  const raw = pt.raw_ref && S.raw_rows?.[pt.raw_ref];
-  const rawFile = raw && S.raw_files?.[raw.file_key];
-  let rowHTML = "";
-  if (raw && rawFile) {
-    const hi = rawFile.header.map((h, i) => String(raw.row[i]).replace(/,/g, "") === String(pt.value));
-    rowHTML = `<p class="eyebrow">Original row</p>
-      <div class="raw"><table class="table raw__table"><thead><tr><th scope="col">Column</th><th scope="col">Value in the source file</th></tr></thead>
-      <tbody>${rawFile.header.map((h, i) => `<tr class="${hi[i] ? "hi" : ""}"><th scope="row">${esc(h)}</th><td>${esc(raw.row[i] ?? "")}</td></tr>`).join("")}</tbody></table></div>
-      <p class="small muted">${esc(rawFile.label)}, line ${raw.line}. Shown exactly as in the file.</p>`;
-  } else if (pt.note || pt.unit === "percent") {
-    rowHTML = `<p class="eyebrow">How this figure was worked out</p><p class="small">${pt.unit === "percent"
-      ? `${numHTML(pt.numerator)} divided by ${numHTML(pt.denominator)}, both UNHCR year-end figures for ${pt.year}.`
-      : `${esc(pt.note)} (${esc(src.dataset || "")}). The rows are in the clean data file below.`}</p>`;
-  }
-  const citeP = cite(src.csl, "apa", citeDetail(pt));
-  const value = pt.unit === "percent" ? pctHTML(pt.value) : numHTML(pt.value);
-  const glossaryId = GLOSS.find((g) => (g.measure_ids || []).includes(pt.measure_id))?.id;
-  const hasCompare = S.steps?.compare;
-  const item = { ...itemFromPoint(pt), what: pt.label.replace(/, (?:as on )?[\d-]{4,10}$/, "") };
-  const body = `
-    <p class="trace__value">${value}</p>
-    <p class="trace__label">${esc(pt.label)}</p>
-    ${pt.status === "to_confirm" ? `<p>${unverifiedTag()}</p>${reviewNote("This figure is still to be confirmed against the original document.")}` : ""}
-    <dl class="trace__dl">
-      <dt>Dataset</dt><dd>${esc(src.dataset || pt.source_id)} <span class="muted">(${esc(src.release || "")})</span></dd>
-      <dt>Published by</dt><dd>${esc(src.organisation || "")}</dd>
-      <dt>Definition</dt><dd>${esc(MEAS[pt.measure_id]?.label || "")}${kind ? `, ${kind}` : ""}. ${esc(m.plain || "")}
-        ${glossaryId ? `<a href="learn.html#g-${glossaryId}">See glossary</a>` : ""}</dd>
-      ${m.zero_note && pt.value === 0 ? `<dt>Note</dt><dd>${esc(m.zero_note)}</dd>` : ""}
-      <dt>Footnote</dt><dd>${fns.length ? fns.map((f) => `<p class="small verbatim">${esc(f)}</p>`).join("") + '<p class="small muted">Quoted exactly as UNHCR wrote it.</p>' : "None for this row"}
-        ${!fns.length && src.caveat ? `<p class="small">Dataset note (${esc(src.caveat_source || src.short || "")}): <span class="verbatim">“${esc(src.caveat)}”</span></p>` : ""}</dd>
-      ${pt.as_of_date ? `<dt>Date</dt><dd>As on ${esc(pt.as_of_date)}</dd>` : ""}
-    </dl>
-    ${rowHTML}
-    <p class="eyebrow" style="margin-top:20px">Cite (APA)</p>
-    <p class="trace__cite" id="trace-cite" aria-busy="true"><span class="muted">Preparing the citation…</span></p>
-    <div class="trace__actions">
-      <button class="btn" type="button" data-copy>Copy citation</button>
-      <button class="btn btn--primary" type="button" data-pin-key="${esc(item.key)}" data-add>+ Add to collection</button>
-    </div>
-    <p style="margin-top:16px" class="small">
-      ${hasCompare ? `<a href="#compare" data-goto-compare>Compare with other sources &rsaquo;</a><br>` : ""}
-      ${src.clean_file ? `<a href="${esc(src.clean_file)}" download>Download the clean data file (CSV)</a> · ` : ""}<a href="datasets.html#${esc(pt.source_id)}">About this dataset</a>
-    </p>`;
-  openPanel("Where this number comes from", body, {
-    onOpen: (panel) => {
-      applyNumbers(panel);
-      syncPins(panel);
-      citeP.then((c) => {
-        const el = panel.querySelector("#trace-cite");
-        if (el) { el.innerHTML = c.html; el.removeAttribute("aria-busy"); }
-      });
-      panel.querySelector("[data-copy]").addEventListener("click", async (e) => {
-        const c = await citeP;
-        try { await navigator.clipboard.writeText(c.text); e.target.textContent = "Copied"; } catch { e.target.textContent = "Select and copy the text above"; }
-      });
-      panel.querySelector("[data-add]").addEventListener("click", (e) => {
-        pin(item, e.currentTarget);
-        e.currentTarget.textContent = e.currentTarget.getAttribute("aria-pressed") === "true" ? "✓ In your collection" : "+ Add to collection";
-        syncPins(document);
-      });
-      if (panel.querySelector("[data-add]").getAttribute("aria-pressed") === "true") panel.querySelector("[data-add]").textContent = "✓ In your collection";
-      panel.querySelector("[data-goto-compare]")?.addEventListener("click", (e) => { e.preventDefault(); closePanel(); document.getElementById("compare").scrollIntoView(); });
-    },
-  });
+// Labels, collection items and the source trace live in js/trace.js (the collection page uses them too).
+const point = (...a) => CTX.point(...a);
+const pointLabel = (...a) => CTX.pointLabel(...a);
+const itemFromPoint = (pt) => CTX.itemFromPoint(pt);
+/** Open "Where this number comes from". `origin` is where it opens from: { el, flyFrom, focusEl, rect }. */
+function openTrace(pt, origin = {}) {
+  return openTraceIn(pt, origin, CTX);
 }
 
 // =================================================================== header
@@ -285,7 +194,7 @@ function briefHTML(brief) {
   return `<div class="brief" id="brief-body">${["what", "why", "when", "how"].map(part).join("")}</div>${more}
     ${anyRest ? `<button class="linklike brief__toggle" type="button" aria-expanded="false" aria-controls="brief-body"
       onclick="const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',open);this.textContent=open?'Show less ⌃':'Read more ⌄';document.querySelectorAll('#brief-body .brief__rest').forEach(e=>e.hidden=!open)">Read more ⌄</button>` : ""}
-    <p style="margin-top:16px"><span class="brief-label" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
+    <p style="margin-top:16px"><span class="brief-label${brief.status === "checked" ? " brief-label--checked" : ""}" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
     <p class="small muted">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
 }
 
@@ -336,7 +245,8 @@ function keyNumbers(el) {
   el.querySelectorAll("[data-trace]").forEach((b) => b.addEventListener("click", (e) => {
     e.preventDefault();
     const kn = pts[+b.dataset.trace];
-    openTrace({ ...kn, label: `${kn.label}${kn.label.includes(String(kn.year)) ? "" : ` (${kn.year})`}` });
+    const card = b.closest(".kn").querySelector(".kn__value");
+    openTrace(CTX.keyNumberPoint(kn), { el: card, flyFrom: card.querySelector("[data-num], [data-pct]"), focusEl: b });
   }));
   el.querySelectorAll("[data-explain]").forEach((b) => b.addEventListener("click", () => openExplainer(pts[+b.dataset.explain], b)));
   el.querySelectorAll("[data-pin-idx]").forEach((b) => b.addEventListener("click", () => pin(el._items[+b.dataset.pinIdx], b)));
@@ -402,20 +312,28 @@ function overTime(el) {
         Plot.ruleY([0], { stroke: "var(--line-strong)" }),
         ...(single ? [Plot.areaY(all, { x: "year", y: "value", fill: lines[0].color, fillOpacity: 0.14, curve: "linear" })] : []),
         ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
-        ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 6, textAnchor: "start", fill: l.color, fontWeight: 500 })),
-        Plot.dot(all, Plot.pointerX({ x: "year", y: "value", r: 4, fill: (d) => lines.find((l) => l.key === d.key).color })),
+        ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500 })),
+        Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
+        Plot.dot(all, Plot.pointerX({ x: "year", y: "value", r: 5, fill: (d) => lines.find((l) => l.key === d.key).color, className: "pt-hover" })),
         Plot.tip(all, Plot.pointerX({ x: "year", y: "value", title: (d) => `${d.line}, ${d.year}\n${fmt(d.value)}${d.note ? `\n${d.note}` : ""}\nClick for the source` })),
       ];
       const p = Plot.plot({ ...base(w, 300), x: { ...base(w).x, domain }, y: { ...base(w).y, domain: [0, Math.max(...all.map((d) => d.value)) * 1.08] }, marks });
       p.style.cursor = "pointer";
       p.addEventListener("click", (e) => {
         const y = yearAt(p, e);
+        // the highlighted dot under the pointer (Plot draws it for the hovered year)
+        const dot = [...p.querySelectorAll("circle")].map((c) => c.getBoundingClientRect())
+          .sort((r1, r2) => Math.hypot(r1.x - e.clientX, r1.y - e.clientY) - Math.hypot(r2.x - e.clientX, r2.y - e.clientY))[0];
+        const at = dot?.width ? dot : { left: e.clientX - 5, top: e.clientY - 5, width: 10, height: 10, right: e.clientX + 5, bottom: e.clientY + 5 };
+        const fig = p.closest(".chart");
+        fig?.setAttribute("tabindex", "-1");
         const line = lines.length === 1 ? lines[0] : null;
         const target = (line ? [line] : lines).map((l) => l.pts.find((q) => q.year === y)).find(Boolean);
         if (target) {
           const l = lines.find((x) => x.pts.includes(target));
           const hostIso = l.key.startsWith("host:") ? l.key.slice(5) : null;
-          openTrace(point(target, l.measure || l.key, pointLabel(l.measure || l.key, y, hostIso), { place: hostIso ? l.label : undefined }));
+          openTrace(point(target, l.measure || l.key, pointLabel(l.measure || l.key, y, hostIso), { place: hostIso ? l.label : undefined, hostIso: hostIso || undefined }),
+            { rect: at, focusEl: fig, flyFrom: { rect: at, fontSize: 12, text: fmt(target.value) } });
         }
       });
       wrap.append(p, eventsStrip(w, domain, conflictYears));
@@ -431,10 +349,10 @@ function overTime(el) {
         return r;
       }),
     },
-    onTrace: (row) => {
+    onTrace: (row, t) => {
       const l = lines[0];
       const p = l.pts.find((q) => q.year === row.year);
-      if (p) openTrace(point(p, l.measure || l.key, pointLabel(l.measure || l.key, row.year)));
+      if (p) openTrace(point(p, l.measure || l.key, pointLabel(l.measure || l.key, row.year)), { el: t, flyFrom: t.querySelector("[data-num]") });
     },
   });
   el.insertAdjacentHTML("beforeend", `<p class="note">${icon("info", { size: 16 })}<span>${CORRELATION} Displacement (${esc(srcShort(lines[0].pts[0].source_id))}) and events come from separate sources. <a href="learn.html#correlation">Why?</a></span></p>`);
@@ -464,6 +382,8 @@ function eventsStrip(w, domain, conflictYears) {
   const evY = 22;
   const bandY = evs.length ? 84 : 6;
   div.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="group" aria-label="Events and conflict years">
+    <defs><pattern id="conf-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="var(--c-context-band)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--c-context)" stroke-width="2.4"/></pattern></defs>
     ${evs.length ? `<text x="0" y="${evY + 4}" class="ev-axis">Events</text>
       ${w < 520 ? `<text x="${MARGIN.left}" y="${evY + 26}" class="ev-axis">Tap a marker to read about the event</text>` : ""}
       <line x1="${MARGIN.left}" x2="${w - right}" y1="${evY}" y2="${evY}" stroke="var(--line-strong)"/>
@@ -486,7 +406,7 @@ function eventsStrip(w, domain, conflictYears) {
             ${narrow ? "" : `<text y="${ty}" text-anchor="${anchorX}" class="ev-label">${esc(label)}</text>`}</g>`;
         }).join("");
       })()}` : ""}
-    ${runs.map(([a, b]) => `<rect x="${x(a - 0.5).toFixed(1)}" y="${bandY}" width="${Math.max(3, x(b + 0.5) - x(a - 0.5)).toFixed(1)}" height="12" rx="2" fill="var(--c-context)" opacity="${[...wars].some((y) => y >= a && y <= b) ? 0.55 : 0.35}"><title>${a === b ? a : `${a} to ${b}`}: armed conflict (UCDP)</title></rect>`).join("")}
+    ${runs.map(([a, b]) => `<rect x="${x(a - 0.5).toFixed(1)}" y="${bandY}" width="${Math.max(3, x(b + 0.5) - x(a - 0.5)).toFixed(1)}" height="12" rx="2" class="conf-band" fill="url(#conf-hatch)" stroke="var(--c-context)" stroke-opacity="0.5" opacity="${[...wars].some((y) => y >= a && y <= b) ? 1 : 0.7}"><title>${a === b ? a : `${a} to ${b}`}: armed conflict (UCDP)</title></rect>`).join("")}
     ${runs.length ? `<text x="${x(runs[0][0] - 0.5)}" y="${bandY + 30}" class="ev-axis">Armed conflict in ${esc(S.origin_name)} (UCDP)${lastConflict && lastConflict < domain[1] ? `, to ${lastConflict}` : ""}</text>` : ""}
   </svg>`;
   return div;
@@ -555,14 +475,16 @@ function wherePeople(el) {
           dx: d.year === sh[0].year ? 16 : d.year === last.year ? -12 : 0, fill: "var(--ink)", fontWeight: 500 })),
         Plot.text([sh[Math.floor(sh.length / 6)]], { x: "year", y: 8, text: () => `in ${where}`, fill: C.refugees, textAnchor: "start", fontWeight: 500 }),
         Plot.text([sh[Math.floor(sh.length / 2)]], { x: "year", y: 94, text: () => "everywhere else", fill: "var(--muted)" }),
+        Plot.ruleX(sh, Plot.pointerX({ x: "year", className: "crosshair" })),
+        Plot.dot(sh, Plot.pointerX({ x: "year", y: "pct", r: 5, fill: C.refugees, className: "pt-hover" })),
         Plot.tip(sh, Plot.pointerX({ x: "year", y: "pct", title: (d) => `${d.year}: ${fmt(d.pct, { decimals: 1 })}%\n${fmt(d.value)} of ${fmt(d.total)}` })),
       ] }),
     table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "value", label: `In ${where}`, type: "num" },
       { key: "total", label: "All host countries", type: "num" }, { key: "pct", label: "Share", type: "pct" }], rows: sh },
   });
-  el.insertAdjacentHTML("beforeend", `<p class="tabular split"><strong>${last.year}:</strong> ${esc(where)} ${numHTML(last.value)}
+  el.insertAdjacentHTML("beforeend", `<p class="tabular split"><strong>${last.year}:</strong> ${esc(where)} ${numHTML(last.value, { year: last.year })}
       <span class="muted" aria-hidden="true">·</span> everywhere else ${numHTML(last.total - last.value)}
-      <span class="muted" aria-hidden="true">·</span> total ${numHTML(last.total)}</p>
+      <span class="muted" aria-hidden="true">·</span> total ${numHTML(last.total, { year: last.year })}</p>
     <p><a href="situation.html?id=${esc(S.origin_iso3.toLowerCase())}-all">Follow ${esc(group)} across all countries over time (onward movement) &rsaquo;</a></p>`);
 }
 
@@ -576,7 +498,7 @@ function insideOutside(el) {
   ].filter((l) => l.pts.length && l.pts.some((p) => p.value));
   const ly = Math.max(...lines.map((l) => l.pts[l.pts.length - 1].year));
   const at = (l) => l.pts.find((p) => p.year === ly);
-  const parts = lines.filter(at).map((l) => `${numHTML(at(l).value)} ${l.key === "abroad" ? `refugees from ${esc(S.origin_name)} lived abroad` : `IDPs inside the country (${l.key === "idps_unhcr" ? "UNHCR" : "IDMC"})`}`);
+  const parts = lines.filter(at).map((l) => `${numHTML(at(l).value, { year: ly })} ${l.key === "abroad" ? `refugees from ${esc(S.origin_name)} lived abroad` : `IDPs inside the country (${l.key === "idps_unhcr" ? "UNHCR" : "IDMC"})`}`);
   const host = document.createElement("div");
   el.append(host);
   chartBlock(host, {
@@ -591,7 +513,8 @@ function insideOutside(el) {
       return Plot.plot({ ...base(w, 280), marginRight: w < 520 ? 70 : 150,
         marks: [Plot.ruleY([0], { stroke: "var(--line-strong)" }),
           ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
-          ...lines.map((l, i) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 6, dy: i === 2 ? 10 : i === 1 ? -6 : 0, textAnchor: "start", fill: l.color, fontWeight: 500, lineWidth: 12 })),
+          ...lines.map((l, i) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 6, dy: i === 2 ? 10 : i === 1 ? -6 : 0, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: 12 })),
+          Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
           Plot.tip(all, Plot.pointer({ x: "year", y: "value", title: (d) => `${d.line}, ${d.year}\n${fmt(d.value)}` }))] });
     },
     table: {
@@ -634,11 +557,7 @@ function compareSources(el) {
     ${whyHTML}
     <p style="margin-top:16px"><a href="learn.html#crosswalk">See how every source defines "${term}" &rsaquo;</a></p>`;
   el.querySelectorAll("[data-cmp]").forEach((b) => b.addEventListener("click", () => {
-    const c = cmp[+b.dataset.cmp];
-    openTrace({ value: c.value, unit: "people", year: c.year, measure_id: c.measure_id, source_id: c.source_id, raw_ref: c.raw_ref,
-      footnote: null, status: c.status, as_of_date: c.as_of_date, note: c.parts?.length ? "Sum of the parts given in the same answer" : null,
-      label: c.source_id.startsWith("unhcr") || c.source_id.startsWith("idmc") ? pointLabel(c.measure_id, c.year)
-        : `${MEAS[c.measure_id]?.label || c.measure_id}, ${c.as_of_date ? `as on ${c.as_of_date}` : c.year}` });
+    openTrace(CTX.comparePoint(cmp[+b.dataset.cmp]), { el: b, flyFrom: b.querySelector("[data-num]") });
   }));
 }
 
@@ -664,7 +583,7 @@ function context(el) {
     const peak = deaths.reduce((a, b) => (b.value > a.value ? b : a));
     chartBlock(host, {
       id: `${S.id}-violence`, filename: `${S.id}_deaths_organized_violence`,
-      title: `Deaths in organized violence in ${esc(S.origin_name)} peaked at ${numHTML(peak.value)} in ${peak.year}`,
+      title: `Deaths in organized violence in ${esc(S.origin_name)} peaked at ${numHTML(peak.value, { year: peak.year })} in ${peak.year}`,
       summary: `Bar chart of deaths in organized violence per year in ${S.origin_name}, UCDP best estimate.`,
       source: sourceLine(["ucdp-ov-26.1"], "Best estimate of deaths in state-based, non-state and one-sided violence"),
       note: `${icon("info", { size: 14 })} ${CORRELATION} Deaths are a yearly count; displacement figures are year-end totals.`,
@@ -709,7 +628,7 @@ function otherAngles(el) {
     const pk = ret.reduce((a, b) => (b.value > a.value ? b : a));
     blocks.push(chartBlock(add(), {
       id: `${S.id}-returns`, filename: `${S.id}_returns`,
-      title: `Returns to ${esc(S.origin_name)}${S.type === "pair" ? ` from ${esc(S.host_name)}` : ""}: most in ${pk.year} (${numHTML(pk.value)})`,
+      title: `Returns to ${esc(S.origin_name)}${S.type === "pair" ? ` from ${esc(S.host_name)}` : ""}: most in ${pk.year} (${numHTML(pk.value, { year: pk.year })})`,
       summary: `Bar chart of returned refugees per year.`,
       source: sourceLine(["unhcr-solutions-2026"], "Returned refugees counted during each year"),
       note: `${icon("info", { size: 14 })} A yearly count (flow), not a year-end total. Years with no row are shown as gaps, not zeros. ${numHTML(total)} returns over these years in all.`,
@@ -718,7 +637,7 @@ function otherAngles(el) {
         marks: [Plot.barY(ret, { x: "year", y: "value", fill: C.refugees, fillOpacity: 0.75 }), Plot.ruleY([0], { stroke: "var(--line-strong)" }),
           Plot.tip(ret, Plot.pointerX({ x: "year", y: "value", title: (d) => `${d.year}: ${fmt(d.value)} returned` }))] }),
       table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "value", label: "Returned refugees", type: "num" }], rows: ret.map((r) => ({ ...r })) },
-      onTrace: (row) => openTrace(point(row, "returned_refugees", `Returned refugees, ${row.year}`)),
+      onTrace: (row, t) => openTrace(point(row, "returned_refugees", `Returned refugees, ${row.year}`), { el: t, flyFrom: t.querySelector("[data-num]") }),
     }));
   }
   if (o.asylum_applications) {
@@ -839,6 +758,10 @@ function setupRail() {
     const a = byId.get(id);
     if (a) {
       a.setAttribute("aria-current", "step");
+      // the thin cyan line on the rail slides to the active step
+      const ol = a.closest("ol");
+      ol?.style.setProperty("--rail-y", `${a.parentElement.offsetTop + 6}px`);
+      ol?.style.setProperty("--rail-h", `${Math.max(8, a.parentElement.offsetHeight - 12)}px`);
       if (window.matchMedia("(max-width: 860px)").matches) a.scrollIntoView({ block: "nearest", inline: "center" });
     }
   };
@@ -849,3 +772,54 @@ function setupRail() {
   }, { rootMargin: "-20% 0px -65% 0px" });
   document.querySelectorAll(".step").forEach((sec) => obs.observe(sec));
 }
+
+// =================================================================== motion: reveal steps, count up the key numbers
+/** Steps below the fold fade and rise in the first time they scroll into view (once each). */
+function revealSteps() {
+  if (fxOff() || !("IntersectionObserver" in window)) return;
+  const vh = window.innerHeight;
+  const later = [...document.querySelectorAll(".step")].filter((st) => st.getBoundingClientRect().top > vh * 0.92);
+  if (!later.length) return;
+  document.documentElement.classList.add("reveal-on");
+  later.forEach((st) => st.classList.add("is-hidden"));
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.remove("is-hidden");
+      io.unobserve(e.target);
+    }
+  }, { rootMargin: "0px 0px -8% 0px" });
+  later.forEach((st) => io.observe(st));
+}
+
+/** The key figures count up to their exact value the first time they are seen (about 600 ms), ending on the exact
+ *  number in the chosen format. Once per situation per session; never with Reduce effects. */
+function countUp(root) {
+  if (!root || fxOff() || !("IntersectionObserver" in window)) return;
+  const key = `wv1:counted:${S.id}`;
+  try { if (sessionStorage.getItem(key)) return; } catch { return; }
+  const spans = [...root.querySelectorAll(".kn__value [data-num], .kn__value [data-pct]")];
+  if (!spans.length) return;
+  const show = (el, k) => {
+    const pct = el.hasAttribute("data-pct");
+    const v = Number(pct ? el.dataset.pct : el.dataset.num);
+    el.textContent = pct ? fmtPct(Math.round(v * k * 10) / 10) : fmt(Math.round(v * k));
+  };
+  spans.forEach((el) => show(el, 0));
+  const io = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    try { sessionStorage.setItem(key, "1"); } catch { /* ignore */ }
+    const t0 = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / 600);
+      const k = 1 - Math.pow(1 - t, 3);
+      if (t < 1) { spans.forEach((el) => show(el, k)); requestAnimationFrame(step); }
+      else applyNumbers(root);                 // the exact value, in the format chosen now
+    };
+    requestAnimationFrame(step);
+  }, { threshold: 0.4 });
+  io.observe(root);
+  document.addEventListener("numfmt-change", () => applyNumbers(root), { once: true });
+}
+

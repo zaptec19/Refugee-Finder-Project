@@ -2,6 +2,7 @@
 // Esc closes both natively. Opening the panel closes any popover.
 import { esc } from "./format.js";
 import { icon } from "./icons.js";
+import { closeCurrentPopout } from "./popout.js";
 
 let pop;
 let panel;
@@ -60,6 +61,7 @@ export function closePopover() {
 export function openPanel(title, bodyHTML, { onOpen } = {}) {
   ensure();
   closePopover();
+  closeCurrentPopout({ instant: true });      // one pop-out at a time
   const opener = document.activeElement;
   panel.innerHTML = `<div class="panel__head"><h2 class="panel__title" id="panel-title">${esc(title)}</h2>
       <button class="icon-btn" type="button" data-close aria-label="Close">${icon("close")}</button></div>

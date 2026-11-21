@@ -140,10 +140,15 @@ function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
   const f1 = (n) => n.toFixed(1);
   return `<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="${esc(label)}">
       <defs>
+        <radialGradient id="${uid}-rim" cx="50%" cy="50%" r="50%">
+          <stop offset="0.74" style="stop-color: var(--g-atmo); stop-opacity: 0"/>
+          <stop offset="0.94" style="stop-color: var(--g-atmo); stop-opacity: 0.16"/>
+          <stop offset="1" style="stop-color: var(--g-atmo); stop-opacity: 0.5"/>
+        </radialGradient>
         <clipPath id="${uid}-clip"><circle cx="${S / 2}" cy="${S / 2}" r="${sc.clipR}"/></clipPath>
         <marker id="${uid}-head" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse"
           markerWidth="${HEAD}" markerHeight="${HEAD}" orient="auto-start-reverse">
-          <path d="M0,1 L9,5 L0,9 z" fill="var(--ink)" stroke="var(--surface)" stroke-width="1.2" stroke-linejoin="round" paint-order="stroke"/>
+          <path d="M0,1 L9,5 L0,9 z" fill="var(--g-arrow)" stroke="var(--g-ocean)" stroke-width="1.2" stroke-linejoin="round" paint-order="stroke"/>
         </marker>
         <marker id="${uid}-headx" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse"
           markerWidth="${HEAD * 0.8}" markerHeight="${HEAD * 0.8}" orient="auto-start-reverse">
@@ -155,11 +160,12 @@ function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
         <path d="${sc.grat}" fill="none" stroke="var(--g-graticule)"/>
         ${sc.landPaths.map((p) => `<path class="mg-${p.cls}" d="${p.d}"${landAttrs(p)}/>`).join("")}
         ${sc.hostBorders ? `<path class="mg-hb" d="${sc.hostBorders}"/>` : ""}
+        ${S > 300 ? `<circle class="mg-rim" cx="${S / 2}" cy="${S / 2}" r="${sc.clipR}" fill="url(#${uid}-rim)" pointer-events="none"/>` : ""}
         ${sc.arrows.filter((a) => a.ring && !a.extra).map((a) => `<circle class="mg-ring" cx="${f1(a.ring.cx)}" cy="${f1(a.ring.cy)}" r="${f1(a.ring.r)}"/>`).join("")}
         ${sc.labels.map((l) => `<text class="mg-label" x="${f1(l.x)}" y="${f1(l.y)}" text-anchor="middle">${esc(l.text)}</text>`).join("")}
         ${sc.arrows.map((a) => a.extra
           ? `<path class="mg-arrow mg-arrow--x" d="${a.d}" marker-end="url(#${uid}-headx)"/>`
-          : `<path class="mg-arrow-halo" d="${a.d}"/><path class="mg-arrow" d="${a.d}" marker-end="url(#${uid}-head)"/>`).join("")}
+          : `<path class="mg-arrow-halo" d="${a.d}"/><path class="mg-arrow" d="${a.d}" marker-end="url(#${uid}-head)"/><path class="mg-flow" d="${a.d}" aria-hidden="true"/>`).join("")}
         ${extraLayers}
       </g>
       ${sc.r < S / 2 ? `<path d="${sc.sphere}" fill="none" stroke="var(--line-strong)"/>` : ""}
