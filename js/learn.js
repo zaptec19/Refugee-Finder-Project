@@ -103,8 +103,9 @@ function stocksFlows() {
   const bars = v.map((h, i) => `<g transform="translate(${30 + i * 70},0)"><rect y="${150 - h * 20}" width="44" height="${h * 20}" rx="3" fill="var(--c-refugees-fill)" stroke="var(--c-refugees)"/>
       <text x="22" y="170" text-anchor="middle" class="sf-t">yr ${i + 1}</text></g>`).join("");
   const deltas = [2, -1, 2].map((d, i) => `<text x="${30 + (i + 1) * 70 + 22}" y="${150 - v[i + 1] * 20 - 8}" text-anchor="middle" class="sf-d">${d > 0 ? "+" : "−"}${Math.abs(d)}</text>`).join("");
-  return `<figure class="sf" aria-label="Illustration: four year-end stocks as bars; the changes between them (+2, −1, +2) are flows."><svg viewBox="0 0 330 180" width="100%">
-      <text x="30" y="16" class="sf-l">stock at year end</text>${bars}${deltas}<text x="318" y="96" text-anchor="end" class="sf-f">flow = change in and out</text></svg>
+  return `<figure class="sf" aria-label="Illustration: four year-end stocks as bars; the changes between them (+2, −1, +2) are flows."><svg viewBox="0 0 330 202" width="100%">
+      <text x="30" y="14" class="sf-l">stock at year end</text><text x="318" y="14" text-anchor="end" class="sf-f">flow = change in and out</text>
+      <g transform="translate(0,22)">${bars}${deltas}</g></svg>
       <figcaption class="small muted">Illustration, not data.</figcaption></figure>`;
 }
 main.addEventListener("click", (e) => {
