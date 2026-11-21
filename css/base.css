@@ -1094,3 +1094,22 @@ html.vt-ghosting #main { opacity: 0; }
 html.theme-swap .sit-title, html.theme-swap .home__globe, html.theme-swap .mini-globe__btn, html.theme-swap .country-head h1 { view-transition-name: none; }
 html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new(root) { animation-duration: 250ms; animation-timing-function: ease; }
 .topbar__theme svg { transform-origin: center; }
+
+/* ---------------------------------------------------------------- phone top bar: fit the first row in the screen
+   (it needed 391 px: name, number switch, Guide pill and collection icon, so phones under ~392 px scrolled sideways) */
+@media (max-width: 860px) {
+  .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; }
+  .topbar__inner > .brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; }    /* never wider than its column */
+}
+@media (max-width: 420px) {
+  .topbar__inner { padding: 0 12px; column-gap: 4px; }
+  .topbar__inner > .brand { font-size: 0.8125rem; }
+  .topbar__fmt button { padding: 0 4px; font-size: 11px; }
+  .topbar__guide { padding: 0 8px; font-size: 12px; gap: 6px; }
+  .topbar__coll { padding: 0 4px; }
+}
+/* the smallest phones: the Guide pill moves to the second row, beside Learn */
+@media (max-width: 350px) {
+  .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-areas: "brand fmt fmt coll" "ask learn guide theme"; }
+  .topbar__learn { padding: 6px 6px; }
+}
