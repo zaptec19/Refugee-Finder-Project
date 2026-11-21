@@ -36,6 +36,8 @@
   --g-origin-line: #8F7650;
   --g-host: #3B4252;
   --g-host-line: #252A35;
+  --g-host-label: #FFFFFF;
+  --g-host-x: #8E96A6;
   --g-land: #E6E2D9;
   --g-land-line: #FFFFFF;
   --g-ocean: #FBFAF7;
@@ -146,6 +148,8 @@
   --g-ramp-4: #6B98CC;
   --g-host: #8A93A6;
   --g-host-line: #C5CCD8;
+  --g-host-label: #12161C;
+  --g-host-x: #4A5262;
 
   --guide-bg: #2E2712;
   --guide-line: #6B5719;

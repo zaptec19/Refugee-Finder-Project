@@ -379,6 +379,14 @@ html { scroll-behavior: smooth; }
 .mg-l { fill: var(--g-land); stroke: var(--g-land-line); stroke-width: 0.5; }
 .mg-o { fill: var(--g-origin); stroke: var(--g-origin-line); stroke-width: 1.1; }
 .mg-h { fill: var(--g-host); stroke: var(--g-host-line); stroke-width: 0.8; }
+.mg-hb { fill: none; stroke: var(--surface); stroke-width: 1.2; stroke-linejoin: round; }
+.mg-ring { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.mg-label { font-size: 9px; font-weight: 600; fill: var(--g-host-label); pointer-events: none; }
+.mg-arrow-halo { fill: none; stroke: var(--surface); stroke-width: 5; stroke-linecap: round; opacity: 0.9; }
+.mg-arrow { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
+.mini-globe__legend { flex-wrap: wrap; }
+.mini-globe__legend.mini-globe__legend--stack { flex-direction: column; align-items: center; gap: 2px; }
+.mini-globe__legend--stack span { line-height: 1.4; }
 .mini-globe__legend { display: flex; justify-content: center; gap: var(--s-3); margin-top: var(--s-1); }
 .mini-globe__legend span { display: inline-flex; align-items: center; gap: 5px; }
 .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
@@ -696,3 +704,78 @@ dialog.export { width: min(520px, calc(100vw - 32px)); }
 .globe-card__src { color: var(--muted); font-size: 0.6875rem; line-height: 1.3; }
 .globe-card__foot { margin: var(--s-2) 0 0; color: var(--muted); font-size: 0.6875rem; }
 .globe-card--docked { left: 16px !important; right: 16px; bottom: 16px; top: auto !important; width: auto; pointer-events: auto; }
+
+/* ------------------------------------------------------------------ mini globe: opens the larger map */
+.mini-globe__btn {
+  display: block; position: relative; width: 100%; padding: 0; margin: 0; border: 0; background: none; color: inherit;
+  cursor: pointer; border-radius: 50%; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.mini-globe__btn svg { display: block; width: 100%; height: auto; }
+.mini-globe__btn:hover, .mini-globe__btn:focus-visible { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(28, 28, 30, 0.14); }
+.mini-globe__btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.mini-globe__expand {
+  position: absolute; right: 2px; top: 2px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface); color: var(--ink); border: var(--hair); box-shadow: var(--shadow-pop);
+  opacity: 0; transition: opacity var(--t-fast) var(--ease);
+}
+.mini-globe__btn:hover .mini-globe__expand, .mini-globe__btn:focus-visible .mini-globe__expand { opacity: 1; }
+@media (hover: none) { .mini-globe__expand { opacity: 0.9; } }
+@media (prefers-reduced-motion: reduce) { .mini-globe__btn, .mini-globe__btn:hover, .mini-globe__btn:focus-visible { transform: none; transition: none; } }
+
+/* ------------------------------------------------------------------ larger map pop-out */
+.map-dialog {
+  padding: 0; border: 0; background: transparent; color: var(--ink); max-width: none; max-height: none; overflow: visible;
+  width: min(704px, calc(100vw - 32px));
+}
+.map-dialog::backdrop { background: rgba(10, 12, 16, 0.55); }
+.map-dialog__box {
+  background: var(--surface); border: var(--hair); border-radius: 14px; box-shadow: var(--shadow-pop);
+  padding: var(--s-4) var(--s-5) var(--s-3); max-height: calc(100vh - 32px); overflow: auto; transform-origin: center;
+}
+.map-dialog__head { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); margin-bottom: var(--s-2); }
+.map-dialog__title { font-size: var(--fs-17); font-weight: 600; margin: 0; }
+.map-dialog__body { position: relative; }
+.map-dialog__map { width: min(640px, 100%, calc(100vh - 250px)); min-width: min(320px, 100%); margin: 0 auto; aspect-ratio: 1; }
+.map-dialog__map svg { display: block; width: 100%; height: auto; }
+.map-dialog__loading { display: grid; place-items: center; height: 100%; margin: 0; }
+.map-dialog__table { min-height: 200px; overflow-x: auto; }
+.map-dialog__bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); margin-top: var(--s-3); }
+.map-dialog__zoom { display: inline-flex; gap: 4px; }
+.map-dialog__zoom .btn { min-width: 34px; justify-content: center; }
+.map-dialog__toggle { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-13); cursor: pointer; }
+.map-dialog__toggle[hidden] { display: none; }
+.map-dialog__toggle input { width: 16px; height: 16px; accent-color: var(--accent); }
+.map-dialog__view { margin-left: auto; font-size: var(--fs-13); }
+.map-dialog__note, .map-dialog__extra { margin: var(--s-2) 0 0; }
+.map-dialog__foot { border-top: var(--hair); margin-top: var(--s-3); padding-top: var(--s-2); }
+.map-dialog__foot p { margin: 0 0 2px; }
+/* phones: a full-screen sheet */
+.map-dialog--sheet { width: 100vw; height: 100dvh; margin: 0; inset: 0; max-height: none; }
+.map-dialog--sheet .map-dialog__box { height: 100%; max-height: none; border-radius: 0; border: 0; padding: var(--s-3) var(--gutter) var(--s-4); }
+.map-dialog--sheet .map-dialog__map { width: 100%; min-width: 0; }
+
+/* the large map */
+.mgl { position: relative; }
+.mgl__svg { touch-action: none; cursor: grab; border-radius: 50%; }
+.mgl__svg:active { cursor: grabbing; }
+.mgl__svg:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.mgl__svg [data-iso] { cursor: pointer; }
+.mg-hx { fill: var(--g-host-x); stroke: var(--g-host-line); stroke-width: 0.6; }
+.mg-arrow--x { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: none; }
+.mgl-texts text { paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
+.mgl-name { font-size: calc(13px * var(--mgl-ts, 1)); font-weight: 600; stroke-width: calc(3px * var(--mgl-ts, 1)); }
+.mgl-name--o { fill: var(--ink); stroke: var(--g-origin); }
+.mgl-name--h { fill: var(--g-host-label); stroke: var(--g-host); }
+.mgl-name--hx { fill: var(--ink); stroke: var(--g-host-x); font-weight: 500; font-size: calc(12px * var(--mgl-ts, 1)); }
+.mgl-fig { font-size: calc(12.5px * var(--mgl-ts, 1)); font-weight: 600; fill: var(--ink); stroke: var(--surface); stroke-width: calc(4px * var(--mgl-ts, 1)); font-variant-numeric: tabular-nums; }
+.mgl-fig--x { font-size: calc(11px * var(--mgl-ts, 1)); font-weight: 500; fill: var(--muted); }
+.mgl-nb { font-size: calc(10.5px * var(--mgl-ts, 1)); fill: var(--muted); stroke: var(--g-land); stroke-width: calc(2.5px * var(--mgl-ts, 1)); }
+.mgl__tip {
+  position: absolute; z-index: 2; max-width: 260px; padding: var(--s-2) var(--s-3); pointer-events: none;
+  display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-13);
+  background: var(--surface); border: var(--hair); border-radius: var(--r-card); box-shadow: var(--shadow-pop);
+}
+.mgl__tip[hidden] { display: none; }
+.mgl__role { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+/* arrows, borders and rings never block hovering or tapping the country underneath */
+.mgl .mg-arrow, .mgl .mg-arrow-halo, .mgl .mg-hb, .mgl .mg-ring { pointer-events: none; }

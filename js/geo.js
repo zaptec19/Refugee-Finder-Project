@@ -21,13 +21,18 @@ export function worldFeatures(res = 110) {
       }
       const fc = topojson.feature(topo, topo.objects.countries);
       const byIso = new Map();
-      for (const f of fc.features) {
+      const geoms = topo.objects.countries.geometries;
+      fc.features.forEach((f, i) => {
         const iso = (f.id && byM49.get(String(f.id).padStart(3, "0"))) || byName.get((f.properties.name || "").toLowerCase()) || null;
         f.properties.iso3 = iso;
+        if (geoms[i]) geoms[i].properties = { ...(geoms[i].properties || {}), iso3: iso };
         if (iso && !byIso.has(iso)) byIso.set(iso, f);
-      }
+      });
       const land = topojson.merge(topo, topo.objects.countries.geometries);
-      return { features: fc.features, byIso, land };
+      /** Borders shared by two different countries that are both in `isos` (a MultiLineString). */
+      const sharedBorders = (isos) => topojson.mesh(topo, topo.objects.countries,
+        (a, b) => a !== b && isos.has(a.properties?.iso3) && isos.has(b.properties?.iso3));
+      return { features: fc.features, byIso, land, sharedBorders };
     })());
   }
   return loaded.get(res);

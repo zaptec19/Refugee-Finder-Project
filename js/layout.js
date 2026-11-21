@@ -46,6 +46,7 @@ export function initPage({ page, dark = false } = {}) {
     });
   });
   syncFormatButtons();
+  document.addEventListener("numfmt-change", syncFormatButtons);   // also when it changes elsewhere (the map pop-out)
 
   // guide on/off
   const guide = header.querySelector("#guide-toggle");

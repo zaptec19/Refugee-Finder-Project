@@ -101,6 +101,8 @@ async function main() {
   const hosts = s.type === "named" ? s.hosts : s.host_iso3 ? [s.host_iso3] : [];
   renderMiniGlobe(document.getElementById("mini-globe"), {
     origin: s.origin_iso3, hosts, originName: s.origin_name,
+    // click (or Enter/Space) opens the larger map in a pop-out; the module loads only when asked for
+    onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn })),
     hostNames: s.type === "named" ? hosts.map((h) => s.hosts_latest.find((x) => x.host_iso3 === h)?.name || h) : [s.host_name].filter(Boolean),
   }).then(() => document.getElementById("mini-globe").removeAttribute("aria-busy"))
     .catch((e) => { console.error(e); document.getElementById("mini-globe").innerHTML = '<p class="small muted">Map could not load.</p>'; });
