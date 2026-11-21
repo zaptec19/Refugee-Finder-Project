@@ -176,10 +176,14 @@ const syncFmt = () => dlg?.querySelectorAll("[data-tfmt]").forEach((b) => b.setA
 export async function openTrace(pt, origin, ctx, { onClosed } = {}) {
   build();
   if (dlg.open) return;
-  state = { ctx, stack: [pt], style: "apa", onClosed };
+  let landed;
+  state = { ctx, stack: [pt], style: "apa", onClosed, landed: new Promise((r) => { landed = r; }) };
   render();
   const box = dlg.querySelector(".tp__box");
-  await pop.open(origin, { flyTo: box.querySelector(".tp__num"), stagger: staggerEls(), focus: dlg.querySelector("#tp-h") });
+  const opening = pop.open(origin, { flyTo: box.querySelector(".tp__num"), stagger: staggerEls(), focus: dlg.querySelector("#tp-h") });
+  // once everything has landed, heavy work (formatting the citation) may start
+  opening.finally(() => requestAnimationFrame(() => setTimeout(landed, 0)));
+  await opening;
 }
 
 /** The collection page: open the trace for a saved item (its situation file is loaded first). */
@@ -447,7 +451,8 @@ function citations(pt) {
 function fillCite(pt) {
   const token = state;
   const style = state.style;
-  state.cite = citations(pt);
+  // the first citation builds the CSL engine (several hundred ms of blocking work): never during the open animation
+  state.cite = (state.landed || Promise.resolve()).then(() => citations(pt));
   state.cite.then((c) => {
     const el = dlg.querySelector("#tp-cite");
     if (state !== token || state.style !== style || !el) return;

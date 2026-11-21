@@ -1004,7 +1004,6 @@ dialog::backdrop { background: var(--scrim); }
 /* ---------------------------------------------------------------- charts */
 .chart__body svg { --plot-background: var(--surface) !important; overflow: visible; }
 .chart__body svg [aria-label="tip"] path, .chart__body svg g[fill] > path[fill="var(--plot-background)"] { stroke: var(--line-strong); }
-.chart__body text { fill: var(--muted); }
 .chart__body svg g[aria-label="tip"] text, .chart__body svg .plot-tip text { fill: var(--ink); }
 .pt-hover circle { stroke: var(--bg); stroke-width: 2; }
 :root[data-theme="dark"]:not(.fx-off) .pt-hover circle { filter: drop-shadow(0 0 6px currentColor); }
@@ -1107,3 +1106,6 @@ html.vt-ghosting #main { opacity: 0; }
 .intro-veil { position: fixed; inset: 0; z-index: 100; background: #000; pointer-events: none; }
 /* the search box glows as a whole; its input and text fields inside a glowing frame don't glow again */
 .ask input:focus-visible, .coll__note:focus-visible, .req input:focus-visible, .req textarea:focus-visible { box-shadow: none; outline: none; }
+
+/* a leader from the end of a line to its label, when the label had to move to avoid another one */
+.end-label__lead { stroke: var(--muted); stroke-opacity: 0.6; stroke-width: 1; }

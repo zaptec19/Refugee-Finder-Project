@@ -115,7 +115,12 @@ async function main() {
     .catch((e) => { console.error(e); document.getElementById("mini-globe").innerHTML = '<p class="small muted">Map could not load.</p>'; });
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
   requestAnimationFrame(() => { revealSteps(); countUp(mainEl.querySelector('[data-body="key_numbers"]')); });
-  setTimeout(() => loadCiteEngine(), 2000);          // get citations ready in the background
+  // get citations ready in the background: load citation-js, then build the APA engine once while the page is idle
+  // (the first citation in a style is several hundred ms of blocking work; after that it is instant)
+  setTimeout(() => {
+    const warm = () => cite(SRC["unhcr-pop-2026"]?.csl, "apa").catch(() => {});
+    loadCiteEngine().then(() => (window.requestIdleCallback ? requestIdleCallback(warm, { timeout: 5000 }) : setTimeout(warm, 500)));
+  }, 2000);
   await Promise.race([mini, new Promise((r) => setTimeout(r, 1200))]);   // the morph lands on the drawn mini globe
 }
 
@@ -312,7 +317,7 @@ function overTime(el) {
         Plot.ruleY([0], { stroke: "var(--line-strong)" }),
         ...(single ? [Plot.areaY(all, { x: "year", y: "value", fill: lines[0].color, fillOpacity: 0.14, curve: "linear" })] : []),
         ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
-        ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500 })),
+        ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: w < 520 ? 6 : 16, className: "end-label" })),
         Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
         Plot.dot(all, Plot.pointerX({ x: "year", y: "value", r: 5, fill: (d) => lines.find((l) => l.key === d.key).color, className: "pt-hover" })),
         Plot.tip(all, Plot.pointerX({ x: "year", y: "value", title: (d) => `${d.line}, ${d.year}\n${fmt(d.value)}${d.note ? `\n${d.note}` : ""}\nClick for the source` })),
@@ -513,7 +518,7 @@ function insideOutside(el) {
       return Plot.plot({ ...base(w, 280), marginRight: w < 520 ? 70 : 150,
         marks: [Plot.ruleY([0], { stroke: "var(--line-strong)" }),
           ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
-          ...lines.map((l, i) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 6, dy: i === 2 ? 10 : i === 1 ? -6 : 0, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: 12 })),
+          ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: w < 520 ? 6 : 12, className: "end-label" })),
           Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
           Plot.tip(all, Plot.pointer({ x: "year", y: "value", title: (d) => `${d.line}, ${d.year}\n${fmt(d.value)}` }))] });
     },

@@ -2,7 +2,7 @@
 import { initPage } from "./layout.js";
 import { getJSON } from "./data.js";
 import { esc, numHTML, applyNumbers, fmt } from "./format.js";
-import { chartBlock, Plot, base, C } from "./charts.js";
+import { chartBlock, Plot, base, C, inkOf } from "./charts.js";
 import { renderMiniGlobe } from "./minimap.js";
 
 initPage({ page: "country" });
@@ -52,7 +52,7 @@ try {
       note: "Each line is a separate year-end series; lines are never added together.",
       draw: (w) => Plot.plot({ ...base(w, 260), marginRight: w < 520 ? 70 : 170, marks: [Plot.ruleY([0], { stroke: "var(--line-strong)" }),
         ...ls.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: COLOR[l.k] || C.context, strokeWidth: 2, strokeDasharray: l.k === "idps_unhcr" ? "4,3" : null })),
-        ...ls.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => LABEL[l.k] || l.k, dx: 6, textAnchor: "start", fill: COLOR[l.k] || C.context, lineWidth: 14 })),
+        ...ls.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => LABEL[l.k] || l.k, dx: 8, textAnchor: "start", fill: inkOf(COLOR[l.k] || C.context), fontWeight: 500, lineWidth: w < 520 ? 6 : 14, className: "end-label" })),
         Plot.tip(ls.flatMap((l) => l.pts.map((p) => ({ ...p, k: l.k }))), Plot.pointer({ x: "year", y: "value", title: (d) => `${LABEL[d.k]}, ${d.year}\n${fmt(d.value)}` }))] }),
       table: { columns: [{ key: "year", label: "Year", type: "year" }, ...ls.map((l) => ({ key: l.k, label: LABEL[l.k] || l.k, type: "num" }))],
         rows: years.map((y) => Object.fromEntries([["year", y], ...ls.map((l) => [l.k, l.pts.find((p) => p.year === y)?.value ?? null])])) },

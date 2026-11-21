@@ -281,6 +281,7 @@ function polish(root, id) {
       }).join("");
       g.after(top);
     });
+    spreadEndLabels(svg);
     // lines: a dot on the last point
     svg.querySelectorAll('g[aria-label="text"]').forEach((g) => g.classList.add("is-text"));
     svg.querySelectorAll('g[aria-label="line"]').forEach((g) => {
@@ -334,4 +335,49 @@ function drawIn(body) {
       { duration: 600, delay: Math.min(250, (i / Math.max(1, all.length)) * 250), easing: ease, fill: "backwards" });
   });
   svg.querySelectorAll(".bar-top, .pt-last, g.is-text").forEach((g) => g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 560, fill: "backwards" }));
+}
+
+// ------------------------------------------------------------------ labels at the end of lines never overlap
+/** Text marks drawn with className "end-label" (one label at the end of each line): when two lines end close
+ *  together their labels are pushed apart vertically, kept inside the plot area, and a short leader line joins a
+ *  moved label to the end of its line. Positions only; the text and the data are unchanged. */
+function spreadEndLabels(svg) {
+  const NS = "http://www.w3.org/2000/svg";
+  const items = [];
+  svg.querySelectorAll("g.end-label text").forEach((t) => {
+    const m = /translate\(([-\d.]+),\s*([-\d.]+)\)/.exec(t.getAttribute("transform") || "");
+    if (!m) return;
+    const b = t.getBBox();
+    if (!b.height) return;
+    items.push({ t, x: +m[1], y: +m[2], top: +m[2] + b.y, h: b.height, left: +m[1] + b.x });
+  });
+  if (items.length < 2) return;
+  const vb = svg.viewBox?.baseVal;
+  const H = vb?.height || +svg.getAttribute("height") || 0;
+  const minY = MARGIN.top - 6;
+  const maxY = H - MARGIN.bottom + 4;
+  const GAP = 3;
+  items.sort((a, b) => a.top - b.top);
+  const pos = items.map((it) => it.top);
+  for (let i = 1; i < pos.length; i++) pos[i] = Math.max(pos[i], pos[i - 1] + items[i - 1].h + GAP);     // push down
+  const over = pos[pos.length - 1] + items[items.length - 1].h - maxY;
+  if (over > 0) pos[pos.length - 1] -= over;
+  for (let i = pos.length - 2; i >= 0; i--) pos[i] = Math.min(pos[i], pos[i + 1] - items[i].h - GAP);    // then up if needed
+  if (pos[0] < minY) {
+    const d = minY - pos[0];
+    for (let i = 0; i < pos.length; i++) pos[i] += d;
+  }
+  items.forEach((it, i) => {
+    const shift = pos[i] - it.top;
+    if (Math.abs(shift) < 0.5) return;
+    it.t.setAttribute("transform", `translate(${it.x},${(it.y + shift).toFixed(1)})`);
+    if (Math.abs(shift) < 4) return;
+    const lead = document.createElementNS(NS, "line");
+    lead.setAttribute("class", "end-label__lead");
+    lead.setAttribute("x1", String(it.x - 6));          // the end of the line (labels sit 8 px to its right)
+    lead.setAttribute("x2", String(it.left - 1));
+    lead.setAttribute("y1", (it.y).toFixed(1));
+    lead.setAttribute("y2", (pos[i] + it.h / 2).toFixed(1));
+    it.t.closest("g").append(lead);
+  });
 }
