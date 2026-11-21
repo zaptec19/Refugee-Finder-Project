@@ -1,5 +1,5 @@
 // The situation map: origin (sand) and host countries (slate) highlighted, an arrow from the origin to
-// each host, zoomed with fitExtent so all of them fit with padding. One function draws both sizes:
+// each host, zoomed so all of them fit inside the circle with padding. One function draws both sizes:
 //   size "small": the mini globe on the situation page (240 px)
 //   size "large": the pop-out map (640 px), with labels, a figure on each arrow, tooltips, the origin's
 //                 other top hosts as an optional layer, zoom and drag-to-rotate.
@@ -90,16 +90,63 @@ function setup({ byIso }, { origin, hosts = [], hostNames = [] }) {
   return { fo, hostPairs, focus: [fo, ...hostPairs.map((h) => h.f)].filter(Boolean) };
 }
 
-/** Rotate to the countries' centre and fit them with padding; never zoom out past the whole globe
- *  or in past a small country. */
-function fitProjection(focus, D) {
+/** The parts of a country the zoom fits: tiny far-off islands (under 1% of the main part's area and over
+ *  2,500 km from it, e.g. the Caribbean Netherlands) are drawn but don't pull the view away. */
+const partsCache = new WeakMap();
+function mainParts(f) {
+  if (f.geometry.type !== "MultiPolygon") return f;
+  if (partsCache.has(f)) return partsCache.get(f);
+  const parts = f.geometry.coordinates.map((c) => ({ c, a: d3.geoArea({ type: "Polygon", coordinates: c }), m: d3.geoCentroid({ type: "Polygon", coordinates: c }) }));
+  const big = parts.reduce((x, y) => (y.a > x.a ? y : x));
+  const keep = parts.filter((p) => p === big || p.a >= big.a * 0.01 || d3.geoDistance(p.m, big.m) * 6371 <= FAR_KM);
+  const out = keep.length === parts.length ? f : { ...f, geometry: { type: "MultiPolygon", coordinates: keep.map((p) => p.c) } };
+  partsCache.set(f, out);
+  return out;
+}
+
+/** Rotate to the middle of the countries as drawn and fit them with padding; never zoom out past the whole
+ *  globe or in past a small country. The map is a circle, so the fit is to the circle, not the square around
+ *  it: a country in a corner of the square would be cut off by the rim.
+ *  `around` (default: focus) are the countries kept in the middle; `focus` are the ones that must fit. */
+function fitProjection(focusAll, D, aroundAll = focusAll) {
   const { S, PAD } = D;
-  const centre = d3.geoCentroid({ type: "FeatureCollection", features: focus });
-  const proj = d3.geoOrthographic().rotate([-centre[0], -centre[1]]).clipAngle(90).precision(0.3);
-  proj.fitExtent([[PAD, PAD], [S - PAD, S - PAD]], { type: "FeatureCollection", features: focus });
+  const focus = focusAll.map(mainParts);
+  const around = aroundAll.map(mainParts);
   const whole = S / 2 - 4;
-  proj.scale(Math.max(Math.min(proj.scale(), whole * 6), whole));
-  proj.translate([S / 2, S / 2]);
+  const C = [S / 2, S / 2];
+  const fcAround = { type: "FeatureCollection", features: around };
+  const proj = d3.geoOrthographic().clipAngle(90).precision(0.3).translate(C).scale(whole);
+  // start halfway between the countries (an area centroid would lean toward the larger one), then move to the
+  // middle of the shapes as drawn, as long as every country stays on the side of the globe facing us
+  const mids = around.map((f) => d3.geoCentroid(f));
+  const facing = (c) => mids.every((m) => d3.geoDistance(m, c) < (80 * Math.PI) / 180);
+  let centre = d3.geoCentroid({ type: "MultiPoint", coordinates: mids });
+  if (!Number.isFinite(centre[0]) || !Number.isFinite(centre[1])) centre = d3.geoCentroid(fcAround);
+  for (let i = 0; i < 3; i++) {
+    proj.rotate([-centre[0], -centre[1]]);
+    const b = d3.geoPath(proj).bounds(fcAround);
+    const mid = proj.invert([(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2]);
+    if (!mid || !Number.isFinite(mid[0]) || !Number.isFinite(mid[1]) || (!facing(mid) && facing(centre))) break;
+    centre = mid;
+  }
+  proj.rotate([-centre[0], -centre[1]]);
+  proj.fitExtent([[PAD, PAD], [S - PAD, S - PAD]], { type: "FeatureCollection", features: focus });
+  let scale = proj.scale();
+  proj.translate(C);
+  // every visible outline point inside the circle, a third of the padding from the rim
+  // (an orthographic map grows evenly with its scale, so one measurement gives the scale that fits)
+  let far = 0;
+  for (const f of focus) {
+    for (const poly of polygonsOf(f)) {
+      for (const pt of poly[0]) {
+        if (d3.geoDistance(pt, centre) > Math.PI / 2) continue;
+        const q = proj(pt);
+        if (q) far = Math.max(far, Math.hypot(q[0] - C[0], q[1] - C[1]));
+      }
+    }
+  }
+  if (far > 0) scale = Math.min(scale, (scale * (S / 2 - PAD / 3)) / far);
+  proj.scale(Math.max(Math.min(scale, whole * 6), whole));
   return proj;
 }
 
@@ -127,7 +174,8 @@ function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { ex
   const anchorO = fo ? insidePoint(proj, path, fo, D) : null;
   const all = [...hostPairs, ...extraPairs];
   const anchors = new Map(all.map((h) => [h.iso, insidePoint(proj, path, h.f, D)]));
-  const arrows = anchorO ? planArrows(proj, fo, anchorO, all, anchors, features, clipR, D) : [];
+  // no arrow when the origin is on the far side of the globe (e.g. Afghanistan and the USA can't both face us)
+  const arrows = anchorO?.pt && anchorO.ok ? planArrows(proj, fo, anchorO, all, anchors, features, clipR, D) : [];
   for (const a of arrows) a.extra = extraIsos.has(a.iso);
   const arrowPts = arrows.flatMap((a) => a.pts);
   const labels = fast ? [] : hostPairs.map((h) => hostLabel(proj, h, anchors.get(h.iso), clipR, arrowPts, D)).filter(Boolean);
@@ -371,11 +419,9 @@ function largeMap(el, geo, D, base, opts) {
     const centre = d3.geoCentroid({ type: "FeatureCollection", features: base.focus });
     const near = extraAll.filter((x) => d3.geoDistance(d3.geoCentroid(x.f), centre) < (80 * Math.PI) / 180);
     state.hidden = extraAll.filter((x) => !near.includes(x));
-    const p = d3.geoOrthographic().rotate([-centre[0], -centre[1]]).clipAngle(90).precision(0.3);
-    p.fitExtent([[D.PAD, D.PAD], [D.S - D.PAD, D.S - D.PAD]], { type: "FeatureCollection", features: [...base.focus, ...near.map((x) => x.f)] });
-    const whole = D.S / 2 - 4;
+    const p = fitProjection([...base.focus, ...near.map((x) => x.f)], D, base.focus);
     state.rot = p.rotate();
-    state.scale = state.fitScale = Math.max(Math.min(p.scale(), whole * 6), whole);
+    state.scale = state.fitScale = p.scale();
   }
   const whole = D.S / 2 - 4;
   const clampScale = (s) => Math.max(whole, Math.min(s, Math.max(state.fitScale * 4, whole * 2)));
