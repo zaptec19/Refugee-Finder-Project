@@ -487,8 +487,8 @@ html { scroll-behavior: smooth; }
 .events { margin-top: var(--s-1); }
 .events svg { overflow: visible; display: block; }
 .ev { cursor: pointer; }
-.ev:focus-visible rect { outline: none; stroke: var(--focus); stroke-width: 3; }
-.ev:hover rect { fill: var(--accent); }
+.ev:focus-visible rect:not(.ev-label-bg) { outline: none; stroke: var(--focus); stroke-width: 3; }
+.ev:hover rect:not(.ev-label-bg) { fill: var(--accent); }
 .ev-label, .ev-axis { font-size: 12px; fill: var(--muted); font-family: var(--font-sans); }
 .step__body > .note, .step__body > p.note { margin-top: var(--s-4); }
 .split { margin-top: var(--s-4); }
@@ -1112,4 +1112,132 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
 @media (max-width: 350px) {
   .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-areas: "brand fmt fmt coll" "ask learn guide theme"; }
   .topbar__learn { padding: 6px 6px; }
+}
+
+/* B1 rail jumps: a step lands 16 px below the top bar (and below the sticky rail strip on phones);
+   the heading takes focus after a rail click, without a ring unless the keyboard was used */
+.step__title:focus { outline: none; }
+.step__title:focus-visible { outline: 2px solid var(--accent-ui); outline-offset: 4px; border-radius: 4px; }
+@media (max-width: 860px) {
+  .step { scroll-margin-top: calc(var(--topbar-h) + 48px + var(--s-4)); }
+}
+
+/* B2 context step: top conflicts, opposing groups as separate tags, the rest behind "Show all" */
+.conf-st-list { list-style: none; margin: var(--s-2) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-1); }
+.conf-st { display: grid; grid-template-columns: 5.5em 1fr; gap: var(--s-2); align-items: baseline; font-size: var(--fs-13); }
+.conf-st__yrs { color: var(--muted); }
+.conf-st__sides { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; }
+.conf-st__groups { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.conf-tag { display: inline-block; padding: 1px 7px; border: var(--hair); border-color: var(--line-strong); border-radius: var(--r-pill); font-size: 12px; line-height: 1.5; color: var(--ink); background: var(--surface-2); }
+.conf-st__earlier { margin: var(--s-1) 0 0; }
+.conf-more { margin-top: var(--s-3); max-width: var(--measure); }
+.conf-more > summary { cursor: pointer; color: var(--accent); font-size: var(--fs-15); list-style: none; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; }
+.conf-more > summary::-webkit-details-marker { display: none; }
+.conf-more > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform 160ms var(--ease-out); }
+.conf-more[open] > summary::before { transform: rotate(45deg); }
+.conf-more:not([open]) .conf-more__close, .conf-more[open] .conf-more__open { display: none; }
+.conf-more > .conf-list { margin-top: var(--s-3); }
+.conf-list__name { display: block; }
+.conf-list__yrs { margin: 2px 0 0; }
+
+/* B3 event tooltip: the full title on hover or keyboard focus (the click still opens the full note) */
+.ev-tip { position: absolute; z-index: 60; max-width: 280px; padding: 8px 10px; border-radius: 8px; pointer-events: none;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); box-shadow: var(--shadow-2, 0 8px 24px rgba(0,0,0,.18));
+  display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-13); line-height: 1.35; }
+.ev-tip[hidden] { display: none; }
+.ev-tip__date { color: var(--muted); font-size: 12px; }
+.ev-tip__title { font-weight: 600; }
+.ev-tip__hint { color: var(--muted); font-size: 12px; }
+.ev:hover .ev-label, .ev:focus-visible .ev-label { fill: var(--ink); }
+/* labels sit on a small box of the page colour, so leader lines to lower rows pass behind them */
+.ev-label-bg { fill: var(--bg); }
+.ev:focus-visible rect.ev-label-bg { stroke: none; }
+
+/* B4 pin buttons: a check when pinned, and a small tooltip ("Pin to collection" / "Pinned") on hover and focus */
+.pin-btn { position: relative; }
+.pin-btn > span { display: inline-grid; place-items: center; }
+.pin-btn__on, .pin-btn[aria-pressed="true"] .pin-btn__off { display: none !important; }
+.pin-btn[aria-pressed="true"] .pin-btn__on { display: inline-grid !important; }
+.pin-btn::after {
+  content: "Pin to collection"; position: absolute; bottom: calc(100% + 6px); right: 0; transform: translateY(2px);
+  padding: 3px 8px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 5;
+  font-size: 12px; line-height: 1.4; font-weight: 500; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong);
+  opacity: 0; transition: opacity 120ms ease, transform 120ms ease;
+}
+.pin-btn[aria-pressed="true"]::after { content: "Pinned"; }
+.pin-btn:hover::after, .pin-btn:focus-visible::after { opacity: 1; transform: translateY(0); }
+@media (hover: none) { .pin-btn:hover::after { opacity: 0; } }
+
+/* ---------------------------------------------------------------- B5 phone top bar (under 600 px)
+   one row: name, compact number switch, search and menu; Learn, Guide, theme and My collection sit in the menu;
+   nothing closer than 16 px to the screen edge */
+.topbar__menu-btn, .topbar__search-btn, .topbar__search-close, .menu-only { display: none; }
+@media (max-width: 599px) {
+  :root { --topbar-h: 56px; }
+  .topbar__inner, .topbar__inner {
+    grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-rows: 56px; grid-template-areas: "brand fmt search menu";
+    padding: 0 16px; column-gap: 8px; position: relative;
+  }
+  .topbar__inner > .brand { grid-area: brand; font-size: var(--fs-15); }
+  .topbar__fmt { grid-area: fmt; }
+  .topbar__fmt button { padding: 0 6px; font-size: 11px; height: 28px; }
+  .topbar__search-btn { grid-area: search; display: inline-grid; }
+  .topbar__menu-btn { grid-area: menu; display: inline-grid; position: relative; }
+  body.page-home .topbar__inner { grid-template-areas: "brand fmt menu menu"; }
+  .topbar__ask-slot { display: none; }
+  /* the search, full width over the bar while open */
+  .topbar__ask { display: none; }
+  .topbar.is-searching .topbar__ask {
+    display: flex; position: absolute; inset: 8px 16px; width: auto; height: auto; max-width: none; justify-self: stretch; align-self: stretch; z-index: 2; background: var(--surface);
+  }
+  /* solid on phones: the glass let the page title show through the results */
+  .topbar.is-searching .topbar__ask .results { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .topbar.is-searching .topbar__search-close { display: inline-grid; width: 32px; height: 32px; margin-right: -6px; }
+  .topbar.is-searching .topbar__ask .results { left: 0; right: 0; min-width: 0; width: auto; }
+  .topbar.is-searching .topbar__ask input::-webkit-search-cancel-button { display: none; }
+  /* the menu */
+  .topbar__right {
+    display: none; position: absolute; top: calc(100% + 1px); right: 16px; left: auto; z-index: 50;
+    min-width: 220px; max-width: calc(100vw - 32px); flex-direction: column; align-items: stretch; gap: 2px; padding: 6px;
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  }
+  .topbar.is-menu-open .topbar__right { display: flex; }
+  .topbar__right > * { grid-area: auto !important; }
+  .topbar__right .topbar__link, .topbar__right .topbar__theme, .topbar__right .topbar__guide, .topbar__right .topbar__coll {
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; width: 100%; height: 44px; padding: 0 12px;
+    border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: var(--fs-15); text-align: left;
+  }
+  .topbar__right .topbar__link:hover, .topbar__right .topbar__theme:hover, .topbar__right .topbar__guide:hover, .topbar__right .topbar__coll:hover { background: var(--surface-2); }
+  .topbar__right .menu-only { display: inline; }
+  .topbar__right .label-wide { display: inline; }
+  .topbar__right .topbar__guide .pill__state { display: inline; }
+  .topbar__right .topbar__guide { font-weight: 400; }
+  .topbar__right .topbar__guide .dot { width: 8px; height: 8px; margin: 0 6px; flex: none; }
+  .topbar__right .topbar__learn::before { content: ""; width: 20px; flex: none; }
+  .topbar__right .topbar__theme-icon { display: inline-grid; width: 20px; place-items: center; }
+  .topbar__right .collection-btn__icon { width: 20px; }
+  .count-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-ui); box-shadow: 0 0 0 2px var(--bg-raised); }
+  .count-dot[hidden] { display: none; }
+}
+
+/* B6: why the home globe starts in 1960 (a second, smaller caption line) */
+.home__caption-main, .home__caption-note { display: block; }
+.home__caption-note { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+
+/* ---------------------------------------------------------------- B7 pop-outs open solid
+   The source trace and map boxes are solid while they grow and their content fades in, then ease to glass.
+   Other dialogs (export, side panel) never fade the panel itself: it is there, solid, from the first frame;
+   only the backdrop and the content fade in. */
+.tp__box, .map-dialog__box { transition: background-color 260ms ease; }
+.tp__box.is-entering, .map-dialog__box.is-entering { background: var(--surface); transition: none; }
+dialog[open]:not(.tp):not(.map-dialog) { animation: dlg-solid 420ms ease; }
+dialog[open]:not(.tp):not(.map-dialog)::backdrop { animation: fade-in var(--t-med) var(--ease); }
+dialog[open]:not(.tp):not(.map-dialog) > * { animation: fade-in 180ms ease 70ms backwards; }
+dialog.panel-right[open]:not(.tp):not(.map-dialog) { animation: dlg-solid 420ms ease, panel-slide var(--t-slow) var(--ease); }
+@keyframes dlg-solid { from, 70% { background-color: var(--surface); } to { background-color: var(--glass-bg); } }
+@keyframes panel-slide { from { transform: translateX(24px); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  dialog[open]:not(.tp):not(.map-dialog), dialog.panel-right[open]:not(.tp):not(.map-dialog) { animation: none; }
+  dialog[open]:not(.tp):not(.map-dialog) > * { animation: fade-in 120ms linear backwards; }
 }

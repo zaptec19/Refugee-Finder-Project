@@ -3,7 +3,7 @@
 // Charts redraw on resize, on the number-format switch and on theme change.
 import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/+esm";
 import { esc, fmt, fmtPct, fmtShort, numHTML, pctHTML, mode } from "./format.js";
-import { icon } from "./icons.js";
+import { icon, pinButton } from "./icons.js";
 import { reducedMotion } from "./motion.js";
 
 export { Plot };
@@ -72,7 +72,7 @@ export function chartBlock(host, spec) {
           <button type="button" class="btn btn--sm" data-dl="png">PNG</button>
           <button type="button" class="btn btn--sm" data-dl="csv">CSV</button>
         </div>
-        ${spec.pin ? `<button class="pin-btn" type="button" data-pin-key="${esc(spec.pin.key)}" aria-pressed="false" aria-label="Add this chart to my collection">${icon("pin", { size: 16 })}</button>` : ""}
+        ${spec.pin ? pinButton({ key: spec.pin.key, label: `the chart "${String(spec.title || "").replace(/<[^>]+>/g, "").trim()}"` }) : ""}
       </div>
       <div class="chart__body" role="img" aria-label="${esc(spec.summary || "")}"></div>
       <div class="chart__data" hidden></div>

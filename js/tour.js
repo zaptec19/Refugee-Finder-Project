@@ -176,6 +176,9 @@ function waitFor(sel, ms = 8000) {
     (function poll() {
       const el = document.querySelector(sel);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
+      // phones: Guide and My collection are inside the top-bar menu, so point at the menu button
+      const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
+      if (menuBtn && menuBtn.getBoundingClientRect().width > 0) return resolve(menuBtn);
       if (performance.now() - t0 > ms) return resolve(null);
       setTimeout(poll, 120);
     })();

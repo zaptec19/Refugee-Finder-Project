@@ -4,7 +4,7 @@ import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glo
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
 import { reducedMotion } from "./motion.js";
 import { arriveMorph } from "./morph.js";
-import { icon } from "./icons.js";
+import { icon, pinButton } from "./icons.js";
 import { renderMiniGlobe } from "./minimap.js";
 import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf } from "./charts.js";
 import { openPopover, openPanel, bindGlossary } from "./popouts.js";
@@ -74,7 +74,7 @@ async function main() {
         </aside>
         <div class="sit__main">
           ${steps.map(([k, l], i) => `<section class="step" id="${anchor(k)}" aria-labelledby="h-${k}">
-              <div class="step__head"><h2 class="step__title" id="h-${k}">${l}</h2></div>
+              <div class="step__head"><h2 class="step__title" id="h-${k}" tabindex="-1">${l}</h2></div>
               ${k !== "brief" && tips[k] ? guideTip(tips[k], steps[i + 1] ? `#${anchor(steps[i + 1][0])}` : null, steps[i + 1]?.[1]) : ""}
               <div class="step__body" data-body="${k}"></div></section>`).join("")}
         </div>
@@ -242,7 +242,7 @@ function keyNumbers(el) {
       <div class="kn__sub">${esc(kn.sub)}${kn.unit === "movements" ? " · counts movements, not people" : ""}</div>
       <div class="kn__foot">
         <a class="kn__src" href="#" data-trace="${i}">Source: ${esc(srcShort(kn.source_id))}</a>
-        <button class="pin-btn" type="button" data-pin-key="${esc(item.key)}" data-pin-idx="${i}" aria-pressed="false" aria-label="Add ${esc(kn.label)} to my collection">${icon("pin", { size: 16 })}</button>
+        ${pinButton({ key: item.key, label: `${kn.label}${kn.label.includes(String(kn.year)) ? "" : ` (${kn.year})`}`, attrs: `data-pin-idx="${i}"` })}
       </div>
     </article>`;
   }).join("")}</div>`;
@@ -363,6 +363,11 @@ function overTime(el) {
   el.insertAdjacentHTML("beforeend", `<p class="note">${icon("info", { size: 16 })}<span>${CORRELATION} Displacement (${esc(srcShort(lines[0].pts[0].source_id))}) and events come from separate sources. <a href="learn.html#correlation">Why?</a></span></p>`);
   el.addEventListener("click", (e) => { if (e.target.closest?.(".ev")) onEventClick(e); });
   el.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.closest?.(".ev")) { e.preventDefault(); onEventClick(e); } });
+  el.addEventListener("pointerover", (e) => { const g = e.target.closest?.(".ev"); if (g && e.pointerType !== "touch") showEventTip(g); });
+  el.addEventListener("pointerout", (e) => { const g = e.target.closest?.(".ev"); if (g && !g.contains(e.relatedTarget)) hideEventTip(); });
+  el.addEventListener("focusin", (e) => { const g = e.target.closest?.(".ev"); if (g) showEventTip(g); });
+  el.addEventListener("focusout", (e) => { if (e.target.closest?.(".ev")) hideEventTip(); });
+  addEventListener("scroll", hideEventTip, { passive: true });
 }
 
 function eventYears() {
@@ -380,47 +385,121 @@ function eventsStrip(w, domain, conflictYears) {
     if (last && y === last[1] + 1) last[1] = y; else runs.push([y, y]);
   }
   const lastConflict = conflictYears.length ? Math.max(...conflictYears) : null;
-  const h = (evs.length ? 84 : 0) + (runs.length ? 44 : 0);
+  const evY = 22;
+  const narrow = w < 520;                                       // phones: markers only (the list is under Context)
+  const placed = narrow ? evs.map((e) => ({ e, row: 0 })) : placeEventLabels(evs, x, MARGIN.left, w);
+  const nRows = Math.max(3, ...placed.map((p) => p.row + 1));
+  const evH = 84 + (nRows - 3) * 16;
+  const h = (evs.length ? evH : 0) + (runs.length ? 44 : 0);
   if (!h) return document.createElement("div");
   const div = document.createElement("div");
   div.className = "events";
-  const evY = 22;
-  const bandY = evs.length ? 84 : 6;
+  const bandY = evs.length ? evH : 6;
   div.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="group" aria-label="Events and conflict years">
     <defs><pattern id="conf-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <rect width="6" height="6" fill="var(--c-context-band)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--c-context)" stroke-width="2.4"/></pattern></defs>
     ${evs.length ? `<text x="0" y="${evY + 4}" class="ev-axis">Events</text>
       ${w < 520 ? `<text x="${MARGIN.left}" y="${evY + 26}" class="ev-axis">Tap a marker to read about the event</text>` : ""}
       <line x1="${MARGIN.left}" x2="${w - right}" y1="${evY}" y2="${evY}" stroke="var(--line-strong)"/>
-      ${(() => {
-        const rowsEnd = [-Infinity, -Infinity, -Infinity];        // right edge of the last label in each row
-        const narrow = w < 520;                                   // phones: markers only (the list is under Context)
-        return evs.map((e) => {
-          const label = shortTitle(e.title);
-          const wLabel = label.length * 6.6;
-          const cx = x(e.y);
-          const anchorX = cx < MARGIN.left + wLabel / 2 ? "start" : cx > w - right - wLabel / 2 ? "end" : "middle";
-          const left = anchorX === "start" ? cx : anchorX === "end" ? cx - wLabel : cx - wLabel / 2;
-          let row = rowsEnd.findIndex((r) => left > r + 8);
-          if (row < 0) row = rowsEnd.indexOf(Math.min(...rowsEnd));
-          rowsEnd[row] = left + wLabel;
+      <g class="ev-leads" aria-hidden="true">${narrow ? "" : placed.filter((q) => q.row).map(({ e, row }) =>
+        `<line x1="${x(e.y).toFixed(1)}" x2="${x(e.y).toFixed(1)}" y1="${evY + 8}" y2="${evY + 24 + row * 16 - 11}" stroke="var(--line-strong)"/>`).join("")}</g>
+      ${placed.map(({ e, row, label, anchorX, wLabel }) => {
           const ty = 24 + row * 16;
-          return `<g class="ev" tabindex="0" role="button" data-ev="${e.i}" aria-label="${esc(formatDate(e.date))}: ${esc(e.title)}" transform="translate(${cx.toFixed(1)},${evY})">
+          const bx = anchorX === "start" ? -3 : anchorX === "end" ? -wLabel - 3 : -wLabel / 2 - 3;
+          return `<g class="ev" tabindex="0" role="button" data-ev="${e.i}" aria-label="${esc(formatDate(e.date))}: ${esc(e.title)}" transform="translate(${x(e.y).toFixed(1)},${evY})">
             <rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" fill="var(--ink)"/>
-            ${row && !narrow ? `<line y1="8" y2="${ty - 11}" stroke="var(--line-strong)"/>` : ""}
-            ${narrow ? "" : `<text y="${ty}" text-anchor="${anchorX}" class="ev-label">${esc(label)}</text>`}</g>`;
-        }).join("");
-      })()}` : ""}
+            ${narrow ? "" : `<rect class="ev-label-bg" x="${bx.toFixed(1)}" y="${ty - 11}" width="${(wLabel + 6).toFixed(1)}" height="15" rx="2"/><text y="${ty}" text-anchor="${anchorX}" class="ev-label">${esc(label)}</text>`}</g>`;
+        }).join("")}
+` : ""}
     ${runs.map(([a, b]) => `<rect x="${x(a - 0.5).toFixed(1)}" y="${bandY}" width="${Math.max(3, x(b + 0.5) - x(a - 0.5)).toFixed(1)}" height="12" rx="2" class="conf-band" fill="url(#conf-hatch)" stroke="var(--c-context)" stroke-opacity="0.5" opacity="${[...wars].some((y) => y >= a && y <= b) ? 1 : 0.7}"><title>${a === b ? a : `${a} to ${b}`}: armed conflict (UCDP)</title></rect>`).join("")}
     ${runs.length ? `<text x="${x(runs[0][0] - 0.5)}" y="${bandY + 30}" class="ev-axis">Armed conflict in ${esc(S.origin_name)} (UCDP)${lastConflict && lastConflict < domain[1] ? `, to ${lastConflict}` : ""}</text>` : ""}
   </svg>`;
   return div;
 }
-const shortTitle = (t) => { const h = t.split(/[:,]/)[0]; return h.length > 24 ? `${h.slice(0, 23)}…` : h; };
+/** B3: event labels as long as they fit. Each label tries its full first clause, then shorter word cuts with "…",
+ *  in the first row where it doesn't touch its neighbours (real text widths). Three rows, up to five where
+ *  events crowd together; only if even that fails does the shortest form share the emptiest row. */
+function placeEventLabels(evs, x, lo, hi) {
+  const MAX_ROWS = 5;
+  const rowsEnd = [];
+  const geom = (label, cx) => {
+    const wLabel = textWidth(label);
+    const anchorX = cx - wLabel / 2 < lo ? "start" : cx + wLabel / 2 > hi ? "end" : "middle";
+    return { wLabel, anchorX, left: anchorX === "start" ? cx : anchorX === "end" ? cx - wLabel : cx - wLabel / 2 };
+  };
+  return [...evs].sort((a, b) => a.y - b.y).map((e) => {
+    const cx = x(e.y);
+    const forms = labelForms(e.title);
+    let pick = null;
+    // the full title in a fourth or fifth row beats a cut one in the first three
+    for (const label of forms) {
+      const g = geom(label, cx);
+      while (rowsEnd.length < MAX_ROWS) rowsEnd.push(-Infinity);
+      const row = rowsEnd.findIndex((r) => g.left > r + 10);
+      if (row >= 0) { pick = { label, row, ...g }; break; }
+    }
+    if (!pick) {
+      const label = forms[forms.length - 1];
+      const row = rowsEnd.indexOf(Math.min(...rowsEnd));
+      pick = { label, row, ...geom(label, cx) };
+    }
+    rowsEnd[pick.row] = pick.left + pick.wLabel;
+    return { e, ...pick };
+  });
+}
+/** Label forms for an event, longest first: the title up to its first ":" or "," (skipping a date-only lead-in),
+ *  then cut at words with "…". */
+const DATE_ONLY = /^(\d{1,2}\s)?([A-Z][a-z]+\s)?\d{4}(\s(to|–)\s\d{4})?$/;
+function labelForms(t) {
+  // "1978: first large exodus" -> "First large exodus" (the marker and the tooltip already give the date)
+  const [pre, ...rest] = t.split(":");
+  const body = rest.length && DATE_ONLY.test(pre.trim()) ? rest.join(":").trim() : t;
+  let h = body.split(/[:,]/)[0].trim();
+  h = h.charAt(0).toUpperCase() + h.slice(1);
+  const words = h.split(/\s+/);
+  const out = [h];
+  for (let n = words.length - 1; n >= 1; n--) out.push(`${words.slice(0, n).join(" ").replace(/[\s'’–-]+$/, "")}…`);
+  return out;
+}
+let measureCtx = null;
+/** Width of an event label in px (12 px, the page's sans font). */
+function textWidth(t) {
+  try {
+    measureCtx ||= document.createElement("canvas").getContext("2d");
+    const fam = getComputedStyle(document.body).getPropertyValue("--font-sans") || getComputedStyle(document.body).fontFamily;
+    measureCtx.font = `12px ${fam}`;
+    return Math.ceil(measureCtx.measureText(t).width);
+  } catch { return t.length * 6.6; }
+}
+
+/** B3: the full title (and date) in a small tooltip while an event marker is hovered or focused. */
+let evTip = null;
+function showEventTip(g) {
+  const ev = S.events[+g.dataset.ev];
+  if (!ev) return;
+  if (!evTip) {
+    evTip = document.createElement("div");
+    evTip.className = "ev-tip";
+    evTip.setAttribute("role", "tooltip");
+    evTip.id = "ev-tip";
+    document.body.append(evTip);
+  }
+  evTip.innerHTML = `<span class="ev-tip__date">${esc(formatDate(ev.date))}</span><span class="ev-tip__title">${esc(ev.title)}</span><span class="ev-tip__hint">Click for the full note</span>`;
+  evTip.hidden = false;
+  g.setAttribute("aria-describedby", "ev-tip");
+  const r = g.querySelector("rect").getBoundingClientRect();
+  const t = evTip.getBoundingClientRect();
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - t.width / 2), innerWidth - t.width - 8);
+  const top = r.top - t.height - 10 < 8 ? r.bottom + 10 : r.top - t.height - 10;
+  evTip.style.left = `${left + scrollX}px`;
+  evTip.style.top = `${top + scrollY}px`;
+}
+function hideEventTip() { if (evTip) evTip.hidden = true; }
 
 function onEventClick(e) {
   const g = e.target.closest?.(".ev");
   if (!g) return;
+  hideEventTip();
   const ev = S.events[+g.dataset.ev];
   const srcIds = ev.source_ids || [ev.source_id];
   const srcTxt = srcIds.map((id) => (SRC[id] ? `${SRC[id].short}: ${SRC[id].dataset.split(":")[0]}` : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id)).join("; ");
@@ -580,9 +659,6 @@ function defaultWhy() {
 function context(el) {
   const host = document.createElement("div");
   el.append(host);
-  const conf = S.conflict;
-  // one line per conflict, plain names, most relevant first (active in the main displacement years, then intensity)
-  const names = (S.conflicts || []).map((c) => [c.conflict_id, c.name]);
   const deaths = (S.violence_deaths || []).filter((d) => d.year >= (S.years?.[0] || 1989) - 5);
   if (deaths.length) {
     const peak = deaths.reduce((a, b) => (b.value > a.value ? b : a));
@@ -599,12 +675,28 @@ function context(el) {
       table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "value", label: "Deaths (best estimate)", type: "num" }], rows: deaths },
     });
   }
-  const list = names.length ? `<h3 class="sub-h">Armed conflicts in ${esc(S.origin_name)} (UCDP/PRIO)</h3><ul class="conf-list">${names.map(([id, n]) => {
-    const ys = conf.filter((c) => c.conflict_id === id);
-    const yrs = ys.map((c) => c.year);
-    const war = ys.filter((c) => c.intensity === 2).map((c) => c.year);
-    return `<li><span class="conf-list__name">${esc(n)}</span> <span class="muted tabular">${runsLabel(yrs)}</span>${war.length ? ` <span class="small muted">· war (1,000+ deaths) in ${runsLabel(war)}</span>` : ""}</li>`;
-  }).join("")}</ul>` : "";
+  // B2: the 2-3 most relevant conflicts (active in the main displacement years, then intensity; ranked in the
+  // pipeline), the rest behind "Show all conflicts (n)". Each period lists the opposing groups as separate tags.
+  const cs = S.conflicts || [];
+  const TOP = 3;
+  const item = (c) => {
+    const yrs = runsLabel(c.active_years.flatMap(([a, b]) => Array.from({ length: b - a + 1 }, (_, i) => a + i)));
+    const war = c.war_years?.length ? `<br>War (1,000+ deaths a year) in ${runsLabel(c.war_years)}` : "";
+    const st = [...(c.stretches || [])].reverse();
+    const shown = st.slice(0, 2);
+    const earlier = st.slice(2);
+    const period = (x) => `<li class="conf-st"><span class="conf-st__yrs tabular">${x.years[0] === x.years[1] ? x.years[0] : `${x.years[0]}–${x.years[1]}`}</span>
+        <span class="conf-st__sides"><span class="small muted">${esc(c.government_side || "")} against</span>
+        <span class="conf-st__groups">${x.groups.map((g) => `<span class="conf-tag">${esc(g)}</span>`).join("")}</span></span></li>`;
+    return `<li><span class="conf-list__name">${esc(c.name)}</span><p class="small muted tabular conf-list__yrs">Active in ${yrs}${war}</p>
+      ${shown.length ? `<ul class="conf-st-list">${shown.map(period).join("")}</ul>` : ""}
+      ${earlier.length ? `<p class="small muted conf-st__earlier">Earlier periods: ${earlier.map((x) => (x.years[0] === x.years[1] ? x.years[0] : `${x.years[0]}–${x.years[1]}`)).join(", ")}</p>` : ""}</li>`;
+  };
+  const list = cs.length ? `<h3 class="sub-h">Armed conflicts in ${esc(S.origin_name)} (UCDP/PRIO)</h3>
+    ${cs.length > TOP ? `<p class="small muted">The ${TOP} most relevant here: active in the main displacement years, then by intensity.</p>` : ""}
+    <ul class="conf-list">${cs.slice(0, TOP).map(item).join("")}</ul>
+    ${cs.length > TOP ? `<details class="conf-more"><summary><span class="conf-more__open">Show all conflicts (${cs.length})</span><span class="conf-more__close">Show fewer</span></summary>
+      <ul class="conf-list">${cs.slice(TOP).map(item).join("")}</ul></details>` : ""}` : "";
   const evs = S.events.length ? `<h3 class="sub-h">Events</h3><ol class="ev-list">${S.events.map((e) => {
     const srcIds = e.source_ids || [e.source_id];
     return `<li><span class="ev-list__date tabular">${esc(formatDate(e.date))}</span><div><strong>${esc(e.title)}</strong><p>${esc(e.note || "")}</p>
@@ -716,7 +808,7 @@ function sourcesHTML(el) {
       <div><div class="reading__by">${esc(r.authors)} (${r.year})</div><div class="reading__title">${esc(r.title)}</div>
         ${reviewNote(r.to_check)}</div>
       <div class="reading__meta"><span class="small muted">${esc(r.type)}</span>
-        <button class="pin-btn" type="button" data-pin-key="read:${esc(r.id)}" data-read="${esc(r.id)}" aria-pressed="false" aria-label="Add ${esc(r.authors)} (${r.year}) to my collection">${icon("pin", { size: 16 })}</button></div>
+        ${pinButton({ key: `read:${r.id}`, label: `${r.authors} (${r.year})`, attrs: `data-read="${esc(r.id)}"` })}</div>
     </article>`).join("");
   el.innerHTML = `<h3 class="sub-h" style="margin-top:0">Datasets used</h3>
     <div class="table-wrap"><table class="table"><thead><tr><th scope="col">Dataset</th><th scope="col">Years</th><th scope="col">Release</th></tr></thead><tbody>${rows}</tbody></table></div>
@@ -771,11 +863,47 @@ function setupRail() {
     }
   };
   setCurrent(links[0]?.getAttribute("href").slice(1));
-  const obs = new IntersectionObserver((entries) => {
-    const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-    if (vis[0]) setCurrent(vis[0].target.id);
-  }, { rootMargin: "-20% 0px -65% 0px" });
-  document.querySelectorAll(".step").forEach((sec) => obs.observe(sec));
+  // while a rail click is scrolling, the clicked step stays current (the observer would light up the steps passed on the way)
+  let lockUntil = 0;
+  const steps = [...document.querySelectorAll(".step")];
+  const pickFromScroll = () => {
+    if (Date.now() < lockUntil) return;
+    // the last step whose top has passed a line a little below the top bar (and the rail strip on phones)
+    const line = (parseFloat(getComputedStyle(steps[0] || document.body).scrollMarginTop) || 72) + 24;
+    let cur = steps[0];
+    for (const st of steps) if (st.getBoundingClientRect().top <= line) cur = st;
+    // at the very bottom the last step counts, even when it is too short to reach the line
+    if (Math.ceil(scrollY + innerHeight) >= document.documentElement.scrollHeight - 2) cur = steps[steps.length - 1];
+    if (cur) setCurrent(cur.id);
+  };
+  let ticking = false;
+  addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { ticking = false; pickFromScroll(); });
+  }, { passive: true });
+  const unlock = () => { lockUntil = 0; pickFromScroll(); };
+  addEventListener("scrollend", () => { if (lockUntil) unlock(); });
+  links.forEach((a) => a.addEventListener("click", (e) => {
+    const id = a.getAttribute("href").slice(1);
+    const target = document.getElementById(id);
+    if (!target || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    // a step still waiting to fade in sits 14 px lower: show it at once so the scroll lands in the right place
+    if (target.classList.contains("is-hidden")) {
+      target.style.transition = "none";
+      target.classList.remove("is-hidden");
+      void target.offsetHeight;
+      target.style.transition = "";
+    }
+    setCurrent(id);
+    lockUntil = Date.now() + 1500;
+    history.pushState(null, "", `#${id}`);
+    target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    target.querySelector("h2")?.focus({ preventScroll: true });
+    setTimeout(() => { if (lockUntil) unlock(); }, 1500);
+  }));
+  pickFromScroll();
 }
 
 // =================================================================== motion: reveal steps, count up the key numbers

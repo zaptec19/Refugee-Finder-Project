@@ -80,10 +80,12 @@ export function initPage({ page, dark = false } = {}) {
     const dark = root.dataset.theme === "dark";
     themeBtn.setAttribute("aria-pressed", String(dark));
     themeBtn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+    const txt = themeBtn.querySelector(".topbar__theme-text");
+    if (txt) txt.textContent = dark ? "Light mode" : "Dark mode";
     const want = dark ? "sun" : "moon";
     if (themeBtn.dataset.icon === want) return;
     themeBtn.dataset.icon = want;
-    themeBtn.innerHTML = icon(want);
+    themeBtn.querySelector(".topbar__theme-icon").innerHTML = icon(want);
     if (spin && !reducedMotion()) {
       themeBtn.querySelector("svg")?.animate([{ transform: "rotate(-90deg) scale(0.6)", opacity: 0 }, { transform: "none", opacity: 1 }],
         { duration: 200, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
@@ -122,6 +124,41 @@ export function initPage({ page, dark = false } = {}) {
     ask.addEventListener("focus", go);
   }
 
+  // phones under 600 px: Learn, Guide, theme and My collection live in a menu; search opens full width
+  const menuBtn = header.querySelector(".topbar__menu-btn");
+  const menu = header.querySelector("#topbar-menu");
+  const setMenu = (open, { focus = true } = {}) => {
+    header.classList.toggle("is-menu-open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    if (open && focus) menu.querySelector("a, button")?.focus();
+    if (!open && focus) menuBtn.focus();
+  };
+  menuBtn.addEventListener("click", () => setMenu(!header.classList.contains("is-menu-open")));
+  menu.addEventListener("keydown", (e) => { if (e.key === "Escape" && header.classList.contains("is-menu-open")) { e.stopPropagation(); setMenu(false); } });
+  menu.addEventListener("focusout", (e) => {
+    if (header.classList.contains("is-menu-open") && e.relatedTarget && !menu.contains(e.relatedTarget) && e.relatedTarget !== menuBtn) setMenu(false, { focus: false });
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (header.classList.contains("is-menu-open") && !menu.contains(e.target) && !menuBtn.contains(e.target)) setMenu(false, { focus: false });
+  });
+  const searchBtn = header.querySelector(".topbar__search-btn");
+  if (searchBtn) {
+    const setSearch = (open) => {
+      header.classList.toggle("is-searching", open);
+      searchBtn.setAttribute("aria-expanded", String(open));
+      if (open) { setMenu(false, { focus: false }); header.querySelector("#ask-top").focus(); } else searchBtn.focus();
+    };
+    searchBtn.addEventListener("click", () => setSearch(true));
+    header.querySelector(".topbar__search-close").addEventListener("click", () => setSearch(false));
+    header.querySelector("#ask-top-form").addEventListener("keydown", (e) => {
+      // Esc first closes the results (search-ui), then the full-width search
+      // (capture phase: read the results' state before search-ui's own Esc handler hides them)
+      if (e.key === "Escape" && header.classList.contains("is-searching") && !header.querySelector(".results:not([hidden])")) setSearch(false);
+    }, true);
+  }
+  const wide = window.matchMedia("(min-width: 600px)");
+  wide.addEventListener?.("change", () => { setMenu(false, { focus: false }); header.classList.remove("is-searching"); });
+
   updateCollectionBadge();
   window.addEventListener("storage", updateCollectionBadge);
   document.addEventListener("collection-change", updateCollectionBadge);
@@ -147,15 +184,18 @@ function topbarHTML(page, dark, theme) {
       <button type="button" data-fmt="intl" aria-pressed="${m === "intl"}" title="International format">100,000</button>
     </div>
     ${page === "home" ? '<span class="topbar__ask-slot" aria-hidden="true"></span>' : `
-    <form class="ask topbar__ask" role="search" action="index.html" method="get" onsubmit="return false">
+    <form class="ask topbar__ask" id="ask-top-form" role="search" action="index.html" method="get" onsubmit="return false">
       ${icon("search")}
       <label class="sr-only" for="ask-top">Ask: a country, a group or a question</label>
       <input id="ask-top" name="q" type="search" placeholder="Ask: a country, a group or a question" autocomplete="off">
-    </form>`}
-    <nav class="topbar__right" aria-label="Site">
+      <button class="icon-btn topbar__search-close" type="button" aria-label="Close search">${icon("close")}</button>
+    </form>
+    <button class="icon-btn topbar__search-btn" type="button" aria-label="Search" aria-expanded="false" aria-controls="ask-top-form">${icon("search")}</button>`}
+    <button class="icon-btn topbar__menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="topbar-menu">${icon("menu")}<span class="count-dot" aria-hidden="true" hidden></span></button>
+    <nav class="topbar__right" id="topbar-menu" aria-label="Site">
       <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
       <button class="icon-btn topbar__theme" id="theme-toggle" type="button" aria-pressed="${theme === "dark"}"
-        aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}">${icon(theme === "dark" ? "sun" : "moon")}</button>
+        aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}"><span class="topbar__theme-icon">${icon(theme === "dark" ? "sun" : "moon")}</span><span class="menu-only topbar__theme-text">${theme === "dark" ? "Light mode" : "Dark mode"}</span></button>
       <button class="pill topbar__guide" id="guide-toggle" type="button" aria-pressed="${guideOn}"
         title="Guide mode shows short tips step by step"><span class="dot" aria-hidden="true"></span><span class="pill__text">Guide<span class="pill__state">${guideOn ? " on" : " off"}</span></span></button>
       <a class="collection-btn topbar__coll" href="collection.html"${cur("collection")}>
@@ -184,6 +224,11 @@ export function updateCollectionBadge() {
     b.classList.add("count-badge--bump");
   }
   b.closest("a")?.setAttribute("aria-label", `My collection, ${n} item${n === 1 ? "" : "s"}`);
+  const mb = document.querySelector(".topbar__menu-btn");
+  if (mb) {
+    mb.querySelector(".count-dot").hidden = n === 0;
+    mb.setAttribute("aria-label", n ? `Menu, ${n} item${n === 1 ? "" : "s"} in My collection` : "Menu");
+  }
 }
 
 /** Toast with an optional action (e.g. Undo). */
@@ -208,7 +253,15 @@ export function toast(html, { action, onAction, timeout = 6000 } = {}) {
     if (!region.hasAttribute("popover")) region.setAttribute("popover", "manual");
     try { if (region.matches(":popover-open")) region.hidePopover(); region.showPopover(); } catch { /* not supported */ }
   }
-  setTimeout(() => { t.remove(); if (!region.children.length && region.matches?.(":popover-open")) region.hidePopover(); }, timeout);
+  // the timer pauses while the pointer is on the toast or its Undo has focus, so there is time to use it
+  const close = () => { t.remove(); if (!region.children.length && region.matches?.(":popover-open")) region.hidePopover(); };
+  let timer = setTimeout(close, timeout);
+  const hold = () => clearTimeout(timer);
+  const resume = () => { clearTimeout(timer); timer = setTimeout(close, 1500); };
+  t.addEventListener("pointerenter", hold);
+  t.addEventListener("pointerleave", resume);
+  t.addEventListener("focusin", hold);
+  t.addEventListener("focusout", (e) => { if (!t.contains(e.relatedTarget)) resume(); });
 }
 
 export function guideTip(tip, nextHref, nextLabel) {

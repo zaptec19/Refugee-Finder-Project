@@ -37,11 +37,12 @@ main.innerHTML = `
       <span><button class="linklike" type="button" data-start-tour>New here? Take the 2-minute tour &rsaquo;</button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
-        <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">1951 – 2025</button>
+        <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">Years</button>
         <div class="range__pop card" id="range-pop" hidden>
           <label for="year" class="small">Year shown on the globe: <strong id="year-out" class="tabular"></strong></label>
           <input type="range" id="year" step="1">
           <p class="small muted" style="margin:6px 0 0">Darker = fewer. Shades start at <span id="thr"></span> people.</p>
+          <p class="small muted" id="range-why" style="margin:6px 0 0" hidden></p>
         </div>
       </div>
     </div>
@@ -76,7 +77,19 @@ if (preset) { input.value = preset; searchUI.run(); }
   thr();
   document.addEventListener("numfmt-change", thr);
   const cap = document.getElementById("globe-cap");
-  const setCap = (y) => { cap.textContent = `People displaced, by country, ${y} · click a country to open it`; };
+  // B6: say why the globe starts later than UNHCR's records (until 1960 its rows don't name the country of origin)
+  const meta = globe._meta || {};
+  const why = meta.records_from && meta.origin_known_from && meta.records_from < years[0]
+    ? `UNHCR's figures start in ${meta.records_from}, but until ${meta.origin_known_from - 1} they don't say which country people came from, so the globe starts in ${years[0]}.`
+    : "";
+  if (why) {
+    const w = document.getElementById("range-why");
+    w.textContent = why;
+    w.hidden = false;
+  }
+  // the caption's first line changes with the year; the second (why the globe starts in 1960) stays
+  cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}`;
+  const setCap = (y) => { cap.querySelector(".home__caption-main").textContent = `People displaced, by country, ${y} · click a country to open it`; };
   setCap(last);
   let year = last;
   const g = await createGlobe(document.getElementById("globe"), {

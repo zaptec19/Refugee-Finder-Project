@@ -172,6 +172,9 @@ export function createPopout(dlg, { box = ".pop__box", sheetClass = "pop--sheet"
       (focus || dlg).focus({ preventScroll: true });
       const b = boxEl();
       const reduced = reducedMotion();
+      // B7: the box is solid from the first frame while it grows and its content fades in; it eases back to the
+      // glass finish only once everything has landed (the glass let the page show through the empty box)
+      b.classList.add("is-entering");
       const anims = [dlg.animate([{ opacity: 0 }, { opacity: 1 }],
         { duration: reduced ? 140 : OPEN_MS, easing: "ease-out", pseudoElement: "::backdrop" })];
       if (reduced) {
@@ -208,6 +211,7 @@ export function createPopout(dlg, { box = ".pop__box", sheetClass = "pop--sheet"
         }, () => {});
       }
       await Promise.allSettled(anims.map((a) => a.finished));
+      b.classList.remove("is-entering");
       if (running === anims) running = [];
     },
 

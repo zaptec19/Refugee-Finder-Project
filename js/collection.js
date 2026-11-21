@@ -44,25 +44,24 @@ export function valueText(item) {
   return item.unit === "percent" ? fmtPct(item.value) : fmt(item.value);
 }
 
-/** Pin with a toast and Undo. `btn` (optional) gets aria-pressed. */
+/** Pin (or unpin, if already pinned) with a toast and Undo. Every pin button for the same item updates. */
 export function pin(item, btn) {
   if (has(item.key)) {
     remove(item.key);
-    btn?.setAttribute("aria-pressed", "false");
-    btn?.setAttribute("aria-label", btn.getAttribute("aria-label")?.replace("Remove from", "Add to") || "Add to my collection");
-    toast("Removed from your collection");
+    syncPins(document);
+    toast("<strong>Removed from your collection</strong>", {
+      action: "Undo", timeout: 4000,
+      onAction: () => { add(item); syncPins(document); },
+    });
     return;
   }
   add(item);
-  btn?.setAttribute("aria-pressed", "true");
+  syncPins(document);
   const n = items().length;
   const what = item.kind === "number" ? `${valueText(item)} · ${esc(item.label)}` : esc(item.label);
   toast(`<strong>Added to your collection (${n})</strong><div class="small muted">${what}${item.source_short ? ` · ${esc(item.source_short)}` : ""} · citation saved</div>`, {
-    action: "Undo",
-    onAction: () => {
-      remove(item.key);
-      btn?.setAttribute("aria-pressed", "false");
-    },
+    action: "Undo", timeout: 4000,
+    onAction: () => { remove(item.key); syncPins(document); },
   });
 }
 
