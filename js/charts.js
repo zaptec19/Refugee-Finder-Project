@@ -4,7 +4,7 @@
 import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/+esm";
 import { esc, fmt, fmtPct, fmtShort, numHTML, pctHTML, mode } from "./format.js";
 import { icon } from "./icons.js";
-import { fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 
 export { Plot };
 
@@ -304,7 +304,7 @@ function polish(root, id) {
 // ------------------------------------------------------------------ draw-in, once per chart, the first time it is seen
 const exporting = (() => { try { return new URLSearchParams(location.search).has("theme"); } catch { return false; } })();
 function drawInWhenSeen(fig) {
-  if (fxOff() || exporting || !("IntersectionObserver" in window)) return;
+  if (reducedMotion() || exporting || !("IntersectionObserver" in window)) return;
   const body = fig.querySelector(".chart__body");
   const io = new IntersectionObserver((entries) => {
     if (!entries.some((e) => e.isIntersecting)) return;
@@ -315,7 +315,7 @@ function drawInWhenSeen(fig) {
 }
 function drawIn(body) {
   const svg = [...body.querySelectorAll("svg")].find((x) => !x.closest(".events"));
-  if (!svg || fxOff()) return;
+  if (!svg || reducedMotion()) return;
   const ease = "cubic-bezier(0.3, 0.7, 0.2, 1)";
   svg.querySelectorAll("g.is-line path").forEach((p) => {
     if (p.getAttribute("stroke-dasharray") || p.closest("[stroke-dasharray]")) {

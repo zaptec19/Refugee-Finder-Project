@@ -7,7 +7,7 @@ import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
 import { showCountryCard, hideCountryCard } from "./globe-card.js";
-import { fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 
 initPage({ page: "home", dark: true });
 document.body.classList.add("page-home");
@@ -106,12 +106,12 @@ if (preset) { input.value = preset; searchUI.run(); }
 
 /** The first visit in a session: the page fades up from black, the globe blooms in (its glow with it), then the
  *  question, the search box and the try-chips rise in, 60 ms apart. About 1.2 s; skipped on repeat visits in
- *  the same session, with Reduce effects, and when coming back with the back button. */
+ *  the same session, with reduced motion, and when coming back with the back button. */
 function intro() {
   let seen = true;
   try { seen = !!sessionStorage.getItem("wv1:intro-seen"); sessionStorage.setItem("wv1:intro-seen", "1"); } catch { /* storage blocked */ }
   const back = performance.getEntriesByType?.("navigation")?.[0]?.type === "back_forward";
-  if (seen || back || fxOff()) return;
+  if (seen || back || reducedMotion()) return;
   const ease = "cubic-bezier(0.2, 0.8, 0.2, 1)";
   const veil = document.createElement("div");
   veil.className = "intro-veil";

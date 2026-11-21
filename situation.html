@@ -10,10 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
-  <script>
-    // set the theme before first paint to avoid a flash
-    try { const t = JSON.parse(localStorage.getItem("wv1:theme")); if (t === "dark") document.documentElement.dataset.theme = "dark"; } catch (e) {}
-  </script>
+  <script>/* theme before first paint: ?theme= > saved choice > system setting */(function(){var t=null;try{var q=new URLSearchParams(location.search).get("theme");t=q==="light"||q==="dark"?q:JSON.parse(localStorage.getItem("wv1:theme"))}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t})()</script>
   <script>addEventListener("pagereveal",function(e){window.wv1Revealed=true;try{if(e.viewTransition&&sessionStorage.getItem("wv1:morph"))e.viewTransition.skipTransition()}catch(x){}},{once:true})</script>
   <script type="module" src="js/situation.js"></script>
 </head>

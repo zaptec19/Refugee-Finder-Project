@@ -2,7 +2,7 @@
 import { initPage, guideTip } from "./layout.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
-import { fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 import { arriveMorph } from "./morph.js";
 import { icon } from "./icons.js";
 import { renderMiniGlobe } from "./minimap.js";
@@ -781,7 +781,7 @@ function setupRail() {
 // =================================================================== motion: reveal steps, count up the key numbers
 /** Steps below the fold fade and rise in the first time they scroll into view (once each). */
 function revealSteps() {
-  if (fxOff() || !("IntersectionObserver" in window)) return;
+  if (reducedMotion() || !("IntersectionObserver" in window)) return;
   const vh = window.innerHeight;
   const later = [...document.querySelectorAll(".step")].filter((st) => st.getBoundingClientRect().top > vh * 0.92);
   if (!later.length) return;
@@ -798,9 +798,9 @@ function revealSteps() {
 }
 
 /** The key figures count up to their exact value the first time they are seen (about 600 ms), ending on the exact
- *  number in the chosen format. Once per situation per session; never with Reduce effects. */
+ *  number in the chosen format. Once per situation per session; never with reduced motion. */
 function countUp(root) {
-  if (!root || fxOff() || !("IntersectionObserver" in window)) return;
+  if (!root || reducedMotion() || !("IntersectionObserver" in window)) return;
   const key = `wv1:counted:${S.id}`;
   try { if (sessionStorage.getItem(key)) return; } catch { return; }
   const spans = [...root.querySelectorAll(".kn__value [data-num], .kn__value [data-pct]")];

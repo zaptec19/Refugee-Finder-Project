@@ -219,17 +219,6 @@
   --label-ink: #D6CCF5;
 }
 
-/* Reduce effects (the display menu) and reduced motion: no blur, no glow, no pulsing */
-:root.fx-off {
-  --accent-glow: 0 0 0 1px var(--accent-ui);
-  --glass-filter: none;
-  --g-glow-o: none;
-  --g-glow-h: none;
-  --g-arrow-glow: none;
-}
-:root.fx-off[data-theme="dark"] { --glass-bg: rgba(14, 19, 27, 0.97); }
-:root.fx-off:not([data-theme="dark"]) { --glass-bg: #FFFFFF; }
-
 @media (prefers-reduced-motion: reduce) {
   :root {
     --t-fast: 0ms;

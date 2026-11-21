@@ -3,11 +3,11 @@
 // transition has nothing to land on. Instead the home page leaves the title and the globe (position, text, the
 // globe's drawing) in sessionStorage; the next page shows them as stand-ins in exactly the same place, and once
 // the real page is drawn a same-document view transition morphs the stand-ins into the real title and mini globe.
-// Without View Transitions, or with Reduce effects, nothing of this runs and pages simply load.
-import { fxOff } from "./fx.js";
+// Without View Transitions, or with reduced motion, nothing of this runs and pages simply load.
+import { reducedMotion } from "./motion.js";
 
 const KEY = "wv1:morph";
-const can = () => typeof document !== "undefined" && !!document.startViewTransition && !fxOff();
+const can = () => typeof document !== "undefined" && !!document.startViewTransition && !reducedMotion();
 
 /** Home page, just before leaving for a situation: remember the clicked title and the globe. */
 export function leaveMorph(titleEl) {

@@ -2,11 +2,22 @@
 import { store, collectionItems } from "./store.js";
 import { mode, setMode, applyNumbers, esc } from "./format.js";
 import { icon } from "./icons.js";
-import { applyFx, setEffects, effectsChosenOff, reducedMotion, fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 
-// cross-document view transitions (css: @view-transition): skipped with Reduce effects
-window.addEventListener("pageswap", (e) => { if (fxOff()) e.viewTransition?.skipTransition(); });
-window.addEventListener("pagereveal", (e) => { if (fxOff()) e.viewTransition?.skipTransition(); });
+// cross-document view transitions (css: @view-transition): skipped with the system's reduced motion
+window.addEventListener("pageswap", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
+window.addEventListener("pagereveal", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
+
+/** The theme for this page: ?theme= (chart exports) > the reader's saved choice > the home page's dark >
+ *  the system setting. The inline script in each page's <head> applies the same rule before first paint. */
+export function themeFor(home) {
+  const forced = new URLSearchParams(location.search).get("theme");
+  if (forced === "light" || forced === "dark") return forced;
+  const saved = store.get("theme", null);
+  if (saved === "light" || saved === "dark") return saved;
+  if (home) return "dark";
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
 
 /**
  * @param {object} o
@@ -15,11 +26,9 @@ window.addEventListener("pagereveal", (e) => { if (fxOff()) e.viewTransition?.sk
  */
 export function initPage({ page, dark = false } = {}) {
   const root = document.documentElement;
-  const forced = new URLSearchParams(location.search).get("theme");       // ?theme=light (used for chart exports)
-  // the home page starts dark; once someone picks a theme it is used on every page
-  const theme = forced === "light" || forced === "dark" ? forced : store.get("theme", dark ? "dark" : "light");
+  const theme = themeFor(dark);
   root.dataset.theme = theme;
-  applyFx();
+  try { localStorage.removeItem("wv1:fx"); } catch { /* an old setting that no longer exists */ }
   document.body.dataset.page = page;
   document.body.classList.toggle("guide-on", store.get("guide", false) === true);
 
@@ -65,44 +74,40 @@ export function initPage({ page, dark = false } = {}) {
     document.dispatchEvent(new CustomEvent("guide-change", { detail: on }));
   });
 
-  // display menu (every page): dark theme and Reduce effects
+  // theme toggle (every page): one click switches light and dark; the colours cross-fade (View Transitions)
   const themeBtn = header.querySelector("#theme-toggle");
-  const menu = header.querySelector("#disp-menu");
-  const darkItem = menu.querySelector("[data-disp=dark]");
-  const fxItem = menu.querySelector("[data-disp=fx]");
-  const sync = () => {
-    darkItem.setAttribute("aria-checked", String(root.dataset.theme === "dark"));
-    fxItem.setAttribute("aria-checked", String(effectsChosenOff() || reducedMotion()));
-    fxItem.querySelector(".disp-menu__hint").textContent = reducedMotion()
-      ? "On because your system asks for reduced motion" : "No blur, glow or movement";
-    const want = root.dataset.theme === "dark" ? "sun" : "moon";
-    if (themeBtn.dataset.icon !== want) { themeBtn.dataset.icon = want; themeBtn.innerHTML = icon(want); }
+  const syncTheme = (spin) => {
+    const dark = root.dataset.theme === "dark";
+    themeBtn.setAttribute("aria-pressed", String(dark));
+    themeBtn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+    const want = dark ? "sun" : "moon";
+    if (themeBtn.dataset.icon === want) return;
+    themeBtn.dataset.icon = want;
+    themeBtn.innerHTML = icon(want);
+    if (spin && !reducedMotion()) {
+      themeBtn.querySelector("svg")?.animate([{ transform: "rotate(-90deg) scale(0.6)", opacity: 0 }, { transform: "none", opacity: 1 }],
+        { duration: 200, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+    }
   };
-  const open = (on) => {
-    menu.hidden = !on;
-    themeBtn.setAttribute("aria-expanded", String(on));
-    if (on) { sync(); darkItem.focus(); }
+  const setTheme = (next, { save = true } = {}) => {
+    const apply = () => {
+      root.dataset.theme = next;
+      if (save) store.set("theme", next);
+      syncTheme(true);
+      document.dispatchEvent(new CustomEvent("theme-change", { detail: next }));
+    };
+    if (!document.startViewTransition || reducedMotion()) { apply(); return; }
+    root.classList.add("theme-swap");                  // a plain 250 ms cross-fade of the whole page
+    const vt = document.startViewTransition(apply);
+    vt.finished.finally(() => root.classList.remove("theme-swap"));
   };
-  themeBtn.addEventListener("click", () => open(menu.hidden));
-  darkItem.addEventListener("click", () => {
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = next;
-    store.set("theme", next);
-    sync();
-    document.dispatchEvent(new CustomEvent("theme-change", { detail: next }));
-  });
-  fxItem.addEventListener("click", () => {
-    if (reducedMotion()) return;               // the system setting wins
-    setEffects(effectsChosenOff());
-    sync();
-  });
-  // (composedPath: the clicked icon may have been re-rendered and detached by the time this runs)
-  document.addEventListener("click", (e) => { if (!menu.hidden && !e.composedPath().some((n) => n.classList?.contains("disp"))) open(false); });
-  menu.addEventListener("keydown", (e) => {
-    const items = [darkItem, fxItem];
-    const i = items.indexOf(document.activeElement);
-    if (e.key === "Escape") { e.stopPropagation(); open(false); themeBtn.focus(); }
-    else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); items[(i + (e.key === "ArrowDown" ? 1 : -1) + 2) % 2].focus(); }
+  themeBtn.dataset.icon = theme === "dark" ? "sun" : "moon";
+  syncTheme(false);
+  themeBtn.addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark"));
+  // no saved choice yet: follow the system setting live (the home page stays dark)
+  window.matchMedia?.("(prefers-color-scheme: dark)").addEventListener?.("change", (e) => {
+    if (dark || store.get("theme", null) || new URLSearchParams(location.search).get("theme")) return;
+    setTheme(e.matches ? "dark" : "light", { save: false });
   });
 
   // top-bar search: load the search panel on first focus only
@@ -149,16 +154,8 @@ function topbarHTML(page, dark, theme) {
     </form>`}
     <nav class="topbar__right" aria-label="Site">
       <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
-      <div class="disp topbar__theme">
-        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Display: theme and effects" aria-haspopup="menu" aria-expanded="false"
-          aria-controls="disp-menu">${icon(theme === "dark" ? "sun" : "moon")}</button>
-        <div class="disp-menu" id="disp-menu" role="menu" aria-label="Display" hidden>
-          <button class="disp-menu__item" type="button" role="menuitemcheckbox" data-disp="dark" aria-checked="${theme === "dark"}">
-            <span>Dark theme</span><span class="switch" aria-hidden="true"></span></button>
-          <button class="disp-menu__item" type="button" role="menuitemcheckbox" data-disp="fx" aria-checked="false">
-            <span>Reduce effects<span class="disp-menu__hint">No blur, glow or movement</span></span><span class="switch" aria-hidden="true"></span></button>
-        </div>
-      </div>
+      <button class="icon-btn topbar__theme" id="theme-toggle" type="button" aria-pressed="${theme === "dark"}"
+        aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}">${icon(theme === "dark" ? "sun" : "moon")}</button>
       <button class="pill topbar__guide" id="guide-toggle" type="button" aria-pressed="${guideOn}"
         title="Guide mode shows short tips step by step"><span class="dot" aria-hidden="true"></span><span class="pill__text">Guide<span class="pill__state">${guideOn ? " on" : " off"}</span></span></button>
       <a class="collection-btn topbar__coll" href="collection.html"${cur("collection")}>

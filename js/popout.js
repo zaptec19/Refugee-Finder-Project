@@ -12,10 +12,9 @@
 // slides up and closes on a swipe down. Reduced motion: a quick fade only.
 // Only one pop-out is open at a time: opening one closes any other pop-out, popover or side panel.
 import { closePopover, closePanel } from "./popouts.js";
-import { fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 
-// reduced motion and the "Reduce effects" option both mean: no movement, just quick fades
-export const reducedMotion = () => fxOff();
+export { reducedMotion };       // with reduced motion: no movement, just quick fades
 export const phoneWidth = () => document.documentElement.clientWidth < 600;
 
 const OPEN_MS = 320;

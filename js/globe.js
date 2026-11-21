@@ -2,7 +2,7 @@
 // Drag to rotate; click a country to open it. No data is shown as plain land, never as the lightest shade.
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm";
 import { worldFeatures } from "./geo.js";
-import { fxOff } from "./fx.js";
+import { reducedMotion } from "./motion.js";
 
 // Quiet on purpose: fixed thresholds, so only large displacement stands out.
 // colours come from the theme tokens (--g-ramp-0 .. --g-ramp-4), so the globe follows light and dark mode
@@ -61,7 +61,7 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
   draw();
   colour(values);
 
-  // slow idle rotation: stops on any interaction, resumes 20 s after the last one (never with Reduce effects)
+  // slow idle rotation: stops on any interaction, resumes 20 s after the last one (never with reduced motion)
   let idleAt = performance.now();
   let flying = false;
   let last = 0;
@@ -70,7 +70,7 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
     requestAnimationFrame(spin);
     const dt = last ? Math.min(64, t - last) : 16;
     last = t;
-    if (flying || fxOff() || document.hidden || start || t - idleAt < 20000 && idleAt !== 0) return;
+    if (flying || reducedMotion() || document.hidden || start || t - idleAt < 20000 && idleAt !== 0) return;
     const r = proj.rotate();
     proj.rotate([r[0] + dt * 0.004, r[1], 0]);        // about 4 degrees a second
     draw();
@@ -150,7 +150,7 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
     touch();
     const f = features[+el.dataset.i];
     const [lon, lat] = d3.geoCentroid(f);
-    if (fxOff() || !Number.isFinite(lon)) { then(); return; }
+    if (reducedMotion() || !Number.isFinite(lon)) { then(); return; }
     svg.classList.add("gl-picking");
     el.classList.add("is-picked");
     el.parentNode.append(el);
