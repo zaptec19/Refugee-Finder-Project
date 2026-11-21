@@ -868,8 +868,9 @@ function setupRail() {
   const steps = [...document.querySelectorAll(".step")];
   const pickFromScroll = () => {
     if (Date.now() < lockUntil) return;
-    // the last step whose top has passed a line a little below the top bar (and the rail strip on phones)
-    const line = (parseFloat(getComputedStyle(steps[0] || document.body).scrollMarginTop) || 72) + 24;
+    // the last step whose top has passed a reading line: 30% down the window, and never above the top bar
+    // (plus the rail strip on phones)
+    const line = Math.max((parseFloat(getComputedStyle(steps[0] || document.body).scrollMarginTop) || 72) + 24, innerHeight * 0.3);
     let cur = steps[0];
     for (const st of steps) if (st.getBoundingClientRect().top <= line) cur = st;
     // at the very bottom the last step counts, even when it is too short to reach the line
@@ -882,7 +883,9 @@ function setupRail() {
     ticking = true;
     requestAnimationFrame(() => { ticking = false; pickFromScroll(); });
   }, { passive: true });
-  const unlock = () => { lockUntil = 0; pickFromScroll(); };
+  // after a rail click the clicked step stays current until the reader scrolls again (a short step may never
+  // reach the reading line on its own)
+  const unlock = () => { lockUntil = 0; };
   addEventListener("scrollend", () => { if (lockUntil) unlock(); });
   links.forEach((a) => a.addEventListener("click", (e) => {
     const id = a.getAttribute("href").slice(1);
