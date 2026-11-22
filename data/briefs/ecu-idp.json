@@ -1,0 +1,91 @@
+{
+  "id": "ecu-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Ecuador, as estimated by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 316000 people living in internal displacement because of conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's file reports no internally displaced people for Ecuador; in UNHCR's data that can mean none, or none reported.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources here don't record the causes of this displacement: there are no dated events or armed conflicts for Ecuador in them.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Floods, storms, earthquakes and wildfires are the disasters recorded for Ecuador in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures for people in displacement start in 2024 at 48593 and reach 316000 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC recorded the most new displacements from conflict in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice in a year is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Ecuador live mainly in the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside Ecuador people moved to.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    48593,
+    316000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "89ab069bb6866ae4",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

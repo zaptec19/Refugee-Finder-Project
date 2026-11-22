@@ -1,0 +1,100 @@
+{
+  "id": "irq-all",
+  "what": [
+    {
+      "text": "This page follows refugees from Iraq in all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 270671 Iraqi refugees, and Germany hosts the largest share, 47.5%.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The United Kingdom, Türkiye and France are the next largest hosts.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Kurdistan territory in several periods from 1963 to 1996, with groups including the KDP and the PUK, and an interstate conflict between Iraq and Kuwait in 1990 and 1991.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It records armed conflict over the government of Iraq from 2004 to 2025, at war level from 2004 to 2009 and from 2013 to 2017, with groups including the al-Mahdi Army, Ansar al-Islam and IS.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main years of displacement in the data are 1991 and 1992 and 2006 to 2011.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's figure peaked at 2309246 in 2007 and fell to 264086 by 2015.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns to Iraq were highest in 1991 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees; asylum seekers from Iraq are counted in a separate series.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "People displaced inside Iraq are counted separately by UNHCR and by IDMC, and their figures are never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    264086,
+    270671,
+    2309246
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "2aa3f81e85de63e5",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

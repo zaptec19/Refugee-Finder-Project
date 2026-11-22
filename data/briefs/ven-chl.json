@@ -1,0 +1,90 @@
+{
+  "id": "ven-chl",
+  "what": [
+    {
+      "text": "This page follows Venezuelans in Chile whom UNHCR counts as other people in need of international protection, a group separate from refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025 there were 662504 people in this group, 11.0% of all Venezuelans in it worldwide.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Only 121 Venezuelans in Chile were counted as refugees that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources here don't say why people left Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's figures describe the scale of the movement, not its causes.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figures for this group in Chile start in 2018 at 285122 and reach 662504 in 2025, their highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2019 to 2025, after a big change between 2018 and 2019.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals reported to UNHCR, and UNHCR adds notes to some of the figures.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figures have no breakdown by gender or age.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say how people travelled or where in Chile they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    121,
+    285122,
+    662504
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "bd5aa6a8ebd2a5ba",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

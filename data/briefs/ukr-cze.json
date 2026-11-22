@@ -1,0 +1,98 @@
+{
+  "id": "ukr-cze",
+  "what": [
+    {
+      "text": "This page follows refugees from Ukraine living in Czechia.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 392955 Ukrainian refugees in Czechia, 7.5% of all Ukrainian refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Only Germany and Poland host more.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records an interstate armed conflict between Russia and Ukraine from 2022 to 2025, at war level in every one of those years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Before that it records armed conflict over Novorossiya territory, with the DPR and LPR, from 2014 to 2022.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main years of displacement in the data are 2022 to 2025, after a big change between 2021 and 2022.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's figure for Czechia peaked at 433501 in 2022 and was 392955 at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Czechia to Ukraine were highest in 2022 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Czechia only, and UNHCR adds notes to some of them.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figures have no breakdown by age.",
+      "source_ids": [
+        "unhcr-demographics-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    392955,
+    433501
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "5dae6cd86cadc301",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

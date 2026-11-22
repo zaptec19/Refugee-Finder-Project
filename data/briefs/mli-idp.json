@@ -1,0 +1,96 @@
+{
+  "id": "mli-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Mali by conflict and violence, counted by IDMC and by UNHCR and shown side by side.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 408646 people in internal displacement, and UNHCR counted 414524.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Mali live mainly in Mauritania and Niger.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Mali from 2012 to 2025, at war level in 2022 and 2025, with groups including Ansar Dine, AQIM, MUJAO and JNIM.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2017 to 2025, and over Azawad territory in several periods, with the FLA from 2023 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figure rose from 230000 in 2012 to 408646 in 2025, its highest.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2012 and 2013 and 2019 to 2025, and IDMC recorded the most new displacements from conflict in 2019.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025 IDMC counts 5878 fewer internally displaced people than UNHCR; the figures overlap and are never added.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice in a year is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside Mali people moved to.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    5878,
+    230000,
+    408646,
+    414524
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "99797f397b5669bb",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

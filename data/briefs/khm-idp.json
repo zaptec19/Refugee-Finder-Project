@@ -1,0 +1,96 @@
+{
+  "id": "khm-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Cambodia by conflict and violence, counted by IDMC and by UNHCR and shown side by side.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025 both sources give the same figure, 517555 people.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records an interstate armed conflict between Cambodia and Thailand in 2011 and again in 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Floods, storms and mass movements are the disasters recorded for Cambodia in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's conflict figures for Cambodia start in 2025, the main year of displacement in the data and a year in which UCDP records the conflict with Thailand.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "That year IDMC recorded 821257 new displacements from conflict.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's earlier figures for people displaced inside Cambodia go back to 1994.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC's new displacements count movements, not people, so they can be higher than the number of people still displaced at the end of the year.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's and IDMC's figures overlap and are counted differently, so they are shown side by side and never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside Cambodia people moved to.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    517555,
+    821257
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "c1d48ebbcdd69e41",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

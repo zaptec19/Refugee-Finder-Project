@@ -1,0 +1,83 @@
+{
+  "id": "jam-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Jamaica; the sources here record only displacement by disasters.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 279000 people still displaced by disasters.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Storms are the disasters recorded for Jamaica in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources here have no armed conflict or dated events for Jamaica.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC recorded far more new displacements from disasters in 2025 than in any earlier year in its data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Its figure for people still displaced at year end covers only 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC's new displacements count movements, not people: someone forced to move twice in a year is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Jamaica are few and live mainly in the United States and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside Jamaica people moved to.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026",
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    279000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "58ec6706783d1b70",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

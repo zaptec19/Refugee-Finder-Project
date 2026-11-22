@@ -1,0 +1,99 @@
+{
+  "id": "ssd-ken",
+  "what": [
+    {
+      "text": "This page follows refugees from South Sudan living in Kenya.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 202772 South Sudanese refugees in Kenya, 8.5% of all South Sudanese refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Uganda, Sudan and Ethiopia host more.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of South Sudan from 2011 to 2021 and again in 2025, at war level in 2014.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The groups fighting the government include the SPLM/A - IO, which UCDP also lists in 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Kenya rose from 16774 in 2012 to 202772 in 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2017 to 2025, after a big change between 2013 and 2014.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Kenya to South Sudan were highest in 2025 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Kenya only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "People displaced inside South Sudan are counted separately by UNHCR and by IDMC, and their figures are never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Kenya they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    16774,
+    202772
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "ad1f82318b1e942a",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

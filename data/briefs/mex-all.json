@@ -1,0 +1,92 @@
+{
+  "id": "mex-all",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Mexico in all host countries combined: people who have asked for protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 236810 Mexican asylum seekers, and the United States hosts the largest share, 88.6%.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Canada is the next largest host.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources here don't say why people left Mexico.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The only armed conflict UCDP records for Mexico in this data is one over the government with the EPR in 1996.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The number of Mexican asylum seekers rose from 13058 in 2000 to 236810 in 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2022 to 2025; earlier big changes came in several years from 2000 to 2015.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of people whose claims had not yet been decided; refugees from Mexico are counted in a separate series.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "People displaced inside Mexico are counted separately by UNHCR and by IDMC, and their figures are never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    13058,
+    236810
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "b8fe15a2f2f03c9d",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

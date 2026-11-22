@@ -1,0 +1,100 @@
+{
+  "id": "ssd-uga",
+  "what": [
+    {
+      "text": "This page follows refugees from South Sudan living in Uganda.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 1033579 South Sudanese refugees in Uganda, 43.3% of all South Sudanese refugees and more than in any other host country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Sudan and Ethiopia host the next largest numbers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of South Sudan from 2011 to 2021 and again in 2025, at war level in 2014.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The groups fighting the government include the SPLM/A - IO, which UCDP also lists in 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Uganda rose from 11135 in 2012 to a peak of 1037412 in 2017.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2016 to 2025, and the figure has stayed close to its peak since then.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Uganda to South Sudan were highest in 2021 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Uganda only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "People displaced inside South Sudan are counted separately by UNHCR and by IDMC, and their figures are never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Uganda they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    11135,
+    1033579,
+    1037412
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "f727e627d8bc22c5",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

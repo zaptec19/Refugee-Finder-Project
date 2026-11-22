@@ -1,0 +1,98 @@
+{
+  "id": "mli-mrt",
+  "what": [
+    {
+      "text": "This page follows refugees from Mali living in Mauritania.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 300192 Malian refugees in Mauritania, 57.8% of all Malian refugees and more than in any other host country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Niger and Burkina Faso host the next largest numbers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Mali from 2012 to 2025, at war level in 2022 and 2025, with groups including Ansar Dine, AQIM, MUJAO and JNIM.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2017 to 2025, and over the government and Azawad territory with the FLA from 2023 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Mauritania rose from 153974 at the end of 2024 to 300192 at the end of 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2024 and 2025; earlier big changes came in most years from 1991 to 1998.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Mauritania to Mali were highest in 1996 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Mauritania only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Gender and age are known for only part of this group.",
+      "source_ids": [
+        "unhcr-demographics-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Mauritania they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    153974,
+    300192
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "6f2143de4df49785",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

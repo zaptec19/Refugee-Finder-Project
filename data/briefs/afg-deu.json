@@ -1,0 +1,97 @@
+{
+  "id": "afg-deu",
+  "what": [
+    {
+      "text": "This page follows refugees from Afghanistan living in Germany.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 288286 Afghan refugees in Germany, 10.8% of all Afghan refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Only Pakistan and Iran host more.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Afghanistan from 1997 to 2025, at war level from 1997 to 2001 and from 2005 to 2021.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The groups involved include the Taleban, the Hizb-i Islami-yi Afghanistan, the NRF and the AFF.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "UCDP also records armed conflict with the Islamic State group from 2015 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Germany rose from 52289 in 2002 to 288286 in 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2020 to 2025, after big changes between 2015 and 2017.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Germany only, and UNHCR adds notes to some of them.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Gender and age are known for only part of this group.",
+      "source_ids": [
+        "unhcr-demographics-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    52289,
+    288286
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "d5ae4fe6f22db74e",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

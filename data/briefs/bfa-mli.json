@@ -1,0 +1,92 @@
+{
+  "id": "bfa-mli",
+  "what": [
+    {
+      "text": "This page follows refugees from Burkina Faso living in Mali.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 200771 in Mali, 57.2% of all refugees from Burkina Faso and more than in any other host country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Côte d'Ivoire and Togo host the next largest numbers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Burkina Faso with JNIM from 2018 to 2025, at war level from 2022.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2019 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Mali rose from 93445 at the end of 2024 to 200771 at the end of 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure also changed sharply between 2019 and 2020, between 2021 and 2022 and in each year since 2023, in the same years as the conflicts UCDP records.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Mali only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Gender and age are known for only part of this group.",
+      "source_ids": [
+        "unhcr-demographics-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Mali they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    93445,
+    200771
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "aac4fde53c2ae572",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

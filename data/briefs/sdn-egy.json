@@ -1,0 +1,92 @@
+{
+  "id": "sdn-egy",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Sudan in Egypt: people who have asked for protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 796517 Sudanese asylum seekers in Egypt, 84.7% of all Sudanese asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "A much smaller group, 37684 people, was counted as Sudanese refugees in Egypt.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Sudan from 1995 to 2018 and from 2020 to 2025, at war level from 2023.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "From 2020 to 2025 the opposing groups include the RSF, the SLM/A, the SPLM/A-North and the SFA.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The figure for Egypt rose from 32761 in 2022 to 796517 in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2024 and 2025, after big changes between 2022 and 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Egypt to Sudan were highest in 2025 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of people whose claims had not yet been decided, and UNHCR adds notes to some of them.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Egypt they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026"
+  ],
+  "numbers": [
+    32761,
+    37684,
+    796517
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "51753de0ecdce7e6",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

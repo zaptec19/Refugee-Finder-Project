@@ -1,0 +1,98 @@
+{
+  "id": "nga-ner",
+  "what": [
+    {
+      "text": "This page follows refugees from Nigeria living in Niger.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 258359 Nigerian refugees in Niger, 54.0% of all Nigerian refugees and more than in any other host country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Cameroon hosts the next largest number.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Nigeria with JAS in 2009 and from 2011 to 2025, at war level from 2013 to 2015 and in 2017.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2015 to 2025, at war level in most of those years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's figure for Niger rose from 6 in 1996 to 258359 in 2025, its highest.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2020 to 2025, after big changes in each year from 2013 to 2016.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Returns from Niger to Nigeria were highest in 2023 in UNHCR's returns data.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "These are year-end totals of refugees in Niger only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Gender and age are known for only part of this group.",
+      "source_ids": [
+        "unhcr-demographics-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say which routes people took or where in Niger they live.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-solutions-2026",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    6,
+    258359
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "1a1c268ae2fe2f6a",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

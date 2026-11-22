@@ -1,0 +1,96 @@
+{
+  "id": "gtm-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Guatemala by conflict and violence, counted by IDMC and by UNHCR and shown side by side.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 572813 people in internal displacement, and UNHCR counted 573000.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Guatemala live mainly in the United States and Mexico.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources here don't record the causes of this displacement: there are no dated events or armed conflicts for Guatemala in them.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Storms, floods, earthquakes, mass movements, wildfires and extreme temperatures are the disasters recorded for Guatemala in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figure rose from 242000 in 2013 to 572813 in 2023 and stayed there in 2024 and 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2023 to 2025, after a big change between 2022 and 2023, the year IDMC recorded the most new displacements from conflict.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "UNHCR's and IDMC's figures overlap and are counted differently, so they are shown side by side and never added.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's file shows 0 for 2024, which in UNHCR's data can mean 0 or not reported.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside Guatemala people moved to.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    0,
+    242000,
+    572813,
+    573000
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "16ca4dc691bc3c69",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

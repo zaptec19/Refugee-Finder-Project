@@ -1,0 +1,97 @@
+{
+  "id": "pse-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside the State of Palestine by conflict and violence, as estimated by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC estimated 2035131 people living in internal displacement there.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The UNHCR figures on this page cover refugees and asylum seekers from the State of Palestine, not people displaced inside it.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources on this page don't record the causes of this displacement: there are no dated events or armed conflicts for the State of Palestine in them.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Floods and storms are the disasters recorded for the State of Palestine in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figure rose from 160000 in 2009 to 2035131 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2023 to 2025, after a big change between 2022 and 2023.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC recorded the most new displacements from conflict in 2023.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "IDMC's new displacements count movements, not people: one person forced to move several times in a year is counted each time.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Refugees from the State of Palestine counted by UNHCR live mainly in Greece and Belgium.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where inside the State of Palestine people moved to.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    160000,
+    2035131
+  ],
+  "prompt_version": 3,
+  "writer": "Claude",
+  "generated_on": "2026-11-22",
+  "factpack_hash": "0184ec20f92bcd14",
+  "status": "unchecked",
+  "checked_by": null,
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
