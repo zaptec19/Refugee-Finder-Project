@@ -454,35 +454,37 @@
   {
     "id": "mea-2016",
     "short": "Govt. of India",
-    "organisation": "Government of India, Ministry of External Affairs",
-    "dataset": "Answer in Parliament on Sri Lankan refugees in India (camp and non-camp figures)",
-    "release": "2016",
+    "organisation": "Government of India, Ministry of Home Affairs",
+    "dataset": "Answer in the Rajya Sabha on Sri Lankan refugees in India (camp and non-camp figures as on 1 January 2016)",
+    "release": "4 May 2016",
     "url": "",
     "licence": "Official parliamentary record; figures quoted with citation",
     "licence_url": "",
     "origin": "typed",
-    "raw": "content/gov_figures.csv (typed by the team from the official answer)",
+    "raw": "content/gov_figures.csv (typed by the team from the Rajya Sabha answer)",
     "clean_file": "data/clean/gov_figures.csv",
-    "status": "to_confirm",
     "csl": {
       "id": "mea-2016",
       "type": "document",
       "author": [
         {
-          "literal": "Ministry of External Affairs, Government of India"
+          "literal": "Ministry of Home Affairs, Government of India"
         }
       ],
       "issued": {
         "date-parts": [
           [
-            2016
+            2016,
+            5,
+            4
           ]
         ]
       },
-      "title": "Answer in Parliament on Sri Lankan refugees in India",
+      "title": "Answer to Unstarred Question No. 1175",
+      "container-title": "Rajya Sabha",
       "publisher": "Parliament of India"
     },
-    "to_check": "Date of the answer, house and question number (Rajya Sabha answers of 2 Mar and 4 May 2016 give the camp and non-camp figures as on 01.01.2016; the Lok Sabha answer of 10 Aug 2016 is unconfirmed)."
+    "to_check": "The question's exact title and a working link: the Rajya Sabha copy (rsdebate.nic.in, PQ 239, 04.05.2016, U1175, p. 141) now redirects to sansad.in. The same camp and non-camp figures appear in Starred Question No. 75, 2 Mar 2016."
   },
   {
     "id": "un-m49",

@@ -11,10 +11,11 @@
    "author": [
     {
      "family": "Balan",
-     "given": "D."
+     "given": "Divya"
     },
     {
-     "family": "Athray"
+     "family": "Athray",
+     "given": "Dharika"
     }
    ],
    "editor": [
@@ -32,16 +33,17 @@
    },
    "title": "Life of Sri Lankan refugee women in the camps of Tamil Nadu",
    "container-title": "The Routledge Handbook of Refugees in India",
-   "publisher": "Routledge"
-  },
-  "to_check": "Second author's initials; page range."
+   "publisher": "Routledge",
+   "page": "642-654",
+   "DOI": "10.4324/9781003246800-60"
+  }
  },
  {
   "id": "valatheeswaran-rajan-2011",
   "type": "journal article",
   "authors": "Valatheeswaran & Rajan",
   "year": 2011,
-  "title": "Sri Lankan Tamil refugees in India",
+  "title": "Sri Lankan Tamil refugees in India: Rehabilitation mechanisms, livelihood strategies, and lasting solutions",
   "csl": {
    "id": "valatheeswaran-rajan-2011",
    "type": "article-journal",
@@ -62,16 +64,20 @@
      ]
     ]
    },
-   "title": "Sri Lankan Tamil refugees in India"
-  },
-  "to_check": "Full title, journal, volume, issue, pages and DOI (left out until confirmed)."
+   "title": "Sri Lankan Tamil refugees in India: Rehabilitation mechanisms, livelihood strategies, and lasting solutions",
+   "container-title": "Refugee Survey Quarterly",
+   "volume": "30",
+   "issue": "2",
+   "page": "24-44",
+   "DOI": "10.1093/rsq/hdr005"
+  }
  },
  {
   "id": "suryanarayan-sudarsen-2000",
   "type": "book",
   "authors": "Suryanarayan & Sudarsen",
   "year": 2000,
-  "title": "Between fear and hope",
+  "title": "Between fear and hope: Sri Lankan refugees in Tamil Nadu",
   "csl": {
    "id": "suryanarayan-sudarsen-2000",
    "type": "book",
@@ -92,9 +98,11 @@
      ]
     ]
    },
-   "title": "Between fear and hope"
+   "title": "Between fear and hope: Sri Lankan refugees in Tamil Nadu",
+   "publisher": "T.R. Publications",
+   "publisher-place": "Chennai"
   },
-  "to_check": "Subtitle and publisher (left out until confirmed)."
+  "to_check": "Publisher (T.R. Publications, Chennai) is confirmed only by the author's later preface; check against a library record."
  },
  {
   "id": "caa-2019",
@@ -120,10 +128,11 @@
     ]
    },
    "title": "The Citizenship (Amendment) Act, 2019",
-   "container-title": "The Gazette of India, Extraordinary",
-   "number": "No. 47 of 2019"
+   "container-title": "The Gazette of India, Extraordinary, Part II, Section 1",
+   "number": "No. 47 of 2019",
+   "issue": "71"
   },
-  "to_check": "Gazette page reference."
+  "to_check": "Gazette issue No. 71 (12 Dec 2019) is from reproductions of the gazette page; check the official copy on egazette.gov.in."
  },
  {
   "id": "burma-citizenship-law-1982",
@@ -175,9 +184,10 @@
     ]
    },
    "title": "The Rohingyas: Inside Myanmar's hidden genocide",
-   "publisher": "Hurst"
-  },
-  "to_check": "edition"
+   "publisher": "Hurst & Company",
+   "publisher-place": "London",
+   "ISBN": "9781849046237"
+  }
  },
  {
   "id": "kirisci-2014",
@@ -228,9 +238,10 @@
      ]
     ]
    },
-   "title": "Temporary Protection Regulation"
-  },
-  "to_check": "Official Gazette number"
+   "title": "Temporary Protection Regulation",
+   "container-title": "Official Gazette of the Republic of Türkiye",
+   "number": "No. 29153"
+  }
  },
  {
   "id": "eu-turkey-2016",
@@ -256,9 +267,10 @@
     ]
    },
    "title": "EU-Turkey statement, 18 March 2016",
-   "publisher": "European Council"
-  },
-  "to_check": "press release number and URL"
+   "publisher": "European Council",
+   "number": "Press release 144/16",
+   "URL": "https://www.consilium.europa.eu/en/press/press-releases/2016/03/18/eu-turkey-statement/"
+  }
  },
  {
   "id": "monsutti-2005",
@@ -337,9 +349,9 @@
      ]
     ]
    },
-   "title": "Towards a peaceful, fair and prosperous future for the people of Rakhine: Final report of the Advisory Commission on Rakhine State"
-  },
-  "to_check": "URL of the official copy"
+   "title": "Towards a peaceful, fair and prosperous future for the people of Rakhine: Final report of the Advisory Commission on Rakhine State",
+   "URL": "https://www.kofiannanfoundation.org/publication/rakhine-final-report/"
+  }
  },
  {
   "id": "unhcr-rohingya-emergency",
@@ -392,14 +404,17 @@
    "issued": {
     "date-parts": [
      [
-      2019
+      2019,
+      8,
+      9
      ]
     ]
    },
    "title": "More than half a million Rohingya refugees receive identity documents, most for the first time",
-   "publisher": "UNHCR"
-  },
-  "to_check": "exact date (August 2019?) and URL"
+   "publisher": "UNHCR",
+   "genre": "Briefing note",
+   "URL": "https://www.unhcr.org/news/briefing-notes/more-half-million-rohingya-refugees-receive-identity-documents-most-first-time"
+  }
  },
  {
   "id": "icduygu-2015",
@@ -435,7 +450,7 @@
   "type": "report",
   "authors": "UNHCR",
   "year": 2012,
-  "title": "Solutions Strategy for Afghan Refugees",
+  "title": "Solutions Strategy for Afghan Refugees to support voluntary repatriation, sustainable reintegration and assistance to host countries",
   "csl": {
    "id": "unhcr-ssar-2012",
    "type": "report",
@@ -453,9 +468,9 @@
     ]
    },
    "title": "Solutions Strategy for Afghan Refugees to support voluntary repatriation, sustainable reintegration and assistance to host countries",
-   "publisher": "UNHCR"
-  },
-  "to_check": "exact full title and URL"
+   "publisher": "UNHCR",
+   "URL": "https://reliefweb.int/report/afghanistan/solutions-strategy-afghan-refugees-support-voluntary-repatriation-sustainable"
+  }
  },
  {
   "id": "unhcr-pak-afg-returns-9",
@@ -543,6 +558,113 @@
    "publisher": "Internal Displacement Monitoring Centre",
    "publisher-place": "Geneva",
    "URL": "https://www.internal-displacement.org/publications/2025-global-report-on-internal-displacement-grid"
+  }
+ },
+ {
+  "id": "un-news-2021-kabul",
+  "type": "news",
+  "authors": "UN News",
+  "year": 2021,
+  "title": "Afghanistan: Guterres urges restraint as Taliban reach Kabul; UN Security Council set to meet Monday",
+  "csl": {
+   "id": "un-news-2021-kabul",
+   "type": "article-newspaper",
+   "author": [
+    {
+     "literal": "UN News"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2021,
+      8,
+      15
+     ]
+    ]
+   },
+   "title": "Afghanistan: Guterres urges restraint as Taliban reach Kabul; UN Security Council set to meet Monday",
+   "container-title": "UN News",
+   "URL": "https://news.un.org/en/node/1097832"
+  }
+ },
+ {
+  "id": "unmis-2011-independence",
+  "type": "web page",
+  "authors": "United Nations Mission in Sudan",
+  "year": 2011,
+  "title": "Independence of South Sudan",
+  "csl": {
+   "id": "unmis-2011-independence",
+   "type": "webpage",
+   "author": [
+    {
+     "literal": "United Nations Mission in Sudan"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2011
+     ]
+    ]
+   },
+   "title": "Independence of South Sudan",
+   "publisher": "United Nations",
+   "URL": "https://peacekeeping.un.org/sites/default/files/past/unmis/referendum.shtml"
+  }
+ },
+ {
+  "id": "unhcr-flash-2024-syria",
+  "type": "report",
+  "authors": "UNHCR",
+  "year": 2024,
+  "title": "Regional Flash Update #1: Recent Syria escalations, 9 December 2024",
+  "csl": {
+   "id": "unhcr-flash-2024-syria",
+   "type": "report",
+   "author": [
+    {
+     "literal": "UNHCR"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2024,
+      12,
+      9
+     ]
+    ]
+   },
+   "title": "Regional Flash Update #1: Recent Syria escalations, 9 December 2024",
+   "publisher": "UNHCR",
+   "URL": "https://reliefweb.int/report/syrian-arab-republic/regional-flash-update-1-recent-syria-escalations-9-december-2024"
+  }
+ },
+ {
+  "id": "jrp-bgd-2025",
+  "type": "report",
+  "authors": "Government of Bangladesh and humanitarian partners",
+  "year": 2025,
+  "title": "Bangladesh: Rohingya humanitarian crisis joint response plan, January 2025 – December 2026",
+  "csl": {
+   "id": "jrp-bgd-2025",
+   "type": "report",
+   "author": [
+    {
+     "literal": "Government of Bangladesh and humanitarian partners"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2025
+     ]
+    ]
+   },
+   "title": "Bangladesh: Rohingya humanitarian crisis joint response plan, January 2025 – December 2026",
+   "URL": "https://reliefweb.int/report/bangladesh/bangladesh-rohingya-humanitarian-crisis-joint-response-plan-january-2025-december-2026"
   }
  }
 ]

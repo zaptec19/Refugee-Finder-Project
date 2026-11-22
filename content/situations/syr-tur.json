@@ -13,15 +13,13 @@
       "date": "2014-10-22",
       "title": "Türkiye's temporary protection regulation",
       "note": "Türkiye set out temporary protection for Syrians in a regulation, rather than granting refugee status case by case.",
-      "source_id": "turkey-tp-2014",
-      "to_check": "Official Gazette number and date"
+      "source_id": "turkey-tp-2014"
     },
     {
       "date": "2016-03-18",
       "title": "EU–Türkiye statement",
       "note": "The EU and Türkiye agreed that new irregular arrivals to the Greek islands could be returned to Türkiye, alongside EU funding for refugees in Türkiye.",
-      "source_id": "eu-turkey-2016",
-      "to_check": "press release number"
+      "source_id": "eu-turkey-2016"
     },
     {
       "date": "2023-02-06",
@@ -34,15 +32,17 @@
       "title": "Fall of the Assad government",
       "note": "The government of Bashar al-Assad fell. Returns from Türkiye to Syria rose afterwards in UNHCR's returns data.",
       "source_id": "unhcr-solutions-2026",
-      "to_check": "a source for the date"
+      "source_ids": [
+        "unhcr-solutions-2026",
+        "unhcr-flash-2024-syria"
+      ]
     }
   ],
   "limitations": [
     {
       "kind": "method",
       "text": "Temporary protection, reported as refugees",
-      "detail": "Türkiye registers Syrians under temporary protection rather than full refugee status. UNHCR reports them as refugees.",
-      "to_check": "UNHCR's footnote wording for Türkiye"
+      "detail": "Türkiye registers Syrians under temporary protection rather than full refugee status. UNHCR reports them as refugees: its notes say the figures are based on official data published by the Turkish Government, including the population under temporary protection, and that the refugee figure for Syrians in 2015 to 2018 was a government estimate."
     },
     {
       "kind": "coverage",

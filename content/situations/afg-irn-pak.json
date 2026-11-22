@@ -26,7 +26,10 @@
       "title": "Taliban take Kabul",
       "note": "The Taliban took control of Kabul. New arrivals in Iran and Pakistan followed; UNHCR's figures for 2022 also reflect a recount in Iran (see Limitations).",
       "source_id": "unhcr-pop-2026",
-      "to_check": "a source for the date"
+      "source_ids": [
+        "unhcr-pop-2026",
+        "un-news-2021-kabul"
+      ]
     },
     {
       "date": "2023-10",

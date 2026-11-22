@@ -14,7 +14,10 @@
       "title": "South Sudan becomes independent",
       "note": "South Sudan separated from Sudan. Figures for Sudan before and after 2011 cover different territory.",
       "source_id": "unhcr-pop-2026",
-      "to_check": "a source for the date"
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unmis-2011-independence"
+      ]
     },
     {
       "date": "2023-04",

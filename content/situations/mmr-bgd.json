@@ -71,8 +71,8 @@
     {
       "kind": "politics",
       "text": "Bangladesh has not signed the 1951 Refugee Convention",
-      "detail": "Rohingya in Bangladesh are recorded through joint registration with the government; their legal status in Bangladesh differs from refugee status under the Convention.",
-      "to_check": "wording on legal status (Bangladesh's own term for this group)"
+      "detail": "Rohingya in Bangladesh are recorded through joint registration with the government. Bangladesh does not recognise them as refugees: its term is Forcibly Displaced Myanmar Nationals (FDMN), and the joint response plan with humanitarian partners writes \"Rohingya refugees/FDMNs\".",
+      "source_id": "jrp-bgd-2025"
     },
     {
       "kind": "method",
