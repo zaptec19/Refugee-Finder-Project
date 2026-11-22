@@ -1241,3 +1241,18 @@ dialog.panel-right[open]:not(.tp):not(.map-dialog) { animation: dlg-solid 420ms 
   dialog[open]:not(.tp):not(.map-dialog), dialog.panel-right[open]:not(.tp):not(.map-dialog) { animation: none; }
   dialog[open]:not(.tp):not(.map-dialog) > * { animation: fade-in 120ms linear backwards; }
 }
+
+/* "Why they differ" on phones: the table stacks into one block per row (a heading, then one line per source
+   with the source's name beside it), instead of three narrow columns */
+.why__src { display: none; }
+@media (max-width: 599px) {
+  .table-wrap:has(> .table.why) { max-height: none; overflow: visible; border: 0; border-radius: 0; }
+  .table.why, .table.why tbody, .table.why tr, .table.why th, .table.why td { display: block; width: auto; }
+  .table.why thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .table.why tr { padding: 12px 0; border-bottom: var(--hair); }
+  .table.why tr:first-child { border-top: var(--hair); }
+  .table.why th[scope="row"] { position: static; padding: 0 0 6px; border: 0; background: none; white-space: normal;
+    font-size: var(--fs-15); font-weight: 600; color: var(--ink); }
+  .table.why td { display: grid; grid-template-columns: 7.5rem 1fr; gap: 10px; padding: 4px 0; border: 0; font-size: var(--fs-15); }
+  .table.why .why__src { display: block; color: var(--muted); font-size: var(--fs-13); line-height: 1.6; }
+}

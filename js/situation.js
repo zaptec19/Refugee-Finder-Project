@@ -631,9 +631,12 @@ function compareSources(el) {
     </div>`;
   }).join("");
   const why = S.compare_why || defaultWhy();
+  const colName = (c) => (SRC[c]?.short === "Govt. of India" ? "Government of India" : SRC[c]?.short || c);
+  // on phones the table stacks: each row becomes a heading with one line per source, so every cell
+  // carries its source's name (shown only when stacked; the column headers name them on wider screens)
   const whyHTML = why ? `<h3 class="sub-h">Why they differ</h3>
-    <div class="table-wrap"><table class="table why"><thead><tr><th scope="col"></th>${why.columns.map((c) => `<th scope="col">${esc(SRC[c]?.short === "Govt. of India" ? "Government of India" : SRC[c]?.short || c)}</th>`).join("")}</tr></thead>
-    <tbody>${why.rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th>${why.columns.map((c) => `<td>${esc(r[c] || "")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "";
+    <div class="table-wrap"><table class="table why"><thead><tr><th scope="col"><span class="sr-only">What differs</span></th>${why.columns.map((c) => `<th scope="col">${esc(colName(c))}</th>`).join("")}</tr></thead>
+    <tbody>${why.rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th>${why.columns.map((c) => `<td><span class="why__src" aria-hidden="true">${esc(colName(c))}</span><span class="why__txt">${esc(r[c] || "")}</span></td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "";
   const term = S.type === "idp" ? "IDP" : "refugee";
   el.innerHTML = `${S.headlines?.compare ? `<p class="step__lede">${fillTemplate(S.headlines.compare)}</p>` : ""}
     <div class="cbars" role="group" aria-label="One bar per source; bars are never added together">${bars}</div>
