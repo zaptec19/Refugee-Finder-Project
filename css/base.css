@@ -1087,8 +1087,17 @@ html.vt-ghosting #main { opacity: 0; }
 
 /* home: the first-visit load sequence starts from black */
 .intro-veil { position: fixed; inset: 0; z-index: 100; background: #000; pointer-events: none; }
-/* the search box glows as a whole; its input and text fields inside a glowing frame don't glow again */
-.ask input:focus-visible, .coll__note:focus-visible, .req input:focus-visible, .req textarea:focus-visible { box-shadow: none; outline: none; }
+/* the search box glows as a whole (.ask:focus-within); the input inside it never paints a box of its own, in any state.
+   :root[data-theme] beats the dark-mode :focus-visible glow (:root[data-theme="dark"] :focus-visible) on specificity. */
+:root[data-theme] .ask input, :root[data-theme] .ask input:hover, :root[data-theme] .ask input:focus, :root[data-theme] .ask input:focus-visible {
+  box-shadow: none; outline: none; border: 0; border-radius: 0; background: transparent; -webkit-appearance: none; appearance: none;
+}
+:root[data-theme] .ask input::-webkit-search-decoration { -webkit-appearance: none; }
+:root[data-theme] .ask input:-webkit-autofill, :root[data-theme] .ask input:autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset; box-shadow: 0 0 0 1000px var(--surface) inset; -webkit-text-fill-color: var(--ink);
+}
+/* collection notes and the request form show focus on the field itself (border, plus the ring or the dark glow): no outline on top */
+.coll__note:focus-visible, .req input:focus-visible, .req textarea:focus-visible { outline: none; }
 
 /* a leader from the end of a line to its label, when the label had to move to avoid another one */
 .end-label__lead { stroke: var(--muted); stroke-opacity: 0.6; stroke-width: 1; }
