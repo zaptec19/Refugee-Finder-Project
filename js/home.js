@@ -35,7 +35,7 @@ main.innerHTML = `
       <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
-      <span><button class="linklike" type="button" data-start-tour>New here? Take the 1-minute tour &rsaquo;</button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
+      <span class="home__links"><button class="tour-pill" type="button" id="tour-pill" data-start-tour aria-label="Take the 1-minute tour">${icon("compass", { size: 16 })}<span>Take the tour</span></button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
         <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">Years</button>
@@ -49,7 +49,15 @@ main.innerHTML = `
     </div>
   </div>`;
 
-intro();
+const introRan = intro();
+// first visit: once the load animation is done, the tour pill grows into a welcome card (js/welcome.js)
+import("./welcome.js").then((m) => {
+  if (!m.shouldOffer()) return;
+  setTimeout(() => {
+    if (document.getElementById("q")?.value || document.querySelector("dialog[open], .tour-card")) return;   // busy: ask another time
+    m.offerTour(document.getElementById("tour-pill"));
+  }, introRan ? 1300 : 500);
+});
 warmUp();                       // load the search data and model in the background
 const input = document.getElementById("q");
 const searchUI = await attachSearch(input);
@@ -122,12 +130,12 @@ if (preset) { input.value = preset; searchUI.run(); }
 
 /** The first visit in a session: the page fades up from black, the globe blooms in (its glow with it), then the
  *  question, the search box and the try-chips rise in, 60 ms apart. About 1.2 s; skipped on repeat visits in
- *  the same session, with reduced motion, and when coming back with the back button. */
+ *  the same session, with reduced motion, and when coming back with the back button. Returns whether it ran. */
 function intro() {
   let seen = true;
   try { seen = !!sessionStorage.getItem("wv1:intro-seen"); sessionStorage.setItem("wv1:intro-seen", "1"); } catch { /* storage blocked */ }
   const back = performance.getEntriesByType?.("navigation")?.[0]?.type === "back_forward";
-  if (seen || back || reducedMotion()) return;
+  if (seen || back || reducedMotion()) return false;
   const ease = "cubic-bezier(0.2, 0.8, 0.2, 1)";
   const veil = document.createElement("div");
   veil.className = "intro-veil";
@@ -141,4 +149,5 @@ function intro() {
     document.querySelector(sel)?.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }],
       { duration: 520, delay: 420 + i * 60, easing: ease, fill: "backwards" });
   });
+  return true;
 }
