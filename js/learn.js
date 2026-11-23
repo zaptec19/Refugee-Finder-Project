@@ -71,7 +71,7 @@ main.innerHTML = `<div class="page page--narrow learn">
   <section id="organisations" class="learn__section"><h2>About the organisations: mandates and limits</h2>
     <div class="orgs">${ORGS.map((o) => `<article class="card org" id="org-${o.id}"><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p><p class="small"><strong>Limits:</strong> ${esc(o.limits)}</p></article>`).join("")}</div></section>
 
-  <section id="tour" class="learn__section"><h2>The 2-minute tour</h2>
+  <section id="tour" class="learn__section"><h2>The 1-minute tour</h2>
     <p><button class="btn btn--primary" type="button" data-start-tour>Start the interactive tour</button>
       <span class="small muted">A card at a time, pointing at each part of the site. Or read the steps below.</span></p>
     <ol class="tour">

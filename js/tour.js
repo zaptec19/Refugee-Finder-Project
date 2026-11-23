@@ -1,5 +1,5 @@
 // The interactive tour: one small card at a time, pointing at the part of the screen it describes.
-// Next / Back / Skip, or the arrow keys and Esc. It starts on the home page and carries on in a real
+// Next / Back / Skip, or the arrow keys and Esc. Eight cards, one area of the screen each. It starts on the home page and carries on in a real
 // example (Sri Lankan refugees in India). Progress lives in localStorage ("wv1:tour") so a reload or the
 // jump to the example page picks up where it left off; it is cleared when the tour ends.
 import { store } from "./store.js";
@@ -8,43 +8,29 @@ import { icon } from "./icons.js";
 
 const EXAMPLE = "situation.html?id=lka-ind";
 
-/** Each step: the page it runs on, what to point at (a CSS selector, or none for a centred card), and two short lines. */
+/** Each step: the page it runs on, what to point at (a CSS selector, or a list tried in order; none for a centred
+ *  card), and at most two short sentences. Every card covers one area of the screen. */
 export const STEPS = [
-  { page: "home", title: "Welcome to Refugee Finder",
-    text: "A research companion for data on people forced from their homes. This tour takes about two minutes: read each card, then press Next." },
   { page: "home", target: "#q", title: "Ask anything",
-    text: "Type a country, a group of people or a question, like “Tamils who fled to India”. Search understands meaning, not just exact names." },
-  { page: "home", target: ".home__try", title: "Not sure where to start?",
-    text: "These chips open well-documented situations. Each one is a full page you can read from top to bottom." },
+    text: "Type a country, a group of people or a question, like “Tamils who fled to India”. Not sure where to start? Try one of the examples below the search bar." },
   { page: "home", target: "#globe", title: "The globe",
-    text: "Countries are shaded by how many people were displaced from them. Drag to turn it; click a country for a preview, and again to open it. Plain land means no data, not zero." },
-  { page: "*", target: ".topbar__fmt", title: "Your number format",
-    text: "Switch between Indian and international digit grouping. Every number on the site follows it, including your exports." },
-  { page: "*", target: "#guide-toggle", title: "Guide mode",
-    text: "Turn this on to get a short tip at each step of a situation page, after the tour." },
-  { page: "*", target: ".topbar__coll", title: "My collection",
-    text: "Numbers, charts and readings you pin are kept here, each with its citation, ready to export." },
-  { page: "home", title: "Now a real example",
-    text: "Next opens Sri Lankan refugees in India, and the tour carries on there.", go: EXAMPLE },
+    text: "Countries are shaded by how many people were displaced from them. Drag to turn it, and click a country to preview it; click again to open it." },
+  { page: "*", target: ".topbar__fmt", title: "Make it yours",
+    text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. Guide mode, next to it, gives a short tip on each part of a page.",
+    go: EXAMPLE, note: "Next: a real example" },
   { page: "situation", target: "#brief", title: "Start with the brief",
     text: "What happened, why people moved, when and how, in plain words. The label under it says who wrote it and whether the team has checked it." },
   { page: "situation", target: "#key-numbers .kn", title: "Key numbers",
-    text: "At most three. Each card says what is counted, where, and for which year." },
-  { page: "situation", target: "#key-numbers [data-explain]", title: "What does it mean?",
-    text: "Press ? for a plain-language explainer: what is counted, what isn't, and how reliable it is." },
-  { page: "situation", target: "#key-numbers .kn__value", title: "Where does it come from?",
-    text: "Click any number to trace it: the dataset, its definition, the footnote and the original row." },
+    text: "Press ? to see what a number counts and how reliable it is. Click the number itself to trace it back to the original dataset row." },
   { page: "situation", target: "#over-time", title: "Over time",
-    text: "The line shows how the figure changed. Grey bands are years of armed conflict and markers are events: they show timing, not proof of cause." },
-  { page: "situation", target: "#compare", title: "Compare sources",
-    text: "When sources disagree, both are shown, and “Why they differ” explains the gap." },
-  { page: "situation", target: "#limitations", title: "Limitations",
-    text: "Read these before you quote a number: what the data can't tell you." },
-  { page: "situation", target: "#key-numbers .pin-btn", title: "Pin what you need",
-    text: "Pin numbers, charts and readings to your collection. The citation comes with them." },
-  { page: "*", target: ".topbar__coll", title: "Export when you're ready",
-    text: "Open My collection to add notes, then export a Word table, Excel or CSV with APA, Chicago or Harvard references.", last: true },
+    text: "How the figure changed, with conflict years and key events underneath. They show timing, not proof of cause." },
+  { page: "situation", target: ["#compare", "#limitations"], title: "Before you quote a number",
+    text: "Compare sources shows where datasets disagree and why. Limitations, further down, lists what the data can't tell you." },
+  { page: "situation", target: "#key-numbers .pin-btn", title: "Pin and export", last: true,
+    text: "Pin numbers, charts and readings; their citations come with them. Open My collection (top right) to export a Word table, Excel or CSV with references." },
 ];
+// saved progress from an older tour (17 steps) is not resumed: it starts again at step 1
+const TOUR_VERSION = 2;
 
 let ui = null;          // { ring, card, live }
 let index = -1;
@@ -56,7 +42,7 @@ const pageOf = () => document.body.dataset.page || "";
 
 /** Start the tour from the first step (on the home page; from anywhere else it opens the home page first). */
 export function startTour() {
-  store.set("tour", { i: 0 });
+  store.set("tour", { i: 0, v: TOUR_VERSION });
   if (pageOf() !== "home") { location.href = "index.html"; return; }
   show(0);
 }
@@ -67,6 +53,11 @@ export function resumeTour() {
   if (params.get("tour") === "1" && pageOf() === "home") { startTour(); return; }
   const st = store.get("tour", null);
   if (!st || typeof st.i !== "number") return;
+  if (st.v !== TOUR_VERSION || st.i > STEPS.length - 1) {          // progress from the old 17-step tour
+    store.set("tour", { i: 0, v: TOUR_VERSION });
+    if (pageOf() === "home") show(0);
+    return;
+  }
   const i = firstStepFor(st.i);
   if (i < 0) { end(); return; }
   show(i);
@@ -114,7 +105,7 @@ const isTyping = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName || ""
 async function show(i) {
   build();
   index = i;
-  store.set("tour", { i });
+  store.set("tour", { i, v: TOUR_VERSION });
   const s = STEPS[i];
   current = s.target ? await waitFor(s.target) : null;
   if (index !== i) return;                       // the reader moved on while we waited
@@ -128,10 +119,12 @@ async function show(i) {
     </div>
     <h2 class="tour-card__title" id="tour-title">${esc(s.title)}</h2>
     <p class="tour-card__text" id="tour-text">${esc(s.text)}</p>
+    ${s.note && s.go && pageOf() !== "situation" ? `<p class="tour-card__note">${esc(s.note)}</p>` : ""}
     <div class="tour-card__progress" aria-hidden="true">${STEPS.map((_, k) => `<span class="${k === i ? "on" : k < i ? "done" : ""}"></span>`).join("")}</div>
     <div class="tour-card__actions">
-      ${i > 0 ? '<button class="btn btn--ghost" type="button" data-tour="back">Back</button>' : '<button class="btn btn--ghost" type="button" data-tour="skip">Skip tour</button>'}
-      <button class="btn btn--primary" type="button" data-tour="next">${s.last ? "Finish" : s.go ? "Open the example" : "Next"}</button>
+      <button class="linklike tour-card__skip" type="button" data-tour="skip">Skip tour</button>
+      <span class="tour-card__nav">${i > 0 ? '<button class="btn btn--ghost" type="button" data-tour="back">Back</button>' : ""}
+      <button class="btn btn--primary" type="button" data-tour="next">${s.last ? "Done" : "Next"}</button></span>
     </div>`;
   ui.card.classList.toggle("tour-card--center", !current);
   ui.ring.classList.toggle("tour-ring--full", !current);
@@ -172,9 +165,11 @@ function settle(el, i) {
 
 function waitFor(sel, ms = 8000) {
   const t0 = performance.now();
+  const sels = Array.isArray(sel) ? sel : [sel];
   return new Promise((resolve) => {
     (function poll() {
-      const el = document.querySelector(sel);
+      // a list of targets: the first one this page has (e.g. Compare sources, else Limitations)
+      const el = sels.map((x) => document.querySelector(x)).find((x) => x && x.getBoundingClientRect().width > 0) || document.querySelector(sels[0]);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
       // phones: Guide and My collection are inside the top-bar menu, so point at the menu button
       const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
@@ -227,7 +222,7 @@ function advance(from, dir) {
   if (i < 0) return;
   if (i >= STEPS.length) { end(); return; }
   if (onThisPage(STEPS[i])) { show(i); return; }
-  store.set("tour", { i });
+  store.set("tour", { i, v: TOUR_VERSION });
   location.href = STEPS[from].go && dir > 0 ? STEPS[from].go : urlFor(STEPS[i]);
 }
 
