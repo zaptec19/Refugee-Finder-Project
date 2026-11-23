@@ -1347,7 +1347,7 @@ a.cite--missing { color: var(--danger); }
 
 
 /* home: the tour pill (bottom left) */
-.home__links { display: inline-flex; align-items: center; gap: 8px; }
+.home__links { display: inline-flex; align-items: center; }   /* the footer cell that holds the tour pill */
 .tour-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 9px; border-radius: 999px; font: inherit; font-weight: 500;
   color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent-ui) 40%, transparent); cursor: pointer;
   transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); position: relative; }

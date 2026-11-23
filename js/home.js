@@ -35,7 +35,7 @@ main.innerHTML = `
       <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
-      <span class="home__links"><button class="tour-pill" type="button" id="tour-pill" data-start-tour title="A 1-minute tour of the site">${icon("compass", { size: 16 })}<span>Take the tour</span></button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
+      <span class="home__links"><button class="tour-pill" type="button" id="tour-pill" data-start-tour title="A 1-minute tour of the site">${icon("compass", { size: 16 })}<span>Take the tour</span></button></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
         <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">Years</button>
