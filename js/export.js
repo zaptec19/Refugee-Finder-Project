@@ -158,7 +158,7 @@ async function toDocx(list, opts, onStatus) {
     rows: [
       new d.TableRow({ tableHeader: true, children: head.map((h, k) => cell(h, { bold: true, right: k === 0, width: widths[k] })) }),
       ...rows.map((r) => new d.TableRow({ children: [
-        cell(r.number_shown || (r.kind === "chart" ? "chart" : r.kind === "reading" ? "reading" : ""), { right: true }),
+        cell(r.number_shown || (r.kind === "chart" ? "chart" : r.kind === "map" ? "map" : r.kind === "reading" ? "reading" : ""), { right: true }),
         cell(r.what_it_measures), cell(r.place), cell(r.year), cell(r.source), cell(r.my_note),
       ] })),
     ],
@@ -249,7 +249,7 @@ async function toXlsx(list, opts, onStatus) {
   ws.columns = cols;
   ws.getRow(1).font = { bold: true };
   for (const [k, r] of rows.entries()) {
-    const row = ws.addRow({ ...r, number: r.number ?? (r.kind === "chart" ? "chart" : r.kind === "reading" ? "reading" : null) });
+    const row = ws.addRow({ ...r, number: r.number ?? (r.kind === "chart" ? "chart" : r.kind === "map" ? "map" : r.kind === "reading" ? "reading" : null) });
     const c = row.getCell("number");
     if (list[k].kind === "number") {
       if (list[k].unit === "percent") { c.value = r.number / 100; c.numFmt = "0.0%"; } else { c.numFmt = NUMFMT[mode()]; }

@@ -55,6 +55,7 @@ function valueCell(i) {
     return i.situation_id ? `<button class="num-link" type="button" data-trace-key="${esc(i.key)}">${v}<span class="sr-only">: see where this number comes from</span></button>` : v;
   }
   if (i.kind === "chart") return `<span class="muted">${icon("chart", { size: 14 })} chart</span>`;
+  if (i.kind === "map") return `<span class="muted">${icon("map", { size: 14 })} map</span>`;
   if (i.kind === "reading") return `<span class="muted">reading</span>`;
   return `<span class="muted">note</span>`;
 }
@@ -65,7 +66,7 @@ function tableHTML(list) {
       <th scope="col">Year</th><th scope="col">Source</th><th scope="col">My note</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
     <tbody>${list.map((i, n) => `<tr data-key="${esc(i.key)}">
       <td class="num coll__num" data-label="Number">${valueCell(i)}</td>
-      <td data-label="What it measures">${i.kind === "chart" && i.url ? `<a href="${esc(i.url)}">${esc(i.label)}</a>` : i.kind === "note" ? "" : esc(i.what || i.label)}</td>
+      <td data-label="What it measures">${(i.kind === "chart" || i.kind === "map") && i.url ? `<a href="${esc(i.url)}">${esc(i.label)}</a>` : i.kind === "note" ? "" : esc(i.what || i.label)}</td>
       <td data-label="Place">${esc(i.place || "")}</td>
       <td class="tabular" data-label="Year">${esc(i.year ?? "")}</td>
       <td data-label="Source">${esc(i.source_label || i.source_short || "")}</td>

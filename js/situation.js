@@ -1,4 +1,5 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
+import { MAP_SOURCE } from "./config.js";
 import { initPage, guideTip } from "./layout.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
@@ -113,9 +114,17 @@ async function main() {
   const mini = renderMiniGlobe(document.getElementById("mini-globe"), {
     origin: s.origin_iso3, hosts, originName: s.origin_name,
     // click (or Enter/Space) opens the larger map in a pop-out; the module loads only when asked for
-    onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn })),
+    onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn, pinItem: mapItem() })),
     hostNames: s.type === "named" ? hosts.map((h) => s.hosts_latest.find((x) => x.host_iso3 === h)?.name || h) : [s.host_name].filter(Boolean),
-  }).then(() => document.getElementById("mini-globe").removeAttribute("aria-busy"))
+  }).then(() => {
+    const fig = document.getElementById("mini-globe");
+    fig.removeAttribute("aria-busy");
+    // the map can be pinned: its citation is Natural Earth (the borders), plus the source of its figures
+    fig.insertAdjacentHTML("beforeend", `<div class="mini-globe__pin">${pinButton({ key: mapItem().key, label: `the map of ${s.title}` })}</div>`);
+    const pb = fig.querySelector(".mini-globe__pin .pin-btn");
+    pb.addEventListener("click", () => pin(mapItem(), pb));
+    syncPins(fig);
+  })
     .catch((e) => { console.error(e); document.getElementById("mini-globe").innerHTML = '<p class="small muted">Map could not load.</p>'; });
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
   requestAnimationFrame(() => { revealSteps(); countUp(mainEl.querySelector('[data-body="key_numbers"]')); });
@@ -130,6 +139,19 @@ async function main() {
 
 // =================================================================== helpers
 const place = () => CTX.place();
+
+/** The situation's map as a collection item: cited as Natural Earth (the borders), with the figures' source too. */
+function mapItem() {
+  const figId = S.type === "idp" ? S.series?.[S.main_measure]?.[0]?.source_id || "idmc-conflict-2026" : "unhcr-pop-2026";
+  const ne = SRC["natural-earth"];
+  return {
+    kind: "map", key: `map:${S.id}`, label: `Map: ${S.title}`, what: `Map: ${S.title} (origin and host countries)`,
+    place: place(), year: S.years?.[1], source_short: `Natural Earth; ${SRC[figId]?.short || ""}`.replace(/; $/, ""),
+    source_label: `${MAP_SOURCE.mini.replace(/^Map: /, "")}; figures: ${SRC[figId]?.short || ""}`, release: `world-atlas ${MAP_SOURCE.atlasVersion}`,
+    csl: ne?.csl, csls: [SRC[figId]?.csl].filter(Boolean),
+    situation_id: S.id, situation_title: S.title, url: `situation.html?id=${S.id}`,
+  };
+}
 const hostName = (iso) => CTX.hostName(iso);
 const srcShort = (id) => SRC[id]?.short || id;
 const series = (k) => S.series?.[k] || [];

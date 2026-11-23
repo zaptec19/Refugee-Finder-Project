@@ -1404,3 +1404,9 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
   /* the phone mini globe card is narrow: one line, slightly smaller, allowed into the card's padding */
   .mini-globe__src { font-size: 10px; white-space: nowrap; margin-inline: -8px; }
 }
+
+/* pin a map: top left of the mini globe card (the expand icon is top right), and in the big map's toolbar */
+.mini-globe { position: relative; }
+.mini-globe__pin { position: absolute; top: 8px; left: 8px; z-index: 2; }
+.mini-globe__pin .pin-btn { background: var(--surface); }
+.map-dialog__pin:empty { display: none; }
