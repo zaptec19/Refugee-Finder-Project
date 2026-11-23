@@ -1400,13 +1400,14 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 .borders-pop p { margin: 0 0 var(--s-2); }
 .borders-pop p:last-child { margin: 0; }
 .borders-pop__h { font-weight: 600; }
-@media (max-width: 600px) {
-  /* the phone mini globe card is narrow: one line, slightly smaller, allowed into the card's padding */
-  .mini-globe__src { font-size: 10px; white-space: nowrap; margin-inline: -8px; }
-}
+.mini-globe__src { text-wrap: balance; }   /* the source line now runs to two short lines */
 
 /* pin a map: top left of the mini globe card (the expand icon is top right), and in the big map's toolbar */
 .mini-globe { position: relative; }
 .mini-globe__pin { position: absolute; top: 8px; left: 8px; z-index: 2; }
 .mini-globe__pin .pin-btn { background: var(--surface); }
 .map-dialog__pin:empty { display: none; }
+
+/* maps: an origin India's official map doesn't show as a separate area (Western Sahara, Kosovo) */
+.map-missing { margin: var(--s-2, 8px) 0 0; padding: 6px 10px; border-left: 3px solid var(--line-strong); color: var(--muted); line-height: 1.45; text-align: left; }
+.mini-globe > .map-missing:only-child, #cg > .map-missing:only-child { margin: 0; }

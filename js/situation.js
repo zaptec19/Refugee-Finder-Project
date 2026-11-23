@@ -1,5 +1,5 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
-import { MAP_SOURCE } from "./config.js";
+import { MAP_SOURCE, NOT_SEPARATE } from "./config.js";
 import { initPage, guideTip } from "./layout.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
@@ -111,14 +111,18 @@ async function main() {
   setupRail();
 
   const hosts = s.type === "named" ? s.hosts : s.host_iso3 ? [s.host_iso3] : [];
+  // Western Sahara and Kosovo are not separate areas on India's official map: say so, with whose figures these are
+  const figSrc = SRC[s.series?.[s.main_measure]?.[0]?.source_id]?.short || "UNHCR";
+  const missingNote = NOT_SEPARATE[s.origin_iso3] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[s.origin_iso3], figSrc) : "";
   const mini = renderMiniGlobe(document.getElementById("mini-globe"), {
-    origin: s.origin_iso3, hosts, originName: s.origin_name,
+    origin: s.origin_iso3, hosts, originName: NOT_SEPARATE[s.origin_iso3] || s.origin_name, missingNote,
     // click (or Enter/Space) opens the larger map in a pop-out; the module loads only when asked for
-    onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn, pinItem: mapItem() })),
+    onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn, pinItem: mapItem(), missingNote })),
     hostNames: s.type === "named" ? hosts.map((h) => s.hosts_latest.find((x) => x.host_iso3 === h)?.name || h) : [s.host_name].filter(Boolean),
   }).then(() => {
     const fig = document.getElementById("mini-globe");
     fig.removeAttribute("aria-busy");
+    if (!fig.querySelector("svg")) return;          // no map drawn (only the note): nothing to pin
     // the map can be pinned: its citation is Natural Earth (the borders), plus the source of its figures
     fig.insertAdjacentHTML("beforeend", `<div class="mini-globe__pin">${pinButton({ key: mapItem().key, label: `the map of ${s.title}` })}</div>`);
     const pb = fig.querySelector(".mini-globe__pin .pin-btn");
@@ -147,7 +151,7 @@ function mapItem() {
   return {
     kind: "map", key: `map:${S.id}`, label: `Map: ${S.title}`, what: `Map: ${S.title} (origin and host countries)`,
     place: place(), year: S.years?.[1], source_short: `Natural Earth; ${SRC[figId]?.short || ""}`.replace(/; $/, ""),
-    source_label: `${MAP_SOURCE.mini.replace(/^Map: /, "")}; figures: ${SRC[figId]?.short || ""}`, release: `world-atlas ${MAP_SOURCE.atlasVersion}`,
+    source_label: `${MAP_SOURCE.mini.replace(/^Borders: /, "")}; figures: ${SRC[figId]?.short || ""}`, release: `Natural Earth ${MAP_SOURCE.release}, India point of view`,
     csl: ne?.csl, csls: [SRC[figId]?.csl].filter(Boolean),
     situation_id: S.id, situation_title: S.title, url: `situation.html?id=${S.id}`,
   };

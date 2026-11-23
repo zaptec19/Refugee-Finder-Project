@@ -89,6 +89,7 @@ function build() {
         <span class="map-dialog__pin"></span>
       </div>
       <p class="map-dialog__extra small muted" hidden></p>
+      <p class="map-missing small" hidden></p>
       <footer class="map-dialog__foot small muted">
         <p class="map-dialog__cap"></p>
         <p class="map-dialog__src"></p>
@@ -103,7 +104,7 @@ function build() {
 let ctx = null;   // { trigger, map, S, MEAS, SRC, fig, table }
 
 /** Open the larger map for a situation. `trigger` is the mini globe button (focus goes back to it on close). */
-export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null }) {
+export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null, missingNote = "" }) {
   if (busy || dlg?.open) return;
   busy = true;
   build();
@@ -112,6 +113,9 @@ export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null }) {
   dlg.querySelector(".map-dialog__title").textContent = `${S.origin_name}${hostNames.length ? ` to ${hostNames.join(" and ")}` : ""}`;
   dlg.querySelector(".map-dialog__cap").innerHTML = hostNames.length
     ? `from ${esc(S.origin_name)} <span aria-hidden="true">&rsaquo;</span> to ${hostNames.map(esc).join(" and ")}` : esc(S.origin_name);
+  const miss = dlg.querySelector(".map-missing");
+  miss.textContent = missingNote;
+  miss.hidden = !missingNote;
   const pinSlot = dlg.querySelector(".map-dialog__pin");
   pinSlot.innerHTML = pinItem ? pinButton({ key: pinItem.key, label: `the map of ${S.title}` }) : "";
   pinSlot.querySelector(".pin-btn")?.addEventListener("click", (e) => pin(pinItem, e.currentTarget));

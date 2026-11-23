@@ -39,11 +39,11 @@ main.innerHTML = `<div class="page page--narrow">
       </div></article>`;
   }).join("")}
   <article class="card dset" id="maps">
-    <div class="dset__head"><div><p class="eyebrow">Natural Earth</p><h2>Country borders for the maps</h2><p class="muted small">Natural Earth, via the world-atlas package</p></div></div>
+    <div class="dset__head"><div><p class="eyebrow">Natural Earth</p><h2>Country borders for the maps</h2><p class="muted small">Natural Earth, India point of view</p></div></div>
     <dl class="dset__dl">
-      <dt>Covers</dt><dd>Admin 0 countries (country borders and outlines)</dd>
-      <dt>Format</dt><dd>TopoJSON from the <a href="https://github.com/topojson/world-atlas">world-atlas</a> npm package ${esc(MAP_SOURCE.atlasVersion)} (ISC licence)</dd>
-      <dt>Scales</dt><dd>1:110m on the home globe; 1:50m on the smaller maps and the big map</dd>
+      <dt>Covers</dt><dd>Admin 0 countries, India point of view (<code>ne_10m_admin_0_countries_ind</code>): borders as on India's official maps</dd>
+      <dt>Release</dt><dd>Natural Earth ${esc(MAP_SOURCE.release)} (<a href="https://github.com/nvkelso/natural-earth-vector/tree/${esc(MAP_SOURCE.release)}">natural-earth-vector</a>), 1:10m</dd>
+      <dt>Format</dt><dd>TopoJSON made by this site's pipeline: simplified on the shared borders (neighbours keep one common line), to about the detail of a 1:110m map for the home globe and a 1:50m map for the smaller maps and the big map. <a href="${esc(MAP_SOURCE.files[50])}" download>50m file</a> · <a href="${esc(MAP_SOURCE.files[110])}" download>110m file</a></dd>
       <dt>Licence</dt><dd><a href="https://www.naturalearthdata.com/about/terms-of-use/">Public domain</a></dd>
       <dt>Borders</dt><dd>${esc(MAP_SOURCE.bordersNote)}</dd>
     </dl>

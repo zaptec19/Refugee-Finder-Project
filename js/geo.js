@@ -1,12 +1,12 @@
-// Shared map data: world-atlas TopoJSON -> features keyed by ISO3.
+// Shared map data: TopoJSON country borders (Natural Earth, India point of view) -> features keyed by ISO3.
 import * as topojson from "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm";
 import { countries } from "./data.js";
 import { MAP_SOURCE } from "./config.js";
 
-// the version here and in every map's source line comes from one place (js/config.js MAP_SOURCE)
+// Natural Earth's India point of view, built by pipeline/geo.py (same ids and names as world-atlas used to give)
 const ATLAS = {
-  110: `https://cdn.jsdelivr.net/npm/world-atlas@${MAP_SOURCE.atlasVersion}/countries-110m.json`,
-  50: `https://cdn.jsdelivr.net/npm/world-atlas@${MAP_SOURCE.atlasVersion}/countries-50m.json`,
+  110: new URL(`../${MAP_SOURCE.files[110]}`, import.meta.url).href,
+  50: new URL(`../${MAP_SOURCE.files[50]}`, import.meta.url).href,
 };
 const loaded = new Map();
 

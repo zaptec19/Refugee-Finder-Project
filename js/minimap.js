@@ -51,8 +51,11 @@ export async function renderMiniGlobe(el, opts) {
   const geo = await worldFeatures(50);
   const D = dims(size);
   const base = setup(geo, opts);
+  // an origin India's official map doesn't show as a separate area (opts.missingNote says so, under the map)
+  const note = !base.fo && opts.missingNote ? `<p class="map-missing small">${esc(opts.missingNote)}</p>` : "";
   if (!base.focus.length) {
-    el.innerHTML = `<p class="small muted">No map shape for this place.</p>`;
+    // nothing to highlight (no host either): the note takes the map's place
+    el.innerHTML = note || `<p class="small muted">No map shape for this place.</p>`;
     return undefined;
   }
   if (size === "large") return largeMap(el, geo, D, base, opts);
@@ -74,8 +77,8 @@ export async function renderMiniGlobe(el, opts) {
     ${open}
     <div class="mini-globe__cap">${caption}</div>
     <div class="mini-globe__legend small muted${base.hostPairs.length > 1 ? " mini-globe__legend--stack" : ""}" aria-hidden="true">
-      <span><i class="sw sw-o"></i>${esc(originName)}</span>${base.hostPairs.map((h) => `<span><i class="sw sw-h"></i>${esc(h.name)}</span>`).join("")}
-    </div>
+      ${base.fo ? `<span><i class="sw sw-o"></i>${esc(originName)}</span>` : ""}${base.hostPairs.map((h) => `<span><i class="sw sw-h"></i>${esc(h.name)}</span>`).join("")}
+    </div>${note}
     <div class="mini-globe__src map-src"><span title="${esc(MAP_SOURCE.miniTitle)}">${esc(MAP_SOURCE.mini)}</span> · <a href="datasets.html#maps">About borders</a></div>`;
   if (opts.onExpand) {
     const btn = el.querySelector(".mini-globe__btn");

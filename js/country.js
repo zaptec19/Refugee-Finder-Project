@@ -2,6 +2,7 @@
 // Each measure is its own card and its own line: refugees and other people in need of international protection
 // (OIP) are never added, UNHCR and IDMC IDP figures are never added, and IDMC's yearly new displacements (a count of
 // movements) get their own bar charts instead of sharing an axis with the year-end totals.
+import { MAP_SOURCE, NOT_SEPARATE } from "./config.js";
 import { initPage } from "./layout.js";
 import { getJSON, glossary as loadGlossary } from "./data.js";
 import { esc, numHTML, applyNumbers, fmt } from "./format.js";
@@ -134,7 +135,10 @@ try {
       table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "value", label: `New displacements (${word})`, type: "num" }], rows: pts },
     });
   }
-  renderMiniGlobe(document.getElementById("cg"), { origin: iso, hosts: [], originName: c.name }).catch(() => {});
+  // an area India's official map doesn't show separately: the note in place of the mini map (whose figures: the page's)
+  const figSrc = ["hosted", "from"].some((g) => Object.values(c[g] || {}).some((v) => v?.some?.(([, x]) => x != null))) ? "UNHCR" : "IDMC";
+  renderMiniGlobe(document.getElementById("cg"), { origin: iso, hosts: [], originName: NOT_SEPARATE[iso] || c.name,
+    missingNote: NOT_SEPARATE[iso] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[iso], figSrc) : "" }).catch(() => {});
 } catch (e) {
   console.error(e);
   main.innerHTML = `<div class="page page--narrow"><div class="empty-state"><h3>No data for this country</h3>

@@ -532,15 +532,15 @@
   {
     "id": "natural-earth",
     "short": "Natural Earth",
-    "label": "Natural Earth country borders (maps)",
+    "label": "Natural Earth country borders, India point of view (maps)",
     "organisation": "Natural Earth",
-    "dataset": "Admin 0 – Countries (country borders for the maps)",
-    "release": "via world-atlas 2.0.2 (TopoJSON; 1:110m and 1:50m)",
+    "dataset": "Admin 0 – Countries, India point of view (country borders for the maps)",
+    "release": "v5.1.2 (layer 5.1.1), 1:10m; simplified by this site for 1:110m and 1:50m maps",
     "url": "https://www.naturalearthdata.com/",
     "licence": "Public domain",
     "licence_url": "https://www.naturalearthdata.com/about/terms-of-use/",
-    "origin": "cdn",
-    "raw": "world-atlas@2.0.2 countries-110m.json and countries-50m.json (jsDelivr), loaded by the browser",
+    "origin": "pipeline",
+    "raw": "natural-earth-vector v5.1.2 10m_cultural/ne_10m_admin_0_countries_ind (pipeline/geo.py -> data/web/geo/)",
     "clean_file": "",
     "csl": {
       "id": "natural-earth",
@@ -550,9 +550,10 @@
           "literal": "Natural Earth"
         }
       ],
-      "title": "Admin 0 – Countries",
-      "medium": "TopoJSON via world-atlas 2.0.2, 1:110m and 1:50m",
-      "URL": "https://www.naturalearthdata.com/",
+      "title": "Admin 0 – Countries, India point of view",
+      "version": "5.1.2",
+      "medium": "1:10m",
+      "URL": "https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2",
       "accessed": {
         "date-parts": [
           [

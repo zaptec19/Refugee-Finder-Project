@@ -71,7 +71,7 @@ main.innerHTML = `<div class="page page--narrow learn">
 
   <section id="organisations" class="learn__section"><h2>About the organisations: mandates and limits</h2>
     <div class="orgs">${ORGS.map((o) => `<article class="card org" id="org-${o.id}"><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p><p class="small"><strong>Limits:</strong> ${esc(o.limits)}</p></article>`).join("")}</div>
-    <p class="small" id="maps-data" style="margin-top:16px;max-width:72ch"><strong>Maps.</strong> Country borders come from Natural Earth (public domain), delivered by the world-atlas ${esc(MAP_SOURCE.atlasVersion)} package: 1:110m on the home globe, 1:50m on the smaller maps. ${esc(MAP_SOURCE.bordersNote)} <a href="datasets.html#maps">Map data &rsaquo;</a></p></section>
+    <p class="small" id="maps-data" style="margin-top:16px;max-width:72ch"><strong>Maps.</strong> Country borders come from Natural Earth's India point of view (${esc(MAP_SOURCE.release)}, public domain), simplified for the home globe and the smaller maps. ${esc(MAP_SOURCE.bordersNote)} <a href="datasets.html#maps">Map data &rsaquo;</a></p></section>
 
   <section id="tour" class="learn__section"><h2>The 1-minute tour</h2>
     <p><button class="btn btn--primary" type="button" data-start-tour>Start the interactive tour</button>
