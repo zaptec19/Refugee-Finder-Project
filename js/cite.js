@@ -129,21 +129,50 @@ export function loadCiteEngine() {
 
 const stripEntry = (html) => html.replace(/<div class="csl-bib-body">|<\/div>\s*$/g, "").replace(/<div class="csl-entry">/g, "").trim();
 
-/** One reference: { text, html }. `detail` (e.g. "Sri Lanka to India, 2016") is added after it. */
+/** Make the URLs and DOIs (https://doi.org/...) in a formatted citation clickable. The link text is exactly the
+ *  URL as printed, so a citation selected and copied by hand reads the same; a full stop, comma or unmatched
+ *  bracket that ends the sentence stays outside the link. (js/links.js opens them in a new tab.) */
+export function linkify(html) {
+  let inLink = false;
+  return html.split(/(<[^>]+>)/).map((part) => {
+    if (part.startsWith("<")) {
+      if (/^<a[\s>]/i.test(part)) inLink = true;
+      else if (/^<\/a>/i.test(part)) inLink = false;
+      return part;
+    }
+    if (inLink) return part;
+    return part.replace(/https?:\/\/[^\s<]+/g, (m) => {
+      let url = m;
+      let tail = "";
+      for (;;) {
+        const last = url.slice(-1);
+        if (/[.,;:]/.test(last)) { tail = last + tail; url = url.slice(0, -1); continue; }
+        if (last === ")" && (url.match(/\(/g) || []).length < (url.match(/\)/g) || []).length) { tail = last + tail; url = url.slice(0, -1); continue; }
+        break;
+      }
+      const href = url.replace(/&amp;/g, "&").replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      return `<a href="${href}">${url}</a>${tail}`;
+    });
+  }).join("");
+}
+const withLinks = (c) => ({ ...c, html: linkify(c.html || "") });
+
+/** One reference: { text, html }. `detail` (e.g. "Sri Lanka to India, 2016") is added after it. The html has its
+ *  URLs and DOIs as links; the text is plain. */
 export async function cite(it, style = "apa", detail = "") {
   if (!it) return { text: "", html: "" };
   const Cite = await loadCiteEngine();
-  if (!Cite) return fallbackCite(it, style, detail);
+  if (!Cite) return withLinks(fallbackCite(it, style, detail));
   try {
     const c = new Cite({ ...it, id: it.id || "x" });
     const opt = { template: TEMPLATE[style]?.[0] || TEMPLATE.apa[0], lang: "en-US" };
     const text = c.format("bibliography", { ...opt, format: "text" }).trim();
     const html = stripEntry(c.format("bibliography", { ...opt, format: "html" }).trim());
     const extra = detail ? ` Data: ${detail}.` : "";
-    return { text: text + extra, html: html + esc(extra) };
+    return withLinks({ text: text + extra, html: html + esc(extra) });
   } catch (e) {
     console.warn(e);
-    return fallbackCite(it, style, detail);
+    return withLinks(fallbackCite(it, style, detail));
   }
 }
 
