@@ -59,7 +59,7 @@ export function traceContext(S, SRC, MEAS, GLOSS) {
 
   /** A traceable figure from a series point. */
   const point = (p, measure, label, extra = {}) => ({ value: p.value, unit: "people", year: p.year, measure_id: measure, source_id: p.source_id,
-    footnote: p.footnote, raw_ref: p.raw_ref, note: p.note, label, ...extra });
+    footnote: p.footnote, raw_ref: p.raw_ref, note: p.note, not_recorded: p.not_recorded, label, ...extra });
 
   const withYear = (label, year) => `${label}${String(label).includes(String(year)) ? "" : ` (${year})`}`;
 
@@ -323,6 +323,11 @@ function madeHTML(pt, ctx, sum) {
         return p ? input(p, name) : `${esc(name)} ${numHTML(pp.value)}`;
       }).join(' <span aria-label="plus">+</span> ')} = ${numHTML(pt.value)}</p>`;
   }
+  if (pt.not_recorded) {
+    // a pair (or a country's internal displacement) with no row in the data: shown as 0, and said so
+    return `<h3 class="tp__sec-h">Original row</h3><p class="small">There is no original row. ${esc(pt.note || "")}</p>
+      <p class="small"><a href="https://www.unhcr.org/refugee-statistics/download/">Check UNHCR's Refugee Data Finder</a></p>`;
+  }
   if (sum) return `<h3 class="tp__sec-h">How this number was made</h3><div class="tp__rows" aria-busy="true"><p class="small muted">Loading the rows…</p></div>`;
   if (pt.raw_ref || pt.hostIso) return `<h3 class="tp__sec-h">Original row</h3><div class="tp__raw" aria-busy="true"><p class="small muted">Loading the original row…</p></div>`;
   if (pt.note) return `<h3 class="tp__sec-h">How this number was made</h3><p class="small">${esc(pt.note)}.</p>`;
@@ -426,6 +431,13 @@ async function rawHTML(pt, ctx) {
   if (!rawRows[ref] && pt.hostIso) {
     const pair = await getOptionalJSON(`data/web/situation/${S.origin_iso3.toLowerCase()}-${pt.hostIso.toLowerCase()}.json`);
     if (pair?.raw_rows?.[ref]) { rawRows = pair.raw_rows; rawFiles = pair.raw_files; }
+  }
+  if (!rawRows[ref]) {
+    // pages built in the browser (and hosts without a page): the origin's original UNHCR rows, by file and line
+    const [f, line] = ref.split("#L");
+    const doc = await getOptionalJSON(`data/web/rawrows/${S.origin_iso3.toLowerCase()}.json`);
+    const row = doc?.rows?.[f]?.[line];
+    if (row) { rawRows = { [ref]: { file_key: f, line: +line, row } }; rawFiles = doc.files; }
   }
   const raw = rawRows[ref];
   const rawFile = raw && rawFiles[raw.file_key];

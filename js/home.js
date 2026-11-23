@@ -72,8 +72,9 @@ document.querySelectorAll("[data-q]").forEach((b) => b.addEventListener("click",
   input.focus();
   searchUI.run();
 }));
-const preset = new URLSearchParams(location.search).get("q");
-if (preset) { input.value = preset; searchUI.run(); }
+const presetP = new URLSearchParams(location.search);
+const preset = presetP.get("q");
+if (preset) { input.value = preset; presetP.get("exact") === "1" ? searchUI.runExact() : searchUI.run(); }
 
 (async () => {
   const globe = await getJSON("data/web/globe.json");

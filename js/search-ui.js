@@ -1,7 +1,11 @@
 // The results panel under a search box (walkthrough screen 2):
 // a quick answer straight from the data, then results grouped as Situation, Country and Group.
-// The ranking engine lives in search.js; this file only draws and handles the keyboard.
+// The ranking engine lives in search.js; what the question names (and so where Enter goes) is search-intent.js.
+// Enter goes to what the question names, never somewhere else: the first option is that place. A question that
+// can't be matched keeps the panel open with "No data for ...". A changed search says so ("Showing results for").
 import { getJSON } from "./data.js";
+import { intent, warmIntent } from "./search-intent.js";
+import { rememberNotice } from "./search-notice.js";
 import { esc, numHTML, fmt } from "./format.js";
 import { icon } from "./icons.js";
 import { search, engineState, onEngineChange } from "./search.js";
@@ -25,21 +29,48 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   let active = -1;
   let last = "";
 
-  async function run() {
+  let exactFor = null;            // "Search instead for ...": this question as typed, no spelling fixes
+  let current = null;             // { q, it, res } for the question on screen
+  warmIntent();
+
+  async function compute(q) {
+    const exact = exactFor === q;
+    const pre = await intent(q, { exact });
+    const res = await search(pre.corrected);               // a spelling fix: list results for the fixed question
+    const top = res.quick || res.items.find((i) => i.s)?.s || null;
+    const it = top ? await intent(q, { exact, top }) : pre;
+    return { q, it, res };
+  }
+  async function run({ exact = false } = {}) {
     const q = input.value.trim();
     last = q;
+    if (exact) exactFor = q;
     if (!q) { close(); return; }
-    const res = await search(q);
+    const c = await compute(q);
     if (input.value.trim() !== q) return;          // a newer query is on its way
-    render(q, res);
+    current = c;
+    render(q, c.res, c.it);
   }
-  function render(q, res) {
+  function render(q, res, it) {
     const groups = { situation: [], country: [], group: [] };
-    for (const r of res.items) groups[r.group]?.push(r);
-    const top = res.quick;
+    const goal = it?.target;
+    const goalHref = goal?.href;
+    for (const r of res.items) if (!goalHref || r.href !== goalHref) groups[r.group]?.push(r);
+    // a quick answer that leaves out a country the question names is not an answer to it
+    const top = res.quick && (!it?.countries?.length || it.countries.every((c) => [res.quick.origin_iso3, res.quick.host_iso3, ...(res.quick.hosts || [])].includes(c)))
+      ? res.quick : null;
     const m = top && measures[top.latest?.measure_id];
+    const quickHref = top ? `situation.html?id=${top.id}` : "";
+    const quickIsGoal = !!top && quickHref === goalHref;
+    // the place the question names comes first, so Enter and the first option are the same
+    const goalHTML = goal && !quickIsGoal ? `
+      <a class="results__item results__intent" role="option" data-opt data-intent href="${esc(goalHref)}">
+        <span>${esc(goal.title)}</span><span class="small muted">${/country\.html/.test(goalHref) ? "Country" : "Situation"}</span></a>` : "";
+    const changed = it?.changed && (goal || it.corrected !== it.q) ? `
+      <p class="results__changed small" data-changed>Showing results for <strong>${esc(goal ? goal.title : it.corrected)}</strong>
+        <span aria-hidden="true">·</span> <a href="#" data-exact>Search instead for <q>${esc(q)}</q></a></p>` : "";
     const quick = top && top.latest ? `
-      <a class="results__quick" href="situation.html?id=${esc(top.id)}" role="option" data-opt>
+      <a class="results__quick" href="${esc(quickHref)}" role="option" data-opt${quickIsGoal ? " data-intent" : ""}>
         <span class="eyebrow">Quick answer</span>
         <span class="results__qa"><span>${esc(top.title)}, ${top.latest.year}:</span> <strong class="num">${numHTML(top.latest.value)}</strong></span>
         <span class="small muted">${m?.kind === "flow"
@@ -53,9 +84,11 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
       </div>`).join("");
     const note = engineState() === "loading" ? `<p class="results__note small muted">${icon("info", { size: 14 })} Smart search loading; showing name matches for now.</p>` : "";
     const filt = res.years ? `<p class="results__note small muted">Years in your question: ${res.years[0]} to ${res.years[1]}</p>` : "";
-    panel.innerHTML = (quick || groupHTML)
-      ? `${quick}${groupHTML}${filt}${note}<a class="results__req" href="request.html?q=${encodeURIComponent(q)}">Can't find it? Request data &rsaquo;</a>`
-      : `<div class="results__empty"><p><strong>No results for "${esc(q)}"</strong></p><p class="small muted">Try a country, a group of people or a year.</p>
+    const dym = !goal && it?.didYouMean ? `<p class="results__dym">Did you mean <a href="#" data-dym="${esc(it.didYouMean)}">${esc(it.didYouMean)}</a>?</p>` : "";
+    panel.innerHTML = (goalHTML || quick || groupHTML)
+      ? `${changed}${goalHTML}${quick}${groupHTML}${filt}${note}<a class="results__req" href="request.html?q=${encodeURIComponent(q)}">Can't find it? Request data &rsaquo;</a>`
+      : `<div class="results__empty" data-empty><p><strong>No data for "${esc(q)}"</strong></p>${dym}
+         <p class="small muted">Search a country, a group of people, or two countries, e.g. 'Afghan refugees in India'</p>
          <a href="request.html?q=${encodeURIComponent(q)}">Request data &rsaquo;</a></div>${note}`;
     const opening = panel.hidden;
     panel.hidden = false;
@@ -91,16 +124,34 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
     else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
     else if (e.key === "Escape") { close(); }
-    else if (e.key === "Enter") {
-      const o = opts();
-      const target = o[active >= 0 ? active : 0];
-      if (target) { e.preventDefault(); morphName(target); location.href = target.getAttribute("href"); }
-    }
+    else if (e.key === "Enter") { e.preventDefault(); enter(); }
+  });
+  async function enter() {
+    const q = input.value.trim();
+    if (!q) return;
+    // a result picked with the arrow keys: like a click (no notice)
+    const o = opts();
+    if (active >= 0 && o[active] && !panel.hidden) { morphName(o[active]); location.href = o[active].getAttribute("href"); return; }
+    const c = current?.q === q ? current : await compute(q);
+    if (input.value.trim() !== q) return;
+    current = c;
+    const goal = c.it.target;
+    if (!goal) { render(q, c.res, c.it); return; }           // nothing it names: stay, with the panel open
+    if (c.it.changed) rememberNotice({ typed: q, shown: goal.title, href: goal.href });
+    const a = panel.querySelector("[data-intent]");
+    if (a && !panel.hidden) morphName(a);
+    location.href = goal.href;
+  }
+  panel.addEventListener("click", (e) => {
+    const x = e.target.closest("[data-exact]");
+    const d = e.target.closest("[data-dym]");
+    if (x) { e.preventDefault(); run({ exact: true }); input.focus(); }
+    else if (d) { e.preventDefault(); input.value = d.dataset.dym; run(); input.focus(); }
   });
   document.addEventListener("click", (e) => { if (!panelParent.contains(e.target)) close(); });
   panel.addEventListener("click", (e) => { const a = e.target.closest("a[data-opt]"); if (a) morphName(a); });
   onEngineChange(() => { if (last && !panel.hidden) run(); });
-  return { run };
+  return { run, runExact: () => run({ exact: true }) };
 }
 
 function sourceShort(measureId) {

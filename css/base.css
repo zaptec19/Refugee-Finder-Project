@@ -1411,3 +1411,33 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 /* maps: an origin India's official map doesn't show as a separate area (Western Sahara, Kosovo) */
 .map-missing { margin: var(--s-2, 8px) 0 0; padding: 6px 10px; border-left: 3px solid var(--line-strong); color: var(--muted); line-height: 1.45; text-align: left; }
 .mini-globe > .map-missing:only-child, #cg > .map-missing:only-child { margin: 0; }
+
+/* ================================================================== search: changed searches, no data, pages built here (23 Nov 2026) */
+.search-notice {
+  position: sticky; top: var(--topbar-h); z-index: 45;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4);
+  padding: var(--s-2) var(--s-5); margin: 0;
+  background: color-mix(in srgb, var(--accent-ui) 12%, var(--surface)); border-bottom: 1px solid var(--accent-ui); color: var(--ink); font-size: var(--fs-15);
+  transition: background 600ms var(--ease-out), border-color 600ms var(--ease-out), box-shadow 600ms var(--ease-out), padding 400ms var(--ease-out), opacity 240ms;
+}
+:root[data-theme="dark"] .search-notice { box-shadow: 0 0 18px -6px var(--accent-ui), inset 0 -1px 0 rgba(34, 211, 238, 0.35); }
+.search-notice__text { margin: 0; flex: 1 1 auto; min-width: 0; }
+.search-notice__text q { color: var(--muted); }
+.search-notice__instead { white-space: nowrap; }
+.search-notice__close { margin-left: auto; }
+.search-notice.is-in { animation: notice-in 320ms var(--ease-out) both; }
+@keyframes notice-in { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+/* after about 6 s: a quiet line */
+.search-notice.is-quiet { background: var(--surface); border-bottom-color: var(--line); box-shadow: none; padding-block: 6px; font-size: var(--fs-13); }
+:root[data-theme="dark"] .search-notice.is-quiet { box-shadow: none; }
+.search-notice.is-out { opacity: 0; transform: translateY(-6px); transition: opacity 240ms, transform 240ms; }
+@media (prefers-reduced-motion: reduce) { .search-notice, .search-notice.is-in, .search-notice.is-out { animation: none; transition: none; transform: none; } }
+@media (max-width: 600px) { .search-notice { padding: var(--s-2) var(--s-4); } }
+
+.results__changed { padding: var(--s-2) var(--s-5) var(--s-3); margin: 0; border-bottom: var(--hair); color: var(--muted); }
+.results__changed strong { color: var(--ink); font-weight: 500; }
+.results__intent > span:first-child { font-weight: 500; }
+.results__dym { margin: var(--s-2) 0; }
+
+.auto-label { display: inline-flex; gap: 6px; align-items: center; margin: var(--s-2) 0 0; color: var(--muted); font-size: var(--fs-15); }
+.zero-note { margin: var(--s-3) 0 0; padding: var(--s-3) var(--s-4); border-left: 3px solid var(--accent-ui); background: var(--accent-soft); border-radius: 0 6px 6px 0; max-width: 70ch; }

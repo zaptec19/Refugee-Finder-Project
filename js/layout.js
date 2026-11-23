@@ -4,6 +4,7 @@ import { mode, setMode, applyNumbers, esc } from "./format.js";
 import { icon } from "./icons.js";
 import { reducedMotion } from "./motion.js";
 import { externalLinksNewTab } from "./links.js";
+import { hasNotice, showNotice } from "./search-notice.js";
 
 // cross-document view transitions (css: @view-transition): skipped with the system's reduced motion
 window.addEventListener("pageswap", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
@@ -43,6 +44,8 @@ export function initPage({ page, dark = false } = {}) {
   skip.textContent = "Skip to content";
   document.body.prepend(skip);
   externalLinksNewTab();
+  // a search that was changed on the way here says so ("Showing: ... · You searched: ...")
+  if (hasNotice()) showNotice();
 
   // the interactive tour: loaded only when one is running (or asked for with ?tour=1)
   let touring = new URLSearchParams(location.search).get("tour") === "1";

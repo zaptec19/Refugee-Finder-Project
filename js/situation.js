@@ -1,6 +1,7 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
 import { MAP_SOURCE, NOT_SEPARATE } from "./config.js";
 import { initPage, guideTip } from "./layout.js";
+import { buildAuto, retarget } from "./auto-situation.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
 import { reducedMotion } from "./motion.js";
@@ -38,7 +39,7 @@ document.body.classList.add("page-situation");
 // Coming from the home page, stand-ins of the clicked title and the globe morph into the real ones (js/morph.js).
 const morph = arriveMorph();
 const ready = main().catch((e) => {
-  console.error(e);
+  if (e.status !== 404) console.error(e);        // an id we don't know is a message on the page, not an error
   document.getElementById("main").innerHTML = `<div class="page"><div class="empty-state" style="margin-top:48px">
     <h3>We couldn't open this situation</h3><p class="muted">${esc(e.status === 404 ? "There is no situation with this id." : e.message)}</p>
     <p><a href="index.html">Back to search</a> · <a href="request.html">Request data</a></p></div></div>`;
@@ -46,16 +47,24 @@ const ready = main().catch((e) => {
 ready.then(() => morph.land());
 
 async function main() {
-  const id = new URLSearchParams(location.search).get("id") || "lka-ind";
-  const briefIds = (await getOptionalJSON("data/briefs/index.json")) || [];
-  const [s, srcList, tips, glossary, measures, refs, brief] = await Promise.all([
-    getJSON(`data/web/situation/${encodeURIComponent(id)}.json`), loadSources(), loadTips(), loadGlossary(), loadMeasures(),
+  const params = new URLSearchParams(location.search);
+  const id = (params.get("id") || "lka-ind").toLowerCase();
+  const askedMeasure = params.get("m");
+  const [briefIds, index] = await Promise.all([
+    getOptionalJSON("data/briefs/index.json").then((x) => x || []), getJSON("data/web/situations.json")]);
+  const isBuilt = index.some((x) => x.id === id);     // only built pages have a file (no 404 for the others)
+  const [built, srcList, tips, glossary, measures, refs, brief] = await Promise.all([
+    isBuilt ? getOptionalJSON(`data/web/situation/${encodeURIComponent(id)}.json`) : null, loadSources(), loadTips(), loadGlossary(), loadMeasures(),
     getJSON("data/web/references.json"),
     briefIds.includes(id) ? getOptionalJSON(`data/briefs/${encodeURIComponent(id)}.json`) : null,
   ]);
+  MEAS = Object.fromEntries(measures.map((x) => [x.id, x]));
+  // every origin-host pair and every <country>-idp has a page: the built one, or one built here from UNHCR's rows
+  let s = built;
+  if (!s) s = await buildAuto(id, { MEAS, measure: askedMeasure });
+  else if (askedMeasure && askedMeasure !== s.main_measure) await retarget(s, askedMeasure, MEAS);   // at the people type asked about
   S = s;
   SRC = Object.fromEntries(srcList.map((x) => [x.id, x]));
-  MEAS = Object.fromEntries(measures.map((x) => [x.id, x]));
   REFS = Object.fromEntries(refs.map((x) => [x.id, x]));
   CITES = citeNumbering({ brief, S, SRC, REFS });
   GLOSS = glossary;
@@ -131,6 +140,7 @@ async function main() {
   })
     .catch((e) => { console.error(e); document.getElementById("mini-globe").innerHTML = '<p class="small muted">Map could not load.</p>'; });
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+  else if (askedMeasure && !S.not_recorded) document.getElementById("key-numbers")?.scrollIntoView();
   requestAnimationFrame(() => { revealSteps(); countUp(mainEl.querySelector('[data-body="key_numbers"]')); });
   // get citations ready in the background: load citation-js, then build the APA engine once while the page is idle
   // (the first citation in a style is several hundred ms of blocking work; after that it is instant)
@@ -195,7 +205,9 @@ function headHTML() {
       ${shorts.map((sh) => `<a class="badge" href="#sources">${esc(sh)}</a>`).join("")}
       ${nRead ? `<a class="badge" href="#sources">+ readings (${nRead})</a>` : ""}
     </div>
-    ${S.note ? `<p class="sit-note small muted">${esc(S.note)}</p>` : ""}`;
+    ${S.note ? `<p class="sit-note small muted">${esc(S.note)}</p>` : ""}
+    ${S.auto ? `<p class="auto-label small">${icon("info", { size: 14 })}<span>Built straight from UNHCR's data. No written summary yet.</span></p>` : ""}
+    ${S.not_recorded ? `<p class="zero-note small">${esc(S.series?.[S.main_measure]?.[0]?.note || S.key_numbers?.[0]?.note || "")}</p>` : ""}`;
 }
 
 // =================================================================== 3 brief
