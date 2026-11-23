@@ -35,6 +35,24 @@ export function base(width, height = 300, extra = {}) {
   };
 }
 
+/** Points a line can't show: a series with one point, or a point with no neighbouring year in its series. They get
+ *  a dot and a "value (year)" label, so a one-year series never disappears from a chart.
+ *  lines: [{ key, color, pts: [{ year, value }] }] */
+export function isolatedMarks(lines) {
+  const iso = [];
+  for (const l of lines) {
+    const ys = new Set(l.pts.filter((p) => p.value != null).map((p) => p.year));
+    for (const p of l.pts) {
+      if (p.value != null && !ys.has(p.year - 1) && !ys.has(p.year + 1)) iso.push({ ...p, key: l.key, color: l.color });
+    }
+  }
+  if (!iso.length) return [];
+  return [
+    Plot.dot(iso, { x: "year", y: "value", r: 4.5, fill: (d) => d.color, stroke: "var(--bg)", strokeWidth: 1.5, className: "pt-isolated" }),
+    Plot.text(iso, { x: "year", y: "value", text: (d) => `${fmt(d.value)} (${d.year})`, dy: -12, fill: (d) => inkOf(d.color), fontWeight: 500, className: "pt-isolated-label" }),
+  ];
+}
+
 let seq = 0;
 const blocks = new Set();
 let watching = false;
@@ -242,7 +260,7 @@ const COLOR_OF_FILL = (f) => {
   const m = /var\(--c-([a-z]+)(?:-fill)?\)/.exec(f || "");
   return m ? `var(--c-${m[1]})` : null;
 };
-/** Make a Plot drawing crisp: area fills become a vertical gradient (45% to 0% of the type colour), bars are solid
+/** Make a Plot drawing crisp: area fills become a vertical gradient (--area-top, 45% dark / 35% light, to 0% of the type colour), bars are solid
  *  with a slightly brighter top edge, and each line's last point gets a small dot (glowing and slowly pulsing in
  *  the dark theme). Purely visual: nothing about the data or scales changes. */
 function polish(root, id) {
@@ -259,7 +277,7 @@ function polish(root, id) {
       const lg = document.createElementNS(NS, "linearGradient");
       lg.setAttribute("id", gradId);
       lg.setAttribute("x1", "0"); lg.setAttribute("y1", "0"); lg.setAttribute("x2", "0"); lg.setAttribute("y2", "1");
-      lg.innerHTML = `<stop offset="0" style="stop-color:${c};stop-opacity:0.45"/><stop offset="1" style="stop-color:${c};stop-opacity:0"/>`;
+      lg.innerHTML = `<stop offset="0" style="stop-color:${c};stop-opacity:var(--area-top, 0.45)"/><stop offset="1" style="stop-color:${c};stop-opacity:0"/>`;
       defs.append(lg);
       g.setAttribute("fill", `url(#${gradId})`);
       g.setAttribute("fill-opacity", "1");

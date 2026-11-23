@@ -6,12 +6,13 @@ import { reducedMotion } from "./motion.js";
 import { arriveMorph } from "./morph.js";
 import { icon, pinButton } from "./icons.js";
 import { renderMiniGlobe } from "./minimap.js";
-import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf } from "./charts.js";
+import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf, isolatedMarks } from "./charts.js";
 import { openPopover, openPanel, bindGlossary } from "./popouts.js";
 import { traceContext, openTrace as openTraceIn, linkNumbers, LABEL } from "./trace.js";
 import { pin, syncPins } from "./collection.js";
 import { cite, referenceList, loadCiteEngine } from "./cite.js";
 import { REVIEW, reviewNote, unverifiedTag } from "./review.js";
+import { citeNumbering, markerHTML, citedListHTML, fillCitations, wireCitations } from "./citations.js";
 
 export const STEPS = [
   ["brief", "Brief"], ["key_numbers", "Key numbers"], ["over_time", "Over time"],
@@ -28,6 +29,7 @@ let SRC = {};     // sources by id
 let MEAS = {};    // measures by id
 let GLOSS = [];
 let REFS = {};    // readings by id
+let CITES = null; // the page's one source numbering (from the brief), see citations.js
 let CTX;          // trace helpers for this situation (js/trace.js)
 
 initPage({ page: "situation" });
@@ -54,6 +56,7 @@ async function main() {
   SRC = Object.fromEntries(srcList.map((x) => [x.id, x]));
   MEAS = Object.fromEntries(measures.map((x) => [x.id, x]));
   REFS = Object.fromEntries(refs.map((x) => [x.id, x]));
+  CITES = citeNumbering({ brief, S, SRC, REFS });
   GLOSS = glossary;
   CTX = traceContext(S, SRC, MEAS, GLOSS);
   document.title = `${s.title} · Refugee Finder`;
@@ -103,6 +106,7 @@ async function main() {
   bindGlossary(mainEl, GLOSS);
   wirePins(mainEl);
   syncPins(mainEl);
+  wireCitations(mainEl, CITES);
   setupRail();
 
   const hosts = s.type === "named" ? s.hosts : s.host_iso3 ? [s.host_iso3] : [];
@@ -177,18 +181,16 @@ function briefHTML(brief) {
       The numbers below still work, and every one of them links to its source.</p></div>`;
   }
   const srcs = brief.sources || [];
-  const marker = (ids) => (ids || []).map((id) => {
-    const n = srcs.indexOf(id) + 1;
-    return n ? `<a class="cite" href="#sources" title="${esc(SRC[id]?.short || REFS[id]?.authors || id)}">[${n}]</a>` : "";
-  }).join("");
+  const marker = (ids) => (ids || []).map((id) => markerHTML(CITES, id)).join("");
   const part = (p) => {
     const v = brief[p];
     if (!v) return "";
     const sentences = Array.isArray(v) ? v : [{ text: v, source_ids: brief.part_sources?.[p] || srcs.slice(0, 1) }];
-    const one = (x) => `${liveNumbers(x.text, brief.numbers)}${marker(x.source_ids)}`;
+    // each sentence has an id, so "Cited in" in Sources & reading can jump back to it
+    const one = (x, i) => `<span class="brief__s" id="brief-${p}-${i}">${liveNumbers(x.text, brief.numbers)}${marker(x.source_ids)}</span>`;
     const rest = sentences.slice(1);
-    return `<div class="brief__k">${p.toUpperCase()}</div><div class="brief__v">${one(sentences[0])}${rest.length
-      ? ` <span class="brief__rest" hidden>${rest.map(one).join(" ")}</span>` : ""}</div>`;
+    return `<div class="brief__k">${p.toUpperCase()}</div><div class="brief__v">${one(sentences[0], 0)}${rest.length
+      ? ` <span class="brief__rest" hidden>${rest.map((x, i) => one(x, i + 1)).join(" ")}</span>` : ""}</div>`;
   };
   const srcNames = [...new Set(srcs.map((id) => (SRC[id]?.short || REFS[id]?.authors || id).replace(/^Government of /, "Govt. of ")))];
   const label = brief.status === "checked"
@@ -200,7 +202,7 @@ function briefHTML(brief) {
     ${anyRest ? `<button class="linklike brief__toggle" type="button" aria-expanded="false" aria-controls="brief-body"
       onclick="const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',open);this.textContent=open?'Show less ⌃':'Read more ⌄';document.querySelectorAll('#brief-body .brief__rest').forEach(e=>e.hidden=!open)">Read more ⌄</button>` : ""}
     <p style="margin-top:16px"><span class="brief-label${brief.status === "checked" ? " brief-label--checked" : ""}" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
-    <p class="small muted">Sources: ${srcs.map((id, i) => `[${i + 1}] ${esc(SRC[id]?.short || REFS[id]?.authors + " " + (REFS[id]?.year || "") || id)}`).join(" · ")}</p>`;
+    <p class="small muted brief__sources">Sources: ${CITES.order.map((id) => markerHTML(CITES, id, { withName: true })).join(" · ")}</p>`;
 }
 
 /** Brief text with its counts turned into live numbers (so the Indian / international switch reaches them).
@@ -238,7 +240,7 @@ function keyNumbers(el) {
     return `<article class="card kn" aria-labelledby="kn-${i}">
       <div class="kn__label" id="kn-${i}">${termFor(kn.label)}</div>
       <span class="kn__help"><button class="help-btn" type="button" data-explain="${i}" aria-label="What does this number mean?" aria-haspopup="dialog">?</button></span>
-      <button class="kn__value" type="button" data-trace="${i}" aria-label="${esc(kn.label)}: where this number comes from">${value}</button>
+      <button class="kn__value" type="button" data-trace="${i}">${value}<span class="sr-only">, ${esc(kn.label)}: where this number comes from</span></button>
       <div class="kn__sub">${esc(kn.sub)}${kn.unit === "movements" ? " · counts movements, not people" : ""}</div>
       <div class="kn__foot">
         <a class="kn__src" href="#" data-trace="${i}">Source: ${esc(srcShort(kn.source_id))}</a>
@@ -317,6 +319,7 @@ function overTime(el) {
         Plot.ruleY([0], { stroke: "var(--line-strong)" }),
         ...(single ? [Plot.areaY(all, { x: "year", y: "value", fill: lines[0].color, fillOpacity: 0.14, curve: "linear" })] : []),
         ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
+        ...isolatedMarks(lines),                // a one-year series (or a lone year) shows as a labelled dot
         ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: w < 520 ? 6 : 16, className: "end-label" })),
         Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
         Plot.dot(all, Plot.pointerX({ x: "year", y: "value", r: 5, fill: (d) => lines.find((l) => l.key === d.key).color, className: "pt-hover" })),
@@ -597,6 +600,7 @@ function insideOutside(el) {
       return Plot.plot({ ...base(w, 280), marginRight: w < 520 ? 70 : 150,
         marks: [Plot.ruleY([0], { stroke: "var(--line-strong)" }),
           ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
+          ...isolatedMarks(lines),                // a one-year series (or a lone year) shows as a labelled dot
           ...lines.map((l) => Plot.text([l.pts[l.pts.length - 1]], { x: "year", y: "value", text: () => l.label, dx: 8, textAnchor: "start", fill: inkOf(l.color), fontWeight: 500, lineWidth: w < 520 ? 6 : 12, className: "end-label" })),
           Plot.ruleX(all, Plot.pointerX({ x: "year", className: "crosshair" })),
           Plot.tip(all, Plot.pointer({ x: "year", y: "value", title: (d) => `${d.line}, ${d.year}\n${fmt(d.value)}` }))] });
@@ -804,6 +808,9 @@ function limitationsHTML() {
 
 // =================================================================== 12 sources and reading
 function sourcesHTML(el) {
+  // "Sources cited in the brief" first: numbered exactly like the brief's markers and Sources line ([1] -> #src-1),
+  // each row with its full citation. Then the datasets table and reading list as before.
+  const N = CITES;
   const ds = S.datasets.map((d) => SRC[d]).filter(Boolean);
   const rows = ds.map((d) => `<tr><td><a href="datasets.html#${esc(d.id)}">${esc(d.dataset)}</a><div class="small muted">${esc(d.organisation)}</div></td>
       <td class="tabular">${d.years ? `${d.years[0]} to ${d.years[1]}` : ""}</td><td>${esc(d.release)}${d.status === "to_confirm" ? ` ${unverifiedTag(d.to_check)}` : ""}</td></tr>`).join("");
@@ -813,13 +820,18 @@ function sourcesHTML(el) {
       <div class="reading__meta"><span class="small muted">${esc(r.type)}</span>
         ${pinButton({ key: `read:${r.id}`, label: `${r.authors} (${r.year})`, attrs: `data-read="${esc(r.id)}"` })}</div>
     </article>`).join("");
-  el.innerHTML = `<h3 class="sub-h" style="margin-top:0">Datasets used</h3>
+  // sources the brief cites that are neither datasets nor readings here (e.g. event sources): in "Cite all" too
+  const also = N.order.filter((id) => !SRC[id] && !(S.reading || []).some((r) => r.id === id) && REFS[id]).map((id) => REFS[id]);
+  const cited = citedListHTML(N);
+  el.innerHTML = `${cited}
+    <h3 class="sub-h"${cited ? "" : ' style="margin-top:0"'}>Datasets used</h3>
     <div class="table-wrap"><table class="table"><thead><tr><th scope="col">Dataset</th><th scope="col">Years</th><th scope="col">Release</th></tr></thead><tbody>${rows}</tbody></table></div>
     ${reading ? `<h3 class="sub-h">Reading list</h3><div class="readings">${reading}</div>` : `<p class="muted" style="margin-top:16px">No readings added for this situation yet.</p>`}
     <div class="sources-actions"><button class="btn" type="button" data-cite-all>Cite all (APA)</button>
       <a href="request.html?about=${encodeURIComponent(S.title)}">Missing something? Request data or a source &rsaquo;</a></div>`;
+  fillCitations(el, N);
   el.querySelector("[data-cite-all]").addEventListener("click", async (e) => {
-    const all = [...ds.map((d) => d.csl), ...ds.flatMap((d) => d.cite_also || []), ...(S.reading || []).map((r) => r.csl)];
+    const all = [...ds.map((d) => d.csl), ...ds.flatMap((d) => d.cite_also || []), ...(S.reading || []).map((r) => r.csl), ...also.map((r) => r.csl)];
     e.currentTarget.disabled = true;
     const refs = await referenceList(all, "apa");
     e.currentTarget.disabled = false;
@@ -835,7 +847,7 @@ function sourcesHTML(el) {
 // =================================================================== pins for charts and readings
 function wirePins(root) {
   root.querySelectorAll("[data-read]").forEach((b) => b.addEventListener("click", () => {
-    const r = S.reading.find((x) => x.id === b.dataset.read);
+    const r = (S.reading || []).find((x) => x.id === b.dataset.read) || REFS[b.dataset.read];
     pin({ kind: "reading", key: `read:${r.id}`, label: `${r.authors} (${r.year}). ${r.title}`, place: "", year: r.year, source_short: r.type,
       csl: r.csl, situation_id: S.id, situation_title: S.title }, b);
   }));
@@ -931,34 +943,48 @@ function revealSteps() {
   later.forEach((st) => io.observe(st));
 }
 
-/** The key figures count up to their exact value the first time they are seen (about 600 ms), ending on the exact
- *  number in the chosen format. Once per situation per session; never with reduced motion. */
+/** The key figures count up the first time they are seen (about 600 ms), once per situation per session; never
+ *  with reduced motion. The real, formatted number is always in the page: the count is an aria-hidden overlay
+ *  drawn over it only while it runs (the real number is transparent underneath, so it stays in the page text, in
+ *  its accessible name and in copy-paste). If anything here fails, the real number simply stays visible. */
 function countUp(root) {
   if (!root || reducedMotion() || !("IntersectionObserver" in window)) return;
   const key = `wv1:counted:${S.id}`;
   try { if (sessionStorage.getItem(key)) return; } catch { return; }
   const spans = [...root.querySelectorAll(".kn__value [data-num], .kn__value [data-pct]")];
   if (!spans.length) return;
-  const show = (el, k) => {
+  const label = (el, k) => {
     const pct = el.hasAttribute("data-pct");
     const v = Number(pct ? el.dataset.pct : el.dataset.num);
-    el.textContent = pct ? fmtPct(Math.round(v * k * 10) / 10) : fmt(Math.round(v * k));
+    return pct ? fmtPct(Math.round(v * k * 10) / 10) : fmt(Math.round(v * k));
   };
-  spans.forEach((el) => show(el, 0));
   const io = new IntersectionObserver((entries) => {
     if (!entries.some((e) => e.isIntersecting)) return;
     io.disconnect();
     try { sessionStorage.setItem(key, "1"); } catch { /* ignore */ }
+    const layers = spans.map((el) => {
+      const ov = document.createElement("span");
+      ov.className = "count-ov";
+      ov.setAttribute("aria-hidden", "true");
+      ov.textContent = label(el, 0);
+      el.after(ov);
+      ov.style.left = `${el.offsetLeft}px`;     // exactly over the real number
+      ov.style.top = `${el.offsetTop}px`;
+      el.classList.add("count-real");
+      return [el, ov];
+    });
+    const done = () => layers.forEach(([el, ov]) => { ov.remove(); el.classList.remove("count-real"); });
     const t0 = performance.now();
     const step = (now) => {
-      const t = Math.min(1, (now - t0) / 600);
-      const k = 1 - Math.pow(1 - t, 3);
-      if (t < 1) { spans.forEach((el) => show(el, k)); requestAnimationFrame(step); }
-      else applyNumbers(root);                 // the exact value, in the format chosen now
+      try {
+        const t = Math.min(1, (now - t0) / 600);
+        const k = 1 - Math.pow(1 - t, 3);
+        if (t < 1) { layers.forEach(([el, ov]) => { ov.textContent = label(el, k); }); requestAnimationFrame(step); } else done();
+      } catch { done(); }
     };
     requestAnimationFrame(step);
-  }, { threshold: 0.4 });
+    setTimeout(done, 2000);                // never leave an overlay behind
+  }, { threshold: 0.2 });
   io.observe(root);
-  document.addEventListener("numfmt-change", () => applyNumbers(root), { once: true });
 }
 

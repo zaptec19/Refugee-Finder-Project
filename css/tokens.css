@@ -48,24 +48,26 @@
   --c-refugees-fill: rgba(11, 107, 255, 0.16);
   --c-idp-fill: rgba(232, 65, 42, 0.14);
   --c-context-band: rgba(107, 114, 128, 0.30);
+  --area-top: 0.35;          /* chart area gradient: this opacity at the top, 0 at the axis */
 
   /* mini globe and larger map (never reuses people-type colours) */
   --g-origin: #D62FB4;
-  --g-origin-fill: rgba(214, 47, 180, 0.35);
+  --g-origin-fill: rgba(214, 47, 180, 0.55);
   --g-origin-line: #D62FB4;
   --g-host: #0891B2;
-  --g-host-fill: rgba(8, 145, 178, 0.35);
-  --g-host-line: #0E7490;    /* outline deepened from #0891B2 for 3:1 on land; the fill keeps #0891B2 */
+  --g-host-fill: rgba(8, 145, 178, 0.50);
+  --g-host-line: #0E7490;    /* #0891B2 is 2.99:1 on land (#E2E8F0); deepened for 3:1. The fill keeps #0891B2 */
   --g-host-label: #0B1220;
-  --g-host-x: #CBD5E1;
+  --g-host-x: rgba(8, 145, 178, 0.22);      /* other hosts ("Show other host countries"): the lighter host colour */
+  --g-host-x-line: rgba(8, 145, 178, 0.70);
   --g-glow-o: none;
   --g-glow-h: none;
   --g-arrow: #0B1220;
   --g-arrow-base: rgba(11, 18, 32, 0.45);
   --g-arrow-glow: none;
   --g-land: #E2E8F0;
-  --g-land-line: #FFFFFF;
-  --g-ocean: #FFFFFF;
+  --g-land-line: #94A3B8;
+  --g-ocean: #F6F8FB;
   --g-graticule: rgba(11, 18, 32, 0.06);
   --g-atmo: rgba(11, 107, 255, 0.16);
   --g-dots: rgba(11, 18, 32, 0.16);
@@ -181,6 +183,7 @@
   --c-refugees-fill: rgba(59, 155, 255, 0.20);
   --c-idp-fill: rgba(255, 92, 57, 0.18);
   --c-context-band: rgba(238, 243, 250, 0.22);
+  --area-top: 0.45;
 
   --g-origin: #FF4FD8;
   --g-origin-fill: rgba(255, 79, 216, 0.35);
@@ -189,7 +192,8 @@
   --g-host-fill: rgba(45, 226, 230, 0.35);
   --g-host-line: #2DE2E6;
   --g-host-label: #EEF3FA;
-  --g-host-x: rgba(148, 180, 255, 0.22);
+  --g-host-x: rgba(45, 226, 230, 0.16);
+  --g-host-x-line: rgba(45, 226, 230, 0.60);
   --g-glow-o: drop-shadow(0 0 5px rgba(255, 79, 216, 0.55));
   --g-glow-h: drop-shadow(0 0 5px rgba(45, 226, 230, 0.55));
   --g-arrow: #FFFFFF;

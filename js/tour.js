@@ -17,7 +17,7 @@ export const STEPS = [
   { page: "home", target: ".home__try", title: "Not sure where to start?",
     text: "These chips open well-documented situations. Each one is a full page you can read from top to bottom." },
   { page: "home", target: "#globe", title: "The globe",
-    text: "Countries are shaded by how many people were displaced from them. Drag to turn it; click a country to open it. Plain land means no data, not zero." },
+    text: "Countries are shaded by how many people were displaced from them. Drag to turn it; click a country for a preview, and again to open it. Plain land means no data, not zero." },
   { page: "*", target: ".topbar__fmt", title: "Your number format",
     text: "Switch between Indian and international digit grouping. Every number on the site follows it, including your exports." },
   { page: "*", target: "#guide-toggle", title: "Guide mode",

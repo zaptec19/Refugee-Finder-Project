@@ -801,7 +801,7 @@ html.pop-locked { overflow: hidden; scrollbar-gutter: stable; }
 
 /* a number in a sentence, title or table that opens its source */
 .num-link {
-  font: inherit; color: inherit; background: none; border: 0; padding: 0 1px; margin: 0 -1px; cursor: pointer; border-radius: 3px;
+  display: inline; font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; border-radius: 3px;
   text-decoration: underline dotted var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px;
 }
 .num-link:hover { color: var(--accent); background: var(--accent-soft); }
@@ -1033,7 +1033,7 @@ dialog::backdrop { background: var(--scrim); }
 /* ---------------------------------------------------------------- mini globe and the larger map */
 .mg-o { fill: var(--g-origin-fill); stroke: var(--g-origin-line); stroke-width: 1.5; filter: var(--g-glow-o); }
 .mg-h { fill: var(--g-host-fill); stroke: var(--g-host-line); stroke-width: 1.5; filter: var(--g-glow-h); }
-.mg-hx { fill: var(--g-host-x); stroke: var(--line-strong); }
+.mg-hx { fill: var(--g-host-x); stroke: var(--g-host-x-line); stroke-width: 0.8; }
 .mg-hb { stroke: var(--g-ocean); stroke-width: 1; }
 .mg-ring { stroke: var(--g-arrow); }
 .mg-label { fill: var(--g-host-label); paint-order: stroke; stroke: var(--g-ocean); stroke-width: 2.5px; stroke-linejoin: round; }
@@ -1256,3 +1256,89 @@ dialog.panel-right[open]:not(.tp):not(.map-dialog) { animation: dlg-solid 420ms 
   .table.why td { display: grid; grid-template-columns: 7.5rem 1fr; gap: 10px; padding: 4px 0; border: 0; font-size: var(--fs-15); }
   .table.why .why__src { display: block; color: var(--muted); font-size: var(--fs-13); line-height: 1.6; }
 }
+
+/* ---------------------------------------------------------------- brief citations (js/citations.js)
+   [n] markers are links to their numbered row in "Sources cited in the brief" ([1] -> #src-1) */
+a.cite { padding: 0 1px; margin-left: 2px; font-size: var(--fs-13); line-height: 1; text-decoration: none;
+  vertical-align: baseline; position: relative; top: -0.5em; color: var(--accent); cursor: pointer; border-radius: 3px; }
+a.cite:hover { text-decoration: underline; }
+a.cite:focus-visible { outline: 2px solid var(--accent-ui); outline-offset: 2px; }
+a.cite--missing { color: var(--danger); }
+.brief__sources a.cite--named { top: 0; line-height: inherit; font-size: inherit; margin: 0; padding: 0 2px; }
+.brief__sources .cite__name { color: var(--muted); }
+.brief__sources a.cite--named:hover .cite__name { color: var(--ink); }
+.cite-num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 6px; font-weight: 600; }
+.cited-in { margin-top: 4px; }
+.cited-in .linklike { font-size: inherit; }
+.cite-tip { position: absolute; z-index: 60; max-width: 300px; padding: 5px 9px; border-radius: 6px; pointer-events: none;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); box-shadow: var(--shadow-2, 0 8px 24px rgba(0,0,0,.18));
+  font-size: var(--fs-13); line-height: 1.35; }
+.cite-tip[hidden] { display: none; }
+/* the numbered list: one row per number, landing a gap below the top bar (and the rail strip on phones) */
+.cited { list-style: none; margin: 0 0 var(--s-2, 8px); padding: 0; display: grid; gap: var(--s-2, 8px); }
+.cited__item { display: grid; grid-template-columns: 2.6em 1fr; gap: var(--s-3, 12px); align-items: start;
+  padding: var(--s-3, 12px) var(--s-4, 16px); border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface);
+  scroll-margin-top: calc(var(--topbar-h) + var(--s-6, 24px)); outline: none; }
+.cited__item > .cite-num { margin: 0; font-size: var(--fs-15); }
+.cited__body { min-width: 0; }
+.cited__name { font-weight: 600; margin-bottom: 2px; }
+.cited__ref { line-height: 1.55; overflow-wrap: anywhere; }
+.cited__ref i { font-style: italic; }
+@media (max-width: 860px) { .cited__item { scroll-margin-top: calc(var(--topbar-h) + 48px + var(--s-6, 24px)); } }
+@media (max-width: 600px) { .cited__item { grid-template-columns: 2.2em 1fr; padding: var(--s-3, 12px); } }
+/* the item a jump lands on: about 2 s, a cyan glow in dark, a soft tint in light */
+.cite-flash { animation: cite-flash 2s ease-out; border-radius: 6px; }
+.cited__item.cite-flash { border-radius: var(--r-card); }
+.brief__s.cite-flash { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+@keyframes cite-flash { from, 50% { background-color: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent-ui); } to { background-color: transparent; box-shadow: 0 0 0 2px transparent; } }
+:root[data-theme="dark"] .cite-flash { animation-name: cite-flash-dark; }
+@keyframes cite-flash-dark { from, 50% { background-color: rgba(34, 211, 238, 0.10); box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.8), 0 0 20px rgba(34, 211, 238, 0.45); }
+  to { background-color: transparent; box-shadow: 0 0 0 1px transparent, 0 0 20px transparent; } }
+@media (prefers-reduced-motion: reduce) {
+  .cite-flash { animation: none; background-color: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent-ui); }
+}
+
+/* A1 key-number count-up: an overlay on top of the real number, which stays in the page (transparent) underneath */
+.kn__value { position: relative; }
+.count-real { color: transparent !important; }
+.count-ov { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; color: inherit; }
+.kn__value .count-ov { font: inherit; }
+
+/* A4: a number and the punctuation right after it never part across a line break */
+.num-nowrap { white-space: nowrap; }
+
+/* country page: IDMC yearly flow charts, one under the other */
+#flows > [id^="flow-"] + [id^="flow-"] { margin-top: var(--s-8, 32px); }
+
+/* big map: other hosts listed under the map when their labels would overlap on it */
+.mgl__xlist { margin: var(--s-2, 8px) auto 0; max-width: 420px; }
+.mgl__xlist-h { margin: 0 0 var(--s-1, 4px); color: var(--muted); }
+.mgl__xlist .table th, .mgl__xlist .table td { padding: 4px 8px; }
+.mgl__xlist tbody th { font-weight: 500; }
+.mgl__xlist tbody th::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px;
+  border-radius: 2px; background: var(--g-host-x); border: 1px solid var(--g-host-x-line); }
+
+/* home globe: the preview card after a click (fly-to, then this; a second click or the button opens the country) */
+.globe-preview {
+  position: absolute; z-index: 85; width: 280px; padding: var(--s-3) var(--s-4) var(--s-4);
+  color: var(--ink); border-radius: var(--r-card); font-size: var(--fs-13);
+  background: var(--glass-bg); backdrop-filter: var(--glass-filter); -webkit-backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--line-strong); box-shadow: var(--glass-edge), var(--shadow-pop);
+}
+.globe-preview[hidden] { display: none; }
+.globe-preview.is-in { animation: gp-in 220ms var(--ease) both; }
+@keyframes gp-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .globe-preview.is-in { animation: none; } }
+.globe-preview__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-bottom: var(--s-2); }
+.globe-preview__name { margin: 0; font-size: var(--fs-15, 0.9375rem); font-weight: 600; }
+.globe-preview__close { margin-right: -6px; }
+.globe-preview__rows { display: grid; gap: 6px; margin: 0; }
+.globe-preview__rows > div { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-3); }
+.globe-preview__rows dd { margin: 0; font-weight: 600; white-space: nowrap; }
+.globe-preview__src { margin: var(--s-1) 0 var(--s-2); }
+.globe-preview__top { margin: 0 0 var(--s-3); padding-top: var(--s-2); border-top: var(--hair); }
+.globe-preview__open { width: 100%; justify-content: center; }
+.globe-preview--docked { position: fixed; left: 16px !important; right: 16px; bottom: 16px; top: auto !important; width: auto; }
+.country-head h1 { view-transition-name: country-name; }
+
+

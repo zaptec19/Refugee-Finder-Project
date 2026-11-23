@@ -36,25 +36,29 @@ function place(el, anchor) {
 }
 
 /** Show a popover next to `anchor`. Returns the popover element. */
-export function openPopover(html, anchor, { label = "", wide = false } = {}) {
+export function openPopover(html, anchor, { label = "", wide = false, cls = "" } = {}) {
   ensure();
   if (pop.matches(":popover-open")) pop.hidePopover();
   pop.innerHTML = `<button class="icon-btn pop__close" type="button" aria-label="Close">${icon("close", { size: 16 })}</button>${html}`;
-  pop.classList.toggle("pop--wide", wide);
+  pop.className = `pop${wide ? " pop--wide" : ""}${cls ? ` ${cls}` : ""}`;
+  pop._noRestore = false;
   if (label) pop.setAttribute("aria-label", label);
   pop.setAttribute("role", "dialog");
   pop._anchor = anchor;
   pop.showPopover();
   place(pop, anchor);
   pop.querySelector(".pop__close").addEventListener("click", () => pop.hidePopover());
-  const back = () => { anchor?.focus?.({ preventScroll: true }); pop.removeEventListener("toggle", onToggle); };
+  const back = () => { if (!pop._noRestore) anchor?.focus?.({ preventScroll: true }); pop.removeEventListener("toggle", onToggle); };
   const onToggle = (e) => { if (e.newState === "closed") back(); };
   pop.addEventListener("toggle", onToggle);
   return pop;
 }
 
-export function closePopover() {
-  if (pop?.matches(":popover-open")) pop.hidePopover();
+/** Close the popover. `restoreFocus: false` when the caller moves focus somewhere else itself. */
+export function closePopover({ restoreFocus = true } = {}) {
+  if (!pop?.matches(":popover-open")) return;
+  pop._noRestore = !restoreFocus;
+  pop.hidePopover();
 }
 
 /** Open the right-side panel (dims the page). */

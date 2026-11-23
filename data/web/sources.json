@@ -2,6 +2,7 @@
  {
   "id": "unhcr-pop-2026",
   "short": "UNHCR",
+  "label": "UNHCR population data (2026)",
   "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
   "dataset": "Refugee Data Finder: population figures by country of origin and asylum",
   "release": "2026 release (data to end-2025)",
@@ -40,6 +41,7 @@
  {
   "id": "unhcr-solutions-2026",
   "short": "UNHCR",
+  "label": "UNHCR solutions data (2026)",
   "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
   "dataset": "Refugee Data Finder: solutions (returns, resettlement, naturalisation)",
   "release": "2026 release (data to end-2025)",
@@ -78,6 +80,7 @@
  {
   "id": "unhcr-demographics-2026",
   "short": "UNHCR",
+  "label": "UNHCR demographics data (2026)",
   "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
   "dataset": "Refugee Data Finder: demographics (sex and age) by population type",
   "release": "2026 release (data to end-2025)",
@@ -116,6 +119,7 @@
  {
   "id": "unhcr-asylum-applications-2026",
   "short": "UNHCR",
+  "label": "UNHCR asylum applications data (2026)",
   "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
   "dataset": "Refugee Data Finder: asylum applications",
   "release": "2026 release (data to end-2025)",
@@ -154,6 +158,7 @@
  {
   "id": "unhcr-asylum-decisions-2026",
   "short": "UNHCR",
+  "label": "UNHCR asylum decisions data (2026)",
   "organisation": "UNHCR (United Nations High Commissioner for Refugees)",
   "dataset": "Refugee Data Finder: asylum decisions",
   "release": "2026 release (data to end-2025)",
@@ -192,6 +197,7 @@
  {
   "id": "idmc-conflict-2026",
   "short": "IDMC",
+  "label": "IDMC conflict displacement data (2026)",
   "organisation": "IDMC (Internal Displacement Monitoring Centre)",
   "dataset": "Global Internal Displacement Database (GIDD): internal displacement associated with conflict and violence",
   "release": "2026 release (data to end-2025), as published by IDMC on HDX",
@@ -232,6 +238,7 @@
  {
   "id": "idmc-disaster-2026",
   "short": "IDMC",
+  "label": "IDMC disaster displacement data (2026)",
   "organisation": "IDMC (Internal Displacement Monitoring Centre)",
   "dataset": "Global Internal Displacement Database (GIDD): internal displacement associated with disasters, by event and hazard",
   "release": "2026 release (data to end-2025), as published by IDMC on HDX",
@@ -272,6 +279,7 @@
  {
   "id": "ucdp-acd-26.1",
   "short": "UCDP",
+  "label": "UCDP/PRIO Armed Conflict Dataset (v26.1)",
   "organisation": "UCDP (Uppsala Conflict Data Program) and PRIO",
   "dataset": "UCDP/PRIO Armed Conflict Dataset",
   "release": "version 26.1 (1946 to 2025)",
@@ -381,6 +389,7 @@
  {
   "id": "ucdp-ov-26.1",
   "short": "UCDP",
+  "label": "UCDP organized violence data (v26.1)",
   "organisation": "UCDP (Uppsala Conflict Data Program)",
   "dataset": "UCDP Country-Year Dataset on Organized Violence within Country Borders",
   "release": "version 26.1 (1989 to 2025)",
@@ -475,6 +484,7 @@
  {
   "id": "wb-pop-2026",
   "short": "World Bank",
+  "label": "World Bank population data (2026)",
   "organisation": "World Bank",
   "dataset": "World Development Indicators: Population, total (SP.POP.TOTL)",
   "release": "API pull, November 2026",
@@ -514,6 +524,7 @@
  {
   "id": "mea-2016",
   "short": "Govt. of India",
+  "label": "Govt. of India (MHA), Rajya Sabha answer (2016)",
   "organisation": "Government of India, Ministry of Home Affairs",
   "dataset": "Answer in the Rajya Sabha on Sri Lankan refugees in India (camp and non-camp figures as on 1 January 2016)",
   "release": "4 May 2016",
@@ -555,6 +566,7 @@
  {
   "id": "un-m49",
   "short": "UN M49",
+  "label": "UN M49 country codes",
   "organisation": "United Nations Statistics Division",
   "dataset": "Standard country or area codes for statistical use (M49)",
   "release": "online version, accessed 2026",

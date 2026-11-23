@@ -7,6 +7,7 @@ import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
 import { showCountryCard, hideCountryCard } from "./globe-card.js";
+import { showPreview, closePreview, openCountry, previewOpen } from "./globe-preview.js";
 import { reducedMotion } from "./motion.js";
 
 initPage({ page: "home", dark: true });
@@ -31,7 +32,7 @@ main.innerHTML = `
       ${TRY.map(([t, q]) => `<button class="chip" type="button" data-q="${q}">${t}</button>`).join("")}
     </div>
     <figure class="home__globe" style="margin-bottom:0">
-      <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it to open it."></svg>
+      <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
       <span><button class="linklike" type="button" data-start-tour>New here? Take the 2-minute tour &rsaquo;</button> <span class="muted" aria-hidden="true">·</span> <a href="learn.html">Learn</a></span>
@@ -89,13 +90,15 @@ if (preset) { input.value = preset; searchUI.run(); }
   }
   // the caption's first line changes with the year; the second (why the globe starts in 1960) stays
   cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}`;
-  const setCap = (y) => { cap.querySelector(".home__caption-main").textContent = `People displaced, by country, ${y} · click a country to open it`; };
+  const setCap = (y) => { cap.querySelector(".home__caption-main").textContent = `People displaced, by country, ${y} · click a country for a preview`; };
   setCap(last);
   let year = last;
   const g = await createGlobe(document.getElementById("globe"), {
     values: globe[String(last)],
-    onPick: (iso) => { location.href = `country.html?iso=${iso}`; },
-    onHover: (f) => showCountryCard(f, year),
+    onPick: (f) => { hideCountryCard(true); showPreview(f, () => g.release()); },
+    onOpen: (iso) => openCountry(iso),
+    onDismiss: () => closePreview(),
+    onHover: (f) => { if (!previewOpen()) showCountryCard(f, year); },
     onHoverEnd: hideCountryCard,
   });
   btn.addEventListener("click", () => {

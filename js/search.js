@@ -64,6 +64,7 @@ function load() {
         if (t.length >= 4) placeNames.push([iso, ` ${t} `]);
       }
     }
+    placeNames.sort((a, b) => b[1].length - a[1].length);
     return { sits, byId, ms, cs, span, vectors, meta, rowIndex, placeNames };
   })();
   ready.then(startModel).catch((e) => { console.error(e); setState("keyword"); });
@@ -140,6 +141,14 @@ const DISASTER_BOOST = 1.15;
 const PLACE_BONUS = 0.2;          // added when the situation's origin or host is a country the question names
 const PLACE_DAMP = 0.85;          // applied to situations in none of the countries the question names
 const DISASTER_DAMP = 0.9;
+// Weak matches are hidden (B4, tuned on tests/search_queries.json with tests/search_fp.py): a situation needs at
+// least MIN_SCORE and REL_FLOOR of the top score (the weakest right answer in the tests scores 1.075; unrelated
+// matches start around 0.83). When the question names a country, only situations involving it are listed.
+// A country is listed only if the question names it or it is part of the top situation result.
+let MIN_SCORE = 0.95;
+let REL_FLOOR = 0.7;
+let STRICT = true;                // false: the rules before B4 (for before/after measurement only)
+const isosOf = (s) => [s.origin_iso3, s.host_iso3, ...(s.hosts || [])].filter(Boolean);
 
 /** @returns {Promise<{items: object[], quick: object|null, years: number[]|null, mode: string}>} */
 export async function search(q) {
@@ -148,7 +157,15 @@ export async function search(q) {
   const text = stripYears(q) || q;
   const disaster = DISASTER_RE.test(q);
   const qn = ` ${norm(text).replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim()} `;
-  const named = new Set(idx.placeNames.filter(([, n]) => qn.includes(n)).map(([iso]) => iso));
+  // countries the question names: longest names first, each match taken out of the question, so "South Sudanese"
+  // names South Sudan only (not Sudan as well)
+  const named = new Set();
+  let rest = qn;
+  for (const [iso, n] of idx.placeNames) {
+    if (!rest.includes(n)) continue;
+    named.add(iso);
+    rest = rest.split(n).join(" ");
+  }
   // keyword scores, normalised to 0..1
   const kwRes = idx.ms.search(text, { combineWith: "OR" });
   const kwMax = kwRes[0]?.score || 1;
@@ -196,18 +213,23 @@ export async function search(q) {
     scored.push({ s, score });
   }
   scored.sort((a, b) => b.score - a.score);
-  const floor = sem ? Math.max(0.25, (scored[0]?.score || 0) * 0.6) : 0;
-  const top = scored.filter((x) => x.score >= floor).slice(0, 10);
+  const floor = !STRICT ? (sem ? Math.max(0.25, (scored[0]?.score || 0) * 0.6) : 0)
+    : sem ? Math.max(MIN_SCORE, (scored[0]?.score || 0) * REL_FLOOR) : 0;
+  let kept = scored.filter((x) => x.score >= floor);
+  if (STRICT && named.size) kept = kept.filter(({ s }) => isosOf(s).some((iso) => named.has(iso)));
+  const top = kept.slice(0, 10);
   const items = top.map(({ s, score }) => ({
     group: s.type === "origin" ? "group" : "situation", title: s.title, href: `situation.html?id=${s.id}`, years: s.years, score, s,
   }));
-  const cRes = idx.cs.search(text, { combineWith: "OR" }).slice(0, 3);
+  const related = new Set(top.slice(0, 1).flatMap(({ s }) => isosOf(s)));
+  const cRes = idx.cs.search(text, { combineWith: "OR" })
+    .filter((c) => !STRICT || named.has(c.iso) || related.has(c.iso)).slice(0, 3);
   for (const c of cRes) {
     items.push({ group: "country", title: `${c.name}: people hosted, people from here`, href: `country.html?iso=${c.iso}`, years: idx.span.get(c.iso) });
   }
   // Quick answer: only when the top match clearly beats the next one. With keyword matching only (model still
   // loading) the scores are not comparable, so it waits for the model.
-  const [a, b] = scored;
+  const [a, b] = STRICT ? kept : scored;
   const clear = sem && a && a.score >= QA_MIN && (!b || a.score - b.score >= QA_GAP);
   let quick = clear ? a.s : null;
   if (quick && disaster && quick.type === "idp" && quick.disaster_latest) quick = { ...quick, latest: quick.disaster_latest };
@@ -220,5 +242,6 @@ export async function rank(q, k = 3) {
   return { mode: r.mode, ids: r.items.filter((i) => i.s).slice(0, k).map((i) => i.s.id), quick: r.quick?.id ?? null,
            quickMeasure: r.quick?.latest?.measure_id ?? null, gap: r.gap, top: r.topScore };
 }
-globalThis.wv1Search = { rank, engineState, warmUp, setKwWeight: (w) => { KW_WEIGHT = w; },
-                         setQuick: (min, gap) => { QA_MIN = min; QA_GAP = gap; } };
+globalThis.wv1Search = { rank, search, engineState, warmUp, setKwWeight: (w) => { KW_WEIGHT = w; },
+                         setQuick: (min, gap) => { QA_MIN = min; QA_GAP = gap; },
+                         setStrict: (on, min = MIN_SCORE, rel = REL_FLOOR) => { STRICT = !!on; MIN_SCORE = min; REL_FLOOR = rel; } };

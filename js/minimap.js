@@ -362,6 +362,14 @@ function greatCircle(proj, start, end, D) {
 }
 
 // ------------------------------------------------------------------ labels
+let measureCtx = null;
+/** Width of a label in SVG units (the map's text uses the page font). */
+function textW(text, px, weight = 400) {
+  measureCtx ||= document.createElement("canvas").getContext("2d");
+  const fam = getComputedStyle(document.body).fontFamily || "sans-serif";
+  measureCtx.font = `${weight} ${px}px ${fam}`;
+  return measureCtx.measureText(text).width;
+}
 const labelBox = (x, y, w, h) => [x - w / 2, y - h * 0.8, x + w / 2, y + h * 0.25];
 const overlaps = (a, b, m = 2) => !(a[2] + m < b[0] || b[2] + m < a[0] || a[3] + m < b[1] || b[3] + m < a[1]);
 const clearOf = (box, pts, m) => pts.every(([px, py]) => px < box[0] - m || px > box[2] + m || py < box[1] - m || py > box[3] + m);
@@ -393,15 +401,28 @@ function largeMap(el, geo, D, base, opts) {
   const { features, byIso } = geo;
   const { origin, originName, figures = {} } = opts;
   const extraAll = (figures.extra || []).map((x) => ({ ...x, f: byIso.get(x.iso) })).filter((x) => x.f);
-  const state = { showExtra: false, rot: null, scale: null, fitScale: null, dragging: false };
+  const state = { showExtra: false, rot: null, scale: null, fitScale: null, dragging: false, listed: [] };
   const uid = `mgl${++seq}`;
   el.innerHTML = `<div class="mgl" id="${uid}">
       <div class="mgl__svg" tabindex="0" aria-describedby="${uid}-help"></div>
       <div class="mgl__tip" role="tooltip" hidden></div>
       <p class="sr-only" id="${uid}-help">Drag or use the arrow keys to turn the globe; plus and minus keys zoom.</p>
+      <div class="mgl__xlist small" hidden></div>
     </div>`;
   const svgBox = el.querySelector(".mgl__svg");
   const tip = el.querySelector(".mgl__tip");
+  const xList = el.querySelector(".mgl__xlist");
+  let xKey = "";
+  /** Other hosts whose labels would overlap on the map: their figures in a small list under it. */
+  function renderXList() {
+    const key = `${state.listed.map((x) => x.iso).join()}|${fmt(1000)}`;
+    if (key === xKey) return;
+    xKey = key;
+    xList.hidden = !state.listed.length;
+    xList.innerHTML = state.listed.length ? `<p class="mgl__xlist-h">Other host countries not labelled on the map (labels would overlap)</p>
+      <table class="table table--compact"><thead><tr><th scope="col">Country</th><th scope="col" class="num">${esc(measureWord[0].toUpperCase() + measureWord.slice(1))}</th><th scope="col" class="num">Year</th></tr></thead>
+      <tbody>${state.listed.map((x) => `<tr><th scope="row">${esc(x.name)}</th><td class="num tabular">${Number.isFinite(x.value) ? esc(fmt(x.value)) : '<span class="no-data">no data</span>'}</td><td class="num tabular">${esc(String(x.year ?? ""))}</td></tr>`).join("")}</tbody></table>` : "";
+  }
 
   // extra hosts on the far side of the globe from the situation are not drawn (they are listed instead)
   const pairs = () => (state.showExtra ? extraAll.filter((x) => !state.hidden.includes(x)) : []);
@@ -442,11 +463,12 @@ function largeMap(el, geo, D, base, opts) {
     const arrowPts = sc.arrows.flatMap((a) => a.pts);
     // 1. figure on each arrow, near its midpoint, on the outside of the bend
     for (const a of sc.arrows) {
+      if (a.extra) continue;     // other hosts are labelled at the country itself (step 2b), not along the arrow
       const figObj = a.extra ? extraAll.find((x) => x.iso === a.iso) : figures.hosts?.[a.iso];
       // other hosts carry their name, so stacked figures can be told apart
-      const text = a.extra ? `${figObj?.name || a.iso}: ${fig(figObj)}` : fig(figObj);
+      let text = a.extra ? `${figObj?.name || a.iso}: ${fig(figObj)}` : fig(figObj);
       const fpx = (a.extra ? 11 : 12.5) * ts;
-      const w = text.length * fpx * 0.55 + 8;
+      let w = textW(text, fpx, 600) + 8;
       const mid = a.pts[Math.floor(a.pts.length / 2)];
       const tan = norm(sub(a.pts[Math.min(a.pts.length - 1, Math.floor(a.pts.length / 2) + 1)], a.pts[Math.max(0, Math.floor(a.pts.length / 2) - 1)]));
       let nrm = [-tan[1], tan[0]];
@@ -454,12 +476,34 @@ function largeMap(el, geo, D, base, opts) {
       const along = (t) => a.pts[Math.max(0, Math.min(a.pts.length - 1, Math.round(t * (a.pts.length - 1))))];
       const spots = [];
       for (const t of [0.5, 0.38, 0.62]) for (const off of [14, 26, -14, -26, 40, -40, 54, -54]) spots.push(add(along(t), mul(nrm, off)));
+      // further along the arrow and further out, before giving up on a free spot
+      for (const t of [0.28, 0.72, 0.2, 0.8]) for (const off of [14, -14, 26, -26, 40, -40, 54, -54, 68, -68]) spots.push(add(along(t), mul(nrm, off)));
       const inGlobe = (box) => [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]]
         .every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
       let place = null;
-      for (const p of spots) {
-        const box = labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
-        if (inGlobe(box) && !taken.some((t) => overlaps(t, box))) { place = { p, box }; break; }
+      const tryPlace = () => {
+        for (const p of spots) {
+          const box = labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
+          if (inGlobe(box) && !taken.some((t) => overlaps(t, box))) return { p, box };
+        }
+        return null;
+      };
+      place = tryPlace();
+      // no room for the full label: try the figure and year alone (the title and tooltip say what it counts)
+      if (!place && !a.extra && figObj && Number.isFinite(figObj.value)) {
+        text = `${fmt(figObj.value)} (${figObj.year})`;
+        w = textW(text, fpx, 600) + 8;
+        place = tryPlace();
+      }
+      // still nothing: slide the first spots up or down, a line at a time, until the label is clear of the others
+      if (!place && !a.extra) {
+        outer: for (const base0 of spots.slice(0, 8)) {
+          for (let k = 1; k <= 8; k++) for (const dir of [1, -1]) {
+            const p = [base0[0], base0[1] + dir * k * fpx * 1.3];
+            const box = labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
+            if (inGlobe(box) && !taken.some((t) => overlaps(t, box))) { place = { p, box }; break outer; }
+          }
+        }
       }
       // a host's own figure is always shown: if nothing is free, use the first spot that stays on the globe
       if (!place && !a.extra) {
@@ -473,14 +517,50 @@ function largeMap(el, geo, D, base, opts) {
     }
     // 2. names: origin and each host at (near) its inside point
     const named = [{ iso: origin, f: base.fo, name: originName, a: sc.anchorO, cls: "mgl-name mgl-name--o" },
-      ...base.hostPairs.map((h) => ({ ...h, a: sc.anchors.get(h.iso), cls: "mgl-name mgl-name--h" })),
-      ...pairs().map((h) => ({ ...h, a: sc.anchors.get(h.iso), cls: "mgl-name mgl-name--hx" }))];
+      ...base.hostPairs.map((h) => ({ ...h, a: sc.anchors.get(h.iso), cls: "mgl-name mgl-name--h" }))];
     for (const n of named) {
       if (!n.f || !n.a) continue;
       const l = hostLabel(sc.proj, n, n.a, sc.clipR, arrowPts, D, { fontPx: 13 * ts, taken })
         || hostLabel(sc.proj, n, n.a, sc.clipR, arrowPts, D, { fontPx: 13 * ts, taken, allowOutside: true });
-      if (l) { taken.push(l.box); texts.push(`<text class="${n.cls}" x="${l.x.toFixed(1)}" y="${l.y.toFixed(1)}" text-anchor="middle">${esc(l.text)}</text>`); }
+      if (l) { taken.push(l.box); texts.push(`<text class="${n.cls}" x="${l.x.toFixed(1)}" y="${l.y.toFixed(1)}" text-anchor="middle">${esc(l.text)}</text>`); continue; }
+      // the situation's own countries are always named: when the map is zoomed out (other hosts on) the country
+      // can be too small for its name, so try spots around its inside point, clear of every other label
+      if (!n.a.pt) continue;
+      const px = 13 * ts;
+      const w = textW(n.name, px, 600) + 6;
+      const cands = [[0, px * 1.4], [0, -px * 0.8], [w / 2 + 8, px * 0.35], [-w / 2 - 8, px * 0.35], [0, px * 2.7], [0, -px * 2.1]];
+      for (const [dx, dy] of cands) {
+        const x = n.a.pt[0] + dx, y = n.a.pt[1] + dy;
+        const box = labelBox(x, y, w, px);
+        const onGlobe = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]].every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
+        if (!onGlobe || taken.some((t) => overlaps(t, box, 2))) continue;
+        taken.push(box);
+        texts.push(`<text class="${n.cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${esc(n.name)}</text>`);
+        break;
+      }
     }
+    // 2b. other hosts: name and figure together at the country's inside point, largest figure first. A label that
+    //     would collide with another label or leave the globe is dropped, and that host's figure is listed under
+    //     the map instead (country, figure, year).
+    const xs = pairs();
+    const listed = [];
+    for (const x of [...xs].sort((a, b) => (b.value ?? -1) - (a.value ?? -1))) {
+      const a = sc.anchors.get(x.iso);
+      const npx = 12 * ts, fpx = 11 * ts;
+      const figText = fig(x);
+      if (!a?.pt) { listed.push(x); continue; }
+      const w = Math.max(textW(x.name, npx, 500), textW(figText, fpx, 500)) + 10;
+      const y = a.pt[1] + npx * 1.1;         // just under the inside point, clear of the arrowhead
+      const box = [a.pt[0] - w / 2, y - npx * 0.85, a.pt[0] + w / 2, y + fpx * 1.35];
+      const corners = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]];
+      const onGlobe = corners.every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
+      if (!onGlobe || taken.some((t) => overlaps(t, box, 6))) { listed.push(x); continue; }
+      taken.push(box);
+      texts.push(`<text class="mgl-name mgl-name--hx" x="${a.pt[0].toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${esc(x.name)}</text>`,
+        `<text class="mgl-fig mgl-fig--x" x="${a.pt[0].toFixed(1)}" y="${(y + fpx * 1.15).toFixed(1)}" text-anchor="middle">${esc(figText)}</text>`);
+    }
+    state.listed = xs.filter((x) => listed.includes(x));
+    renderXList();
     // 3. neighbours: small muted labels where they fit without touching anything else
     if (!fast) {
       const skip = new Set([origin, ...base.hostPairs.map((h) => h.iso), ...pairs().map((h) => h.iso)]);
@@ -608,6 +688,7 @@ function largeMap(el, geo, D, base, opts) {
     get drawn() { return last; },
     hasExtra: extraAll.length > 0,
     get hiddenExtra() { return state.showExtra ? state.hidden.map((x) => x.iso) : []; },
+    get listedExtra() { return state.listed.map((x) => x.iso); },
   };
   refit();
   draw();

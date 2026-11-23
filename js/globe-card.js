@@ -10,7 +10,7 @@ let card = null;
 let showing = null;   // iso currently shown
 let pinned = false;   // opened by a tap: stays until the next tap elsewhere
 
-function loadCountry(iso) {
+export function loadCountry(iso) {
   if (!cache.has(iso)) cache.set(iso, getJSON(`data/web/country/${iso}.json`).catch(() => null));
   return cache.get(iso);
 }
@@ -64,7 +64,7 @@ function html(f, year, c) {
   const unhcr = r[3][1] !== undefined;
   return `${head}
     <dl class="globe-card__rows">${r.map(([k, v, src]) => `<div><dt>${esc(k)}<span class="globe-card__src">${esc(src)}</span></dt><dd>${val(v)}</dd></div>`).join("")}</dl>
-    <p class="globe-card__foot">${idmc && unhcr ? "IDMC and UNHCR are never added. " : ""}Year-end figures. ${f.touch ? `<a href="country.html?iso=${esc(f.iso)}">Open ${esc(f.name)} &rsaquo;</a>` : "Click to open."}</p>`;
+    <p class="globe-card__foot">${idmc && unhcr ? "IDMC and UNHCR are never added. " : ""}Year-end figures. ${f.touch ? `<a href="country.html?iso=${esc(f.iso)}">Open ${esc(f.name)} &rsaquo;</a>` : "Click for a preview."}</p>`;
 }
 
 function place(x, y) {
@@ -104,8 +104,8 @@ export async function showCountryCard(f, year) {
   place(f.x, f.y);
 }
 
-export function hideCountryCard() {
-  if (!pinned) hide();
+export function hideCountryCard(force = false) {
+  if (force || !pinned) hide();
 }
 
 function hide() {

@@ -1,5 +1,6 @@
 // The quiet home globe: countries shaded by people displaced from them (UNHCR) in one year.
-// Drag to rotate; click a country to open it. No data is shown as plain land, never as the lightest shade.
+// Drag to rotate; click a country to fly to it and preview it (a second click opens it). No data is shown as
+// plain land, never as the lightest shade.
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm";
 import { worldFeatures } from "./geo.js";
 import { reducedMotion } from "./motion.js";
@@ -12,12 +13,14 @@ const cls = (v) => (v > 0 ? THRESHOLDS.filter((b) => v >= b).length : -1);
 
 /**
  * @param {object} o
- * @param {(iso: string) => void} [o.onPick]   click (mouse, pen) on a country with data
+ * @param {(f: {iso: string, name: string, pt: {x: number, y: number}}) => void} [o.onPick]
+ *        click or tap on a country with data, after the fly-to (pt: the country's centre on screen)
+ * @param {(iso: string) => void} [o.onOpen]   a second click on the picked country
  * @param {(f: {iso: string, name: string, value: number|undefined, x: number, y: number, touch: boolean}) => void} [o.onHover]
  *        pointer over a country (or a tap on a touch screen, which shows the card instead of opening the page)
  * @param {() => void} [o.onHoverEnd]
  */
-export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, onHover, onHoverEnd } = {}) {
+export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, onOpen, onDismiss, onHover, onHoverEnd } = {}) {
   const { features } = await worldFeatures(110);
   const size = 560;
   const proj = d3.geoOrthographic().scale(size / 2 - 6).translate([size / 2, size / 2]).rotate(rotate).clipAngle(90);
@@ -64,13 +67,14 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
   // slow idle rotation: stops on any interaction, resumes 20 s after the last one (never with reduced motion)
   let idleAt = performance.now();
   let flying = false;
+  let held = false;           // a country is picked (its preview is open): the globe holds still
   let last = 0;
   const touch = () => { idleAt = performance.now(); };
   const spin = (t) => {
     requestAnimationFrame(spin);
     const dt = last ? Math.min(64, t - last) : 16;
     last = t;
-    if (flying || reducedMotion() || document.hidden || start || t - idleAt < 20000 && idleAt !== 0) return;
+    if (flying || held || reducedMotion() || document.hidden || start || t - idleAt < 20000 && idleAt !== 0) return;
     const r = proj.rotate();
     proj.rotate([r[0] + dt * 0.004, r[1], 0]);        // about 4 degrees a second
     draw();
@@ -137,23 +141,54 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
     if (moved) return;
     const el = e.target.closest?.(".gl-c");
     const iso = el?.dataset.iso;
-    if (lastPointer === "touch" && onHover) {        // touch: first show the card; the card has the link
-      if (iso) onHover({ ...info(el, e), touch: true });
-      else onHoverEnd?.();
+    const hasData = iso && current[iso] !== undefined;
+    if (!hasData) {
+      if (held) { onDismiss?.(); return; }          // a click on the sea or a country without data closes the preview
+      if (lastPointer === "touch" && onHover) { if (iso) onHover({ ...info(el, e), touch: true }); else onHoverEnd?.(); }
       return;
     }
-    if (iso && current[iso] !== undefined && onPick) flyTo(el, () => onPick(iso));
+    // a second click on the country already picked opens it
+    if (held && svg.querySelector(".gl-c.is-picked")?.dataset.iso === iso) { onOpen?.(iso); return; }
+    onHoverEnd?.();
+    flyTo(el, () => onPick?.({ iso, name: features[+el.dataset.i].properties.name || iso, pt: screenPoint(features[+el.dataset.i]) }));
   });
+
+  /** The country's centre on screen (client px). */
+  function screenPoint(f) {
+    const p = proj(d3.geoCentroid(f)) || [size / 2, size / 2];
+    const [[x0], [x1]] = path.bounds(f);
+    const r = svg.getBoundingClientRect();
+    const k = r.width / size;
+    // centre, plus the country's left and right edges on screen, so the card can sit beside it, not over it
+    return { x: r.left + p[0] * k, y: r.top + p[1] * k, left: r.left + x0 * k, right: r.left + x1 * k };
+  }
+  /** Close the pick: the other countries come back, the idle spin may resume later. */
+  function release() {
+    held = false;
+    touch();
+    svg.classList.remove("gl-picking");
+    svg.querySelectorAll(".gl-c.is-picked").forEach((x) => x.classList.remove("is-picked"));
+  }
 
   /** The camera flies to the country (about 900 ms, ease-in-out); it gets a glowing outline, the rest dims. */
   function flyTo(el, then) {
     touch();
     const f = features[+el.dataset.i];
     const [lon, lat] = d3.geoCentroid(f);
-    if (reducedMotion() || !Number.isFinite(lon)) { then(); return; }
+    svg.querySelectorAll(".gl-c.is-picked").forEach((x) => x.classList.remove("is-picked"));
     svg.classList.add("gl-picking");
     el.classList.add("is-picked");
     el.parentNode.append(el);
+    held = true;
+    if (!Number.isFinite(lon)) { then(); return; }
+    const p1r = Math.max(-70, Math.min(70, -lat));
+    if (reducedMotion()) {           // no flight: turn straight to the country
+      let l = -lon;
+      proj.rotate([l, p1r, 0]);
+      draw();
+      then();
+      return;
+    }
     const [l0, p0] = proj.rotate();
     let l1 = -lon;
     while (l1 - l0 > 180) l1 -= 360;
@@ -168,7 +203,7 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
       proj.rotate([l0 + (l1 - l0) * e, p0 + (p1 - p0) * e, 0]);
       draw();
       if (t < 1) requestAnimationFrame(step);
-      else { flying = false; setTimeout(then, 120); }
+      else { flying = false; setTimeout(then, 60); }
     };
     requestAnimationFrame(step);
   }
@@ -183,6 +218,6 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
     draw();
   });
   // coming back to the page (back button): undo the picked state
-  window.addEventListener("pageshow", () => { svg.classList.remove("gl-picking"); svg.querySelector(".is-picked")?.classList.remove("is-picked"); });
-  return { setValues: colour, redraw: draw };
+  window.addEventListener("pageshow", () => { release(); });
+  return { setValues: colour, redraw: draw, release };
 }

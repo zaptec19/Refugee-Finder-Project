@@ -512,19 +512,40 @@ function wire(box, pt) {
  */
 export function linkNumbers(root, ctx, open) {
   root.querySelectorAll("[data-num], [data-pct]").forEach((span) => {
-    if (span.closest("button, a, .tp, [data-no-trace]")) return;
+    if (span.closest("button, a, .tp, [data-no-trace], .num-link")) return;
     const pct = span.hasAttribute("data-pct");
     const value = Number(pct ? span.dataset.pct : span.dataset.num);
     const year = span.dataset.year ? Number(span.dataset.year) : null;
     const pt = ctx.resolve(value, { year, pct });
     if (!pt) return;
-    const b = document.createElement("button");
-    b.type = "button";
+    // a real inline element (a <button> is always laid out as inline-block, which lets a line break land right
+    // after it): an inline span that works as a button, with keyboard focus and Enter / Space
+    const b = document.createElement("span");
     b.className = "num-link";
-    span.replaceWith(b);
+    b.setAttribute("role", "button");
+    b.tabIndex = 0;
+    // keep the number and any punctuation right after it together, so a comma or full stop never starts a line
+    const next = span.nextSibling;
+    const punct = next && next.nodeType === 3 ? next.textContent.match(/^[,.;:!?)\]%”’"']+/) : null;
+    if (punct) {
+      const keep = document.createElement("span");
+      keep.className = "num-nowrap";
+      span.replaceWith(keep);
+      keep.append(b);
+      next.textContent = next.textContent.slice(punct[0].length);
+      keep.append(document.createTextNode(punct[0]));
+    } else {
+      span.replaceWith(b);
+    }
     b.append(span);
     b.insertAdjacentHTML("beforeend", '<span class="sr-only">: see where this number comes from</span>');
     b.addEventListener("click", (e) => {
+      e.stopPropagation();
+      open(pt, { el: b, flyFrom: span });
+    });
+    b.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
       e.stopPropagation();
       open(pt, { el: b, flyFrom: span });
     });
