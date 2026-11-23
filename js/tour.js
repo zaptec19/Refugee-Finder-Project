@@ -11,12 +11,12 @@ const EXAMPLE = "situation.html?id=lka-ind";
 /** Each step: the page it runs on, what to point at (a CSS selector, or a list tried in order; none for a centred
  *  card), and at most two short sentences. Every card covers one area of the screen. */
 export const STEPS = [
-  { page: "home", target: "#q", title: "Ask anything",
+  { page: "home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
     text: "Type a country, a group of people or a question, like “Tamils who fled to India”. Not sure where to start? Try one of the examples below the search bar." },
   { page: "home", target: "#globe", title: "The globe",
     text: "Countries are shaded by how many people were displaced from them. Drag to turn it, and click a country to preview it; click again to open it." },
   { page: "*", target: ".topbar__fmt", title: "Make it yours",
-    text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. Guide mode, next to it, gives a short tip on each part of a page.",
+    text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. Turn on Guide (top right) for a short tip on each part of a page.",
     go: EXAMPLE, note: "Next: a real example" },
   { page: "situation", target: "#brief", title: "Start with the brief",
     text: "What happened, why people moved, when and how, in plain words. The label under it says who wrote it and whether the team has checked it." },
@@ -26,7 +26,7 @@ export const STEPS = [
     text: "How the figure changed, with conflict years and key events underneath. They show timing, not proof of cause." },
   { page: "situation", target: ["#compare", "#limitations"], title: "Before you quote a number",
     text: "Compare sources shows where datasets disagree and why. Limitations, further down, lists what the data can't tell you." },
-  { page: "situation", target: "#key-numbers .pin-btn", title: "Pin and export", last: true,
+  { page: "situation", target: ".topbar__coll", title: "Pin and export", last: true,
     text: "Pin numbers, charts and readings; their citations come with them. Open My collection (top right) to export a Word table, Excel or CSV with references." },
 ];
 // saved progress from an older tour (17 steps) is not resumed: it starts again at step 1
@@ -43,6 +43,7 @@ const pageOf = () => document.body.dataset.page || "";
 /** Start the tour from the first step (on the home page; from anywhere else it opens the home page first). */
 export function startTour() {
   store.set("tour", { i: 0, v: TOUR_VERSION });
+  store.set("tour-offered", true);        // someone who has taken the tour doesn't need the welcome card
   if (pageOf() !== "home") { location.href = "index.html"; return; }
   show(0);
 }
@@ -83,7 +84,7 @@ function build() {
     if (!b) return;
     if (b.dataset.tour === "next") next();
     else if (b.dataset.tour === "back") back();
-    else end();
+    else quit();
   });
   document.addEventListener("keydown", onKey);
   window.addEventListener("resize", queue);
@@ -95,8 +96,8 @@ function build() {
 }
 
 function onKey(e) {
-  if (index < 0) return;
-  if (e.key === "Escape") { e.preventDefault(); end(); }
+  if (index < 0) { if (index === -2 && e.key === "Escape") e.preventDefault(); return; }
+  if (e.key === "Escape") { e.preventDefault(); quit(); }
   else if (e.key === "ArrowRight" && !isTyping(e)) { e.preventDefault(); next(); }
   else if (e.key === "ArrowLeft" && !isTyping(e)) { e.preventDefault(); back(); }
 }
@@ -110,7 +111,6 @@ async function show(i) {
   current = s.target ? await waitFor(s.target) : null;
   if (index !== i) return;                       // the reader moved on while we waited
   if (s.target && !current) { advance(i, +1); return; }   // this page doesn't have it: skip the step
-  if (current) settle(current, i);
   const n = STEPS.length;
   ui.card.innerHTML = `
     <div class="tour-card__top">
@@ -130,23 +130,53 @@ async function show(i) {
   ui.ring.classList.toggle("tour-ring--full", !current);
   if (!current) ui.ring.style.left = ui.ring.style.top = ui.ring.style.width = ui.ring.style.height = "";
   document.body.classList.add("touring");
+  if (current) settle(current, i);
   place();
   // follow the target while it scrolls into view
   if (current && !reduced()) setTimeout(place, 350);
   ui.card.querySelector('[data-tour="next"]').focus({ preventScroll: true });
 }
 
-/** Bring the target into view: centred when it fits, otherwise just below the sticky top bar.
- *  On phones it always goes near the top, because the card is docked at the bottom of the screen. */
+// ------------------------------------------------------------------ where the target and the card go
+// The card never covers its target (nor anything a step asks to keep clear): it goes below, above or beside
+// the target, flipping sides when there is no room. A target taller than the free screen is highlighted only
+// in its top part, scrolled just under the top bar, with the card under that part.
+const GAP = 14;
+const inTopbar = (el) => !!el.closest(".topbar");
+/** The top of the free area: below the sticky top bar and, on phones, the sticky step strip of a situation page. */
+function areaTop() {
+  let top = 0;
+  document.querySelectorAll(".topbar, .sit__rail").forEach((e) => {
+    const cs = getComputedStyle(e);
+    const r = e.getBoundingClientRect();
+    // where the bar sits once it sticks (before the page scrolls, the step strip is still lower down)
+    const stick = parseFloat(cs.top);
+    if ((cs.position === "sticky" || cs.position === "fixed") && Number.isFinite(stick) && stick < 160 && r.height < 160 && r.height > 0) {
+      top = Math.max(top, stick + r.height);
+    }
+  });
+  return top;
+}
+const phoneCard = () => document.documentElement.clientWidth < 600;
+/** The space the target may use: on phones the card is docked at the bottom of the screen. */
+function areaBottom() {
+  if (phoneCard() && ui?.card) return window.innerHeight - 16 - ui.card.offsetHeight - GAP;
+  return window.innerHeight - 16;
+}
+const cardH = () => ui?.card?.offsetHeight || 220;
+
+/** Bring the target into view so that it and the card both fit: the pair centred when they fit, otherwise the
+ *  target's top just below the top bar. Targets in the top bar never scroll the page. */
 function scrollToTarget(el, instant = false) {
+  if (inTopbar(el)) return;
   const r = el.getBoundingClientRect();
-  const bar = document.querySelector(".topbar")?.offsetHeight || 0;
-  const vh = window.innerHeight;
-  const phone = document.documentElement.clientWidth < 600;
-  const top = phone || r.height > (vh - bar) * 0.6
-    ? r.top + window.scrollY - bar - 16
-    : r.top + window.scrollY - (vh - r.height) / 2;
-  window.scrollTo({ top: Math.max(0, top), behavior: instant || reduced() ? "instant" : "smooth" });
+  const top0 = areaTop() + 12;
+  const bottom = areaBottom();
+  const need = phoneCard() ? r.height : r.height + GAP + cardH();
+  const room = bottom - top0;
+  const want = need <= room && !phoneCard() ? top0 + (room - need) / 2 : top0;
+  const y = window.scrollY + r.top - want;
+  window.scrollTo({ top: Math.max(0, y), behavior: instant || reduced() ? "instant" : "smooth" });
 }
 
 /** Scroll to the target, then check again as charts above it finish drawing (they can push it down). */
@@ -154,11 +184,11 @@ function settle(el, i) {
   scrollToTarget(el);
   [450, 1000, 1700, 2600].forEach((ms) => setTimeout(() => {
     if (index !== i || !el.isConnected) return;
-    const r = el.getBoundingClientRect();
-    const bar = document.querySelector(".topbar")?.offsetHeight || 0;
-    const vh = window.innerHeight;
-    const visible = r.top >= bar - 4 && r.top < vh - 80;
-    if (!visible) scrollToTarget(el, true);
+    if (!inTopbar(el)) {
+      const r = el.getBoundingClientRect();
+      const visible = r.top >= areaTop() - 4 && r.top < areaBottom() - 60;
+      if (!visible) scrollToTarget(el, true);
+    }
     place();
   }, ms));
 }
@@ -185,32 +215,81 @@ function queue() {
   raf = requestAnimationFrame(place);
 }
 
+const box = (l, t, w, h) => ({ left: l, top: t, right: l + w, bottom: t + h, width: w, height: h });
+const hit = (a, b, m = 4) => a.left < b.right + m && b.left < a.right + m && a.top < b.bottom + m && b.top < a.bottom + m;
+const union = (rs) => box(Math.min(...rs.map((r) => r.left)), Math.min(...rs.map((r) => r.top)),
+  Math.max(...rs.map((r) => r.right)) - Math.min(...rs.map((r) => r.left)), Math.max(...rs.map((r) => r.bottom)) - Math.min(...rs.map((r) => r.top)));
+
+/** The part of the target to highlight: all of it, or its top part when it is taller than the free screen. */
+function highlight(el) {
+  const r = el.getBoundingClientRect();
+  if (inTopbar(el)) return box(r.left, r.top, r.width, r.height);
+  if (phoneCard()) {
+    // phones: the part of the target that is on screen above the docked card (a target near the end of a short
+    // page can't scroll any higher, so the card would otherwise sit on it)
+    const t = Math.max(r.top, areaTop());
+    const bottom = Math.min(r.bottom, areaBottom());
+    return bottom - t >= 40 ? box(r.left, t, r.width, bottom - t) : box(r.left, r.top, r.width, r.height);
+  }
+  const free = areaBottom() - (areaTop() + 12) - GAP - cardH();
+  const h = r.height > free ? Math.max(120, free) : r.height;
+  return box(r.left, r.top, r.width, h);
+}
+
 function place() {
   if (!ui || index < 0) return;
   const card = ui.card;
   const vw = document.documentElement.clientWidth;
   const vh = window.innerHeight;
-  const phone = vw < 600;
+  const phone = phoneCard();
   card.classList.toggle("tour-card--docked", phone && !!current);
   if (!current) {
-    card.style.left = card.style.top = "";
+    card.style.left = card.style.top = card.style.width = "";
     return;
   }
-  const r = current.getBoundingClientRect();
+  const H = highlight(current);
   const pad = 6;
   Object.assign(ui.ring.style, {
-    left: `${r.left - pad}px`, top: `${r.top - pad}px`, width: `${r.width + pad * 2}px`, height: `${r.height + pad * 2}px`,
+    left: `${H.left - pad}px`, top: `${H.top - pad}px`, width: `${H.width + pad * 2}px`, height: `${H.height + pad * 2}px`,
   });
-  if (phone) { card.style.left = card.style.top = ""; return; }   // docked at the bottom of the screen
-  const w = card.offsetWidth;
-  const h = card.offsetHeight;
-  const gap = 14;
-  let top = r.bottom + gap;
-  if (top + h > vh - 16) top = r.top - h - gap;                     // no room below: go above
-  if (top < 16) top = Math.min(vh - h - 16, Math.max(16, r.top + 16)); // tall target: overlap its top edge
-  const left = Math.min(Math.max(16, r.left + r.width / 2 - w / 2), vw - w - 16);
-  card.style.left = `${Math.round(left)}px`;
-  card.style.top = `${Math.round(top)}px`;
+  if (phone) { card.style.left = card.style.top = card.style.width = ""; return; }   // docked at the bottom of the screen
+  // what the card must keep clear: the highlighted part and anything the step names
+  const s = STEPS[index];
+  const keep = [box(H.left - pad, H.top - pad, H.width + pad * 2, H.height + pad * 2),
+    ...(s.avoid || []).map((sel) => document.querySelector(sel)).filter(Boolean).map((e) => e.getBoundingClientRect())];
+  const U = union(keep);
+  const top0 = areaTop() + 8;
+  card.style.width = "";
+  const w0 = card.offsetWidth;
+  const fits = (b) => b.left >= 16 && b.right <= vw - 16 && b.top >= top0 && b.bottom <= vh - 16 && !keep.some((k) => hit(b, k));
+  const clampX = (x, w) => Math.min(Math.max(16, x), vw - w - 16);
+  const clampY = (y, h) => Math.min(Math.max(top0, y), vh - h - 16);
+  const tryAt = (where) => {
+    let w = w0;
+    if (where === "right" || where === "left") {
+      const space = where === "right" ? vw - 16 - (U.right + GAP) : U.left - GAP - 16;
+      if (space < 280) return null;
+      w = Math.min(w0, space);
+    }
+    card.style.width = `${w}px`;
+    const h = card.offsetHeight;
+    const cx = U.left + U.width / 2 - w / 2;
+    const b = where === "below" ? box(clampX(cx, w), U.bottom + GAP, w, h)
+      : where === "above" ? box(clampX(cx, w), U.top - GAP - h, w, h)
+      : where === "right" ? box(U.right + GAP, clampY(U.top, h), w, h)
+      : box(U.left - GAP - w, clampY(U.top, h), w, h);
+    return fits(b) ? b : null;
+  };
+  const order = s.side ? ["right", "left", "below", "above"] : ["below", "above", "right", "left"];
+  let at = null;
+  for (const where of order) { at = tryAt(where); if (at) break; }
+  if (!at) {               // nowhere fits (a very small window): below the highlight, as far down as the screen allows
+    card.style.width = "";
+    const h = card.offsetHeight;
+    at = box(clampX(H.left + H.width / 2 - w0 / 2, w0), clampY(U.bottom + GAP, h), w0, h);
+  }
+  card.style.left = `${Math.round(at.left)}px`;
+  card.style.top = `${Math.round(at.top)}px`;
 }
 
 const onThisPage = (st) => st.page === "*" || st.page === pageOf();
@@ -227,8 +306,44 @@ function advance(from, dir) {
 }
 
 function next() {
-  if (STEPS[index].last) { end(); return; }
+  if (STEPS[index].last) { finish(); return; }
   advance(index, +1);
+}
+
+// ------------------------------------------------------------------ the ending
+// The tour brought the reader to the example page, so it takes them back home: after a short closing card when
+// they finish, straight away when they skip. On arrival the home page's tour pill pulses (see home.js).
+// Saved progress is cleared first, so the tour never resumes on its own.
+export const RETURN_KEY = "wv1:tour-return";
+function goHome(kind) {
+  try { sessionStorage.setItem(RETURN_KEY, kind); } catch { /* storage blocked: no pulse, still home */ }
+  location.href = "index.html";            // the cross-document view transition (skipped with reduced motion)
+}
+
+/** Done on the last card: "You're all set" for about 1.5 s, then home. */
+function finish() {
+  store.remove("tour");
+  const away = pageOf() !== "home";
+  index = -2;                              // keys and buttons do nothing while the closing card shows
+  current = null;
+  ui.card.innerHTML = `<div class="tour-card__done" role="status">${icon("check", { size: 28 })}
+      <p class="tour-card__title" id="tour-title">You're all set. Pick any situation to start.</p></div>`;
+  ui.card.classList.add("tour-card--center", "tour-card--done");
+  ui.card.classList.remove("tour-card--docked");
+  ui.card.style.left = ui.card.style.top = ui.card.style.width = "";
+  ui.ring.classList.add("tour-ring--full");
+  ui.ring.style.left = ui.ring.style.top = ui.ring.style.width = ui.ring.style.height = "";
+  setTimeout(() => {
+    if (away) { goHome("done"); return; }
+    end();
+  }, 1500);
+}
+
+/** Skip tour, X or Esc: on the example page, back home (no closing card); on the home page, just close. */
+function quit() {
+  store.remove("tour");
+  if (pageOf() !== "home") { goHome("skip"); return; }
+  end();
 }
 
 function back() {

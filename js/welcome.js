@@ -142,7 +142,7 @@ async function back(pill) {
   await Promise.allSettled(anims.map((a) => a.finished));
   finish(pill);
   pill.focus({ preventScroll: true });
-  hereIAm(pill);
+  pillHere(pill, "The tour lives here.");
 }
 
 function finish(pill) {
@@ -153,9 +153,10 @@ function finish(pill) {
   busy = false;
 }
 
-/** The pill says where the tour went: a cyan ring that expands and fades twice (about 1.2 s) and a 3 s tooltip.
- *  With reduced motion, a plain highlight instead of the ring. */
-function hereIAm(pill) {
+/** The pill says where the tour is: a cyan ring that expands and fades twice (about 1.2 s) and a 3 s tooltip
+ *  (`text`). With reduced motion, a plain highlight instead of the ring. Also used on arrival after a tour. */
+export function pillHere(pill, text) {
+  if (!pill) return;
   const cls = reducedMotion() ? "tour-pill--lit" : "tour-pill--here";
   pill.classList.remove("tour-pill--here", "tour-pill--lit");
   void pill.offsetWidth;
@@ -165,7 +166,7 @@ function hereIAm(pill) {
   const tip = document.createElement("div");
   tip.className = "tour-pill-tip";
   tip.setAttribute("role", "status");
-  tip.textContent = "The tour lives here.";
+  tip.textContent = text;
   document.body.append(tip);
   const r = pill.getBoundingClientRect();
   const t = tip.getBoundingClientRect();
