@@ -4,6 +4,7 @@ import { initPage, guideTip } from "./layout.js";
 import { glossary as loadGlossary, tips as loadTips, getJSON } from "./data.js";
 import { esc } from "./format.js";
 import { icon } from "./icons.js";
+import { MAP_SOURCE } from "./config.js";
 
 initPage({ page: "learn" });
 document.body.classList.add("page-learn");
@@ -69,7 +70,8 @@ main.innerHTML = `<div class="page page--narrow learn">
     <dl class="gloss">${glossary.map((g) => `<div id="g-${g.id}" class="gloss__item"><dt>${esc(g.term)}</dt><dd><p>${esc(g.plain)}</p>${g.how_sources_differ ? `<p class="small muted"><strong>How sources differ:</strong> ${esc(g.how_sources_differ)}</p>` : ""}</dd></div>`).join("")}</dl></section>
 
   <section id="organisations" class="learn__section"><h2>About the organisations: mandates and limits</h2>
-    <div class="orgs">${ORGS.map((o) => `<article class="card org" id="org-${o.id}"><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p><p class="small"><strong>Limits:</strong> ${esc(o.limits)}</p></article>`).join("")}</div></section>
+    <div class="orgs">${ORGS.map((o) => `<article class="card org" id="org-${o.id}"><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p><p class="small"><strong>Limits:</strong> ${esc(o.limits)}</p></article>`).join("")}</div>
+    <p class="small" id="maps-data" style="margin-top:16px;max-width:72ch"><strong>Maps.</strong> Country borders come from Natural Earth (public domain), delivered by the world-atlas ${esc(MAP_SOURCE.atlasVersion)} package: 1:110m on the home globe, 1:50m on the smaller maps. ${esc(MAP_SOURCE.bordersNote)} <a href="datasets.html#maps">Map data &rsaquo;</a></p></section>
 
   <section id="tour" class="learn__section"><h2>The 1-minute tour</h2>
     <p><button class="btn btn--primary" type="button" data-start-tour>Start the interactive tour</button>

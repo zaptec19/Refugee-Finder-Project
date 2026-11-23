@@ -9,6 +9,8 @@ import { warmUp } from "./search.js";
 import { showCountryCard, hideCountryCard } from "./globe-card.js";
 import { showPreview, closePreview, openCountry, previewOpen } from "./globe-preview.js";
 import { reducedMotion } from "./motion.js";
+import { MAP_SOURCE } from "./config.js";
+import { bordersNoteHTML, wireBordersNotes } from "./borders.js";
 
 initPage({ page: "home", dark: true });
 document.body.classList.add("page-home");
@@ -101,7 +103,8 @@ if (preset) { input.value = preset; searchUI.run(); }
     w.hidden = false;
   }
   // the caption's first line changes with the year; the second (why the globe starts in 1960) stays
-  cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}`;
+  cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}<span class="home__caption-src map-src">${MAP_SOURCE.home} · ${bordersNoteHTML()}</span>`;
+  wireBordersNotes(cap);
   const setCap = (y) => { cap.querySelector(".home__caption-main").textContent = `People displaced, by country, ${y} · click a country for a preview`; };
   setCap(last);
   let year = last;

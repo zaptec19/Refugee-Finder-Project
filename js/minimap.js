@@ -15,6 +15,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm";
 import polylabel from "https://cdn.jsdelivr.net/npm/polylabel@2.0.1/+esm";
 import { worldFeatures } from "./geo.js";
 import { esc, fmt } from "./format.js";
+import { MAP_SOURCE } from "./config.js";
 
 const SMALL = 240;
 const LARGE = 640;
@@ -74,7 +75,8 @@ export async function renderMiniGlobe(el, opts) {
     <div class="mini-globe__cap">${caption}</div>
     <div class="mini-globe__legend small muted${base.hostPairs.length > 1 ? " mini-globe__legend--stack" : ""}" aria-hidden="true">
       <span><i class="sw sw-o"></i>${esc(originName)}</span>${base.hostPairs.map((h) => `<span><i class="sw sw-h"></i>${esc(h.name)}</span>`).join("")}
-    </div>`;
+    </div>
+    <div class="mini-globe__src map-src"><span title="${esc(MAP_SOURCE.miniTitle)}">${esc(MAP_SOURCE.mini)}</span> · <a href="datasets.html#maps">About borders</a></div>`;
   if (opts.onExpand) {
     const btn = el.querySelector(".mini-globe__btn");
     btn.addEventListener("click", () => opts.onExpand(btn));

@@ -1385,3 +1385,22 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 .tour-card__done { display: grid; justify-items: center; gap: var(--s-2, 8px); }
 .tour-card__done .icon { color: var(--accent); width: 32px; height: 32px; padding: 6px; border-radius: 50%; background: var(--accent-soft); box-sizing: content-box; }
 .tour-card__done .tour-card__title { margin: 0; }
+
+/* map source lines (js/config.js MAP_SOURCE) and the "About borders" note (js/borders.js) */
+.map-src { font-size: 0.6875rem; line-height: 1.45; color: var(--muted); }
+.map-src a, .map-src .linklike { font-size: inherit; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.map-src a:hover, .map-src .linklike:hover { color: var(--accent); }
+.home__caption-src { display: block; margin-top: 4px; opacity: 0.85; }
+.mini-globe__src { text-align: center; margin-top: var(--s-1); }
+.mini-globe__src span[title] { cursor: help; }
+.map-dialog__src .map-src__about { font-size: inherit; }
+.borders-pop { position: fixed; inset: auto; margin: 0; width: min(320px, calc(100vw - 24px)); padding: var(--s-3) var(--s-4);
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); border-radius: 10px; box-shadow: var(--shadow-pop);
+  font-size: var(--fs-13); line-height: 1.5; text-align: left; }
+.borders-pop p { margin: 0 0 var(--s-2); }
+.borders-pop p:last-child { margin: 0; }
+.borders-pop__h { font-weight: 600; }
+@media (max-width: 600px) {
+  /* the phone mini globe card is narrow: one line, slightly smaller, allowed into the card's padding */
+  .mini-globe__src { font-size: 10px; white-space: nowrap; margin-inline: -8px; }
+}

@@ -6,6 +6,8 @@ import { renderMiniGlobe } from "./minimap.js";
 import { getJSON } from "./data.js";
 import { esc, fmt, mode, setMode } from "./format.js";
 import { createPopout } from "./popout.js";
+import { MAP_SOURCE } from "./config.js";
+import { bordersNoteHTML, wireBordersNotes } from "./borders.js";
 
 let dlg = null;
 let pop = null;          // the shared pop-out (js/popout.js): opening, closing, Esc, backdrop, focus
@@ -47,10 +49,11 @@ function hostNamesFor(S, hostIsos) {
   return S.type === "named" ? hostIsos.map((h) => (S.hosts_latest || []).find((x) => x.host_iso3 === h)?.name || h) : [S.host_name].filter(Boolean);
 }
 
+/** The map's source line (js/config.js MAP_SOURCE): borders, the figures' source, what the arrows mean. */
 function sourceLine(S, SRC) {
   const id = S.type === "idp" ? S.series?.[S.main_measure]?.[0]?.source_id : "unhcr-pop-2026";
-  const fig = id === "unhcr-pop-2026" ? "UNHCR, Refugee Data Finder (2026 release)" : `${SRC[id]?.short || ""}, ${SRC[id]?.dataset || ""} (${(SRC[id]?.release || "").replace(/ \(.*$/, "")})`;
-  return `Figures: ${fig}. Borders: Natural Earth via world-atlas. Borders shown are not an endorsement.`;
+  const fig = id === "unhcr-pop-2026" ? MAP_SOURCE.figuresUNHCR : `${SRC[id]?.short || ""}, ${SRC[id]?.dataset || ""} (${(SRC[id]?.release || "").replace(/ \(.*$/, "")})`;
+  return MAP_SOURCE.big(fig);
 }
 
 function build() {
@@ -82,7 +85,6 @@ function build() {
         <label class="map-dialog__toggle" hidden><input type="checkbox" data-extra> Show other host countries</label>
         <button class="linklike map-dialog__view" type="button" data-mapview aria-pressed="false">Table view</button>
       </div>
-      <p class="map-dialog__note small muted">Arrows link origin and host countries; they don't show the route people travelled.</p>
       <p class="map-dialog__extra small muted" hidden></p>
       <footer class="map-dialog__foot small muted">
         <p class="map-dialog__cap"></p>
@@ -107,7 +109,9 @@ export async function openMapDialog({ S, MEAS, SRC, trigger }) {
   dlg.querySelector(".map-dialog__title").textContent = `${S.origin_name}${hostNames.length ? ` to ${hostNames.join(" and ")}` : ""}`;
   dlg.querySelector(".map-dialog__cap").innerHTML = hostNames.length
     ? `from ${esc(S.origin_name)} <span aria-hidden="true">&rsaquo;</span> to ${hostNames.map(esc).join(" and ")}` : esc(S.origin_name);
-  dlg.querySelector(".map-dialog__src").textContent = sourceLine(S, SRC);
+  const srcEl = dlg.querySelector(".map-dialog__src");
+  srcEl.innerHTML = `${esc(sourceLine(S, SRC))} ${bordersNoteHTML()}`;
+  wireBordersNotes(srcEl);
   const mapEl = dlg.querySelector(".map-dialog__map");
   const tableEl = dlg.querySelector(".map-dialog__table");
   mapEl.hidden = false;

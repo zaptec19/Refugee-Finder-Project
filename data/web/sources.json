@@ -597,5 +597,43 @@
   "accessed": "2026-11-13",
   "years": null,
   "rows": 0
+ },
+ {
+  "id": "natural-earth",
+  "short": "Natural Earth",
+  "label": "Natural Earth country borders (maps)",
+  "organisation": "Natural Earth",
+  "dataset": "Admin 0 – Countries (country borders for the maps)",
+  "release": "via world-atlas 2.0.2 (TopoJSON; 1:110m and 1:50m)",
+  "url": "https://www.naturalearthdata.com/",
+  "licence": "Public domain",
+  "licence_url": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "origin": "cdn",
+  "raw": "world-atlas@2.0.2 countries-110m.json and countries-50m.json (jsDelivr), loaded by the browser",
+  "clean_file": "",
+  "csl": {
+   "id": "natural-earth",
+   "type": "dataset",
+   "author": [
+    {
+     "literal": "Natural Earth"
+    }
+   ],
+   "title": "Admin 0 – Countries",
+   "medium": "TopoJSON via world-atlas 2.0.2, 1:110m and 1:50m",
+   "URL": "https://www.naturalearthdata.com/",
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      11,
+      23
+     ]
+    ]
+   }
+  },
+  "accessed": "",
+  "years": null,
+  "rows": 0
  }
 ]

@@ -831,7 +831,8 @@ function sourcesHTML(el) {
       <a href="request.html?about=${encodeURIComponent(S.title)}">Missing something? Request data or a source &rsaquo;</a></div>`;
   fillCitations(el, N);
   el.querySelector("[data-cite-all]").addEventListener("click", async (e) => {
-    const all = [...ds.map((d) => d.csl), ...ds.flatMap((d) => d.cite_also || []), ...(S.reading || []).map((r) => r.csl), ...also.map((r) => r.csl)];
+    // the page's maps use Natural Earth borders, so they are cited too
+    const all = [...ds.map((d) => d.csl), ...ds.flatMap((d) => d.cite_also || []), ...(S.reading || []).map((r) => r.csl), ...also.map((r) => r.csl), SRC["natural-earth"]?.csl];
     e.currentTarget.disabled = true;
     const refs = await referenceList(all, "apa");
     e.currentTarget.disabled = false;
