@@ -387,7 +387,6 @@ html { scroll-behavior: smooth; }
 .mg-h { fill: var(--g-host); stroke: var(--g-host-line); stroke-width: 0.8; }
 .mg-hb { fill: none; stroke: var(--surface); stroke-width: 1.2; stroke-linejoin: round; }
 .mg-ring { fill: none; stroke: var(--ink); stroke-width: 1.2; }
-.mg-label { font-size: 9px; font-weight: 600; fill: var(--g-host-label); pointer-events: none; }
 .mg-arrow-halo { fill: none; stroke: var(--surface); stroke-width: 5; stroke-linecap: round; opacity: 0.9; }
 .mg-arrow { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
 .mini-globe__legend { flex-wrap: wrap; }
@@ -1039,7 +1038,6 @@ dialog::backdrop { background: var(--scrim); }
 .mg-hx { fill: var(--g-host-x); stroke: var(--g-host-x-line); stroke-width: 0.8; }
 .mg-hb { stroke: var(--g-ocean); stroke-width: 1; }
 .mg-ring { stroke: var(--g-arrow); }
-.mg-label { fill: var(--g-host-label); paint-order: stroke; stroke: var(--g-ocean); stroke-width: 2.5px; stroke-linejoin: round; }
 .mg-arrow-halo { stroke: var(--g-ocean); opacity: 0.55; }
 .mg-arrow { stroke: var(--g-arrow-base); filter: var(--g-arrow-glow); }
 .mg-flow { fill: none; stroke: var(--g-arrow); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 2 12; pointer-events: none;
@@ -1516,3 +1514,15 @@ html.theme-swap .home__globe #globe { view-transition-name: none; }
   .home__globe { height: auto; container-type: normal; width: min(360px, 80vw, 70vh); }
   .home__globe #globe { width: 100%; height: auto; }
 }
+
+/* ================================================================== maps: names on hover only (24 Nov 2026)
+   No country names are drawn on the maps; the tooltip (one per map, .mgl__tip) names the country under the pointer.
+   Arrows, rings and shared borders never block the country underneath. */
+.mini-globe .mg-arrow, .mini-globe .mg-arrow-halo, .mini-globe .mg-flow, .mini-globe .mg-hb, .mini-globe .mg-ring { pointer-events: none; }
+/* the figures on the arrows never block hovering or tapping the country under them */
+.mgl-texts, .mgl-texts text { pointer-events: none; }
+.mg-tip { z-index: 5; max-width: 220px; display: block; font-size: var(--fs-13); line-height: 1.35; }
+.mgl__tip { display: block; line-height: 1.35; }
+.mgl__tip strong { font-weight: 600; }
+.mgl [data-iso][tabindex]:focus { outline: none; }
+.mgl [data-iso][tabindex]:focus-visible { outline: none; stroke: var(--accent-ui); stroke-width: 3; }

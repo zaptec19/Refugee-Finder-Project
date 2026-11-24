@@ -8,6 +8,7 @@ import { reducedMotion } from "./motion.js";
 import { arriveMorph } from "./morph.js";
 import { icon, pinButton } from "./icons.js";
 import { renderMiniGlobe } from "./minimap.js";
+import { figuresFor } from "./map-figures.js";
 import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf, isolatedMarks } from "./charts.js";
 import { openPopover, openPanel, bindGlossary } from "./popouts.js";
 import { traceContext, openTrace as openTraceIn, linkNumbers, LABEL } from "./trace.js";
@@ -125,6 +126,7 @@ async function main() {
   const missingNote = NOT_SEPARATE[s.origin_iso3] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[s.origin_iso3], figSrc) : "";
   const mini = renderMiniGlobe(document.getElementById("mini-globe"), {
     origin: s.origin_iso3, hosts, originName: NOT_SEPARATE[s.origin_iso3] || s.origin_name, missingNote,
+    figures: figuresFor(s, MEAS, SRC),         // the hover tooltips: role and figure for the origin and hosts
     // click (or Enter/Space) opens the larger map in a pop-out; the module loads only when asked for
     onExpand: (btn) => import("./map-dialog.js").then((m) => m.openMapDialog({ S: s, MEAS, SRC, trigger: btn, pinItem: mapItem(), missingNote })),
     hostNames: s.type === "named" ? hosts.map((h) => s.hosts_latest.find((x) => x.host_iso3 === h)?.name || h) : [s.host_name].filter(Boolean),

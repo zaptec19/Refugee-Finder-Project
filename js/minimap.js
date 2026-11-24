@@ -1,15 +1,16 @@
 // The situation map: origin (sand) and host countries (slate) highlighted, an arrow from the origin to
 // each host, zoomed so all of them fit inside the circle with padding. One function draws both sizes:
 //   size "small": the mini globe on the situation page (240 px)
-//   size "large": the pop-out map (640 px), with labels, a figure on each arrow, tooltips, the origin's
-//                 other top hosts as an optional layer, zoom and drag-to-rotate.
+//   size "large": the pop-out map (640 px), with a figure on each arrow, the origin's other top hosts as an
+//                 optional layer, zoom and drag-to-rotate.
 // The arrows, colours and zoom are the same code at both sizes; the large map only adds layers.
 //  - Every arrow runs from a point clearly inside the origin to a point clearly inside the host
 //    ("inside point": the pole of inaccessibility of the country's largest polygon on screen, from polylabel).
-//  - Neighbours (up to 2,500 km): one gentle quadratic curve. Far pairs: the great-circle arc.
-//  - Several hosts: the arrows start a few pixels apart and bend away from each other.
-//  - Hosts are kept visibly separate: a light line on the borders they share, a label where it fits,
-//    and one legend entry per host.
+//  - Every arrow, near or far, is one arc bulging up the screen, like a flight taking off and landing (upArc).
+//  - Several hosts: the arrows start a few pixels apart and their arcs rise to different heights.
+//  - No country names are drawn on the map: hovering any country (focus, or a tap, in the large map) shows its
+//    name in a tooltip, with the role and figure for the origin and hosts. Hosts are kept visibly separate by a
+//    light line on the borders they share, and the legend names each one.
 // An arrow means "people from here are counted there", not the route anyone travelled.
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm";
 import polylabel from "https://cdn.jsdelivr.net/npm/polylabel@2.0.1/+esm";
@@ -32,7 +33,7 @@ function dims(size) {
     TINY: 12 * k,                 // a host narrower than this (px) gets a ring and the arrow stops short
     HEAD: 8 * Math.sqrt(k),       // arrowhead size; 8 px on the mini globe
     FAN: [5, 4, 6].map((v) => v * k),   // how far apart the starts of several arrows are
-    BEND: [8 * k, 30 * k],        // curve bend limits
+    ARC: [8 * k, 34 * k],         // how high an arrow's arc rises above its straight line (min, max)
   };
 }
 
@@ -84,6 +85,23 @@ export async function renderMiniGlobe(el, opts) {
     const btn = el.querySelector(".mini-globe__btn");
     btn.addEventListener("click", () => opts.onExpand(btn));
   }
+  const tip = document.createElement("div");
+  tip.className = "mgl__tip mg-tip";
+  tip.setAttribute("role", "tooltip");
+  tip.hidden = true;
+  el.append(tip);
+  const F = opts.figures || {};
+  const mw = F.measureWord || "people";
+  const line = (name, role = "", v = undefined, after = "", always = false) => {
+    const figure = v && Number.isFinite(v.value) ? `${fmt(v.value)} ${mw}${after} (${v.year})` : always ? "no data" : "";
+    return `<strong>${esc(name)}</strong>${role ? ` · ${esc(role)}` : ""}${figure ? ` · ${esc(figure)}` : ""}`;
+  };
+  attachTip(el.querySelector("svg"), tip, (iso, name) => {
+    if (iso === opts.origin) return line(originName, F.originRole ?? (hosts.length ? "origin" : ""), F.origin, F.originAll ? " in all host countries" : "");
+    const i = hosts.indexOf(iso);
+    if (i >= 0) return line(hostNames[i] || name || iso, "host", F.hosts?.[iso], "", !!opts.figures);
+    return line(name || iso);
+  });
   trimArrows(el, D);
   return { proj, origin: base.fo || null, hosts: base.hostPairs, arrows: sc.arrows };
 }
@@ -155,7 +173,7 @@ function fitProjection(focusAll, D, aroundAll = focusAll) {
   return proj;
 }
 
-/** Everything both sizes draw: land, host borders, inside points, arrows and host labels. */
+/** Everything both sizes draw: land, host borders, inside points and arrows. */
 function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { extraPairs = [], fast = false } = {}) {
   const { S } = D;
   const path = d3.geoPath(proj);
@@ -168,7 +186,7 @@ function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { ex
     const iso = f.properties.iso3;
     const cls = iso === origin ? "o" : hostIsos.has(iso) ? "h" : extraIsos.has(iso) ? "hx" : "l";
     const d = path(f);
-    if (d) landPaths.push({ cls, iso, d });
+    if (d) landPaths.push({ cls, iso, d, name: f.properties.name || "" });
   }
   // draw highlighted countries last so their outlines sit on top
   const order = { o: 3, h: 2, hx: 1, l: 0 };
@@ -182,9 +200,7 @@ function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { ex
   // no arrow when the origin is on the far side of the globe (e.g. Afghanistan and the USA can't both face us)
   const arrows = anchorO?.pt && anchorO.ok ? planArrows(proj, fo, anchorO, all, anchors, features, clipR, D) : [];
   for (const a of arrows) a.extra = extraIsos.has(a.iso);
-  const arrowPts = arrows.flatMap((a) => a.pts);
-  const labels = fast ? [] : hostPairs.map((h) => hostLabel(proj, h, anchors.get(h.iso), clipR, arrowPts, D)).filter(Boolean);
-  return { proj, path, r, clipR, landPaths, hostBorders, anchorO, anchors, arrows, labels, sphere: path({ type: "Sphere" }), grat: path(d3.geoGraticule10()) };
+  return { proj, path, r, clipR, landPaths, hostBorders, anchorO, anchors, arrows, sphere: path({ type: "Sphere" }), grat: path(d3.geoGraticule10()) };
 }
 
 function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
@@ -211,11 +227,10 @@ function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
       <circle cx="${S / 2}" cy="${S / 2}" r="${S / 2 - 1}" fill="var(--g-ocean)" stroke="var(--line-strong)"/>
       <g clip-path="url(#${uid}-clip)">
         <path d="${sc.grat}" fill="none" stroke="var(--g-graticule)"/>
-        ${sc.landPaths.map((p) => `<path class="mg-${p.cls}" d="${p.d}"${landAttrs(p)}/>`).join("")}
+        ${sc.landPaths.map((p) => `<path class="mg-${p.cls}" d="${p.d}"${p.iso ? ` data-iso="${esc(p.iso)}"` : ""}${p.name ? ` data-name="${esc(p.name)}"` : ""}${landAttrs(p)}/>`).join("")}
         ${sc.hostBorders ? `<path class="mg-hb" d="${sc.hostBorders}"/>` : ""}
         ${S > 300 ? `<circle class="mg-rim" cx="${S / 2}" cy="${S / 2}" r="${sc.clipR}" fill="url(#${uid}-rim)" pointer-events="none"/>` : ""}
         ${sc.arrows.filter((a) => a.ring && !a.extra).map((a) => `<circle class="mg-ring" cx="${f1(a.ring.cx)}" cy="${f1(a.ring.cy)}" r="${f1(a.ring.r)}"/>`).join("")}
-        ${sc.labels.map((l) => `<text class="mg-label" x="${f1(l.x)}" y="${f1(l.y)}" text-anchor="middle">${esc(l.text)}</text>`).join("")}
         ${sc.arrows.map((a) => a.extra
           ? `<path class="mg-arrow mg-arrow--x" d="${a.d}" marker-end="url(#${uid}-headx)"/>`
           : `<path class="mg-arrow-halo" d="${a.d}"/><path class="mg-arrow" d="${a.d}" marker-end="url(#${uid}-head)"/><path class="mg-flow" d="${a.d}" aria-hidden="true"/>`).join("")}
@@ -283,10 +298,6 @@ function planArrows(proj, fo, ao, hostPairs, anchors, features, clipR, D) {
   const dirs = new Map(usable.map((h) => [h.iso, norm(sub(anchors.get(h.iso).pt, ao.pt))]));
   const many = usable.length > 1;
   const inClip = (p) => Math.hypot(p[0] - C[0], p[1] - C[1]) <= clipR - 2;
-  const land = (pt) => {
-    const ll = proj.invert(pt);
-    return !!ll && features.some((f) => d3.geoContains(f, ll));
-  };
 
   return usable.map((h) => {
     const ah = anchors.get(h.iso);
@@ -306,64 +317,52 @@ function planArrows(proj, fo, ao, hostPairs, anchors, features, clipR, D) {
     if (ah.tiny) end = sub(ah.pt, mul(norm(sub(ah.pt, start)), Math.min(2 * D.k, ah.depth * 0.6)));
     const ring = ah.tiny ? { cx: ah.pt[0], cy: ah.pt[1], r: Math.max(6 * D.k, ah.size / 2 + 4 * D.k) } : null;
     const km = d3.geoDistance(proj.invert(start), proj.invert(end)) * 6371;
-
-    let d;
-    let pts = [];
-    let side = 1;
-    let ctrl = null;
-    if (km > FAR_KM) {
-      ({ d, pts } = greatCircle(proj, start, end, D));
-    } else {
-      const v = sub(end, start);
-      const len = Math.hypot(v[0], v[1]) || 1;
-      const nrm = [-v[1] / len, v[0] / len];
-      const mid = mul(add(start, end), 0.5);
-      let bend = Math.min(D.BEND[1], Math.max(D.BEND[0], len * 0.22));
-      // side: away from the nearest other arrow; with one host, away from land so the curve stays visible
-      if (many) {
-        const others = usable.filter((x) => x.iso !== h.iso).map((x) => dirs.get(x.iso));
-        const near = others.reduce((b, x) => (dot(x, dir) > dot(b, dir) ? x : b));
-        side = dot(nrm, near) > 0 ? -1 : 1;
-      } else if (land(add(mid, mul(nrm, bend))) && !land(add(mid, mul(nrm, -bend)))) {
-        side = -1;
-      }
-      const fits = (s, b) => {
-        const c = add(mid, mul(nrm, s * b));
-        for (let t = 0; t <= 1.0001; t += 0.05) if (!inClip(qpt(start, c, end, t))) return false;
-        return true;
-      };
-      if (!fits(side, bend)) {
-        if (fits(-side, bend)) side = -side;
-        else bend = fits(side, D.BEND[0]) ? D.BEND[0] : 0;
-      }
-      ctrl = add(mid, mul(nrm, side * bend));
-      d = `M${start[0].toFixed(1)},${start[1].toFixed(1)} Q${ctrl[0].toFixed(1)},${ctrl[1].toFixed(1)} ${end[0].toFixed(1)},${end[1].toFixed(1)}`;
-      pts = Array.from({ length: 31 }, (_, k) => qpt(start, ctrl, end, k / 30));
-    }
-    return { iso: h.iso, start, end, ring, d, pts, ctrl, km: Math.round(km) };
+    // several hosts: the arcs fan out by height (never flipped downwards)
+    const lift = many ? [1, 1.35, 0.7, 1.6, 0.55][usable.indexOf(h) % 5] : 1;
+    const arc = upArc(start, end, D, inClip, lift);
+    return { iso: h.iso, start, end, ring, ...arc, km: Math.round(km) };
   }).filter(Boolean);
 }
 
-/** Great-circle arc between two screen points, keeping only the part on the visible side of the globe;
- *  it always finishes at `end`, so the head sits on the host. */
-function greatCircle(proj, start, end, D) {
-  const a = proj.invert(start);
-  const b = proj.invert(end);
-  const centre = proj.invert([D.S / 2, D.S / 2]);
-  const interp = d3.geoInterpolate(a, b);
-  const pts = [];
-  for (let i = 1; i < 48; i++) {
-    const ll = interp(i / 48);
-    pts.push(d3.geoDistance(ll, centre) < Math.PI / 2 - 1e-3 ? proj(ll) : null);
+/**
+ * Every arrow is one smooth arc that bulges up the screen, near or far, like a flight taking off and landing: it
+ * leaves the origin rising, peaks, and comes down into the host. (It is not the route people travelled; the map's
+ * note says so.) A quadratic curve: the control point sits on the upper side of the straight line between the ends
+ * and, where it fits, above both ends. Its height is about 30% of the distance on screen, between D.ARC[0] and
+ * D.ARC[1]. A nearly vertical route (Sri Lanka to India) leans to one side so it still arches over the top and comes
+ * down into the host: never a hook, loop or S. An arc that would leave the globe is lowered (towards a straight
+ * line), never flipped downwards. Returns d, the sampled points, the control point, the up direction and the lift used.
+ */
+function upArc(start, end, D, inClip, lift = 1) {
+  const v = sub(end, start);
+  const len = Math.hypot(v[0], v[1]) || 1;
+  const mid = mul(add(start, end), 0.5);
+  let up = [-v[1] / len, v[0] / len];
+  if (up[1] > 0) up = mul(up, -1);                  // the normal that points up the screen (smaller y)
+  if (Math.abs(up[1]) < 0.02) {                     // straight up or down the screen: lean towards the globe's middle
+    up = [mid[0] > D.S / 2 ? -1 : 1, 0];
   }
-  let d = `M${start[0].toFixed(1)},${start[1].toFixed(1)}`;
-  let pen = true;
-  for (const p of pts) {
-    if (!p) { pen = false; continue; }
-    d += `${pen ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`;
-    pen = true;
+  // never taller than about half its length: a short hop that rose by the full minimum would turn into a hook
+  const bulge = Math.min(D.ARC[1], Math.max(D.ARC[0], len * 0.3), len * 0.5) * lift;
+  const ctrl0 = add(mid, mul(up, 2 * bulge));       // a quadratic's peak is half way to its control point
+  // take off and land: the control point above both ends, so the arc rises from the origin and comes down into the host
+  const top = Math.min(start[1], end[1]) - Math.min(Math.max(D.ARC[0] * 0.5, bulge * 0.5), len * 0.3);
+  if (ctrl0[1] > top) ctrl0[1] = top;
+  // keep it on the globe: lower the arc (towards the straight line) until every point is inside the circle
+  let ctrl = ctrl0;
+  let used = 0;
+  for (const f of [1, 0.85, 0.7, 0.55, 0.42, 0.3, 0.2, 0.1, 0]) {
+    const c = add(mid, mul(sub(ctrl0, mid), f));
+    let ok = true;
+    for (let t = 0; t <= 1.0001; t += 0.04) if (!inClip(qpt(start, c, end, t))) { ok = false; break; }
+    ctrl = c;
+    used = f;
+    if (ok) break;
   }
-  return { d: `${d}L${end[0].toFixed(1)},${end[1].toFixed(1)}`, pts: [start, ...pts.filter(Boolean), end] };
+  const f1 = (n) => n.toFixed(1);
+  const d = `M${f1(start[0])},${f1(start[1])} Q${f1(ctrl[0])},${f1(ctrl[1])} ${f1(end[0])},${f1(end[1])}`;
+  const pts = Array.from({ length: 41 }, (_, k) => qpt(start, ctrl, end, k / 40));
+  return { d, pts, ctrl, up, lift: used };
 }
 
 // ------------------------------------------------------------------ labels
@@ -377,26 +376,52 @@ function textW(text, px, weight = 400) {
 }
 const labelBox = (x, y, w, h) => [x - w / 2, y - h * 0.8, x + w / 2, y + h * 0.25];
 const overlaps = (a, b, m = 2) => !(a[2] + m < b[0] || b[2] + m < a[0] || a[3] + m < b[1] || b[3] + m < a[1]);
-const clearOf = (box, pts, m) => pts.every(([px, py]) => px < box[0] - m || px > box[2] + m || py < box[1] - m || py > box[3] + m);
 
-/** A small name label near the host's inside point (not over the arrowhead), only if it fits inside the country. */
-function hostLabel(proj, h, a, clipR, arrowPts, D, { fontPx = 9, taken = [], allowOutside = false } = {}) {
-  if (!a?.pt || (a.tiny && !allowOutside)) return null;
-  const w = h.name.length * fontPx * 0.57 + 4;
-  const hh = fontPx * 1.1;
-  const C = [D.S / 2, D.S / 2];
-  // below, above, right of, left of the arrowhead (text baseline y)
-  const g = fontPx * 1.55;
-  const spots = [[0, g], [0, -g * 0.65], [w / 2 + g * 0.65, fontPx * 0.35], [-(w / 2 + g * 0.65), fontPx * 0.35], [0, g * 1.75], [0, -g * 1.4]];
-  for (const [dx, dy] of spots) {
-    const x = a.pt[0] + dx;
-    const y = a.pt[1] + dy;
-    const box = labelBox(x, y, w, hh);
-    const corners = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]], [x, y - hh * 0.3]];
-    const fits = corners.every((p) => (allowOutside || inside(proj, h.f, p)) && Math.hypot(p[0] - C[0], p[1] - C[1]) < clipR - 2);
-    if (fits && clearOf(box, arrowPts, 3) && !taken.some((t) => overlaps(t, box))) return { x, y, text: h.name, box };
-  }
-  return null;
+// ------------------------------------------------------------------ tooltips (both sizes)
+const tipKey = (el) => el.dataset.iso || el.dataset.name || "";
+/**
+ * One tooltip per map: the country under the pointer, highlighted or not, by name; the origin and hosts with their
+ * role and figure ("India · host · 89,507 refugees (2025)"). It appears after about 80 ms, follows the pointer, stays
+ * inside the map and hides on leave. Touch and keyboard call show() themselves (the large map).
+ */
+function attachTip(box, tip, lineFor, { busy = () => false } = {}) {
+  let timer = 0;
+  let key = null;
+  const place = (cx, cy) => {
+    const r = box.getBoundingClientRect();
+    const pr = (tip.offsetParent || tip.parentElement).getBoundingClientRect();
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    let x = cx + 14;
+    let y = cy + 14;
+    if (x + w > r.right - 4) x = cx - w - 14;
+    if (y + h > r.bottom - 4) y = cy - h - 14;
+    x = Math.max(r.left + 4, Math.min(x, r.right - w - 4));
+    y = Math.max(r.top + 4, Math.min(y, r.bottom - h - 4));
+    tip.style.left = `${(x - pr.left).toFixed(0)}px`;
+    tip.style.top = `${(y - pr.top).toFixed(0)}px`;
+  };
+  let by = null;                                     // what opened it: "pointer", "tap" or "focus"
+  const show = (el, cx, cy, how = "pointer") => {
+    clearTimeout(timer);
+    tip.innerHTML = lineFor(el.dataset.iso || "", el.dataset.name || "");
+    tip.hidden = false;
+    key = tipKey(el);
+    by = how;
+    place(cx, cy);
+  };
+  const hide = () => { clearTimeout(timer); tip.hidden = true; key = null; by = null; };
+  box.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "touch" || busy()) return;
+    const el = e.target.closest?.("[data-name], [data-iso]");
+    if (!el) { hide(); return; }
+    if (tipKey(el) === key) { place(e.clientX, e.clientY); return; }
+    clearTimeout(timer);
+    const { clientX: x, clientY: y } = e;
+    timer = setTimeout(() => show(el, x, y), key ? 0 : 80);
+  });
+  box.addEventListener("pointerleave", (e) => { if (e.pointerType !== "touch") hide(); });
+  return { show, hide, get key() { return key; }, get by() { return by; } };
 }
 
 // ------------------------------------------------------------------ large map
@@ -418,13 +443,13 @@ function largeMap(el, geo, D, base, opts) {
   const tip = el.querySelector(".mgl__tip");
   const xList = el.querySelector(".mgl__xlist");
   let xKey = "";
-  /** Other hosts whose labels would overlap on the map: their figures in a small list under it. */
+  /** Other hosts (the optional layer): their figures in a small list under the map (no figures on the map for them). */
   function renderXList() {
     const key = `${state.listed.map((x) => x.iso).join()}|${fmt(1000)}`;
     if (key === xKey) return;
     xKey = key;
     xList.hidden = !state.listed.length;
-    xList.innerHTML = state.listed.length ? `<p class="mgl__xlist-h">Other host countries not labelled on the map (labels would overlap)</p>
+    xList.innerHTML = state.listed.length ? `<p class="mgl__xlist-h">Other host countries</p>
       <table class="table table--compact"><thead><tr><th scope="col">Country</th><th scope="col" class="num">${esc(measureWord[0].toUpperCase() + measureWord.slice(1))}</th><th scope="col" class="num">Year</th></tr></thead>
       <tbody>${state.listed.map((x) => `<tr><th scope="row">${esc(x.name)}</th><td class="num tabular">${Number.isFinite(x.value) ? esc(fmt(x.value)) : '<span class="no-data">no data</span>'}</td><td class="num tabular">${esc(String(x.year ?? ""))}</td></tr>`).join("")}</tbody></table>` : "";
   }
@@ -466,180 +491,106 @@ function largeMap(el, geo, D, base, opts) {
     const taken = [];
     const texts = [];
     const arrowPts = sc.arrows.flatMap((a) => a.pts);
-    // 1. figure on each arrow, near its midpoint, on the outside of the bend
+    // figures on the arrows, just above the peak of each arc (the arcs all bulge upwards); the overlap rules as before
     for (const a of sc.arrows) {
-      if (a.extra) continue;     // other hosts are labelled at the country itself (step 2b), not along the arrow
-      const figObj = a.extra ? extraAll.find((x) => x.iso === a.iso) : figures.hosts?.[a.iso];
-      // other hosts carry their name, so stacked figures can be told apart
-      let text = a.extra ? `${figObj?.name || a.iso}: ${fig(figObj)}` : fig(figObj);
-      const fpx = (a.extra ? 11 : 12.5) * ts;
+      if (a.extra) continue;     // other hosts' figures are in the list under the map
+      const figObj = figures.hosts?.[a.iso];
+      let text = fig(figObj);
+      const fpx = 12.5 * ts;
       let w = textW(text, fpx, 600) + 8;
       const mid = a.pts[Math.floor(a.pts.length / 2)];
+      const peak = a.pts.reduce((m, q) => (q[1] < m[1] ? q : m), a.pts[0]);
       const tan = norm(sub(a.pts[Math.min(a.pts.length - 1, Math.floor(a.pts.length / 2) + 1)], a.pts[Math.max(0, Math.floor(a.pts.length / 2) - 1)]));
       let nrm = [-tan[1], tan[0]];
-      if (a.ctrl && dot(nrm, sub(a.ctrl, mid)) < 0) nrm = mul(nrm, -1);
+      if (dot(nrm, a.up || [0, -1]) < 0) nrm = mul(nrm, -1);      // the side the arc bulges to
       const along = (t) => a.pts[Math.max(0, Math.min(a.pts.length - 1, Math.round(t * (a.pts.length - 1))))];
       const spots = [];
-      for (const t of [0.5, 0.38, 0.62]) for (const off of [14, 26, -14, -26, 40, -40, 54, -54]) spots.push(add(along(t), mul(nrm, off)));
-      // further along the arrow and further out, before giving up on a free spot
-      for (const t of [0.28, 0.72, 0.2, 0.8]) for (const off of [14, -14, 26, -26, 40, -40, 54, -54, 68, -68]) spots.push(add(along(t), mul(nrm, off)));
+      // above the peak first (centred, then nudged sideways), a line higher each time
+      for (let k = 0; k < 4; k++) for (const dx of [0, -w / 3, w / 3]) spots.push([peak[0] + dx, peak[1] - fpx * (0.95 + 1.25 * k)]);
+      for (const t of [0.5, 0.38, 0.62]) for (const off of [14, 26, 40, 54, -14, -26]) spots.push(add(along(t), mul(nrm, off)));
+      for (const t of [0.28, 0.72, 0.2, 0.8]) for (const off of [14, 26, 40, 54, 68, -14, -26, -40]) spots.push(add(along(t), mul(nrm, off)));
       const inGlobe = (box) => [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]]
         .every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
-      let place = null;
-      const tryPlace = () => {
+      const boxAt = (p) => labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
+      // clear of the other figures, and of the arrows (a figure never sits on an arc)
+      const clearOfArrows = (box) => arrowPts.every(([px, py]) => px < box[0] - 2 || px > box[2] + 2 || py < box[1] - 2 || py > box[3] + 2);
+      const tryPlace = (strict = true) => {
         for (const p of spots) {
-          const box = labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
-          if (inGlobe(box) && !taken.some((t) => overlaps(t, box))) return { p, box };
+          const box = boxAt(p);
+          if (inGlobe(box) && !taken.some((t) => overlaps(t, box)) && (!strict || clearOfArrows(box))) return { p, box };
         }
         return null;
       };
-      place = tryPlace();
-      // no room for the full label: try the figure and year alone (the title and tooltip say what it counts)
-      if (!place && !a.extra && figObj && Number.isFinite(figObj.value)) {
+      let place = tryPlace() || tryPlace(false);
+      // no room for the full label: the figure and year alone (the tooltip and the table say what it counts)
+      if (!place && figObj && Number.isFinite(figObj.value)) {
         text = `${fmt(figObj.value)} (${figObj.year})`;
         w = textW(text, fpx, 600) + 8;
-        place = tryPlace();
+        place = tryPlace() || tryPlace(false);
       }
       // still nothing: slide the first spots up or down, a line at a time, until the label is clear of the others
-      if (!place && !a.extra) {
-        outer: for (const base0 of spots.slice(0, 8)) {
-          for (let k = 1; k <= 8; k++) for (const dir of [1, -1]) {
+      if (!place) {
+        outer: for (const base0 of spots.slice(0, 12)) {
+          for (let k = 1; k <= 8; k++) for (const dir of [-1, 1]) {
             const p = [base0[0], base0[1] + dir * k * fpx * 1.3];
-            const box = labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2);
+            const box = boxAt(p);
             if (inGlobe(box) && !taken.some((t) => overlaps(t, box))) { place = { p, box }; break outer; }
           }
         }
       }
-      // a host's own figure is always shown: if nothing is free, use the first spot that stays on the globe
-      if (!place && !a.extra) {
-        const p = spots.find((q) => inGlobe(labelBox(q[0], q[1] + fpx * 0.35, w, fpx * 1.2))) || mid;
-        place = { p, box: labelBox(p[0], p[1] + fpx * 0.35, w, fpx * 1.2) };
+      // a host's own figure is always shown: if nothing is free, the first spot that stays on the globe
+      if (!place) {
+        const p = spots.find((q) => inGlobe(boxAt(q))) || mid;
+        place = { p, box: boxAt(p) };
       }
-      if (place) {
-        taken.push(place.box);
-        texts.push(`<text class="mgl-fig${a.extra ? " mgl-fig--x" : ""}" x="${place.p[0].toFixed(1)}" y="${(place.p[1] + fpx * 0.35).toFixed(1)}" text-anchor="middle">${esc(text)}</text>`);
-      }
+      taken.push(place.box);
+      texts.push(`<text class="mgl-fig" x="${place.p[0].toFixed(1)}" y="${(place.p[1] + fpx * 0.35).toFixed(1)}" text-anchor="middle">${esc(text)}</text>`);
     }
-    // 2. names: origin and each host at (near) its inside point
-    const named = [{ iso: origin, f: base.fo, name: originName, a: sc.anchorO, cls: "mgl-name mgl-name--o" },
-      ...base.hostPairs.map((h) => ({ ...h, a: sc.anchors.get(h.iso), cls: "mgl-name mgl-name--h" }))];
-    for (const n of named) {
-      if (!n.f || !n.a) continue;
-      const l = hostLabel(sc.proj, n, n.a, sc.clipR, arrowPts, D, { fontPx: 13 * ts, taken })
-        || hostLabel(sc.proj, n, n.a, sc.clipR, arrowPts, D, { fontPx: 13 * ts, taken, allowOutside: true });
-      if (l) { taken.push(l.box); texts.push(`<text class="${n.cls}" x="${l.x.toFixed(1)}" y="${l.y.toFixed(1)}" text-anchor="middle">${esc(l.text)}</text>`); continue; }
-      // the situation's own countries are always named: when the map is zoomed out (other hosts on) the country
-      // can be too small for its name, so try spots around its inside point, clear of every other label
-      if (!n.a.pt) continue;
-      const px = 13 * ts;
-      const w = textW(n.name, px, 600) + 6;
-      const cands = [[0, px * 1.4], [0, -px * 0.8], [w / 2 + 8, px * 0.35], [-w / 2 - 8, px * 0.35], [0, px * 2.7], [0, -px * 2.1]];
-      for (const [dx, dy] of cands) {
-        const x = n.a.pt[0] + dx, y = n.a.pt[1] + dy;
-        const box = labelBox(x, y, w, px);
-        const onGlobe = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]].every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
-        if (!onGlobe || taken.some((t) => overlaps(t, box, 2))) continue;
-        taken.push(box);
-        texts.push(`<text class="${n.cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${esc(n.name)}</text>`);
-        break;
-      }
-    }
-    // 2b. other hosts: name and figure together at the country's inside point, largest figure first. A label that
-    //     would collide with another label or leave the globe is dropped, and that host's figure is listed under
-    //     the map instead (country, figure, year).
-    const xs = pairs();
-    const listed = [];
-    for (const x of [...xs].sort((a, b) => (b.value ?? -1) - (a.value ?? -1))) {
-      const a = sc.anchors.get(x.iso);
-      const npx = 12 * ts, fpx = 11 * ts;
-      const figText = fig(x);
-      if (!a?.pt) { listed.push(x); continue; }
-      const w = Math.max(textW(x.name, npx, 500), textW(figText, fpx, 500)) + 10;
-      const y = a.pt[1] + npx * 1.1;         // just under the inside point, clear of the arrowhead
-      const box = [a.pt[0] - w / 2, y - npx * 0.85, a.pt[0] + w / 2, y + fpx * 1.35];
-      const corners = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]];
-      const onGlobe = corners.every((q) => Math.hypot(q[0] - D.S / 2, q[1] - D.S / 2) < sc.clipR - 4);
-      if (!onGlobe || taken.some((t) => overlaps(t, box, 6))) { listed.push(x); continue; }
-      taken.push(box);
-      texts.push(`<text class="mgl-name mgl-name--hx" x="${a.pt[0].toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${esc(x.name)}</text>`,
-        `<text class="mgl-fig mgl-fig--x" x="${a.pt[0].toFixed(1)}" y="${(y + fpx * 1.15).toFixed(1)}" text-anchor="middle">${esc(figText)}</text>`);
-    }
-    state.listed = xs.filter((x) => listed.includes(x));
+    // other hosts: no names or figures on the map; all of them are in the list under it
+    state.listed = [...pairs()].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
     renderXList();
-    // 3. neighbours: small muted labels where they fit without touching anything else
-    if (!fast) {
-      const skip = new Set([origin, ...base.hostPairs.map((h) => h.iso), ...pairs().map((h) => h.iso)]);
-      const cands = [];
-      for (const f of features) {
-        const iso = f.properties.iso3;
-        if (!f.properties.name || skip.has(iso)) continue;
-        const area = sc.path.area(f);
-        if (area > 900) cands.push({ f, area });
-      }
-      cands.sort((a, b) => b.area - a.area);
-      for (const { f } of cands.slice(0, 40)) {
-        const a = insidePoint(sc.proj, sc.path, f, D);
-        if (!a.ok) continue;
-        const name = f.properties.name;
-        const w = name.length * 10.5 * ts * 0.55 + 4;
-        const box = labelBox(a.pt[0], a.pt[1] + 3.5 * ts, w, 12 * ts);
-        const corners = [[box[0], box[1]], [box[2], box[1]], [box[0], box[3]], [box[2], box[3]]];
-        if (!corners.every((p) => inside(sc.proj, f, p) && Math.hypot(p[0] - D.S / 2, p[1] - D.S / 2) < sc.clipR - 4)) continue;
-        if (taken.some((t) => overlaps(t, box, 4)) || !clearOf(box, arrowPts, 4)) continue;
-        taken.push(box);
-        texts.push(`<text class="mgl-nb" x="${a.pt[0].toFixed(1)}" y="${(a.pt[1] + 3.5 * ts).toFixed(1)}" text-anchor="middle">${esc(name)}</text>`);
-      }
-    }
     const roles = new Map([[origin, "o"], ...base.hostPairs.map((h) => [h.iso, "h"]), ...pairs().map((h) => [h.iso, "hx"])]);
-    svgBox.innerHTML = svgMarkup(D, { ...sc, labels: [] }, {
+    const focused = svgBox.contains(document.activeElement) ? document.activeElement.dataset?.iso : null;
+    svgBox.innerHTML = svgMarkup(D, sc, {
       label: `Larger map: ${originName}${base.hostPairs.length ? ` to ${base.hostPairs.map((h) => h.name).join(" and ")}` : ""}.`,
       extraLayers: `<g class="mgl-texts">${texts.join("")}</g>`,
-      landAttrs: (p) => (roles.has(p.iso) ? ` data-iso="${esc(p.iso)}"` : ""),
+      landAttrs: (p) => (roles.get(p.iso) === "o" || roles.get(p.iso) === "h"
+        ? ` tabindex="0" role="img" aria-label="${esc(tipLine(p.iso, p.name).replace(/<[^>]+>/g, ""))}"` : ""),
     });
     trimArrows(svgBox, D);
+    if (focused) svgBox.querySelector(`[data-iso="${focused}"][tabindex]`)?.focus({ preventScroll: true });
     last = { proj: sc.proj, origin: base.fo, hosts: [...base.hostPairs, ...pairs()], arrows: sc.arrows };
     return last;
   }
 
-  // ---- tooltips on the highlighted countries (hover; tap on touch screens)
-  const tipText = (iso) => {
-    if (iso === origin) return { name: originName, role: "Origin", text: typeof figures.originText === "function" ? figures.originText() : "no data" };
+  // ---- tooltips: any country under the pointer (hover), a tap on touch screens, keyboard focus on the origin and hosts
+  function tipLine(iso, name) {
+    if (iso === origin) return lineFor(originName, figures.originRole ?? "origin", figures.origin, figures.originAll ? " in all host countries" : "");
     const h = base.hostPairs.find((x) => x.iso === iso);
-    if (h) {
-      const v = figures.hosts?.[iso];
-      return { name: h.name, role: "Host", text: v && Number.isFinite(v.value) ? `Hosts ${fmt(v.value)} ${measureWord} from ${originName}, ${v.year} · ${v.source}` : "no data" };
-    }
+    if (h) return lineFor(h.name, "host", figures.hosts?.[iso], "", true);
     const x = extraAll.find((e) => e.iso === iso);
-    if (x) return { name: x.name, role: "Other host (another situation)", text: Number.isFinite(x.value) ? `Hosts ${fmt(x.value)} ${measureWord} from ${originName}, ${x.year} · ${x.source}` : "no data" };
-    return null;
-  };
-  let tipIso = null;
-  function showTip(iso, cx, cy) {
-    const t = tipText(iso);
-    if (!t) { hideTip(); return; }
-    tipIso = iso;
-    tip.innerHTML = `<strong>${esc(t.name)}</strong><span class="mgl__role">${esc(t.role)}</span><span>${esc(t.text)}</span>`;
-    tip.hidden = false;
-    const box = el.getBoundingClientRect();
-    const w = tip.offsetWidth;
-    const h = tip.offsetHeight;
-    let x = cx - box.left + 14;
-    let y = cy - box.top + 14;
-    if (x + w > box.width - 4) x = cx - box.left - w - 14;
-    if (y + h > box.height - 4) y = cy - box.top - h - 14;
-    tip.style.left = `${Math.max(4, x)}px`;
-    tip.style.top = `${Math.max(4, y)}px`;
+    if (x && state.showExtra) return lineFor(x.name, "other host", x, "", true);
+    return lineFor(name || iso);
   }
-  function hideTip() { tip.hidden = true; tipIso = null; }
-  svgBox.addEventListener("pointermove", (e) => {
-    if (state.dragging) return;
-    const iso = e.target.closest?.("[data-iso]")?.dataset.iso;
-    if (iso && e.pointerType !== "touch") showTip(iso, e.clientX, e.clientY);
-    else if (e.pointerType !== "touch") hideTip();
-  });
-  svgBox.addEventListener("pointerleave", (e) => { if (e.pointerType !== "touch") hideTip(); });
+  function lineFor(name, role = "", v = undefined, after = "", always = false) {
+    const figure = v && Number.isFinite(v.value) ? `${fmt(v.value)} ${measureWord}${after} (${v.year})` : always ? "no data" : "";
+    return `<strong>${esc(name)}</strong>${role ? ` · ${esc(role)}` : ""}${figure ? ` · ${esc(figure)}` : ""}`;
+  }
+  const tips = attachTip(svgBox, tip, tipLine, { busy: () => state.dragging });
+  const hideTip = tips.hide;
   // a tap anywhere outside the map closes a tooltip opened by a tap
-  document.addEventListener("pointerdown", (e) => { if (tipIso && !svgBox.contains(e.target)) hideTip(); });
+  document.addEventListener("pointerdown", (e) => { if (tips.key && !svgBox.contains(e.target)) hideTip(); });
+  svgBox.addEventListener("focusin", (e) => {
+    const p = e.target.closest?.("[data-iso][tabindex]");
+    if (!p) return;
+    const r = p.getBoundingClientRect();
+    tips.show(p, r.left + r.width / 2, r.top + r.height / 2, "focus");
+  });
+  // leaving a focused country hides only a tooltip focus opened (on touch, focus moves after a tap has shown its own)
+  svgBox.addEventListener("focusout", (e) => {
+    const p = e.target.closest?.("[data-iso][tabindex]");
+    if (p && tips.by === "focus" && tips.key === tipKey(p)) hideTip();
+  });
 
   // ---- drag to rotate (mouse, pen, touch); a tap without movement shows the tooltip on touch screens
   let drag = null;
@@ -647,7 +598,7 @@ function largeMap(el, geo, D, base, opts) {
   const redrawFast = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => draw({ fast: true })); };
   svgBox.addEventListener("pointerdown", (e) => {
     // remember the country under the finger now: after pointer capture, later events target the map itself
-    drag = { x: e.clientX, y: e.clientY, rot: state.rot.slice(), moved: false, iso: e.target.closest?.("[data-iso]")?.dataset.iso };
+    drag = { x: e.clientX, y: e.clientY, rot: state.rot.slice(), moved: false, el: e.target.closest?.("[data-name], [data-iso]") };
     try { svgBox.setPointerCapture(e.pointerId); } catch { /* ignore */ }
   });
   svgBox.addEventListener("pointermove", (e) => {
@@ -669,7 +620,7 @@ function largeMap(el, geo, D, base, opts) {
     state.dragging = false;
     if (was.moved) { draw(); return; }
     if (e.pointerType === "touch") {
-      if (was.iso && was.iso !== tipIso) showTip(was.iso, e.clientX, e.clientY); else hideTip();
+      if (was.el && (tipKey(was.el) !== tips.key || tips.by !== "tap")) tips.show(was.el, e.clientX, e.clientY, "tap"); else hideTip();
     }
   };
   svgBox.addEventListener("pointerup", endDrag);
@@ -688,7 +639,7 @@ function largeMap(el, geo, D, base, opts) {
     zoom(f) { state.scale = clampScale(state.scale * f); draw(); return state.scale; },
     reset() { refit(); draw(); },
     setExtra(on) { state.showExtra = !!on && extraAll.length > 0; refit(); draw(); },
-    redraw() { draw(); if (tipIso) hideTip(); },
+    redraw() { draw(); if (tips.key) hideTip(); },
     get limits() { return { scale: state.scale, min: whole, max: clampScale(Infinity), fit: state.fitScale }; },
     get drawn() { return last; },
     hasExtra: extraAll.length > 0,

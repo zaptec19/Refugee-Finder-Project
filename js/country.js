@@ -137,7 +137,7 @@ try {
   }
   // an area India's official map doesn't show separately: the note in place of the mini map (whose figures: the page's)
   const figSrc = ["hosted", "from"].some((g) => Object.values(c[g] || {}).some((v) => v?.some?.(([, x]) => x != null))) ? "UNHCR" : "IDMC";
-  renderMiniGlobe(document.getElementById("cg"), { origin: iso, hosts: [], originName: NOT_SEPARATE[iso] || c.name,
+  renderMiniGlobe(document.getElementById("cg"), { origin: iso, hosts: [], originName: NOT_SEPARATE[iso] || c.name, figures: { originRole: "" },
     missingNote: NOT_SEPARATE[iso] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[iso], figSrc) : "" }).catch(() => {});
 } catch (e) {
   console.error(e);

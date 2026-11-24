@@ -10,42 +10,11 @@ import { MAP_SOURCE } from "./config.js";
 import { bordersNoteHTML, wireBordersNotes } from "./borders.js";
 import { pinButton } from "./icons.js";
 import { pin, syncPins } from "./collection.js";
+import { figuresFor } from "./map-figures.js";
 
 let dlg = null;
 let pop = null;          // the shared pop-out (js/popout.js): opening, closing, Esc, backdrop, focus
 let busy = false;
-const last = (s) => (Array.isArray(s) && s.length ? s[s.length - 1] : null);
-
-/** Figures for the map, straight from the situation file. */
-function figuresFor(S, MEAS, SRC) {
-  const measureWord = (MEAS[S.main_measure]?.label || "people").toLowerCase();
-  const srcName = (id) => SRC[id]?.short || id || "";
-  const hosts = {};
-  const hostIsos = S.type === "named" ? S.hosts || [] : S.host_iso3 ? [S.host_iso3] : [];
-  for (const iso of hostIsos) {
-    let p = null;
-    if (S.type === "named") p = S.series?.by_host?.[iso] && !Array.isArray(S.series.by_host[iso]) ? S.series.by_host[iso] : last(S.series?.by_host?.[iso]);
-    else p = last(S.series?.[S.main_measure]);
-    if (!p) {
-      const h = (S.hosts_latest || []).find((x) => x.host_iso3 === iso);
-      if (h) p = { value: h.value, year: h.year, source_id: "unhcr-pop-2026" };
-    }
-    hosts[iso] = p ? { value: p.value, year: p.year, source: srcName(p.source_id) } : null;
-  }
-  const ot = last(S.origin_total);
-  const main = last(S.series?.[S.main_measure]);
-  const originText = () => {
-    if (ot && Number.isFinite(ot.value)) return `${fmt(ot.value)} ${measureWord} from ${S.origin_name} in all host countries, ${ot.year} · ${srcName(ot.source_id)}`;
-    if (S.type === "idp" && main && Number.isFinite(main.value)) return `${fmt(main.value)}: ${MEAS[S.main_measure]?.label || ""}, ${main.year} · ${srcName(main.source_id)}`;
-    return "no data";
-  };
-  const extra = (S.hosts_latest || [])
-    .filter((h) => h.host_iso3 && h.host_iso3 !== S.origin_iso3 && !hostIsos.includes(h.host_iso3))
-    .slice(0, 5)
-    .map((h) => ({ iso: h.host_iso3, name: h.name, value: h.value, year: h.year, source: "UNHCR",
-      id: `${S.origin_iso3}-${h.host_iso3}`.toLowerCase() }));
-  return { measureWord, hosts, originText, origin: ot || main, extra, hostIsos };
-}
 
 function hostNamesFor(S, hostIsos) {
   return S.type === "named" ? hostIsos.map((h) => (S.hosts_latest || []).find((x) => x.host_iso3 === h)?.name || h) : [S.host_name].filter(Boolean);
@@ -143,7 +112,7 @@ export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null, mis
   await pop.open({ el: trigger }, { focus: dlg.querySelector(".map-dialog__close") });
   const out = await renderMiniGlobe(mapEl, {
     size: "large", origin: S.origin_iso3, hosts: fig.hostIsos, originName: S.origin_name, hostNames,
-    figures: { measureWord: fig.measureWord, hosts: fig.hosts, originText: fig.originText, extra: fig.extra },
+    figures: { measureWord: fig.measureWord, hosts: fig.hosts, originText: fig.originText, extra: fig.extra, origin: fig.origin, originAll: fig.originAll },
   });
   ctx.map = out?.controls || null;
   wire();
