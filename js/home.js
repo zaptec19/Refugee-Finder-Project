@@ -33,7 +33,7 @@ main.innerHTML = `
     <div class="home__try"><span class="muted small">Try:</span>
       ${TRY.map(([t, q]) => `<button class="chip" type="button" data-q="${q}">${t}</button>`).join("")}
     </div>
-    <figure class="home__globe" style="margin-bottom:0">
+    <figure class="home__globe">
       <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
@@ -106,7 +106,7 @@ if (preset) { input.value = preset; presetP.get("exact") === "1" ? searchUI.runE
   // the caption's first line changes with the year; the second (why the globe starts in 1960) stays
   cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}<span class="home__caption-src map-src">${MAP_SOURCE.home} · ${bordersNoteHTML()}</span>`;
   wireBordersNotes(cap);
-  const setCap = (y) => { cap.querySelector(".home__caption-main").textContent = `People displaced, by country, ${y} · click a country for a preview`; };
+  const setCap = (y) => { cap.querySelector(".home__caption-main").innerHTML = `People displaced, by country, ${y}<span class="home__caption-hint"> · click a country for a preview</span>`; };
   setCap(last);
   let year = last;
   const g = await createGlobe(document.getElementById("globe"), {

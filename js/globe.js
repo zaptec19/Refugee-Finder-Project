@@ -62,6 +62,15 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
     });
   }
   draw();
+  // the home page sizes the globe from the space left on screen (css: .home__globe is a size container): the drawing
+  // scales with the viewBox; redraw when the size changes so the outlines and the hover/preview positions follow at once
+  if ("ResizeObserver" in window) {
+    let w = 0;
+    new ResizeObserver(([e]) => {
+      const nw = Math.round(e.contentRect.width);
+      if (nw && nw !== w) { w = nw; requestAnimationFrame(draw); }
+    }).observe(svg);
+  }
   colour(values);
 
   // slow idle rotation: stops on any interaction, resumes 20 s after the last one (never with reduced motion)
