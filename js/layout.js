@@ -151,18 +151,23 @@ export function initPage({ page, dark = false } = {}) {
     const setSearch = (open) => {
       header.classList.toggle("is-searching", open);
       searchBtn.setAttribute("aria-expanded", String(open));
-      if (open) { setMenu(false, { focus: false }); header.querySelector("#ask-top").focus(); } else searchBtn.focus();
+      if (open) { setMenu(false, { focus: false }); header.querySelector("#ask-top").focus(); }
+      else { header.querySelector("#ask-top").dispatchEvent(new Event("search-close")); searchBtn.focus(); }
     };
     searchBtn.addEventListener("click", () => setSearch(true));
     header.querySelector(".topbar__search-close").addEventListener("click", () => setSearch(false));
     header.querySelector("#ask-top-form").addEventListener("keydown", (e) => {
       // Esc first closes the results (search-ui), then the full-width search
       // (capture phase: read the results' state before search-ui's own Esc handler hides them)
-      if (e.key === "Escape" && header.classList.contains("is-searching") && !header.querySelector(".results:not([hidden])")) setSearch(false);
+      if (e.key === "Escape" && header.classList.contains("is-searching") && !document.querySelector("#ask-top-results:not([hidden])")) setSearch(false);
     }, true);
   }
   const wide = window.matchMedia("(min-width: 600px)");
-  wide.addEventListener?.("change", () => { setMenu(false, { focus: false }); header.classList.remove("is-searching"); });
+  wide.addEventListener?.("change", () => {
+    setMenu(false, { focus: false });
+    if (header.classList.contains("is-searching")) header.querySelector("#ask-top")?.dispatchEvent(new Event("search-close"));
+    header.classList.remove("is-searching");
+  });
 
   updateCollectionBadge();
   window.addEventListener("storage", updateCollectionBadge);

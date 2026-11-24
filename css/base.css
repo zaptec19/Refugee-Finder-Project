@@ -1450,3 +1450,15 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 
 .auto-label { display: inline-flex; gap: 6px; align-items: center; margin: var(--s-2) 0 0; color: var(--muted); font-size: var(--fs-15); }
 .zero-note { margin: var(--s-3) 0 0; padding: var(--s-3) var(--s-4); border-left: 3px solid var(--accent-ui); background: var(--accent-soft); border-radius: 0 6px 6px 0; max-width: 70ch; }
+
+/* ================================================================== top bar search results (24 Nov 2026)
+   The panel lives in <body> (js/search-ui.js), placed under the top bar's search with position: fixed (inside .topbar,
+   whose backdrop-filter isolates it, its glass blurred nothing and the page showed through). It is solid. Under the top bar (z 40) a light scrim while it is open; dialogs (top layer) stay above both. */
+.results.results--portal { position: fixed; right: auto; z-index: 65; min-width: 0;
+  /* solid, not glass: WebKit still let page text through a blurred 97% panel */
+  background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; border-color: var(--line-strong); }
+:root[data-theme="dark"] .results.results--portal { background: color-mix(in srgb, var(--surface) 96%, white); }
+.results-scrim { position: fixed; inset: 0; z-index: 39; background: var(--scrim); opacity: .35; pointer-events: none; animation: scrim-in 180ms var(--ease-out); }
+.results-scrim[hidden] { display: none; }
+@keyframes scrim-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .results-scrim { animation: none; } }

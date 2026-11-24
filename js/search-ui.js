@@ -20,7 +20,38 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   panel.hidden = true;
   panel.setAttribute("role", "listbox");
   panel.setAttribute("aria-label", "Search results");
-  panelParent.append(panel);
+  // The top bar has its own backdrop-filter, and a child's backdrop-filter can then only blur the top bar, not the page:
+  // the panel was see-through over the page. So the top bar's panel lives in <body> (fixed, placed under the bar).
+  const bar = input.closest(".ask") || panelParent;
+  const portal = !!input.closest(".topbar");
+  let scrim = null;
+  if (portal) {
+    panel.classList.add("results--portal");
+    document.body.append(panel);
+    scrim = document.createElement("div");
+    scrim.className = "results-scrim";
+    scrim.hidden = true;
+    scrim.setAttribute("aria-hidden", "true");
+    document.body.append(scrim);
+  } else panelParent.append(panel);
+  const place = () => {
+    if (!portal || panel.hidden) return;
+    const r = bar.getBoundingClientRect();
+    if (!r.width) { close(); return; }                       // the bar was hidden (the phone search closed)
+    const gutter = 16;
+    const width = Math.min(Math.max(r.width, Math.min(560, innerWidth - 2 * gutter)), innerWidth - 2 * gutter);
+    const left = Math.max(gutter, Math.min(r.left, innerWidth - gutter - width));
+    const top = r.bottom + 8;
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+    panel.style.width = `${width}px`;
+    panel.style.maxHeight = `${Math.max(160, Math.min(560, innerHeight * 0.7, innerHeight - top - gutter))}px`;
+  };
+  if (portal) {
+    addEventListener("resize", place, { passive: true });
+    addEventListener("scroll", place, { passive: true, capture: true });
+    input.addEventListener("search-close", () => close());   // layout.js: the phone's full-width search closed
+  }
   input.setAttribute("role", "combobox");
   input.setAttribute("aria-controls", panel.id);
   input.setAttribute("aria-expanded", "false");
@@ -92,6 +123,8 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
          <a href="request.html?q=${encodeURIComponent(q)}">Request data &rsaquo;</a></div>${note}`;
     const opening = panel.hidden;
     panel.hidden = false;
+    if (scrim) scrim.hidden = false;
+    place();
     input.setAttribute("aria-expanded", "true");
     active = -1;
     // opening: the panel scales and fades in, the results follow in a short stagger (not on every keystroke)
@@ -106,6 +139,7 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   }
   function close() {
     panel.hidden = true;
+    if (scrim) scrim.hidden = true;
     input.setAttribute("aria-expanded", "false");
   }
   function opts() { return [...panel.querySelectorAll("[data-opt]")]; }
@@ -148,7 +182,31 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     if (x) { e.preventDefault(); run({ exact: true }); input.focus(); }
     else if (d) { e.preventDefault(); input.value = d.dataset.dym; run(); input.focus(); }
   });
-  document.addEventListener("click", (e) => { if (!panelParent.contains(e.target)) close(); });
+  document.addEventListener("click", (e) => { if (!panelParent.contains(e.target) && !panel.contains(e.target)) close(); });
+  if (portal) {
+    // the panel is no longer next to the input in the DOM: keep Tab moving between them as before
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Tab" && !e.shiftKey && !panel.hidden) {
+        const first = panel.querySelector("a[href]");
+        if (first) { e.preventDefault(); first.focus(); }
+      }
+    });
+    panel.addEventListener("keydown", (e) => {
+      const links = [...panel.querySelectorAll("a[href]")];
+      if (e.key === "Escape") { e.preventDefault(); close(); input.focus(); }
+      else if (e.key === "Tab" && e.shiftKey && document.activeElement === links[0]) { e.preventDefault(); input.focus(); }
+      else if (e.key === "Tab" && !e.shiftKey && document.activeElement === links[links.length - 1]) {
+        // off the end of the results: on to whatever followed the search box
+        const all = [...document.querySelectorAll("a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex='-1'])")]
+          .filter((x) => !panel.contains(x) && x.getClientRects().length);
+        const next = all[all.indexOf(input) + 1];
+        if (next) { e.preventDefault(); close(); next.focus(); }
+      }
+    });
+    panel.addEventListener("focusout", (e) => {
+      if (e.relatedTarget && !panel.contains(e.relatedTarget) && e.relatedTarget !== input) close();
+    });
+  }
   panel.addEventListener("click", (e) => { const a = e.target.closest("a[data-opt]"); if (a) morphName(a); });
   onEngineChange(() => { if (last && !panel.hidden) run(); });
   return { run, runExact: () => run({ exact: true }) };
