@@ -176,9 +176,13 @@ function fitProjection(focusAll, D, aroundAll = focusAll) {
 /** Everything both sizes draw: land, host borders, inside points and arrows. */
 function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { extraPairs = [], fast = false } = {}) {
   const { S } = D;
-  const path = d3.geoPath(proj);
   const r = proj.scale();
   const clipR = Math.min(r, S / 2 - 1);
+  // zoomed in past the frame: cut the shapes where the visible circle ends (a little beyond it, so the cut edge's
+  // outline stays under the rim), so far-off parts (Hawaii, the Caribbean Netherlands) leave no hidden geometry
+  const reach = Math.min(1, (clipR + 1.2) / r);
+  proj.clipAngle(reach < 1 ? (Math.asin(reach) * 180) / Math.PI : 90);
+  const path = d3.geoPath(proj);
   const hostIsos = new Set(hostPairs.map((h) => h.iso));
   const extraIsos = new Set(extraPairs.map((h) => h.iso));
   const landPaths = [];
