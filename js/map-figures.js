@@ -6,7 +6,8 @@ const last = (s) => (Array.isArray(s) && s.length ? s[s.length - 1] : null);
 
 /** Figures for the map, straight from the situation file. */
 export function figuresFor(S, MEAS, SRC) {
-  const measureWord = (MEAS[S.main_measure]?.label || "people").toLowerCase();
+  // "Refugees" -> "refugees", but acronyms stay as they are ("IDPs (disasters), IDMC, by event")
+  const measureWord = (MEAS[S.main_measure]?.label || "people").replace(/\b([A-Z])([a-z]+)\b/g, (m, a, b) => a.toLowerCase() + b);
   const srcName = (id) => SRC[id]?.short || id || "";
   const hosts = {};
   const hostIsos = S.type === "named" ? S.hosts || [] : S.host_iso3 ? [S.host_iso3] : [];

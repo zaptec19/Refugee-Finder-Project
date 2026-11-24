@@ -16,7 +16,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm";
 import polylabel from "https://cdn.jsdelivr.net/npm/polylabel@2.0.1/+esm";
 import { worldFeatures } from "./geo.js";
 import { esc, fmt } from "./format.js";
-import { MAP_SOURCE } from "./config.js";
+import { MAP_SOURCE, PART_OF } from "./config.js";
 
 const SMALL = 240;
 const LARGE = 640;
@@ -53,7 +53,8 @@ export async function renderMiniGlobe(el, opts) {
   const D = dims(size);
   const base = setup(geo, opts);
   // an origin India's official map doesn't show as a separate area (opts.missingNote says so, under the map)
-  const note = !base.fo && opts.missingNote ? `<p class="map-missing small">${esc(opts.missingNote)}</p>` : "";
+  const partOf = base.originParent || base.hostPairs.some((h) => h.parent);
+  const note = (!base.fo || partOf) && opts.missingNote ? `<p class="map-missing small">${esc(opts.missingNote)}</p>` : "";
   if (!base.focus.length) {
     // nothing to highlight (no host either): the note takes the map's place
     el.innerHTML = note || `<p class="small muted">No map shape for this place.</p>`;
@@ -62,7 +63,7 @@ export async function renderMiniGlobe(el, opts) {
   if (size === "large") return largeMap(el, geo, D, base, opts);
 
   const proj = fitProjection(base.focus, D);
-  const sc = scene(geo, D, proj, base.fo, opts.origin, base.hostPairs);
+  const sc = scene(geo, D, proj, base.fo, base.originDraw, base.hostPairs);
   const { originName, hostNames = [], hosts = [] } = opts;
   const caption = hosts.length
     ? `from ${esc(originName)} <span aria-hidden="true">&rsaquo;</span> to ${hostNames.map(esc).join(" and ")}`
@@ -97,9 +98,9 @@ export async function renderMiniGlobe(el, opts) {
     return `<strong>${esc(name)}</strong>${role ? ` · ${esc(role)}` : ""}${figure ? ` · ${esc(figure)}` : ""}`;
   };
   attachTip(el.querySelector("svg"), tip, (iso, name) => {
-    if (iso === opts.origin) return line(originName, F.originRole ?? (hosts.length ? "origin" : ""), F.origin, F.originAll ? " in all host countries" : "");
-    const i = hosts.indexOf(iso);
-    if (i >= 0) return line(hostNames[i] || name || iso, "host", F.hosts?.[iso], "", !!opts.figures);
+    if (iso === base.originDraw) return line(base.originParent ? `${base.originParent} (${originName})` : originName, F.originRole ?? (hosts.length ? "origin" : ""), F.origin, F.originAll ? " in all host countries" : "");
+    const h = base.hostPairs.find((x) => (x.draw || x.iso) === iso);
+    if (h) return line(h.parent ? `${h.parent} (${h.name})` : h.name, "host", F.hosts?.[h.iso], "", !!opts.figures);
     return line(name || iso);
   });
   trimArrows(el, D);
@@ -108,9 +109,26 @@ export async function renderMiniGlobe(el, opts) {
 
 // ------------------------------------------------------------------ shared building blocks
 function setup({ byIso }, { origin, hosts = [], hostNames = [] }) {
-  const fo = byIso.get(origin);
-  const hostPairs = hosts.map((h, i) => ({ iso: h, f: byIso.get(h), name: hostNames[i] || h })).filter((h) => h.f);
-  return { fo, hostPairs, focus: [fo, ...hostPairs.map((h) => h.f)].filter(Boolean) };
+  // a place with no shape of its own (PART_OF): the country it is drawn in is highlighted (draw), and its own part of
+  // that country (f) is what the zoom fits and the arrow points at
+  const shape = (iso) => {
+    const f = byIso.get(iso);
+    if (f) return { f, draw: iso };
+    const p = PART_OF[iso];
+    const parent = p && byIso.get(p.iso);
+    return parent ? { f: localPart(parent, p), draw: p.iso, parent: p.name } : null;
+  };
+  const o = shape(origin);
+  const hostPairs = hosts.map((h, i) => ({ iso: h, name: hostNames[i] || h, ...shape(h) })).filter((h) => h.f);
+  return { fo: o?.f, originDraw: o?.draw || origin, originParent: o?.parent || null, hostPairs,
+           focus: [o?.f, ...hostPairs.map((h) => h.f)].filter(Boolean) };
+}
+
+/** The parts of a country within p.km of the place p.at: e.g. French Guiana's part of France. */
+function localPart(f, p) {
+  const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+  const near = polys.filter((c) => d3.geoDistance(d3.geoCentroid({ type: "Polygon", coordinates: c }), p.at) * 6371 <= p.km);
+  return { type: "Feature", properties: { ...f.properties }, geometry: { type: "MultiPolygon", coordinates: near.length ? near : polys } };
 }
 
 /** The parts of a country the zoom fits: tiny far-off islands (under 1% of the main part's area and over
@@ -183,7 +201,7 @@ function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { ex
   const reach = Math.min(1, (clipR + 1.2) / r);
   proj.clipAngle(reach < 1 ? (Math.asin(reach) * 180) / Math.PI : 90);
   const path = d3.geoPath(proj);
-  const hostIsos = new Set(hostPairs.map((h) => h.iso));
+  const hostIsos = new Set(hostPairs.map((h) => h.draw || h.iso));
   const extraIsos = new Set(extraPairs.map((h) => h.iso));
   const landPaths = [];
   for (const f of features) {
@@ -204,7 +222,9 @@ function scene({ features, sharedBorders }, D, proj, fo, origin, hostPairs, { ex
   // no arrow when the origin is on the far side of the globe (e.g. Afghanistan and the USA can't both face us)
   const arrows = anchorO?.pt && anchorO.ok ? planArrows(proj, fo, anchorO, all, anchors, features, clipR, D) : [];
   for (const a of arrows) a.extra = extraIsos.has(a.iso);
-  return { proj, path, r, clipR, landPaths, hostBorders, anchorO, anchors, arrows, sphere: path({ type: "Sphere" }), grat: path(d3.geoGraticule10()) };
+  // a tiny origin (an island such as Réunion) gets the same ring as a tiny host, so it can be found
+  const originRing = anchorO?.pt && anchorO.ok && anchorO.tiny ? { cx: anchorO.pt[0], cy: anchorO.pt[1], r: Math.max(6 * D.k, anchorO.size / 2 + 4 * D.k) } : null;
+  return { proj, path, r, clipR, landPaths, hostBorders, anchorO, anchors, arrows, originRing, sphere: path({ type: "Sphere" }), grat: path(d3.geoGraticule10()) };
 }
 
 function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
@@ -234,7 +254,7 @@ function svgMarkup(D, sc, { label, extraLayers = "", landAttrs = () => "" }) {
         ${sc.landPaths.map((p) => `<path class="mg-${p.cls}" d="${p.d}"${p.iso ? ` data-iso="${esc(p.iso)}"` : ""}${p.name ? ` data-name="${esc(p.name)}"` : ""}${landAttrs(p)}/>`).join("")}
         ${sc.hostBorders ? `<path class="mg-hb" d="${sc.hostBorders}"/>` : ""}
         ${S > 300 ? `<circle class="mg-rim" cx="${S / 2}" cy="${S / 2}" r="${sc.clipR}" fill="url(#${uid}-rim)" pointer-events="none"/>` : ""}
-        ${sc.arrows.filter((a) => a.ring && !a.extra).map((a) => `<circle class="mg-ring" cx="${f1(a.ring.cx)}" cy="${f1(a.ring.cy)}" r="${f1(a.ring.r)}"/>`).join("")}
+        ${[sc.originRing, ...sc.arrows.filter((a) => a.ring && !a.extra).map((a) => a.ring)].filter(Boolean).map((g) => `<circle class="mg-ring" cx="${f1(g.cx)}" cy="${f1(g.cy)}" r="${f1(g.r)}"/>`).join("")}
         ${sc.arrows.map((a) => a.extra
           ? `<path class="mg-arrow mg-arrow--x" d="${a.d}" marker-end="url(#${uid}-headx)"/>`
           : `<path class="mg-arrow-halo" d="${a.d}"/><path class="mg-arrow" d="${a.d}" marker-end="url(#${uid}-head)"/><path class="mg-flow" d="${a.d}" aria-hidden="true"/>`).join("")}
@@ -491,7 +511,7 @@ function largeMap(el, geo, D, base, opts) {
     const ts = Math.max(1, Math.min(1.7, (D.S / shown) * 0.8));
     svgBox.style.setProperty("--mgl-ts", ts.toFixed(3));
     const proj = d3.geoOrthographic().rotate(state.rot).scale(state.scale).translate([D.S / 2, D.S / 2]).clipAngle(90).precision(0.3);
-    const sc = scene(geo, D, proj, base.fo, origin, base.hostPairs, { extraPairs: pairs(), fast: true });
+    const sc = scene(geo, D, proj, base.fo, base.originDraw, base.hostPairs, { extraPairs: pairs(), fast: true });
     const taken = [];
     const texts = [];
     const arrowPts = sc.arrows.flatMap((a) => a.pts);
@@ -553,7 +573,7 @@ function largeMap(el, geo, D, base, opts) {
     // other hosts: no names or figures on the map; all of them are in the list under it
     state.listed = [...pairs()].sort((a, b) => (b.value ?? -1) - (a.value ?? -1));
     renderXList();
-    const roles = new Map([[origin, "o"], ...base.hostPairs.map((h) => [h.iso, "h"]), ...pairs().map((h) => [h.iso, "hx"])]);
+    const roles = new Map([[base.originDraw, "o"], ...base.hostPairs.map((h) => [h.draw || h.iso, "h"]), ...pairs().map((h) => [h.iso, "hx"])]);
     const focused = svgBox.contains(document.activeElement) ? document.activeElement.dataset?.iso : null;
     svgBox.innerHTML = svgMarkup(D, sc, {
       label: `Larger map: ${originName}${base.hostPairs.length ? ` to ${base.hostPairs.map((h) => h.name).join(" and ")}` : ""}.`,
@@ -569,9 +589,9 @@ function largeMap(el, geo, D, base, opts) {
 
   // ---- tooltips: any country under the pointer (hover), a tap on touch screens, keyboard focus on the origin and hosts
   function tipLine(iso, name) {
-    if (iso === origin) return lineFor(originName, figures.originRole ?? "origin", figures.origin, figures.originAll ? " in all host countries" : "");
-    const h = base.hostPairs.find((x) => x.iso === iso);
-    if (h) return lineFor(h.name, "host", figures.hosts?.[iso], "", true);
+    if (iso === base.originDraw) return lineFor(base.originParent ? `${base.originParent} (${originName})` : originName, figures.originRole ?? "origin", figures.origin, figures.originAll ? " in all host countries" : "");
+    const h = base.hostPairs.find((x) => (x.draw || x.iso) === iso);
+    if (h) return lineFor(h.parent ? `${h.parent} (${h.name})` : h.name, "host", figures.hosts?.[h.iso], "", true);
     const x = extraAll.find((e) => e.iso === iso);
     if (x && state.showExtra) return lineFor(x.name, "other host", x, "", true);
     return lineFor(name || iso);
