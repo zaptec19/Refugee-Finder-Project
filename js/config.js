@@ -23,11 +23,16 @@ export const MAP_SOURCE = {
   bordersNote: "Borders follow India's official position, using Natural Earth's India point of view. Some borders are disputed and are drawn differently on other countries' maps. Maps are shown only to place the data.",
   /** for an area India's map doesn't show separately (Western Sahara, Kosovo); `source` is whose figures they are */
   notSeparate: (name, source = "UNHCR") => `This map follows India's official map, which doesn't show ${name} as a separate area. The figures come from ${source}'s data for ${name}.`,
+  /** for a place with no shape of its own and no country to highlight (NO_SHAPE): neutral, nothing highlighted */
+  noShape: (label, code, source = "IDMC") => `This map has no separate shape for ${label}, so no country is highlighted. The figures come from ${source}'s data for ${code}.`,
   /** for a place drawn as part of another country (PART_OF): that country is highlighted */
   partOf: (name, parent, source = "UNHCR") => `This map draws ${name} as part of ${parent}, so ${parent} is highlighted. The figures come from ${source}'s data for ${name}.`,
 };
 /** Areas that India's official map doesn't show as separate shapes (Natural Earth, India point of view). */
 export const NOT_SEPARATE = { ESH: "Western Sahara", XKX: "Kosovo" };
+/** Places with no shape on the map and no single country to highlight: the note in place of the map. AB9 has no
+ *  name in IDMC's country column; IDMC's own disaster event records name it ("Abyei: Flood", "Abyei Administrative Area"). */
+export const NO_SHAPE = { AB9: "AB9 (the Abyei area, as IDMC's event records name it)" };
 /** Places with no shape of their own on the map: Natural Earth draws them as part of another country (France's
  *  overseas regions, Norway's Svalbard). The map highlights that country, zoomed on the place's own part of it:
  *  the parts within `km` of `at` (longitude, latitude; only used to pick the part, never shown). */

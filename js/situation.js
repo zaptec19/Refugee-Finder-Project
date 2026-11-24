@@ -1,5 +1,5 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
-import { MAP_SOURCE, NOT_SEPARATE, PART_OF } from "./config.js";
+import { MAP_SOURCE, NOT_SEPARATE, PART_OF, NO_SHAPE } from "./config.js";
 import { initPage, guideTip } from "./layout.js";
 import { buildAuto, retarget } from "./auto-situation.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
@@ -127,7 +127,8 @@ async function main() {
   const partIso = [s.origin_iso3, ...hosts].find((i) => PART_OF[i]);
   const partName = partIso === s.origin_iso3 ? s.origin_name : (s.hosts_latest || []).find((x) => x.host_iso3 === partIso)?.name || s.host_name || partIso;
   const missingNote = NOT_SEPARATE[s.origin_iso3] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[s.origin_iso3], figSrc)
-    : partIso ? MAP_SOURCE.partOf(partName, PART_OF[partIso].name, figSrc) : "";
+    : partIso ? MAP_SOURCE.partOf(partName, PART_OF[partIso].name, figSrc)
+    : NO_SHAPE[s.origin_iso3] ? MAP_SOURCE.noShape(NO_SHAPE[s.origin_iso3], s.origin_iso3, figSrc) : "";
   const mini = renderMiniGlobe(document.getElementById("mini-globe"), {
     origin: s.origin_iso3, hosts, originName: NOT_SEPARATE[s.origin_iso3] || s.origin_name, missingNote,
     figures: figuresFor(s, MEAS, SRC),         // the hover tooltips: role and figure for the origin and hosts
