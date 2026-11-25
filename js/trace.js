@@ -446,10 +446,35 @@ async function rawHTML(pt, ctx) {
     return `<p class="small">${esc(f)}, line ${esc(line)}.</p><p class="small muted">The row is in the clean data file, with this reference in its raw_ref column.</p>`;
   }
   const hi = rawFile.header.map((h, i) => String(raw.row[i]).replace(/,/g, "") === String(pt.value));
+  // amounts follow the number format (with the file's exact digits in the cell's tooltip); years, codes, names,
+  // ids, footnote codes and everything else stay exactly as in the file
+  let formatted = false;
+  const cell = (h, v) => {
+    const t = String(v ?? "");
+    const m = AMOUNT_COLS.has(h) && /^-?\d+(\.\d+)?$/.exec(t.trim());
+    if (!m) return `<td>${esc(t)}</td>`;
+    formatted = true;
+    return `<td class="raw__amt" title="In the file: ${esc(t.trim())}" data-raw="${esc(t.trim())}">${numHTML(Number(t), { decimals: m[1] ? m[1].length - 1 : 0 })}</td>`;
+  };
+  const rows = rawFile.header.map((h, i) => `<tr class="${hi[i] ? "hi" : ""}"><th scope="row">${esc(h)}</th>${cell(h, raw.row[i])}</tr>`).join("");
   return `<div class="raw"><table class="table raw__table"><thead><tr><th scope="col">Column</th><th scope="col">Value in the source file</th></tr></thead>
-      <tbody>${rawFile.header.map((h, i) => `<tr class="${hi[i] ? "hi" : ""}"><th scope="row">${esc(h)}</th><td>${esc(raw.row[i] ?? "")}</td></tr>`).join("")}</tbody></table></div>
-    <p class="small muted">${esc(rawFile.label)}, line ${raw.line}. Shown exactly as in the file.</p>`;
+      <tbody>${rows}</tbody></table></div>
+    ${formatted ? `<p class="small muted raw__fmt-note">Amounts shown with separators; the file has plain digits.</p>` : ""}
+    <p class="small muted">${esc(rawFile.label)}, line ${raw.line}.${formatted ? " Everything else is shown exactly as in the file." : " Shown exactly as in the file."}</p>`;
 }
+
+/** Columns of the original files that hold amounts (people, movements). Only these get separators. */
+const AMOUNT_COLS = new Set([
+  // UNHCR population (persons_of_concern.csv)
+  "Refugees", "Asylum-seekers", "IDPs", "Other people in need of international protection", "Stateless persons",
+  "Host community", "Others of concern",
+  // UNHCR solutions (API download)
+  "Returned refugees", "Resettlement arrivals", "Naturalisation", "Returned IDPss", "Returned IDPs",
+  // IDMC GIDD
+  "new_displacement", "new_displacement_rounded", "total_displacement", "total_displacement_rounded",
+  // team-typed government figures
+  "value",
+]);
 
 function citations(pt) {
   const { ctx, style } = state;

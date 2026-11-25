@@ -276,6 +276,9 @@ function termFor(label) {
   return esc(label);
 }
 
+/** "Refugees from Sri Lanka in India, 2025: 89,507. See where this number comes from" (value in the selected format). */
+const knAria = (kn) => `${kn.label}: ${kn.unit === "percent" ? fmtPct(kn.value) : fmt(kn.value)}. See where this number comes from`;
+
 function keyNumbers(el) {
   if (!S.key_numbers.length) return `<p class="muted">No key numbers for this situation.</p>`;
   const pts = S.key_numbers.map((kn) => ({ ...kn, label: kn.label, unit: kn.unit, value: kn.value }));
@@ -285,10 +288,9 @@ function keyNumbers(el) {
     return `<article class="card kn" aria-labelledby="kn-${i}">
       <div class="kn__label" id="kn-${i}">${termFor(kn.label)}</div>
       <span class="kn__help"><button class="help-btn" type="button" data-explain="${i}" aria-label="What does this number mean?" aria-haspopup="dialog">?</button></span>
-      <button class="kn__value" type="button" data-trace="${i}">${value}<span class="sr-only">, ${esc(kn.label)}: where this number comes from</span></button>
+      <button class="kn__value" type="button" data-trace="${i}" aria-label="${esc(knAria(kn))}">${value}<span class="kn__trace" aria-hidden="true">${icon("trace", { size: 16 })}</span></button>
       <div class="kn__sub">${esc(kn.sub)}${kn.unit === "movements" ? " · counts movements, not people" : ""}</div>
       <div class="kn__foot">
-        <a class="kn__src" href="#" data-trace="${i}">Source: ${esc(srcShort(kn.source_id))}</a>
         ${pinButton({ key: item.key, label: `${kn.label}${kn.label.includes(String(kn.year)) ? "" : ` (${kn.year})`}`, attrs: `data-pin-idx="${i}"` })}
       </div>
     </article>`;
@@ -300,6 +302,14 @@ function keyNumbers(el) {
     const card = b.closest(".kn").querySelector(".kn__value");
     openTrace(CTX.keyNumberPoint(kn), { el: card, flyFrom: card.querySelector("[data-num], [data-pct]"), focusEl: b });
   }));
+  // the number's name says the value in the selected format, so it is re-made when the format changes
+  if (!el._ariaSync) {
+    el._ariaSync = true;
+    document.addEventListener("numfmt-change", () => el.querySelectorAll(".kn__value[data-trace]").forEach((b) => {
+      const kn = el._pts?.[+b.dataset.trace]; if (kn) b.setAttribute("aria-label", knAria(kn));
+    }));
+  }
+  el._pts = pts;
   el.querySelectorAll("[data-explain]").forEach((b) => b.addEventListener("click", () => openExplainer(pts[+b.dataset.explain], b)));
   el.querySelectorAll("[data-pin-idx]").forEach((b) => b.addEventListener("click", () => pin(el._items[+b.dataset.pinIdx], b)));
 }

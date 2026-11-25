@@ -1526,3 +1526,21 @@ html.theme-swap .home__globe #globe { view-transition-name: none; }
 .mgl__tip strong { font-weight: 600; }
 .mgl [data-iso][tabindex]:focus { outline: none; }
 .mgl [data-iso][tabindex]:focus-visible { outline: none; stroke: var(--accent-ui); stroke-width: 3; }
+
+/* Key number cards without a source line (25 Nov 2026): the pin sits bottom right; the number shows it can be
+   clicked (dotted underline + a small trace icon on hover and keyboard focus). The source is in the trace. */
+.kn__foot { justify-content: flex-end; margin-top: var(--s-3); }
+.kn__value { display: inline-flex; align-items: baseline; gap: 6px; align-self: flex-start; max-width: 100%; }
+.kn__value > [data-num], .kn__value > [data-pct] {
+  text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 6px;
+  text-decoration-color: color-mix(in srgb, var(--muted) 45%, transparent);
+  transition: text-decoration-color var(--t-fast, 120ms) ease;
+}
+.kn__value:hover > [data-num], .kn__value:hover > [data-pct], .kn__value:focus-visible > [data-num], .kn__value:focus-visible > [data-pct] {
+  text-decoration-color: var(--accent-ui);
+}
+.kn__trace { display: inline-grid; place-items: center; color: var(--accent); opacity: 0; transform: translateX(-3px);
+  transition: opacity var(--t-fast, 120ms) ease, transform var(--t-fast, 120ms) ease; align-self: center; }
+.kn__value:hover .kn__trace, .kn__value:focus-visible .kn__trace { opacity: 1; transform: none; }
+@media (hover: none) { .kn__trace { opacity: 0.6; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .kn__trace { transition: none; transform: none; } }
