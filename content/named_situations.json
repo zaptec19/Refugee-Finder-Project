@@ -25,5 +25,9 @@
     "extends": "sdn-idp",
     "title": "Internal displacement in Sudan",
     "aliases": ["Sudan war 2023", "Sudanese IDPs", "People displaced inside Sudan"]
+  },
+  {
+    "extends": "ab9-idp",
+    "aliases": ["Abyei"]
   }
 ]
