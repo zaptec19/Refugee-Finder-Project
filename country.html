@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <script>/* theme before first paint: ?theme= > saved choice > system setting */(function(){var t=null;try{var q=new URLSearchParams(location.search).get("theme");t=q==="light"||q==="dark"?q:JSON.parse(localStorage.getItem("wv1:theme"))}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t})()</script>
+  <script>/* a page transition the browser drops (aborted: "Page already revealed") is not an error: silence only that rejection */addEventListener("unhandledrejection",function(e){var r=e.reason;if(r&&r.name==="InvalidStateError"&&/^Transition was aborted/.test(r.message||""))e.preventDefault()})</script>
   <script type="module" src="js/country.js"></script>
 </head>
 <body>

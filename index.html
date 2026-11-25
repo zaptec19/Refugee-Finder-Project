@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>/* theme before first paint: ?theme= > saved choice > dark on the home page */(function(){var t=null;try{var q=new URLSearchParams(location.search).get("theme");t=q==="light"||q==="dark"?q:JSON.parse(localStorage.getItem("wv1:theme"))}catch(e){}if(t!=="light"&&t!=="dark")t="dark";document.documentElement.dataset.theme=t})()</script>
+  <script>/* a page transition the browser drops (aborted: "Page already revealed") is not an error: silence only that rejection */addEventListener("unhandledrejection",function(e){var r=e.reason;if(r&&r.name==="InvalidStateError"&&/^Transition was aborted/.test(r.message||""))e.preventDefault()})</script>
   <title>Refugee Finder · displacement research companion</title>
   <meta name="description" content="A calm research companion for forced displacement data: situations explained first, every number traceable to its source.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
