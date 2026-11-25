@@ -140,7 +140,7 @@ try {
   renderMiniGlobe(document.getElementById("cg"), { origin: iso, hosts: [], originName: NOT_SEPARATE[iso] || c.name, figures: { originRole: "" },
     missingNote: NOT_SEPARATE[iso] ? MAP_SOURCE.notSeparate(NOT_SEPARATE[iso], figSrc)
       : PART_OF[iso] ? MAP_SOURCE.partOf(c.name, PART_OF[iso].name, figSrc)
-      : NO_SHAPE[iso] ? MAP_SOURCE.noShape(NO_SHAPE[iso], iso, figSrc) : "" }).catch(() => {});
+      : NO_SHAPE[iso] ? MAP_SOURCE.noShape(NO_SHAPE[iso], figSrc) : "" }).catch(() => {});
 } catch (e) {
   console.error(e);
   main.innerHTML = `<div class="page page--narrow"><div class="empty-state"><h3>No data for this country</h3>
