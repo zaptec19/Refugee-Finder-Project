@@ -919,14 +919,40 @@ const limSources = (l) => {
   const ids = l.source_ids || (l.source_id ? [l.source_id] : []);
   return ids.length ? `<div class="small muted">Source: ${esc(ids.map(srcLabel).join("; "))}</div>` : "";
 };
-const KIND_ICON = { politics: "alert", method: "alert", missing: "question", coverage: "question" };
+/** Limitations in four groups, one icon and one colour each, the same everywhere (legend included). */
+const LIM_GROUPS = [
+  { id: "politics", kinds: ["politics"], name: "Politics and mandates", icon: "landmark", meaning: "rules and agreements that affect who is counted" },
+  { id: "method", kinds: ["method"], name: "How the figures are made", icon: "alert", meaning: "how the sources collect and report the numbers" },
+  { id: "missing", kinds: ["missing", "coverage"], name: "What's missing or partial", icon: "question", meaning: "parts of the picture the data doesn't cover" },
+  { id: "pattern", kinds: ["pattern"], name: "Patterns to read with care", icon: "wave", meaning: "changes in the numbers that may come from counting, not real movement" },
+];
+const limGroup = (kind) => LIM_GROUPS.find((g) => g.kinds.includes(kind)) || LIM_GROUPS[1];
+const limIcon = (g, size = 20) => `<span class="lim__icon lim__icon--${g.id}" role="img" aria-label="${esc(g.name)}">${icon(g.icon, { size })}</span>`;
+const LIM_SHOW = 3;          // a group with more items shows its first 2 and the rest under "Show all (n)"
 function limitationsHTML() {
-  const items = S.limitations.map((l) => {
-    const ic = l.text.startsWith("Very slow") ? "steady" : KIND_ICON[l.kind] || "info";
-    return `<li class="lim"><span class="lim__icon lim__icon--${esc(l.kind)}">${icon(ic, { size: 20 })}</span>
+  const item = (l) => {
+    const g = limGroup(l.kind);
+    return `<li class="lim">${limIcon(g)}
       <div><div class="lim__text">${esc(l.text)}</div><div class="lim__detail muted">${fillTemplate({ text: l.detail || "", nums: l.nums, pcts: l.pcts })}</div>
       ${limSources(l)}${reviewNote(l.to_check)}</div></li>`;
+  };
+  const groups = LIM_GROUPS.map((g) => ({ g, list: S.limitations.filter((l) => limGroup(l.kind) === g) })).filter((x) => x.list.length);
+  const groupsHTML = groups.map(({ g, list }) => {
+    const cut = list.length > LIM_SHOW ? 2 : list.length;
+    return `<section class="limx__group" aria-labelledby="lim-g-${g.id}">
+      <h3 class="limx__gh" id="lim-g-${g.id}">${limIcon(g, 18)}<span>${esc(g.name)}</span> <span class="limx__n">(${list.length})</span></h3>
+      <ul class="lims">${list.slice(0, cut).map(item).join("")}</ul>
+      ${list.length > cut ? `<details class="limx__more"><summary>Show all (${list.length})</summary><ul class="lims">${list.slice(cut).map(item).join("")}</ul></details>` : ""}
+    </section>`;
   }).join("");
+  // the key: a slim card beside the list on wide columns, a row of chips (tap for the meaning) on narrow ones
+  const legend = groups.length ? `<aside class="limx__legend" aria-labelledby="lim-key-h">
+      <h3 class="limx__legend-h" id="lim-key-h">What the symbols mean</h3>
+      <ul class="limx__keys">${groups.map(({ g }) => `<li class="limx__key">${limIcon(g, 18)}<span><strong>${esc(g.name)}</strong>: ${esc(g.meaning)}</span></li>`).join("")}</ul>
+    </aside>
+    <div class="limx__chips" role="list" aria-label="What the symbols mean">${groups.map(({ g }) =>
+      `<details class="limx__chip" role="listitem"><summary>${limIcon(g, 16)}<span>${esc(g.name)}</span></summary><p>${esc(g.meaning)}</p></details>`).join("")}</div>` : "";
+  const items = `<div class="limx"><div class="limx__in">${legend}<div class="limx__groups">${groupsHTML}</div></div></div>`;
   const pct = Math.round((S.demographics_coverage || 0) * 1000) / 10;
   const sexPct = Math.round((S.sex_coverage || 0) * 1000) / 10;
   const demo = S.type === "pair" ? `
@@ -936,7 +962,7 @@ function limitationsHTML() {
       <div class="cov__row"><span class="cov__label">Sex known</span><div class="cov__bar" role="img" aria-label="${sexPct}% known"><span style="width:${sexPct}%"></span></div><span class="cov__pct">${pctHTML(sexPct)} known</span></div>
     </div>` : "";
   const missing = S.missing.length ? `<div class="missing"><span>What's missing:</span>${S.missing.map((m) => `<span class="chip chip--static">${esc(m)}</span>`).join("")}</div>` : "";
-  return `<ul class="lims">${items}</ul>${demo}${missing}
+  return `${items}${demo}${missing}
     <p style="margin-top:20px"><a href="learn.html#organisations">About the organisations: UNHCR, IDMC and UCDP, their mandates and limits &rsaquo;</a></p>`;
 }
 

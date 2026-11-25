@@ -16,6 +16,7 @@
   --surface-2: #EEF2F7;
   --ink: #0B1220;
   --muted: #475569;
+  --muted-strong: #334155;
   --line: #E2E8F0;
   --line-strong: #CBD5E1;
   --accent: #0E7490;         /* links, active and selected states (deepened from #0891B2 to pass 4.5:1 as link text) */
@@ -155,6 +156,7 @@
   --surface-2: #141B26;
   --ink: #EEF3FA;
   --muted: #93A1B5;
+  --muted-strong: #C3CEDC;
   --line: rgba(148, 180, 255, 0.10);
   --line-strong: rgba(148, 180, 255, 0.22);
   --accent: #22D3EE;

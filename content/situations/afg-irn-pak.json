@@ -50,12 +50,12 @@
   ],
   "limitations": [
     {
-      "kind": "method",
+      "kind": "pattern",
       "text": "Iran's 2022 figure follows a recount",
       "detail": "UNHCR's footnote for 2022 says the figure includes Afghans reported as people in a refugee-like situation after a government recount. Read the footnote before comparing 2021 and 2022."
     },
     {
-      "kind": "method",
+      "kind": "pattern",
       "text": "Same figure in Iran for 2017, 2018 and 2019",
       "detail": "The figure repeats exactly for three years, which suggests it was carried forward rather than recounted; the sources don't say."
     },

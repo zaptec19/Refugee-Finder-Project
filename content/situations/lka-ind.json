@@ -52,7 +52,11 @@
     {
       "kind": "politics",
       "text": "India has not signed the 1951 Refugee Convention",
-      "detail": "UNHCR's data has no source note for this group."
+      "detail": "India has no national refugee law. Sri Lankan refugees are registered and assisted by the Government of India rather than by UNHCR, so figures for this group come largely from the government.",
+      "source_ids": [
+        "valatheeswaran-rajan-2011"
+      ],
+      "to_check": "Confirm both sentences against Valatheeswaran & Rajan (2011) and add the page number."
     },
     {
       "kind": "method",
@@ -60,7 +64,7 @@
       "detail": "UNHCR gives one total; the Government of India counts camp residents and registered non-camp refugees separately."
     },
     {
-      "kind": "coverage",
+      "kind": "method",
       "text": "The Government of India total covers Tamil Nadu only",
       "detail": "The Rajya Sabha answer of 4 May 2016 also lists refugees in one camp in Odisha. The total shown here adds the Tamil Nadu camp figure and the refugees registered outside camps; it does not include Odisha."
     },

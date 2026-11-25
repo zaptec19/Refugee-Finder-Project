@@ -43,7 +43,7 @@
       "detail": "IDMC's new displacements count each forced move, so one person displaced twice counts twice. Compare them with year-end totals with care."
     },
     {
-      "kind": "coverage",
+      "kind": "pattern",
       "text": "A series break in 2011",
       "detail": "South Sudan's independence changed the territory counted as Sudan."
     }

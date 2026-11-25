@@ -80,7 +80,7 @@ function autoLimitations(s) {
     if (b.year !== a.year + 1 || !a.value) continue;
     const ch = (b.value - a.value) / a.value;
     if (Math.abs(ch) > JUMP && Math.max(a.value, b.value) >= 1000) {
-      out.push({ kind: "method", auto: true, text: `Big change between ${a.year} and ${b.year}`,
+      out.push({ kind: "pattern", auto: true, text: `Big change between ${a.year} and ${b.year}`,
         detail: "The figure went from {n0} to {n1} in one year. The source data doesn't say why; a change in counting can look like real movement.",
         nums: [a.value, b.value] });
     }
@@ -95,7 +95,7 @@ function autoLimitations(s) {
   }
   if (run.length > best.length) best = run;
   if (best.length >= STEADY_RUN) {
-    out.push({ kind: "method", auto: true, text: `Very slow, steady change ${best[0].year} to ${best[best.length - 1].year}`,
+    out.push({ kind: "pattern", auto: true, text: `Very slow, steady change ${best[0].year} to ${best[best.length - 1].year}`,
       detail: `Each year the figure moves by less than ${Math.round(STEADY_MAX * 100)}%. Steady figures can come from registers that are updated rather than recounted; the sources don't say which.` });
   }
   return out;

@@ -1656,3 +1656,40 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .conf-sw--war { background: var(--conf-war); }
 .conf-sw--minor { background: var(--conf-minor); }
 @media (prefers-reduced-motion: reduce) { [class*="ev-rule-"] line { transition: none; } }
+
+/* ================================================================ limitations grouped by type (26 Nov 2026) */
+.lim__icon { color: var(--danger); padding-top: 2px; display: inline-flex; }
+.lim__icon--politics, .lim__icon--method { color: var(--danger); }
+.lim__icon--missing { color: var(--warn); }
+.lim__icon--pattern { color: var(--muted-strong); }
+.limx { container-type: inline-size; }
+.limx__in { display: grid; gap: var(--s-4); }
+.limx__groups { display: flex; flex-direction: column; gap: var(--s-6); min-width: 0; }
+.limx__gh { display: flex; align-items: center; gap: var(--s-2); margin: 0 0 var(--s-3); font-size: var(--fs-15); font-weight: 600; }
+.limx__gh .lim__icon { padding-top: 0; }
+.limx__n { color: var(--muted); font-weight: 400; }
+.limx__more { margin-top: var(--s-3); }
+.limx__more > summary { cursor: pointer; color: var(--accent); font-size: var(--fs-15); width: max-content; }
+.limx__more > .lims { margin-top: var(--s-3); }
+/* the key: chips on narrow columns, a sticky card beside the list on wide ones */
+.limx__legend { display: none; }
+.limx__chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.limx__chip { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: var(--fs-13); }
+.limx__chip[open] { border-radius: var(--r-card); flex-basis: 100%; }
+.limx__chip > summary { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; cursor: pointer; list-style: none; }
+.limx__chip > summary::-webkit-details-marker { display: none; }
+.limx__chip > summary .lim__icon { padding-top: 0; }
+.limx__chip > p { margin: 0; padding: 0 10px 8px 32px; color: var(--muted); }
+.limx__chip > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 999px; }
+@container (min-width: 640px) {
+  .limx__in { grid-template-columns: minmax(0, 1fr) 220px; column-gap: var(--s-8); align-items: start; }
+  .limx__groups { grid-column: 1; grid-row: 1; }
+  .limx__chips { display: none; }
+  .limx__legend { display: block; grid-column: 2; grid-row: 1; position: sticky; top: calc(var(--topbar-h) + var(--s-6));
+    padding: var(--s-4); border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); font-size: var(--fs-13); }
+}
+.limx__legend-h { margin: 0 0 var(--s-3); font-size: var(--fs-13); font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
+.limx__keys { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.limx__key { display: grid; grid-template-columns: 22px 1fr; gap: var(--s-2); color: var(--muted); line-height: 1.4; }
+.limx__key strong { color: var(--ink); font-weight: 600; }
+.limx__key .lim__icon { padding-top: 1px; }
