@@ -48,6 +48,8 @@
   --c-refugees-fill: rgba(11, 107, 255, 0.16);
   --c-idp-fill: rgba(232, 65, 42, 0.14);
   --c-context-band: rgba(107, 114, 128, 0.30);
+  --conf-war: rgba(107, 114, 128, 0.18);
+  --conf-minor: rgba(107, 114, 128, 0.09);
   --area-top: 0.35;          /* chart area gradient: this opacity at the top, 0 at the axis */
 
   /* mini globe and larger map (never reuses people-type colours) */
@@ -183,6 +185,8 @@
   --c-refugees-fill: rgba(59, 155, 255, 0.20);
   --c-idp-fill: rgba(255, 92, 57, 0.18);
   --c-context-band: rgba(238, 243, 250, 0.22);
+  --conf-war: rgba(148, 163, 184, 0.20);
+  --conf-minor: rgba(148, 163, 184, 0.10);
   --area-top: 0.45;
 
   --g-origin: #FF4FD8;

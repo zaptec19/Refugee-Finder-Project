@@ -62,6 +62,24 @@ export function fmtShort(n) {
   return fmt(v);
 }
 
+/** Axis ticks: one unit for the whole axis, chosen from its largest tick (Plot passes every tick as the third
+ *  argument). Indian: crore / lakh / thousand; international: B / M / k. "0" stays "0"; at most one decimal.
+ *  0, 0.5 lakh, 1 lakh, 1.5 lakh, 2 lakh  ·  0, 50k, 100k, 150k, 200k */
+export function fmtAxis(d, i, ticks) {
+  if (isMissing(d)) return "";
+  const v = Number(d);
+  if (v === 0) return "0";
+  const top = Math.max(...(Array.isArray(ticks) && ticks.length ? ticks : [v]).map((t) => Math.abs(Number(t)) || 0));
+  const units = mode() === "ind"
+    ? [[1e7, " crore"], [1e5, " lakh"], [1e3, " thousand"]]
+    : [[1e9, "B"], [1e6, "M"], [1e3, "k"]];
+  const u = units.find(([n]) => top >= n);
+  if (!u) return fmt(v, { decimals: Number.isInteger(v) ? 0 : 1 });
+  const x = v / u[0];
+  const t = Number.isInteger(x) ? String(x) : x.toFixed(1).replace(/\.0$/, "");
+  return `${t}${u[1]}`;
+}
+
 export function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }

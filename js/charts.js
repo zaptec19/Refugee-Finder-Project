@@ -2,7 +2,7 @@
 //   one-sentence title · Chart / Data switch · Download PNG / CSV · pin · source line · screen-reader text.
 // Charts redraw on resize, on the number-format switch and on theme change.
 import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/+esm";
-import { esc, fmt, fmtPct, fmtShort, numHTML, pctHTML, mode } from "./format.js";
+import { esc, fmt, fmtPct, fmtAxis, numHTML, pctHTML, mode } from "./format.js";
 import { icon, pinButton } from "./icons.js";
 import { reducedMotion } from "./motion.js";
 
@@ -30,7 +30,7 @@ export function base(width, height = 300, extra = {}) {
     marginLeft: MARGIN.left, marginRight: width < 520 ? 64 : MARGIN.right, marginTop: MARGIN.top, marginBottom: MARGIN.bottom,
     style: { background: "transparent", fontFamily: "IBM Plex Sans, system-ui, sans-serif", fontSize: "12px", color: "var(--muted)", overflow: "visible" },
     x: { label: null, tickFormat: (d) => String(d), ticks: width < 520 ? 4 : 7 },
-    y: { label: null, tickFormat: (d) => fmtShort(d), ticks: 4, grid: true },     // faint horizontal gridlines only
+    y: { label: null, tickFormat: fmtAxis, ticks: 4, grid: true },     // one unit for the whole axis; faint gridlines only
     ...extra,
   };
 }

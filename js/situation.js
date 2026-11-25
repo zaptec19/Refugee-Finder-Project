@@ -364,6 +364,7 @@ function overTime(el) {
   const yrs = all.map((p) => p.year);
   const domain = [Math.min(...yrs, ...eventYears()), Math.max(...yrs)];
   const conflictYears = [...new Set(S.conflict.map((c) => c.year))].filter((y) => y >= domain[0] - 0 && y <= domain[1]);
+  const conf = conflictBands(conflictYears, domain);
   const single = lines.length === 1;
   const title = S.headlines?.over_time ? fillTemplate(S.headlines.over_time) : esc(S.title);
   const host = document.createElement("div");
@@ -375,7 +376,12 @@ function overTime(el) {
     pin: { key: `chart:${S.id}:over_time` },
     draw: (w) => {
       const wrap = document.createElement("div");
+      const evs = S.events.map((e, i) => ({ i, y: parseInt(e.date, 10) })).filter((e) => e.y >= domain[0] && e.y <= domain[1]);
       const marks = [
+        // UCDP conflict years: soft bands behind everything, darker for war years (1,000+ deaths)
+        ...(conf.bands.length ? [Plot.rect(conf.bands, { x1: "x1", x2: "x2", fill: (d) => (d.war ? "var(--conf-war)" : "var(--conf-minor)"), title: "title", className: "conf-bands" })] : []),
+        // each event's year: a faint dotted line through the chart, down to its marker under the axis
+        ...evs.map((e) => Plot.ruleX([e.y], { stroke: "var(--line-strong)", strokeOpacity: 0.5, strokeDasharray: "2,3", insetBottom: -MARGIN.bottom, className: `ev-rule-${e.i}` })),
         Plot.ruleY([0], { stroke: "var(--line-strong)" }),
         ...(single ? [Plot.areaY(all, { x: "year", y: "value", fill: lines[0].color, fillOpacity: 0.14, curve: "linear" })] : []),
         ...lines.map((l) => Plot.lineY(l.pts, { x: "year", y: "value", stroke: l.color, strokeWidth: 2, strokeDasharray: l.dash || null })),
@@ -413,14 +419,15 @@ function overTime(el) {
             { rect: at, focusEl: fig, flyFrom: { rect: at, fontSize: 12, text: fmt(target.value) }, hl: host ? { host, at: at2 } : undefined });
         }
       });
-      wrap.append(p, eventsStrip(w, domain, conflictYears));
+      wrap.append(p, eventsStrip(w, domain));
+      if (conf.bands.length) wrap.insertAdjacentHTML("beforeend", conf.key);
       return wrap;
     },
     table: {
       columns: [{ key: "year", label: "Year", type: "year" }, ...lines.map((l) => ({ key: l.key, label: l.label, type: "num" })),
-        { key: "source", label: "Source", type: "text" }],
+        { key: "ucdp", label: "UCDP armed conflict", type: "text" }, { key: "source", label: "Source", type: "text" }],
       rows: [...new Set(yrs)].sort((a, b) => a - b).map((y) => {
-        const r = { year: y, source: srcShort(lines[0].pts[0].source_id) };
+        const r = { year: y, ucdp: conf.of(y), source: srcShort(lines[0].pts[0].source_id) };
         for (const l of lines) r[l.key] = l.pts.find((q) => q.year === y)?.value ?? null;
         r.raw_ref = lines[0].pts.find((q) => q.year === y)?.raw_ref ?? null;
         return r;
@@ -446,45 +453,86 @@ function eventYears() {
   return S.events.map((e) => parseInt(e.date, 10)).filter(Boolean);
 }
 
-function eventsStrip(w, domain, conflictYears) {
-  const right = w < 520 ? 64 : MARGIN.right;
-  const x = (y) => MARGIN.left + ((y - domain[0]) / Math.max(1, domain[1] - domain[0])) * (w - MARGIN.left - right);
-  const evs = S.events.map((e, i) => ({ ...e, i, y: parseInt(e.date, 10) })).filter((e) => e.y);
-  const wars = new Set(S.conflict.filter((c) => c.intensity === 2).map((c) => c.year));
+/** UCDP conflict years as bands: runs of the same intensity (war = 1,000+ battle deaths in a year, else minor),
+ *  a tooltip per run of consecutive conflict years, the legend chip, and each year's kind for the Data view. */
+function conflictBands(years, domain) {
+  const war = new Set(S.conflict.filter((c) => c.intensity === 2).map((c) => c.year));
+  const ys = [...years].sort((a, b) => a - b);
   const runs = [];
-  for (const y of conflictYears.sort((a, b) => a - b)) {
+  for (const y of ys) {
     const last = runs[runs.length - 1];
     if (last && y === last[1] + 1) last[1] = y; else runs.push([y, y]);
   }
-  const lastConflict = conflictYears.length ? Math.max(...conflictYears) : null;
-  const evY = 22;
+  const span = (a, b) => (a === b ? `${a}` : `${a}–${String(a).slice(0, 2) === String(b).slice(0, 2) ? String(b).slice(2) : b}`);
+  const spans = (list) => {
+    const out = [];
+    for (const y of list) { const l = out[out.length - 1]; if (l && y === l[1] + 1) l[1] = y; else out.push([y, y]); }
+    return out.map(([a, b]) => span(a, b)).join(", ");
+  };
+  const bands = [];
+  for (const [a, b] of runs) {
+    const inRun = ys.filter((y) => y >= a && y <= b);
+    const wars = inRun.filter((y) => war.has(y));
+    const title = `Armed conflict, ${a === b ? a : `${a}–${b}`} (${wars.length === inRun.length ? "war years" : wars.length ? `war in ${spans(wars)}` : "minor conflict"}) · UCDP/PRIO v26.1`;
+    let start = a;
+    for (let y = a; y <= b; y++) {
+      if (y === b || war.has(y) !== war.has(y + 1)) {
+        bands.push({ x1: Math.max(domain[0], start - 0.5), x2: Math.min(domain[1], y + 0.5), war: war.has(y), title });
+        start = y + 1;
+      }
+    }
+  }
+  const hasWar = bands.some((d) => d.war);
+  const hasMinor = bands.some((d) => !d.war);
+  const key = `<p class="conf-key"><span>Armed conflict in ${esc(S.origin_name)} (UCDP):</span>
+    ${hasWar ? `<span class="conf-key__item"><i class="conf-sw conf-sw--war" aria-hidden="true"></i>war years</span>` : ""}
+    ${hasMinor ? `<span class="conf-key__item"><i class="conf-sw conf-sw--minor" aria-hidden="true"></i>other conflict years</span>` : ""}</p>`;
+  return { bands, key, of: (y) => (war.has(y) ? "war" : years.includes(y) ? "minor" : "none") };
+}
+
+/** Year ticks the way the chart's x-axis picks them (d3's nice steps). */
+function yearTicks(domain, count) {
+  const step0 = Math.abs(domain[1] - domain[0]) / Math.max(1, count);
+  let step = 10 ** Math.floor(Math.log10(step0));
+  const e = step0 / step;
+  if (e >= Math.sqrt(50)) step *= 10; else if (e >= Math.sqrt(10)) step *= 5; else if (e >= Math.sqrt(2)) step *= 2;
+  step = Math.max(1, step);
+  const out = [];
+  for (let y = Math.ceil(domain[0] / step) * step; y <= domain[1]; y += step) out.push(y);
+  return out;
+}
+
+function eventsStrip(w, domain) {
+  const right = w < 520 ? 64 : MARGIN.right;
+  const x = (y) => MARGIN.left + ((y - domain[0]) / Math.max(1, domain[1] - domain[0])) * (w - MARGIN.left - right);
+  const evs = S.events.map((e, i) => ({ ...e, i, y: parseInt(e.date, 10) })).filter((e) => e.y);
+  if (!evs.length) return document.createElement("div");
+  const evY = 10;                                               // right under the x-axis labels
   const narrow = w < 520;                                       // phones: markers only (the list is under Context)
   const placed = narrow ? evs.map((e) => ({ e, row: 0 })) : placeEventLabels(evs, x, MARGIN.left, w);
-  const nRows = Math.max(3, ...placed.map((p) => p.row + 1));
-  const evH = 84 + (nRows - 3) * 16;
-  const h = (evs.length ? evH : 0) + (runs.length ? 44 : 0);
-  if (!h) return document.createElement("div");
+  const maxRow = Math.max(0, ...placed.map((p) => p.row));
+  const nRows = Math.max(3, maxRow + 1);
+  const repeatAxis = !narrow && maxRow >= 2;                   // labels on several rows: a light copy of the year axis
+  const axisY = evY + 24 + nRows * 16;
+  const h = narrow ? evY + 40 : repeatAxis ? axisY + 18 : evY + 24 + (nRows - 1) * 16 + 10;
   const div = document.createElement("div");
   div.className = "events";
-  const bandY = evs.length ? evH : 6;
-  div.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="group" aria-label="Events and conflict years">
-    <defs><pattern id="conf-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width="6" height="6" fill="var(--c-context-band)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--c-context)" stroke-width="2.4"/></pattern></defs>
-    ${evs.length ? `<text x="0" y="${evY + 4}" class="ev-axis">Events</text>
-      ${w < 520 ? `<text x="${MARGIN.left}" y="${evY + 26}" class="ev-axis">Tap a marker to read about the event</text>` : ""}
-      <line x1="${MARGIN.left}" x2="${w - right}" y1="${evY}" y2="${evY}" stroke="var(--line-strong)"/>
-      <g class="ev-leads" aria-hidden="true">${narrow ? "" : placed.filter((q) => q.row).map(({ e, row }) =>
-        `<line x1="${x(e.y).toFixed(1)}" x2="${x(e.y).toFixed(1)}" y1="${evY + 8}" y2="${evY + 24 + row * 16 - 11}" stroke="var(--line-strong)"/>`).join("")}</g>
-      ${placed.map(({ e, row, label, anchorX, wLabel }) => {
-          const ty = 24 + row * 16;
-          const bx = anchorX === "start" ? -3 : anchorX === "end" ? -wLabel - 3 : -wLabel / 2 - 3;
-          return `<g class="ev" tabindex="0" role="button" data-ev="${e.i}" aria-label="${esc(formatDate(e.date))}: ${esc(e.title)}" transform="translate(${x(e.y).toFixed(1)},${evY})">
-            <rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" fill="var(--ink)"/>
-            ${narrow ? "" : `<rect class="ev-label-bg" x="${bx.toFixed(1)}" y="${ty - 11}" width="${(wLabel + 6).toFixed(1)}" height="15" rx="2"/><text y="${ty}" text-anchor="${anchorX}" class="ev-label">${esc(label)}</text>`}</g>`;
-        }).join("")}
-` : ""}
-    ${runs.map(([a, b]) => `<rect x="${x(a - 0.5).toFixed(1)}" y="${bandY}" width="${Math.max(3, x(b + 0.5) - x(a - 0.5)).toFixed(1)}" height="12" rx="2" class="conf-band" fill="url(#conf-hatch)" stroke="var(--c-context)" stroke-opacity="0.5" opacity="${[...wars].some((y) => y >= a && y <= b) ? 1 : 0.7}"><title>${a === b ? a : `${a} to ${b}`}: armed conflict (UCDP)</title></rect>`).join("")}
-    ${runs.length ? `<text x="${x(runs[0][0] - 0.5)}" y="${bandY + 30}" class="ev-axis">Armed conflict in ${esc(S.origin_name)} (UCDP)${lastConflict && lastConflict < domain[1] ? `, to ${lastConflict}` : ""}</text>` : ""}
+  div.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="group" aria-label="Events">
+    <text x="0" y="${evY + 4}" class="ev-axis">Events</text>
+    ${narrow ? `<text x="${MARGIN.left}" y="${evY + 26}" class="ev-axis">Tap a marker to read about the event</text>` : ""}
+    <line x1="${MARGIN.left}" x2="${w - right}" y1="${evY}" y2="${evY}" stroke="var(--line-strong)"/>
+    <g class="ev-stems" aria-hidden="true">${evs.map((e) => `<line class="ev-stem ev-stem-${e.i}" x1="${x(e.y).toFixed(1)}" x2="${x(e.y).toFixed(1)}" y1="0" y2="${evY - 7}"/>`).join("")}</g>
+    <g class="ev-leads" aria-hidden="true">${narrow ? "" : placed.filter((q) => q.row).map(({ e, row }) =>
+      `<line x1="${x(e.y).toFixed(1)}" x2="${x(e.y).toFixed(1)}" y1="${evY + 8}" y2="${evY + 24 + row * 16 - 11}" stroke="var(--line-strong)"/>`).join("")}</g>
+    ${placed.map(({ e, row, label, anchorX, wLabel }) => {
+        const ty = 24 + row * 16;
+        const bx = anchorX === "start" ? -3 : anchorX === "end" ? -wLabel - 3 : -wLabel / 2 - 3;
+        return `<g class="ev" tabindex="0" role="button" data-ev="${e.i}" aria-label="${esc(formatDate(e.date))}: ${esc(e.title)}" transform="translate(${x(e.y).toFixed(1)},${evY})">
+          <rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" fill="var(--ink)"/>
+          ${narrow ? "" : `<rect class="ev-label-bg" x="${bx.toFixed(1)}" y="${ty - 11}" width="${(wLabel + 6).toFixed(1)}" height="15" rx="2"/><text y="${ty}" text-anchor="${anchorX}" class="ev-label">${esc(label)}</text>`}</g>`;
+      }).join("")}
+    ${repeatAxis ? `<g class="ev-axis2" aria-hidden="true"><line x1="${MARGIN.left}" x2="${w - right}" y1="${axisY}" y2="${axisY}"/>
+      ${yearTicks(domain, w < 520 ? 4 : 7).map((y) => `<line x1="${x(y).toFixed(1)}" x2="${x(y).toFixed(1)}" y1="${axisY}" y2="${axisY + 4}"/><text x="${x(y).toFixed(1)}" y="${axisY + 14}" text-anchor="middle">${y}</text>`).join("")}</g>` : ""}
   </svg>`;
   return div;
 }
@@ -556,6 +604,23 @@ function showEventTip(g) {
     evTip.id = "ev-tip";
     document.body.append(evTip);
   }
+  const fig = g.closest(".chart");
+  fig?.querySelectorAll(".is-on").forEach((x) => x.classList.remove("is-on"));
+  fig?.querySelectorAll(`.ev-rule-${g.dataset.ev}, .ev-stem-${g.dataset.ev}`).forEach((x) => x.classList.add("is-on"));
+  // the event's year, written on the x-axis while it is hovered or focused (drawn now, removed on leave)
+  fig?.querySelectorAll(".ev-year").forEach((t) => t.remove());
+  const pl = [...(fig?.querySelectorAll(".chart__body svg, .chart__body figure") || [])].find((x) => typeof x.scale === "function");
+  const yr = parseInt(ev.date, 10);
+  if (pl && yr) {
+    const svg = pl.tagName.toLowerCase() === "svg" ? pl : pl.querySelector("svg");
+    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    t.setAttribute("class", "ev-year");
+    t.setAttribute("x", pl.scale("x").apply(yr).toFixed(1));
+    t.setAttribute("y", String(+svg.getAttribute("height") - MARGIN.bottom + 18));
+    t.setAttribute("text-anchor", "middle");
+    t.textContent = String(yr);
+    svg.append(t);
+  }
   evTip.innerHTML = `<span class="ev-tip__date">${esc(formatDate(ev.date))}</span><span class="ev-tip__title">${esc(ev.title)}</span><span class="ev-tip__hint">Click for the full note</span>`;
   evTip.hidden = false;
   g.setAttribute("aria-describedby", "ev-tip");
@@ -566,7 +631,7 @@ function showEventTip(g) {
   evTip.style.left = `${left + scrollX}px`;
   evTip.style.top = `${top + scrollY}px`;
 }
-function hideEventTip() { if (evTip) evTip.hidden = true; }
+function hideEventTip() { if (evTip) evTip.hidden = true; document.querySelectorAll('[class*="ev-rule-"].is-on, .ev-stem.is-on').forEach((x) => x.classList.remove("is-on")); document.querySelectorAll(".ev-year").forEach((t) => t.remove()); }
 
 function onEventClick(e) {
   const g = e.target.closest?.(".ev");

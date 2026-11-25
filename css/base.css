@@ -1639,3 +1639,20 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .sp .explain p + h4 { margin-top: var(--s-4); }
 .sp .sp-block .refs { padding-left: 1.4em; }
 .sp .sp-block .refs li { margin-bottom: var(--s-2); overflow-wrap: anywhere; }
+
+/* ================================================================ over-time chart (26 Nov 2026)
+   Events sit right under the x-axis, tied to their years by a faint line through the chart; UCDP conflict years are
+   soft shaded bands behind the chart (darker for war years), not a striped bar. */
+.events { margin-top: 0; }
+.ev-stem { stroke: var(--line-strong); stroke-opacity: 0.5; stroke-dasharray: 2 3; }
+[class*="ev-rule-"] line { transition: stroke var(--t-fast) var(--ease), stroke-opacity var(--t-fast) var(--ease); }
+[class*="ev-rule-"].is-on line, .ev-stem.is-on { stroke: var(--accent-ui); stroke-opacity: 1; stroke-dasharray: none; stroke-width: 1.5; }
+.ev-year { font-size: 12px; font-family: var(--font-sans); fill: var(--accent); font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.ev-axis2 line { stroke: var(--line-strong); stroke-opacity: 0.6; }
+.ev-axis2 text { font-size: 10px; fill: var(--muted); font-family: var(--font-sans); }
+.conf-key { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: var(--s-2) 0 0; font-size: var(--fs-13); color: var(--muted); }
+.conf-key__item, .conf-key > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.conf-sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; border: 1px solid var(--line); }
+.conf-sw--war { background: var(--conf-war); }
+.conf-sw--minor { background: var(--conf-minor); }
+@media (prefers-reduced-motion: reduce) { [class*="ev-rule-"] line { transition: none; } }
