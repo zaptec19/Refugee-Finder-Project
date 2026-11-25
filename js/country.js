@@ -8,7 +8,7 @@ import { getJSON, glossary as loadGlossary } from "./data.js";
 import { esc, numHTML, applyNumbers, fmt } from "./format.js";
 import { chartBlock, Plot, base, C, inkOf, isolatedMarks } from "./charts.js";
 import { renderMiniGlobe } from "./minimap.js";
-import { openPopover } from "./popouts.js";
+import { openTerm } from "./popouts.js";
 
 initPage({ page: "country" });
 document.body.classList.add("page-country");
@@ -72,12 +72,7 @@ try {
     </section>
     <p class="small muted">${esc(c.notes.hosted)} ${esc(c.notes.from)} ${esc(c.notes.internal)}</p></div>`;
   applyNumbers(main);
-  main.querySelectorAll("[data-term-help]").forEach((b) => b.addEventListener("click", () => {
-    const g = G[b.dataset.termHelp];
-    openPopover(`<div class="gl"><h3 class="gl__term">${esc(g.term)}</h3><p>${esc(g.plain)}</p>
-      ${g.how_sources_differ ? `<p class="eyebrow" style="margin-top:12px">How sources differ</p><p class="small">${esc(g.how_sources_differ)}</p>` : ""}
-      <a class="small" href="learn.html#g-${esc(g.id)}">More in Learn &rsaquo;</a></div>`, b, { label: g.term });
-  }));
+  main.querySelectorAll("[data-term-help]").forEach((b) => b.addEventListener("click", () => openTerm(G[b.dataset.termHelp], b)));
 
   // year-end totals: every series with data is drawn; a one-year series (or a lone year) as a labelled dot
   const lines = (obj) => Object.entries(obj).filter(([, v]) => v.some(([, x]) => x != null))

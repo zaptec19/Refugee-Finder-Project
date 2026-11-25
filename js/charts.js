@@ -62,6 +62,7 @@ function watch() {
   const redrawAll = () => blocks.forEach((b) => b.isConnected ? b._redraw?.() : blocks.delete(b));
   document.addEventListener("numfmt-change", redrawAll);
   document.addEventListener("theme-change", redrawAll);
+  document.addEventListener("sp-settled", () => blocks.forEach((b) => b.isConnected ? b._fit?.() : blocks.delete(b)));
 }
 
 /**
@@ -134,10 +135,12 @@ export function chartBlock(host, spec) {
   fig._redraw = redraw;
   blocks.add(fig);
   drawInWhenSeen(fig);
-  new ResizeObserver(() => {
+  // a new width redraws the chart; while the side panel slides or its divider is dragged, only once it settles
+  fig._fit = () => {
     const w = body.clientWidth;
     if (w && Math.abs(w - (fig._w || 0)) > 8) { fig._w = w; redraw(); }
-  }).observe(body);
+  };
+  new ResizeObserver(() => { if (!document.documentElement.classList.contains("sp-moving")) fig._fit(); }).observe(body);
   redraw();
 
   fig.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {

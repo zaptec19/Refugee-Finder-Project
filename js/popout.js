@@ -1,313 +1,522 @@
-// One pop-out system for the site: a native <dialog> opened with showModal() and animated with the
-// Web Animations API. Used by the larger map and the source trace (later the explainer and export dialog).
+// Side details: one split panel for the whole site. The source trace, the "?" explainer, the big map, glossary
+// terms and reference lists open beside the page, not over it: the top bar stays full width, the page shrinks to
+// the left (still fully usable) and the panel docks on the right, full height under the top bar, scrolling on its
+// own. Under 860 px there is no room for two columns, so the same panel is a bottom sheet (swipe down to close).
 //
-//   const p = createPopout(dlg, { box: ".x__box", sheetClass: "x--sheet" });
-//   await p.open({ el, rect, focusEl, flyFrom }, { flyTo, stagger: [...], focus });
-//   p.close();
+//   openSide({ kind, title, announce, key, origin: { el, flyFrom, focusEl, hl }, render(body) -> { flyTo }, onClose })
+//   pushSide(entry)     the panel's own links (an input of a share, ...): new content, same highlight
+//   closeSide()         X, Esc, or a second click on the highlighted element
 //
-// Open (320 ms): the box grows out of the element that was clicked (FLIP) while the backdrop fades in;
-// the clicked number can fly into the pop-out's big number; the content fades up in a quick stagger.
-// Close (220 ms): the reverse, back into the same element, or a small fade in place if it is out of view;
-// then focus returns to it and it gets a soft highlight pulse. Phones (under 600 px): a bottom sheet that
-// slides up and closes on a swipe down. Reduced motion: a quick fade only.
-// Only one pop-out is open at a time: opening one closes any other pop-out, popover or side panel.
-import { closePopover, closePanel } from "./popouts.js";
+// Open: the panel slides in (280 ms) while the page narrows in step, and the clicked number flies into the panel.
+// The reader's place is kept: the clicked element (or what was at the top of the screen) stays at the same height
+// while the page re-flows. The clicked element keeps an accent outline while its panel is open. Clicking another
+// number while the panel is open swaps the content (a quick cross-fade); a back arrow returns to the previous item
+// (up to 10). The divider between page and panel can be dragged (or moved with ←/→ when focused); the width is
+// kept in localStorage (wv1:split-w); a double-click resets it. Reduced motion: no slide, no fly, instant widths.
+// The panel is a non-modal <aside role="complementary">: no backdrop, no focus trap; F6 moves between page and panel.
 import { reducedMotion } from "./motion.js";
+import { store } from "./store.js";
+import { icon } from "./icons.js";
 
-export { reducedMotion };       // with reduced motion: no movement, just quick fades
+export { reducedMotion };
 export const phoneWidth = () => document.documentElement.clientWidth < 600;
+export const SPLIT_MIN = 860;
+export const sheetMode = () => document.documentElement.clientWidth < SPLIT_MIN;
 
-const OPEN_MS = 320;
-const CLOSE_MS = 220;
-const EASE_OPEN = "cubic-bezier(0.2, 0.8, 0.2, 1)";
-const EASE_CLOSE = "cubic-bezier(0.4, 0, 0.8, 0.4)";
-const START_RADIUS = 6;
-const END_RADIUS = 12;
+const OPEN_MS = 280;
+const CLOSE_MS = 240;
+const SWAP_OUT_MS = 90;
+const SWAP_IN_MS = 160;
+const EASE_OUT = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+const EASE_IN = "cubic-bezier(0.4, 0, 0.8, 0.4)";
+const MAX_HISTORY = 10;
+const html = document.documentElement;
 
-let current = null;
+let el = null;
+let titleEl;
+let backBtn;
+let bodyEl;
+let divider;
+let scrim;
+let live;
+let hist = [];
+let isOpen = false;
+let mode = null;                    // "split" | "sheet"
+let queue = Promise.resolve();
+let lastPageFocus = null;
+let unmark = null;
 
-/** Close whichever pop-out is open (instantly when asked). */
-export function closeCurrentPopout({ instant = false } = {}) {
-  return current ? current.close({ instant }) : Promise.resolve();
-}
+const top = () => hist[hist.length - 1];
+const vw = () => html.clientWidth;
 
-// ------------------------------------------------------------------ page scroll lock
-let locks = 0;
-function lockScroll() {
-  if (locks++) return;
-  const html = document.documentElement;
-  html.classList.add("pop-locked");
-}
-function unlockScroll() {
-  if (!locks) return;
-  if (--locks) return;
-  document.documentElement.classList.remove("pop-locked");
-}
-
-// ------------------------------------------------------------------ geometry
-function rectOf(origin) {
-  if (origin?.el?.isConnected) {
-    const r = origin.el.getBoundingClientRect();
-    if (r.width || r.height) return r;
+// ------------------------------------------------------------------ widths
+/** The panel's width limits at this window width (the page keeps at least 640 px from 1280 px up, else 440 + gutters). */
+export function limits() {
+  const w = vw();
+  if (w >= 1280) {
+    const max = Math.min(640, w - 640);
+    return { min: Math.min(420, max), max, def: Math.max(Math.min(420, max), Math.min(Math.round(w * 0.4), max)) };
   }
-  return origin?.rect || null;
+  const max = Math.max(300, Math.min(560, w - 488));
+  const min = Math.min(340, max);
+  return { min, max, def: Math.max(min, Math.min(420, max)) };
 }
-function inView(r) {
-  if (!r) return false;
-  const vw = document.documentElement.clientWidth;
-  const vh = window.innerHeight;
-  return r.bottom > 0 && r.right > 0 && r.top < vh && r.left < vw && r.width > 0 && r.height > 0;
+const clampW = (w) => { const L = limits(); return Math.round(Math.max(L.min, Math.min(L.max, w))); };
+const wanted = () => clampW(Number(store.get("split-w", 0)) || limits().def);
+
+function setWidth(w) {
+  const L = limits();
+  html.style.setProperty("--sp-w", `${w}px`);
+  divider?.setAttribute("aria-valuenow", String(w));
+  divider?.setAttribute("aria-valuemin", String(L.min));
+  divider?.setAttribute("aria-valuemax", String(L.max));
+  divider?.setAttribute("aria-valuetext", `${w} pixels wide`);
+  // the situation layout follows the page column's width, not the window's
+  const page = vw() - w;
+  html.classList.toggle("sp-narrow", vw() < 1280 || page < 760);
+  html.classList.toggle("sp-mid", !(vw() < 1280 || page < 760) && page < 1120);
 }
-/** transform that puts a box laid out at `to` over the rectangle `from` (transform-origin 0 0) */
-function flip(from, to) {
-  const sx = Math.max(0.02, from.width / to.width);
-  const sy = Math.max(0.02, from.height / to.height);
-  return {
-    transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${sx}, ${sy})`,
-    borderRadius: `${(START_RADIUS / sx).toFixed(1)}px / ${(START_RADIUS / sy).toFixed(1)}px`,
-  };
+function clearLayout() {
+  html.classList.remove("sp-on", "sp-sheet", "sp-narrow", "sp-mid");
+  html.style.removeProperty("--sp-w");
 }
 
-/** A soft highlight that tells the eye where it was: on the element itself, or a ring at a point. */
-export function pulse(origin) {
-  if (origin?.el?.isConnected && inView(origin.el.getBoundingClientRect())) {
-    origin.el.classList.remove("pop-pulse");
-    void origin.el.offsetWidth;                 // restart the animation
-    origin.el.classList.add("pop-pulse");
-    setTimeout(() => origin.el.classList.remove("pop-pulse"), 700);
+// ------------------------------------------------------------------ keeping the reader's place
+/** What to hold still while the page re-flows: the clicked element, or whatever is at the top of the screen. */
+function anchorFor(origin) {
+  const topbar = parseFloat(getComputedStyle(html).getPropertyValue("--topbar-h")) || 64;
+  const inView = (r) => r && r.bottom > 0 && r.top < innerHeight && (r.width || r.height);
+  const cand = origin?.el?.isConnected ? origin.el : origin?.hl?.host?.isConnected ? origin.hl.host : null;
+  if (cand && inView(cand.getBoundingClientRect())) return { el: cand, top: cand.getBoundingClientRect().top };
+  const main = document.getElementById("main");
+  if (!main) return null;
+  const x = Math.min(240, (main.getBoundingClientRect().right || vw()) / 3);
+  let at = document.elementFromPoint(x, topbar + 24);
+  while (at && at !== main && at.getBoundingClientRect().height > innerHeight) at = null;
+  if (!at || !main.contains(at)) at = [...main.querySelectorAll("h1, h2, h3, p, figure, section, article")].find((n) => n.getBoundingClientRect().bottom > topbar);
+  void inView;
+  return at ? { el: at, top: at.getBoundingClientRect().top } : null;
+}
+function holdPlace(anchor) {
+  if (!anchor?.el?.isConnected) return;
+  const d = anchor.el.getBoundingClientRect().top - anchor.top;
+  if (Math.abs(d) > 0.5) window.scrollBy({ top: d, behavior: "instant" });        // the page scrolls smoothly otherwise
+}
+function holdDuring(anchor, ms) {
+  if (!anchor) return Promise.resolve();
+  const t0 = performance.now();
+  return new Promise((resolve) => {
+    const step = () => {
+      holdPlace(anchor);
+      if (performance.now() - t0 < ms) requestAnimationFrame(step); else resolve();
+    };
+    requestAnimationFrame(step);
+  });
+}
+const settled = () => document.dispatchEvent(new CustomEvent("sp-settled"));
+
+// ------------------------------------------------------------------ the highlight on the page
+function mark(origin) {
+  unmark?.();
+  unmark = null;
+  const h = origin?.hl || origin?.el;
+  if (h instanceof Element) {
+    h.classList.add("sp-hl");
+    unmark = () => h.classList.remove("sp-hl");
     return;
   }
-  const r = origin?.rect;
-  if (!r || !inView(r)) return;
-  const ring = document.createElement("span");
-  ring.className = "pop-pulse-ring";
-  const size = Math.max(16, Math.min(40, Math.max(r.width, r.height) + 12));
-  Object.assign(ring.style, { left: `${r.left + r.width / 2 - size / 2}px`, top: `${r.top + r.height / 2 - size / 2}px`, width: `${size}px`, height: `${size}px` });
-  document.body.append(ring);
-  setTimeout(() => ring.remove(), 700);
+  if (h?.host instanceof Element && typeof h.at === "function") {
+    // a point inside a chart: a ring placed from the chart's own scales, kept in place when the chart redraws
+    const ring = document.createElement("span");
+    ring.className = "sp-hl-ring";
+    ring.setAttribute("aria-hidden", "true");
+    const place = () => {
+      const p = h.at();
+      if (!p) { ring.hidden = true; return; }
+      if (!ring.isConnected) h.host.append(ring);
+      ring.hidden = false;
+      ring.style.left = `${p.x}px`;
+      ring.style.top = `${p.y}px`;
+    };
+    if (getComputedStyle(h.host).position === "static") h.host.style.position = "relative";
+    h.host.append(ring);
+    place();
+    const mo = new MutationObserver(() => requestAnimationFrame(place));
+    mo.observe(h.host, { childList: true });
+    document.addEventListener("sp-settled", place);
+    unmark = () => { mo.disconnect(); document.removeEventListener("sp-settled", place); ring.remove(); };
+  }
 }
 
 // ------------------------------------------------------------------ the number that flies
-/** Animate a copy of the clicked number from where it sits into the pop-out's big number, then show the real one.
- *  `from` is an element (its text and rectangle are used) or { rect, fontSize, text }. */
-function flyNumber(dlg, from, to, b, delay = 0) {
-  const src = from?.nodeType ? { rect: from.getBoundingClientRect(), style: getComputedStyle(from), text: from.textContent.trim() } : from;
-  if (!src?.rect || !to || !inView(src.rect)) return null;
+function flyNumber(from, to) {
+  const src = from?.nodeType ? { rect: from.getBoundingClientRect(), style: getComputedStyle(from) } : from;
+  if (!src?.rect || !to) return null;
+  const r = src.rect;
+  if (!(r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < vw() && (r.width || r.height))) return null;
+  const b = to.getBoundingClientRect();
   const ds = getComputedStyle(to);
   const c = document.createElement("span");
   c.className = "pop-fly";
   c.setAttribute("aria-hidden", "true");
-  c.textContent = to.textContent.trim() || src.text;
+  c.textContent = to.textContent.trim() || src.text || "";
   Object.assign(c.style, {
     left: `${b.left}px`, top: `${b.top}px`, fontFamily: ds.fontFamily, fontSize: ds.fontSize, fontWeight: ds.fontWeight,
     letterSpacing: ds.letterSpacing, fontVariantNumeric: ds.fontVariantNumeric, color: ds.color, lineHeight: ds.lineHeight,
   });
-  dlg.append(c);
-  const srcSize = parseFloat(src.style?.fontSize || src.fontSize || 14);
-  const k = Math.max(0.1, srcSize / parseFloat(ds.fontSize || 34));
-  // line up the text's vertical centres (the copy is laid out with the destination's line height)
-  const dy = src.rect.top + src.rect.height / 2 - (b.top + (b.height * k) / 2);
-  const startColor = src.style?.color || ds.color;
+  document.body.append(c);
+  const k = Math.max(0.1, parseFloat(src.style?.fontSize || src.fontSize || 14) / parseFloat(ds.fontSize || 34));
+  const dy = r.top + r.height / 2 - (b.top + (b.height * k) / 2);
   to.style.opacity = "0";
   const a = c.animate([
-    { transform: `translate(${src.rect.left - b.left}px, ${dy}px) scale(${k})`, color: startColor, opacity: from?.nodeType ? 1 : 0 },
+    { transform: `translate(${r.left - b.left}px, ${dy}px) scale(${k})`, color: src.style?.color || ds.color, opacity: from?.nodeType ? 1 : 0 },
     { opacity: 1, offset: 0.25 },
     { transform: "none", color: ds.color, opacity: 1 },
-  ], { duration: OPEN_MS + 60, delay, easing: EASE_OPEN, fill: "backwards" });
+  ], { duration: OPEN_MS + 80, easing: EASE_OUT, fill: "backwards" });
+  c.style.transformOrigin = "0 0";
   const done = () => { to.style.opacity = ""; c.remove(); };
   a.finished.then(done, done);
   return a;
 }
 
-// ------------------------------------------------------------------ the pop-out
-export function createPopout(dlg, { box = ".pop__box", sheetClass = "pop--sheet", handle = "[data-drag]", onClosed } = {}) {
-  const boxEl = () => (typeof box === "string" ? dlg.querySelector(box) : box);
-  let origin = null;
-  let running = [];
-  let closing = null;
-  let pressedOnBackdrop = false;
+/** A soft highlight that tells the eye where it was. */
+export function pulse(origin) {
+  const e = origin?.el;
+  if (!e?.isConnected) return;
+  e.classList.remove("pop-pulse");
+  void e.offsetWidth;
+  e.classList.add("pop-pulse");
+  setTimeout(() => e.classList.remove("pop-pulse"), 700);
+}
 
-  const cleanup = () => {
-    running.forEach((a) => a.cancel());
-    running = [];
-    dlg.querySelectorAll(".pop-fly").forEach((c) => c.remove());
-    dlg.querySelectorAll("[style*='opacity: 0']").forEach((el) => { el.style.opacity = ""; });
-    boxEl().style.transform = "";
-    unlockScroll();
-    if (current === api) current = null;
-    const o = origin;
-    origin = null;
-    closing = null;
-    const f = o?.focusEl || o?.el;
-    if (f?.isConnected) f.focus({ preventScroll: true });
-    pulse(o);
-    onClosed?.();
-  };
+// ------------------------------------------------------------------ building the panel
+function build() {
+  if (el) return;
+  el = document.createElement("aside");
+  el.className = "sp";
+  el.id = "side-panel";
+  el.setAttribute("role", "complementary");
+  el.hidden = true;
+  el.innerHTML = `
+    <div class="sp__divider" role="separator" tabindex="0" aria-orientation="vertical" aria-controls="side-panel"
+      aria-label="Resize the side panel (left and right arrow keys; double-click to reset)"><span class="sp__grip" aria-hidden="true"></span></div>
+    <div class="sp__handle" data-drag aria-hidden="true"></div>
+    <header class="sp__head" data-drag>
+      <button class="icon-btn sp__back" type="button" data-sp-back aria-label="Back to the previous item" hidden>${icon("back", { size: 18 })}</button>
+      <h2 class="sp__title" id="sp-title" tabindex="-1"></h2>
+      <button class="icon-btn sp__close" type="button" data-sp-close aria-label="Close the side panel">${icon("close", { size: 18 })}</button>
+    </header>
+    <div class="sp__body"></div>`;
+  titleEl = el.querySelector(".sp__title");
+  backBtn = el.querySelector("[data-sp-back]");
+  bodyEl = el.querySelector(".sp__body");
+  divider = el.querySelector(".sp__divider");
+  scrim = document.createElement("div");
+  scrim.className = "sp-scrim";
+  scrim.hidden = true;
+  live = document.createElement("div");
+  live.className = "sr-only sp-live";
+  live.setAttribute("aria-live", "polite");
+  document.body.append(el, scrim, live);
 
-  dlg.addEventListener("cancel", (e) => { e.preventDefault(); api.close(); });                 // Esc
-  dlg.addEventListener("close", () => { if (origin) cleanup(); });                               // closed some other way
-  dlg.addEventListener("pointerdown", (e) => { pressedOnBackdrop = e.target === dlg; });
-  dlg.addEventListener("click", (e) => {
-    if (e.target === dlg && pressedOnBackdrop) api.close();                                     // the dimmed background
-    pressedOnBackdrop = false;
-  });
+  el.querySelector("[data-sp-close]").addEventListener("click", () => closeSide());
+  backBtn.addEventListener("click", () => sideBack());
+  scrim.addEventListener("click", () => closeSide());
+  document.addEventListener("focusin", (e) => { if (!el.contains(e.target)) lastPageFocus = e.target; });
+  document.addEventListener("keydown", onKey);
+  wireDivider();
   wireSwipe();
+  let raf = 0;
+  addEventListener("resize", () => {
+    if (!isOpen) return;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const m = sheetMode() ? "sheet" : "split";
+      if (m !== mode) applyMode(m);
+      else if (m === "split") setWidth(wanted());
+      settled();
+    });
+  });
+}
 
-  const api = {
-    get isOpen() { return dlg.open; },
-    get origin() { return origin; },
+function applyMode(m) {
+  mode = m;
+  el.classList.toggle("sp--sheet", m === "sheet");
+  clearLayout();
+  if (m === "split") {
+    html.classList.add("sp-on");
+    setWidth(wanted());
+    scrim.hidden = true;
+    html.classList.remove("pop-locked");
+  } else {
+    html.classList.add("sp-sheet", "pop-locked");
+    scrim.hidden = false;
+  }
+}
 
-    async open(from, { flyTo = null, flyFrom = undefined, stagger = [], focus = null } = {}) {
-      if (dlg.open) return;
-      closePopover();
-      closePanel();
-      if (current && current !== api) await current.close({ instant: true });
-      current = api;
-      origin = from || {};
-      const sheet = phoneWidth();
-      dlg.classList.toggle(sheetClass, sheet);
-      lockScroll();
-      dlg.showModal();
-      // keyboard users can act at once: focus moves before any animation runs
-      (focus || dlg).focus({ preventScroll: true });
-      const b = boxEl();
-      const reduced = reducedMotion();
-      // B7: the box is solid from the first frame while it grows and its content fades in; it eases back to the
-      // glass finish only once everything has landed (the glass let the page show through the empty box)
-      b.classList.add("is-entering");
-      const anims = [dlg.animate([{ opacity: 0 }, { opacity: 1 }],
-        { duration: reduced ? 140 : OPEN_MS, easing: "ease-out", pseudoElement: "::backdrop" })];
-      if (reduced) {
-        anims.push(b.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 140, easing: "linear" }));
-      } else {
-        // measure the final layout before anything moves
-        const to = b.getBoundingClientRect();
-        const flyRect = flyTo?.getBoundingClientRect();
-        const fromRect = rectOf(origin);
-        if (sheet) {
-          anims.push(b.animate([{ transform: "translateY(100%)" }, { transform: "none" }], { duration: OPEN_MS + 40, easing: EASE_OPEN }));
-        } else if (inView(fromRect)) {
-          anims.push(b.animate([{ ...flip(fromRect, to), transformOrigin: "0 0" }, { transform: "none", borderRadius: `${END_RADIUS}px`, transformOrigin: "0 0" }],
-            { duration: OPEN_MS, easing: EASE_OPEN }));
-        } else {
-          anims.push(b.animate([{ opacity: 0, transform: "scale(0.96)" }, { opacity: 1, transform: "none" }], { duration: OPEN_MS, easing: EASE_OPEN }));
-        }
-        const flyer = flyFrom === undefined ? origin.flyFrom || origin.el : flyFrom;
-        if (flyTo && flyer) {
-          const a = flyNumber(dlg, flyer, flyTo, flyRect, sheet ? 60 : 0);
-          if (a) anims.push(a);
-        }
-        anims.push(...staggerIn(stagger, sheet ? 160 : 170));
-      }
-      running = anims;
-      // a quick glow-border flash the moment the box lands (the content may still be fading in)
-      if (!reduced) {
-        anims[1]?.finished.then(() => {
-          if (!dlg.open) return;
-          b.classList.remove("pop-landed");
-          void b.offsetWidth;
-          b.classList.add("pop-landed");
-          setTimeout(() => b.classList.remove("pop-landed"), 600);
-        }, () => {});
-      }
-      await Promise.allSettled(anims.map((a) => a.finished));
-      b.classList.remove("is-entering");
-      if (running === anims) running = [];
-    },
+function onKey(e) {
+  if (!isOpen) return;
+  if (e.key === "F6") {
+    e.preventDefault();
+    if (el.contains(document.activeElement)) {
+      const back = (lastPageFocus?.isConnected && lastPageFocus) || top()?.origin?.focusEl || top()?.origin?.el || document.getElementById("main");
+      back?.focus?.({ preventScroll: false });
+    } else {
+      titleEl.focus({ preventScroll: true });
+    }
+    return;
+  }
+  if (e.key !== "Escape" || e.defaultPrevented) return;
+  if (document.querySelector("dialog[open]") || document.querySelector(":popover-open:not(.toast-region)") || document.querySelector(".tour-card")) return;
+  const a = document.activeElement;
+  if (a && !el.contains(a) && a.closest?.(".ask, .results")) return;          // the search box closes its own results
+  e.preventDefault();
+  closeSide();
+}
 
-    /** Replace the content in place (e.g. following an input of a share to its own source). */
-    async swap(render, { stagger = () => [], focus = null } = {}) {
-      if (!dlg.open) return;
-      const b = boxEl();
-      const body = [...b.children];
-      if (!reducedMotion()) {
-        await Promise.allSettled(body.map((el) => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 90, fill: "forwards" }).finished));
-      }
-      render();
-      b.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-      (focus?.() || dlg).focus({ preventScroll: true });
-      if (!reducedMotion()) staggerIn(stagger(), 0);
-    },
+function fill(entry) {
+  titleEl.textContent = entry.title;
+  el.setAttribute("aria-label", entry.title);
+  backBtn.hidden = hist.length < 2;
+  bodyEl.scrollTop = 0;
+  bodyEl.replaceChildren();
+  bodyEl.dataset.kind = entry.kind || "";
+  return entry.render(bodyEl, entry) || {};
+}
 
-    async close({ instant = false } = {}) {
-      if (!dlg.open) return;
-      if (closing) return closing;
-      running.forEach((a) => a.finish());
-      running = [];
-      const b = boxEl();
-      if (instant) {
-        dlg.close();
-        if (origin) cleanup();
-        return;
-      }
-      closing = (async () => {
-        const reduced = reducedMotion();
-        const sheet = dlg.classList.contains(sheetClass);
-        const anims = [dlg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: reduced ? 120 : CLOSE_MS, easing: "ease-in", pseudoElement: "::backdrop", fill: "forwards" })];
-        if (reduced) {
-          anims.push(b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120, fill: "forwards" }));
-        } else {
-          [...b.children].forEach((el) => anims.push(el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 90, easing: "ease-in", fill: "forwards" })));
-          const fromRect = rectOf(origin);
-          const now = b.getBoundingClientRect();
-          const start = b.style.transform || "none";
-          b.style.transform = "";
-          const to = b.getBoundingClientRect();
-          if (sheet) {
-            anims.push(b.animate([{ transform: start }, { transform: "translateY(100%)" }], { duration: CLOSE_MS, easing: EASE_CLOSE, fill: "forwards" }));
-          } else if (inView(fromRect) && now.width) {
-            anims.push(b.animate([{ transform: "none", borderRadius: `${END_RADIUS}px`, transformOrigin: "0 0", opacity: 1 },
-              { opacity: 1, offset: 0.7 },
-              { ...flip(fromRect, to), transformOrigin: "0 0", opacity: 0 }], { duration: CLOSE_MS, easing: EASE_CLOSE, fill: "forwards" }));
-          } else {
-            anims.push(b.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(0.96)" }], { duration: CLOSE_MS, easing: EASE_CLOSE, fill: "forwards" }));
-          }
-        }
-        await Promise.allSettled(anims.map((a) => a.finished));
-        dlg.close();
-        anims.forEach((a) => a.cancel());
-        [...b.children].forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
-        if (origin) cleanup();
-      })();
-      return closing;
-    },
+function announce(text) {
+  if (!text) return;
+  live.textContent = "";
+  setTimeout(() => { live.textContent = text; }, 60);
+}
+
+// ------------------------------------------------------------------ open, swap, back, close
+function sameOrigin(a, b) {
+  const x = a?.origin || {};
+  const y = b?.origin || {};
+  if (y.el && x.el) return y.el === x.el;
+  if (!y.el && y.hl?.host && y.hl.host === x.hl?.host) return !!b.key && b.key === a.key;
+  return false;
+}
+
+const serial = (fn) => { queue = queue.then(fn, fn); return queue; };
+
+/** Open a side detail. If the panel is open, its content is replaced (or, for the highlighted element, it closes). */
+export function openSide(entry) {
+  build();
+  return serial(async () => {
+    if (isOpen) {
+      if (sameOrigin(top(), entry)) return doClose();
+      hist.push(entry);
+      if (hist.length > MAX_HISTORY) hist.shift();
+      return swap(entry, { fly: true });
+    }
+    hist = [entry];
+    return doOpen(entry);
+  });
+}
+
+/** New content from inside the panel (keeps the highlight on the element that opened the panel). */
+export function pushSide(entry) {
+  build();
+  return serial(async () => {
+    if (!isOpen) { hist = [entry]; return doOpen(entry); }
+    const cur = top();
+    hist.push({ ...entry, origin: entry.origin || cur.origin });
+    if (hist.length > MAX_HISTORY) hist.shift();
+    return swap(top(), { fly: false });
+  });
+}
+
+export function sideBack() {
+  return serial(async () => {
+    if (!isOpen || hist.length < 2) return;
+    hist.pop();
+    return swap(top(), { fly: false });
+  });
+}
+
+export function closeSide({ instant = false } = {}) {
+  if (!el) return Promise.resolve();
+  return serial(() => doClose({ instant }));
+}
+export const closeCurrentPopout = closeSide;
+export const sideOpen = () => isOpen;
+export const sideBody = () => bodyEl;
+export const sideKind = () => (isOpen ? top()?.kind : null);
+
+async function doOpen(entry) {
+  document.querySelectorAll(":popover-open:not(.toast-region)").forEach((p) => { try { p.hidePopover(); } catch { /* ignore */ } });
+  const reduced = reducedMotion();
+  const anchor = anchorFor(entry.origin);
+  if (anchor) anchor.top = anchor.el.getBoundingClientRect().top;
+  el.hidden = false;
+  isOpen = true;
+  if (!reduced) html.classList.add("sp-moving", "sp-anim");
+  applyMode(sheetMode() ? "sheet" : "split");
+  el.setAttribute("data-open", "");
+  const res = fill(entry);
+  mark(entry.origin);
+  titleEl.focus({ preventScroll: true });
+  announce(entry.announce || `${entry.title} opened beside the page`);
+  if (reduced) {
+    holdPlace(anchor);
+    settled();
+    res.landed?.();
+    return;
+  }
+  const anims = [el.animate([{ transform: mode === "sheet" ? "translateY(100%)" : "translateX(100%)" }, { transform: "none" }],
+    { duration: mode === "sheet" ? OPEN_MS + 40 : OPEN_MS, easing: EASE_OUT })];
+  const flyer = entry.origin?.flyFrom || entry.origin?.el;
+  if (res.flyTo && flyer) {
+    const a = flyNumber(flyer, res.flyTo);
+    if (a) anims.push(a);
+  }
+  if (mode === "split") anims.push({ finished: holdDuring(anchor, OPEN_MS + 40) });
+  await Promise.allSettled(anims.map((a) => a.finished));
+  html.classList.remove("sp-moving", "sp-anim");
+  holdPlace(anchor);
+  settled();
+  res.landed?.();
+}
+
+async function swap(entry, { fly }) {
+  const reduced = reducedMotion();
+  if (!reduced) {
+    await Promise.allSettled([bodyEl, titleEl].map((x) => x.animate([{ opacity: 1 }, { opacity: 0 }], { duration: SWAP_OUT_MS, easing: "ease-in", fill: "forwards" }).finished));
+  }
+  const res = fill(entry);
+  mark(entry.origin);
+  titleEl.focus({ preventScroll: true });
+  if (!reduced) {
+    [bodyEl, titleEl].forEach((x) => { x.getAnimations().forEach((a) => a.cancel()); x.animate([{ opacity: 0 }, { opacity: 1 }], { duration: SWAP_IN_MS, easing: "ease-out" }); });
+    const flyer = entry.origin?.flyFrom || entry.origin?.el;
+    if (fly && res.flyTo && flyer) {
+      const a = flyNumber(flyer, res.flyTo);
+      if (a) await a.finished.catch(() => {});
+    }
+  }
+  res.landed?.();
+}
+
+async function doClose({ instant = false } = {}) {
+  if (!isOpen) return;
+  const cur = top();
+  const reduced = instant || reducedMotion();
+  const anchor = anchorFor(cur?.origin);
+  if (anchor) anchor.top = anchor.el.getBoundingClientRect().top;
+  const focusTo = cur?.origin?.focusEl || cur?.origin?.el;
+  unmark?.();
+  unmark = null;
+  if (!reduced) {
+    html.classList.add("sp-moving", "sp-anim");
+    const out = el.animate([{ transform: el.style.transform || "none" }, { transform: mode === "sheet" ? "translateY(100%)" : "translateX(100%)" }],
+      { duration: CLOSE_MS, easing: EASE_IN, fill: "forwards" });
+    clearLayout();
+    html.classList.remove("pop-locked");
+    scrim.hidden = true;
+    await Promise.allSettled([out.finished, mode === "split" ? holdDuring(anchor, CLOSE_MS + 40) : null]);
+    out.cancel();
+    html.classList.remove("sp-moving", "sp-anim");
+  } else {
+    clearLayout();
+    html.classList.remove("pop-locked");
+    scrim.hidden = true;
+  }
+  el.hidden = true;
+  el.removeAttribute("data-open");
+  el.style.transform = "";
+  isOpen = false;
+  holdPlace(anchor);
+  const closed = hist;
+  hist = [];
+  bodyEl.replaceChildren();
+  settled();
+  new Set(closed.map((e) => e.onClose).filter(Boolean)).forEach((f) => { try { f(); } catch (e) { console.error(e); } });
+  if (focusTo?.isConnected) focusTo.focus({ preventScroll: true });
+  pulse(cur?.origin);
+}
+
+// ------------------------------------------------------------------ the divider
+function wireDivider() {
+  let x0 = null;
+  let anchor = null;
+  const save = (w) => store.set("split-w", w);
+  divider.addEventListener("pointerdown", (e) => {
+    if (mode !== "split") return;
+    e.preventDefault();
+    x0 = e.clientX;
+    anchor = anchorFor(null);
+    divider.setPointerCapture(e.pointerId);
+    html.classList.add("sp-dragging", "sp-moving");
+  });
+  divider.addEventListener("pointermove", (e) => {
+    if (x0 === null) return;
+    setWidth(clampW(vw() - e.clientX));
+    holdPlace(anchor);
+  });
+  const end = () => {
+    if (x0 === null) return;
+    x0 = null;
+    html.classList.remove("sp-dragging", "sp-moving");
+    save(parseInt(html.style.getPropertyValue("--sp-w"), 10));
+    holdPlace(anchor);
+    settled();
   };
+  divider.addEventListener("pointerup", end);
+  divider.addEventListener("pointercancel", end);
+  divider.addEventListener("dblclick", () => {
+    store.remove("split-w");
+    const a = anchorFor(null);
+    setWidth(wanted());
+    holdPlace(a);
+    settled();
+  });
+  let t = 0;
+  divider.addEventListener("keydown", (e) => {
+    if (mode !== "split") return;
+    const step = e.shiftKey ? 72 : 24;
+    const w = parseInt(html.style.getPropertyValue("--sp-w"), 10) || wanted();
+    const L = limits();
+    const next = e.key === "ArrowLeft" ? w + step : e.key === "ArrowRight" ? w - step : e.key === "Home" ? L.max : e.key === "End" ? L.min : null;
+    if (next === null) return;
+    e.preventDefault();
+    const a = anchorFor(null);
+    html.classList.add("sp-moving");
+    setWidth(clampW(next));
+    holdPlace(a);
+    save(clampW(next));
+    clearTimeout(t);
+    t = setTimeout(() => { html.classList.remove("sp-moving"); settled(); }, 200);
+  });
+}
 
-  function staggerIn(els, delay) {
-    return [...els].filter(Boolean).map((el, i) => el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }],
-      { duration: 200, delay: delay + i * 30, easing: "ease-out", fill: "backwards" }));
-  }
-
-  // phones: drag the sheet down by its handle or header to close it
-  function wireSwipe() {
-    let y0 = null;
-    let t0 = 0;
-    let dy = 0;
-    dlg.addEventListener("pointerdown", (e) => {
-      if (!dlg.classList.contains(sheetClass) || !e.target.closest?.(handle) || e.target.closest("button, a, input, select")) return;
-      y0 = e.clientY;
-      t0 = performance.now();
-      dy = 0;
-      e.target.closest(handle).setPointerCapture?.(e.pointerId);
-    });
-    dlg.addEventListener("pointermove", (e) => {
-      if (y0 === null) return;
-      dy = Math.max(0, e.clientY - y0);
-      boxEl().style.transform = dy ? `translateY(${dy}px)` : "";
-    });
-    const end = () => {
-      if (y0 === null) return;
-      const v = dy / Math.max(1, performance.now() - t0);
-      y0 = null;
-      if (dy > 90 || (dy > 30 && v > 0.5)) { api.close(); return; }
-      const b = boxEl();
-      const start = b.style.transform;
-      b.style.transform = "";
-      if (start && !reducedMotion()) b.animate([{ transform: start }, { transform: "none" }], { duration: 180, easing: EASE_OPEN });
-    };
-    dlg.addEventListener("pointerup", end);
-    dlg.addEventListener("pointercancel", end);
-  }
-
-  return api;
+// ------------------------------------------------------------------ phones: swipe the sheet down to close it
+function wireSwipe() {
+  let y0 = null;
+  let t0 = 0;
+  let dy = 0;
+  el.addEventListener("pointerdown", (e) => {
+    if (mode !== "sheet" || !e.target.closest?.("[data-drag]") || e.target.closest("button, a, input, select")) return;
+    y0 = e.clientY;
+    t0 = performance.now();
+    dy = 0;
+    e.target.closest("[data-drag]").setPointerCapture?.(e.pointerId);
+  });
+  el.addEventListener("pointermove", (e) => {
+    if (y0 === null) return;
+    dy = Math.max(0, e.clientY - y0);
+    el.style.transform = dy ? `translateY(${dy}px)` : "";
+  });
+  const end = () => {
+    if (y0 === null) return;
+    const v = dy / Math.max(1, performance.now() - t0);
+    y0 = null;
+    if (dy > 90 || (dy > 30 && v > 0.5)) { closeSide(); return; }      // slides out from where the finger left it
+    const start = el.style.transform;
+    el.style.transform = "";
+    if (start && !reducedMotion()) el.animate([{ transform: start }, { transform: "none" }], { duration: 180, easing: EASE_OUT });
+  };
+  el.addEventListener("pointerup", end);
+  el.addEventListener("pointercancel", end);
 }

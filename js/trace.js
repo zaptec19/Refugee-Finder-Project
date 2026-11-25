@@ -1,5 +1,5 @@
-// "Where this number comes from": the source trace for any number on the site, in a centred pop-out
-// (a bottom sheet on phones) built on js/popout.js.
+// "Where this number comes from": the source trace for any number on the site, in the split side panel
+// beside the page (a bottom sheet on phones), js/popout.js.
 // Every value shown comes from the situation file or data/web/rows/ (the rows behind a labelled sum).
 // Nothing here calculates a figure: shares, sums and differences were computed in the pipeline and are only
 // explained here, with their inputs.
@@ -9,7 +9,7 @@ import { icon } from "./icons.js";
 import { pin, has, syncPins } from "./collection.js";
 import { cite, STYLES } from "./cite.js";
 import { reviewNote, unverifiedTag } from "./review.js";
-import { createPopout, phoneWidth } from "./popout.js";
+import { openSide, pushSide, closeSide, sheetMode, phoneWidth } from "./popout.js";
 
 export const LABEL = {
   refugees: "Refugees", asylum_seekers: "Asylum seekers", oip: "Other people in need of international protection",
@@ -146,44 +146,47 @@ export function traceContext(S, SRC, MEAS, GLOSS) {
   return { S, SRC, MEAS, GLOSS, hostName, place, pointLabel, citeDetail, itemFromPoint, point, keyNumberPoint, comparePoint, resolve };
 }
 
-// =================================================================== the pop-out
-let dlg = null;
-let pop = null;
-let state = null;     // { ctx, stack: [pt], style }
+// =================================================================== the side panel
+let root = null;      // the trace as drawn in the side panel
+let state = null;     // { ctx, pt, item, cite, landed }
+let style = "apa";
+let fmtWired = false;
 
-function build() {
-  if (dlg) return;
-  dlg = document.createElement("dialog");
-  dlg.className = "tp";
-  dlg.setAttribute("aria-labelledby", "tp-h");
-  dlg.innerHTML = `<div class="tp__box"></div>`;
-  document.body.append(dlg);
-  pop = createPopout(dlg, { box: ".tp__box", sheetClass: "tp--sheet", onClosed: () => { state?.onClosed?.(); state = null; } });
+function wireFmt() {
+  if (fmtWired) return;
+  fmtWired = true;
   document.addEventListener("numfmt-change", () => {
-    if (!dlg.open) return;
-    applyNumbers(dlg);
+    if (!root?.isConnected) return;
+    applyNumbers(root);
     syncFmt();
   });
 }
-const syncFmt = () => dlg?.querySelectorAll("[data-tfmt]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tfmt === mode())));
+const syncFmt = () => root?.querySelectorAll("[data-tfmt]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tfmt === mode())));
+const keyOf = (pt) => `trace:${pt.label}|${pt.value}|${pt.year}`;
+
+function entryFor(pt, ctx, origin, onClosed) {
+  return {
+    kind: "trace", title: "Where this number comes from", announce: "Source details opened beside the page",
+    key: keyOf(pt), origin, onClose: onClosed,
+    render: (body) => {
+      let landed;
+      state = { ctx, pt, landed: new Promise((r) => { landed = r; }) };
+      render(body);
+      // once the panel has landed, heavy work (formatting the citation) may start
+      return { flyTo: root.querySelector(".tp__num"), landed: () => requestAnimationFrame(() => setTimeout(landed, 0)) };
+    },
+  };
+}
 
 /**
- * Open the trace for a figure.
+ * Open the trace for a figure, beside the page.
  * @param pt      a figure (from ctx.resolve, ctx.point, a key number ...)
- * @param origin  { el, flyFrom, focusEl, rect }: where it opens from and where focus returns
+ * @param origin  { el, flyFrom, focusEl, hl }: what was clicked (stays highlighted) and where focus returns
  * @param ctx     traceContext(...)
  */
-export async function openTrace(pt, origin, ctx, { onClosed } = {}) {
-  build();
-  if (dlg.open) return;
-  let landed;
-  state = { ctx, stack: [pt], style: "apa", onClosed, landed: new Promise((r) => { landed = r; }) };
-  render();
-  const box = dlg.querySelector(".tp__box");
-  const opening = pop.open(origin, { flyTo: box.querySelector(".tp__num"), stagger: staggerEls(), focus: dlg.querySelector("#tp-h") });
-  // once everything has landed, heavy work (formatting the citation) may start
-  opening.finally(() => requestAnimationFrame(() => setTimeout(landed, 0)));
-  await opening;
+export function openTrace(pt, origin, ctx, { onClosed } = {}) {
+  wireFmt();
+  return openSide(entryFor(pt, ctx, origin, onClosed));
 }
 
 /** The collection page: open the trace for a saved item (its situation file is loaded first). */
@@ -199,22 +202,14 @@ export async function openTraceForItem(item, origin, opts) {
   return openTrace(pt, origin, ctx, opts);
 }
 
-const staggerEls = () => [...dlg.querySelectorAll(".tp__eyebrow, .tp__label, .tp__tools, [data-st]")];
-
+/** An input of a share or a sum, opened from inside the trace (the panel's back arrow returns). */
 function go(pt) {
-  state.stack.push(pt);
-  pop.swap(render, { stagger: staggerEls, focus: () => dlg.querySelector("#tp-h") });
-}
-function back() {
-  if (state.stack.length < 2) return;
-  state.stack.pop();
-  pop.swap(render, { stagger: staggerEls, focus: () => dlg.querySelector("#tp-h") });
+  pushSide(entryFor(pt, state.ctx));
 }
 
 // ------------------------------------------------------------------ content
-function render() {
-  const { ctx, stack } = state;
-  const pt = stack[stack.length - 1];
+function render(body) {
+  const { ctx, pt } = state;
   const { S, SRC, MEAS, GLOSS } = ctx;
   const src = SRC[pt.source_id] || {};
   const m = MEAS[pt.measure_id] || {};
@@ -248,20 +243,19 @@ function render() {
         ${pt.as_of_date ? `<dt>Date</dt><dd>As on ${esc(pt.as_of_date)}</dd>` : ""}
       </dl>`;
 
-  const box = dlg.querySelector(".tp__box");
+  body.innerHTML = `<div class="tp${sheetMode() ? " tp--sheet" : ""}"><div class="tp__box"></div></div>`;
+  root = body.querySelector(".tp");
+  const box = root.querySelector(".tp__box");
   box.innerHTML = `
-    <div class="tp__handle" data-drag aria-hidden="true"></div>
-    <header class="tp__head" data-drag>
+    <header class="tp__head">
       <div class="tp__head-main">
-        <p class="tp__eyebrow">${stack.length > 1 ? `<button class="linklike tp__back" type="button" data-back>&lsaquo; Back</button> · ` : ""}Where this number comes from</p>
-        <h2 class="tp__h" id="tp-h" tabindex="-1"><span class="tp__num">${value}</span><span class="tp__label">${esc(pt.label)}</span></h2>
+        <h3 class="tp__h" id="tp-h"><span class="tp__num">${value}</span><span class="tp__label">${esc(pt.label)}</span></h3>
       </div>
       <div class="tp__tools">
         <div class="seg tp__fmt" role="group" aria-label="Number format">
           <button type="button" data-tfmt="ind" title="Indian format: lakh and crore">1,00,000</button>
           <button type="button" data-tfmt="intl" title="International format">100,000</button>
         </div>
-        <button class="icon-btn tp__close" type="button" data-close aria-label="Close">${icon("close")}</button>
       </div>
     </header>
     <div class="tp__body">
@@ -275,7 +269,7 @@ function render() {
           <section class="tp__sec" data-st>
             <div class="tp__sec-head"><h3 class="tp__sec-h">Cite</h3>
               <div class="seg seg--text tp__style" role="group" aria-label="Citation style">${Object.entries(STYLES).map(([k, l]) =>
-                `<button type="button" data-style="${k}" aria-pressed="${k === state.style}">${l}</button>`).join("")}</div></div>
+                `<button type="button" data-style="${k}" aria-pressed="${k === style}">${l}</button>`).join("")}</div></div>
             <div class="tp__cite" id="tp-cite" aria-live="polite" aria-busy="true"><span class="muted">Preparing the citation…</span></div>
           </section>
         </div>
@@ -357,7 +351,7 @@ function input(p, name) {
 }
 
 async function fillMade(pt, ctx, sum) {
-  const sec = dlg.querySelector("[data-made]");
+  const sec = root.querySelector("[data-made]");
   const token = state;
   if (sum) {
     const el = sec.querySelector(".tp__rows");
@@ -477,7 +471,7 @@ const AMOUNT_COLS = new Set([
 ]);
 
 function citations(pt) {
-  const { ctx, style } = state;
+  const { ctx } = state;
   if (pt.kind === "diff") {
     return Promise.all([pt.a, pt.b].map((p) => cite(ctx.SRC[p.source_id]?.csl, style, ctx.citeDetail(p))))
       .then((cs) => ({ text: cs.map((c) => c.text).join("\n"), html: cs.map((c) => `<p>${c.html}</p>`).join("") }));
@@ -487,23 +481,21 @@ function citations(pt) {
 
 function fillCite(pt) {
   const token = state;
-  const style = state.style;
+  const st = style;
   // the first citation builds the CSL engine (several hundred ms of blocking work): never during the open animation
   state.cite = (state.landed || Promise.resolve()).then(() => citations(pt));
   state.cite.then((c) => {
-    const el = dlg.querySelector("#tp-cite");
-    if (state !== token || state.style !== style || !el) return;
+    const el = root?.querySelector("#tp-cite");
+    if (state !== token || style !== st || !el) return;
     el.innerHTML = c.html || '<span class="muted">No citation for this source.</span>';
     el.removeAttribute("aria-busy");
   });
 }
 
 function wire(box, pt) {
-  box.querySelector("[data-close]").addEventListener("click", () => pop.close());
-  box.querySelector("[data-back]")?.addEventListener("click", back);
   box.querySelectorAll("[data-tfmt]").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.tfmt)));
   box.querySelectorAll("[data-style]").forEach((b) => b.addEventListener("click", () => {
-    state.style = b.dataset.style;
+    style = b.dataset.style;
     box.querySelectorAll("[data-style]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     const el = box.querySelector("#tp-cite");
     el.setAttribute("aria-busy", "true");
@@ -534,9 +526,10 @@ function wire(box, pt) {
     syncPins(box);
     label();
   }
+  // beside the page, the page scrolls to Compare sources and the trace stays open; a phone's sheet closes first
   box.querySelector("[data-goto-compare]")?.addEventListener("click", async (e) => {
     e.preventDefault();
-    await pop.close();
+    if (sheetMode()) await closeSide();
     document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" });
   });
   if (phoneWidth()) box.querySelector(".tp__fmt")?.classList.add("seg--compact");

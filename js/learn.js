@@ -1,6 +1,7 @@
 // Learn (walkthrough screen 15): glossary, how sources define things, reading the numbers,
 // the organisations behind the data, and a short tour.
 import { initPage, guideTip } from "./layout.js";
+import { openTerm } from "./popouts.js";
 import { glossary as loadGlossary, tips as loadTips, getJSON } from "./data.js";
 import { esc } from "./format.js";
 import { icon } from "./icons.js";
@@ -114,6 +115,9 @@ main.addEventListener("click", (e) => {
   const b = e.target.closest("[data-show]");
   if (!b) return;
   e.preventDefault();
+  // a glossary term opens beside the page; the reading notes stay in the card below
+  const g = b.dataset.show.startsWith("g-") && glossary.find((x) => `g-${x.id}` === b.dataset.show);
+  if (g) { openTerm(g, b); return; }
   show(b.dataset.show);
   if (b.tagName === "A") detail.scrollIntoView({ block: "nearest" });
 });

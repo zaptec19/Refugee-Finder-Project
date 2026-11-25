@@ -1544,3 +1544,98 @@ html.theme-swap .home__globe #globe { view-transition-name: none; }
 .kn__value:hover .kn__trace, .kn__value:focus-visible .kn__trace { opacity: 1; transform: none; }
 @media (hover: none) { .kn__trace { opacity: 0.6; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .kn__trace { transition: none; transform: none; } }
+
+/* ================================================================ split side panel (js/popout.js, Nov 2026)
+   Side details open beside the page: the top bar stays full width, the page column shrinks to the left (still
+   fully usable), the panel docks on the right under the top bar and scrolls on its own. Under 860 px: a bottom sheet. */
+.sp {
+  position: fixed; top: var(--topbar-h); right: 0; bottom: 0; width: var(--sp-w, 420px); z-index: 35;
+  display: flex; flex-direction: column; background: var(--surface); color: var(--ink);
+  border-left: 1px solid var(--line); box-shadow: -18px 0 36px -30px rgba(0, 0, 0, 0.55);
+}
+.sp[hidden] { display: none; }
+.sp__head { flex: none; display: flex; align-items: center; gap: var(--s-2); min-height: 52px;
+  padding: var(--s-2) var(--s-3) var(--s-2) var(--s-5); border-bottom: 1px solid var(--line); }
+.sp__back { margin-left: calc(-1 * var(--s-2)); }
+.sp__back[hidden] { display: none; }
+.sp__title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: var(--fs-15); font-weight: 600; letter-spacing: 0.01em; outline: none; }
+.sp__title:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+.sp__body { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.sp__handle { display: none; }
+.pop-fly { z-index: 60; }
+
+/* the divider: a grip on the panel's left edge (drag, or ←/→ when focused; double-click resets) */
+.sp__divider { position: absolute; left: -8px; top: 0; bottom: 0; width: 16px; z-index: 2; cursor: col-resize; touch-action: none;
+  display: grid; place-items: center; outline: none; }
+.sp__divider::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: transparent; transition: background-color var(--t-fast) var(--ease); }
+.sp__divider:hover::before, .sp__divider:focus-visible::before, html.sp-dragging .sp__divider::before { background: var(--accent-ui); }
+.sp__grip { position: relative; width: 8px; height: 44px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line-strong);
+  background-image: radial-gradient(circle, var(--muted) 1px, transparent 1.3px); background-size: 4px 6px; background-position: center; }
+.sp__divider:hover .sp__grip, html.sp-dragging .sp__grip { border-color: var(--accent-ui); }
+.sp__divider:focus-visible .sp__grip { outline: 2px solid var(--focus); outline-offset: 2px; }
+html.sp-dragging, html.sp-dragging * { cursor: col-resize !important; user-select: none; -webkit-user-select: none; }
+
+/* the page beside it: every block under the top bar keeps clear of the panel (no dimming, no blur) */
+html.sp-on body > :not(.topbar):not(.skip-link):not(.sp):not(.sp-scrim):not(.sp-live):not([popover]):not(dialog):not(script):not(.toast-region) { margin-right: var(--sp-w); }
+html.sp-anim body > :not(.topbar):not(.skip-link):not(.sp):not(.sp-scrim):not(.sp-live):not([popover]):not(dialog):not(script):not(.toast-region) {
+  transition: margin-right 280ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+html.sp-moving { overflow-anchor: none; }
+
+/* the situation layout follows the page column's width while the panel is open */
+html.sp-on.sp-mid .sit { grid-template-columns: var(--rail-w) minmax(0, 1fr); column-gap: var(--s-8); }
+html.sp-on.sp-mid .sit__head { grid-column: 2; grid-row: 1; }
+html.sp-on.sp-mid .sit__side { grid-column: 2; grid-row: 2; position: static; flex-direction: row; align-items: flex-start; margin-top: var(--s-4); }
+html.sp-on.sp-mid .sit__side .mini-globe { width: 220px; }
+html.sp-on.sp-mid .sit__main { grid-column: 2; grid-row: 3; }
+html.sp-on.sp-mid .sit__rail { grid-row: 1 / span 3; }
+html.sp-on.sp-narrow .sit { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+html.sp-on.sp-narrow .sit__rail { display: none; }
+html.sp-on.sp-narrow .sit__head { grid-column: 1; grid-row: 1; }
+html.sp-on.sp-narrow .sit__side { grid-column: 1; grid-row: 2; position: static; flex-direction: row; flex-wrap: wrap; align-items: flex-start; margin-top: var(--s-4); }
+html.sp-on.sp-narrow .sit__side .mini-globe { width: 200px; }
+html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
+
+/* what the panel is about: the clicked number, term, bar or button keeps an accent outline; a chart point a ring */
+.sp-hl { outline: 2px solid var(--accent-ui) !important; outline-offset: 3px; border-radius: 4px; }
+:root[data-theme="dark"] .sp-hl { box-shadow: 0 0 12px rgba(34, 211, 238, 0.35); }
+.sp-hl-ring { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; pointer-events: none; z-index: 2;
+  border: 2px solid var(--accent-ui); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sp-hl-ring[hidden] { display: none; }
+
+/* phones and narrow windows: a bottom sheet over a light scrim */
+.sp.sp--sheet { top: auto; left: 0; right: 0; width: auto; max-height: 88dvh; z-index: 70; border-left: 0; border-top: 1px solid var(--line);
+  border-radius: 16px 16px 0 0; box-shadow: var(--shadow-pop); }
+.sp--sheet .sp__divider { display: none; }
+.sp--sheet .sp__handle { display: block; flex: none; width: 40px; height: 5px; margin: 8px auto 0; border-radius: 3px; background: var(--line-strong); touch-action: none; }
+.sp--sheet .sp__head { touch-action: none; min-height: 48px; padding: var(--s-1) var(--s-2) var(--s-2) var(--gutter); }
+.sp--sheet .sp__body { padding-bottom: env(safe-area-inset-bottom); }
+.sp-scrim { position: fixed; inset: 0; z-index: 69; background: var(--scrim); }
+.sp-scrim[hidden] { display: none; }
+
+/* the source trace in the panel */
+.sp .tp { position: static; inset: auto; width: auto; height: auto; max-width: none; max-height: none; margin: 0; padding: 0;
+  overflow: visible; background: none; display: block; }
+.sp .tp__box { width: auto; max-height: none; overflow: visible; display: flex; flex-direction: column; min-height: 100%;
+  background: none; border: 0; border-radius: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.sp .tp__head { padding: var(--s-4) var(--s-5) var(--s-3); }
+.sp .tp__h { font-size: inherit; }
+.sp .tp__body { flex: 1 0 auto; overflow: visible; }
+.sp .tp__bar { position: sticky; bottom: 0; z-index: 1; background: var(--surface) !important; backdrop-filter: none; box-shadow: 0 -8px 16px -14px rgba(0, 0, 0, 0.4); }
+.sp .tp--sheet .tp__head { padding: var(--s-3) var(--gutter); }
+.sp .tp--sheet .tp__eyebrow { padding-right: 0; min-height: 0; }
+.sp .tp--sheet .tp__tools { position: static; }
+
+/* the map in the panel: fits the panel's width */
+.sp .map-dialog { width: auto; max-width: none; max-height: none; padding: 0; margin: 0; border: 0; background: none; }
+.sp .map-dialog__box { padding: var(--s-4) var(--s-5); max-height: none; overflow: visible; border: 0; border-radius: 0;
+  box-shadow: none; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.sp .map-dialog__map { width: 100%; min-width: 0; max-width: 640px; }
+.sp--sheet .map-dialog__box { padding: var(--s-3) var(--gutter) var(--s-4); }
+
+/* the explainer, glossary terms and reference lists */
+.sp .explain--side, .sp .gl--side, .sp .sp-block { padding: var(--s-4) var(--s-5) var(--s-8); }
+.sp--sheet .explain--side, .sp--sheet .gl--side, .sp--sheet .sp-block { padding: var(--s-3) var(--gutter) var(--s-6); }
+.sp .explain__h, .sp .gl__term { font-size: var(--fs-20, 1.25rem); margin: 0 0 var(--s-2); }
+.sp .explain p + h4 { margin-top: var(--s-4); }
+.sp .sp-block .refs { padding-left: 1.4em; }
+.sp .sp-block .refs li { margin-bottom: var(--s-2); overflow-wrap: anywhere; }

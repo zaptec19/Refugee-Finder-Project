@@ -11,6 +11,7 @@ import { renderMiniGlobe } from "./minimap.js";
 import { figuresFor } from "./map-figures.js";
 import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf, isolatedMarks } from "./charts.js";
 import { openPopover, openPanel, bindGlossary } from "./popouts.js";
+import { openSide } from "./popout.js";
 import { traceContext, openTrace as openTraceIn, linkNumbers, LABEL } from "./trace.js";
 import { pin, syncPins } from "./collection.js";
 import { cite, referenceList, loadCiteEngine } from "./cite.js";
@@ -328,16 +329,20 @@ function whatOf(kn) {
 function openExplainer(kn, anchorEl) {
   const e = kn.explainer || {};
   const fillN = (t) => fillTemplate({ text: t || "", nums: kn.nums || [] });
-  openPopover(`<div class="explain">
-      <h3 class="explain__h">What this number means</h3>
+  const html = `<div class="explain explain--side">
+      <h3 class="explain__h">${esc(kn.label)}</h3>
       <h4>What is counted</h4><p>${fillN(e.counted)}</p>
       <h4>Type of figure</h4><p>${esc(e.type)}</p>
       <h4>Not included</h4><p>${esc(e.not_included || "Not stated.")}</p>
       <h4>How reliable</h4><p>${esc(e.reliability || "Not stated.")}</p>
       ${e.reliability_sources?.length ? `<p class="small muted">Source: ${esc(e.reliability_sources.map(srcLabel).join("; "))}</p>` : ""}
       ${reviewNote(e.to_check)}
-      <a href="learn.html#stocks-flows">Learn: stocks vs flows &rsaquo;</a></div>`, anchorEl, { label: "What this number means", wide: true });
-  applyNumbers(document.getElementById("pop"));
+      <p><a href="learn.html#stocks-flows">Learn: stocks vs flows &rsaquo;</a></p></div>`;
+  openSide({
+    kind: "explain", title: "What this number means", announce: "Explanation opened beside the page", key: `explain:${kn.label}`,
+    origin: { el: anchorEl },
+    render: (body) => { body.innerHTML = html; applyNumbers(body); },
+  });
 }
 
 // =================================================================== 6 over time
@@ -395,8 +400,17 @@ function overTime(el) {
         if (target) {
           const l = lines.find((x) => x.pts.includes(target));
           const hostIso = l.key.startsWith("host:") ? l.key.slice(5) : null;
+          const host = fig?.querySelector(".chart__body");
+          const at2 = () => {
+            const pl = [...(host?.querySelectorAll("svg, figure") || [])].find((x) => typeof x.scale === "function");
+            if (!pl) return null;
+            const sx = pl.scale("x"), sy = pl.scale("y");
+            const svg = pl.tagName.toLowerCase() === "svg" ? pl : pl.querySelector("svg");
+            const hr = host.getBoundingClientRect(), sr = svg.getBoundingClientRect();
+            return { x: sr.left - hr.left + sx.apply(y), y: sr.top - hr.top + sy.apply(target.value) };
+          };
           openTrace(point(target, l.measure || l.key, pointLabel(l.measure || l.key, y, hostIso), { place: hostIso ? l.label : undefined, hostIso: hostIso || undefined }),
-            { rect: at, focusEl: fig, flyFrom: { rect: at, fontSize: 12, text: fmt(target.value) } });
+            { rect: at, focusEl: fig, flyFrom: { rect: at, fontSize: 12, text: fmt(target.value) }, hl: host ? { host, at: at2 } : undefined });
         }
       });
       wrap.append(p, eventsStrip(w, domain, conflictYears));

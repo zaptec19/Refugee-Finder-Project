@@ -1,20 +1,19 @@
-// The larger situation map in a pop-out (native <dialog>). It grows out of the mini globe (FLIP) and shrinks
-// back into it on close; with reduced motion it only fades; on phones it is a full-screen sheet.
+// The larger situation map, in the split side panel beside the page (js/popout.js; a bottom sheet on phones).
+// It fits the panel's width; zoom, the number format, other hosts and the table view stay inside the panel.
 // Every figure comes from the situation JSON (series, by_host, hosts_latest, origin_total). The map never
 // calculates a number; a missing value says "no data".
 import { renderMiniGlobe } from "./minimap.js";
 import { getJSON } from "./data.js";
 import { esc, fmt, mode, setMode } from "./format.js";
-import { createPopout } from "./popout.js";
+import { openSide } from "./popout.js";
 import { MAP_SOURCE } from "./config.js";
 import { bordersNoteHTML, wireBordersNotes } from "./borders.js";
 import { pinButton } from "./icons.js";
 import { pin, syncPins } from "./collection.js";
 import { figuresFor } from "./map-figures.js";
 
-let dlg = null;
-let pop = null;          // the shared pop-out (js/popout.js): opening, closing, Esc, backdrop, focus
-let busy = false;
+let dlg = null;          // the map as drawn in the side panel (a new element each time it is shown)
+let fmtWired = false;
 
 function hostNamesFor(S, hostIsos) {
   return S.type === "named" ? hostIsos.map((h) => (S.hosts_latest || []).find((x) => x.host_iso3 === h)?.name || h) : [S.host_name].filter(Boolean);
@@ -27,56 +26,59 @@ function sourceLine(S, SRC) {
   return MAP_SOURCE.big(fig);
 }
 
-function build() {
-  if (dlg) return dlg;
-  dlg = document.createElement("dialog");
-  dlg.className = "map-dialog";
-  dlg.setAttribute("aria-labelledby", "map-dialog-title");
-  dlg.innerHTML = `
-    <div class="map-dialog__box">
-      <header class="map-dialog__head">
-        <h2 id="map-dialog-title" class="map-dialog__title"></h2>
-        <button class="icon-btn map-dialog__close" type="button" aria-label="Close map" data-close>
-          <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-      </header>
-      <div class="map-dialog__body">
-        <div class="map-dialog__map"></div>
-        <div class="map-dialog__table" hidden></div>
-      </div>
-      <div class="map-dialog__bar">
-        <div class="map-dialog__zoom" role="group" aria-label="Zoom">
-          <button class="btn btn--sm" type="button" data-zoom="in" aria-label="Zoom in">+</button>
-          <button class="btn btn--sm" type="button" data-zoom="out" aria-label="Zoom out">&minus;</button>
-          <button class="btn btn--sm" type="button" data-zoom="reset">Reset</button>
+function shell(body) {
+  body.innerHTML = `
+    <div class="map-dialog map-dialog--side">
+      <div class="map-dialog__box">
+        <header class="map-dialog__head">
+          <h3 id="map-dialog-title" class="map-dialog__title"></h3>
+        </header>
+        <div class="map-dialog__body">
+          <div class="map-dialog__map"></div>
+          <div class="map-dialog__table" hidden></div>
         </div>
-        <div class="seg map-dialog__fmt" role="group" aria-label="Number format">
-          <button type="button" data-mfmt="ind" title="Indian format: lakh and crore">1,00,000</button>
-          <button type="button" data-mfmt="intl" title="International format">100,000</button>
+        <div class="map-dialog__bar">
+          <div class="map-dialog__zoom" role="group" aria-label="Zoom">
+            <button class="btn btn--sm" type="button" data-zoom="in" aria-label="Zoom in">+</button>
+            <button class="btn btn--sm" type="button" data-zoom="out" aria-label="Zoom out">&minus;</button>
+            <button class="btn btn--sm" type="button" data-zoom="reset">Reset</button>
+          </div>
+          <div class="seg map-dialog__fmt" role="group" aria-label="Number format">
+            <button type="button" data-mfmt="ind" title="Indian format: lakh and crore">1,00,000</button>
+            <button type="button" data-mfmt="intl" title="International format">100,000</button>
+          </div>
+          <label class="map-dialog__toggle" hidden><input type="checkbox" data-extra> Show other host countries</label>
+          <button class="linklike map-dialog__view" type="button" data-mapview aria-pressed="false">Table view</button>
+          <span class="map-dialog__pin"></span>
         </div>
-        <label class="map-dialog__toggle" hidden><input type="checkbox" data-extra> Show other host countries</label>
-        <button class="linklike map-dialog__view" type="button" data-mapview aria-pressed="false">Table view</button>
-        <span class="map-dialog__pin"></span>
+        <p class="map-dialog__extra small muted" hidden></p>
+        <p class="map-missing small" hidden></p>
+        <footer class="map-dialog__foot small muted">
+          <p class="map-dialog__cap"></p>
+          <p class="map-dialog__src"></p>
+        </footer>
       </div>
-      <p class="map-dialog__extra small muted" hidden></p>
-      <p class="map-missing small" hidden></p>
-      <footer class="map-dialog__foot small muted">
-        <p class="map-dialog__cap"></p>
-        <p class="map-dialog__src"></p>
-      </footer>
     </div>`;
-  document.body.append(dlg);
-  pop = createPopout(dlg, { box: ".map-dialog__box", sheetClass: "map-dialog--sheet" });
-  dlg.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) pop.close(); });    // X
+  dlg = body.querySelector(".map-dialog");
   return dlg;
 }
 
 let ctx = null;   // { trigger, map, S, MEAS, SRC, fig, table }
 
-/** Open the larger map for a situation. `trigger` is the mini globe button (focus goes back to it on close). */
-export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null, missingNote = "" }) {
-  if (busy || dlg?.open) return;
-  busy = true;
-  build();
+/** Open the larger map for a situation, beside the page. `trigger` is the mini globe button (it stays highlighted). */
+export function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null, missingNote = "" }) {
+  wireFmt();
+  return openSide({
+    kind: "map", title: "Map", announce: "Map opened beside the page", key: `map:${S.id}`, origin: { el: trigger },
+    render: (body) => {
+      const mine = fill(body, { S, MEAS, SRC, trigger, pinItem, missingNote });
+      return { landed: () => draw(mine) };
+    },
+  });
+}
+
+function fill(body, { S, MEAS, SRC, trigger, pinItem, missingNote }) {
+  shell(body);
   const fig = figuresFor(S, MEAS, SRC);
   const hostNames = hostNamesFor(S, fig.hostIsos);
   dlg.querySelector(".map-dialog__title").textContent = `${S.origin_name}${hostNames.length ? ` to ${hostNames.join(" and ")}` : ""}`;
@@ -92,43 +94,31 @@ export async function openMapDialog({ S, MEAS, SRC, trigger, pinItem = null, mis
   const srcEl = dlg.querySelector(".map-dialog__src");
   srcEl.innerHTML = `${esc(sourceLine(S, SRC))} ${bordersNoteHTML()}`;
   wireBordersNotes(srcEl);
-  const mapEl = dlg.querySelector(".map-dialog__map");
-  const tableEl = dlg.querySelector(".map-dialog__table");
-  mapEl.hidden = false;
-  tableEl.hidden = true;
-  const viewBtn = dlg.querySelector("[data-mapview]");
-  viewBtn.textContent = "Table view";
-  viewBtn.setAttribute("aria-pressed", "false");
-  const toggle = dlg.querySelector(".map-dialog__toggle");
-  const box = toggle.querySelector("input");
-  box.checked = false;
-  toggle.hidden = !fig.extra.length;
-  dlg.querySelector(".map-dialog__extra").hidden = true;
-  dlg.querySelectorAll("[data-zoom]").forEach((b) => { b.disabled = false; });
-  mapEl.innerHTML = '<p class="small muted map-dialog__loading">Loading the map…</p>';
-
+  dlg.querySelector(".map-dialog__toggle").hidden = !fig.extra.length;
+  dlg.querySelector(".map-dialog__map").innerHTML = '<p class="small muted map-dialog__loading">Loading the map…</p>';
   syncFmt();
-  ctx = { trigger, S, MEAS, SRC, fig, hostNames };
-  await pop.open({ el: trigger }, { focus: dlg.querySelector(".map-dialog__close") });
-  const out = await renderMiniGlobe(mapEl, {
+  ctx = { trigger, S, MEAS, SRC, fig, hostNames, root: dlg };
+  wire(dlg);
+  return ctx;
+}
+
+async function draw(mine) {
+  if (!mine.root.isConnected || mine.map) return;
+  const { S, fig, hostNames } = mine;
+  const out = await renderMiniGlobe(mine.root.querySelector(".map-dialog__map"), {
     size: "large", origin: S.origin_iso3, hosts: fig.hostIsos, originName: S.origin_name, hostNames,
     figures: { measureWord: fig.measureWord, hosts: fig.hosts, originText: fig.originText, extra: fig.extra, origin: fig.origin, originAll: fig.originAll },
   });
-  ctx.map = out?.controls || null;
-  wire();
-  busy = false;
-  globalThis.wv1MapDialog = { controls: ctx.map, drawn: () => ctx.map?.drawn };
+  mine.map = out?.controls || null;
+  if (ctx === mine) globalThis.wv1MapDialog = { controls: mine.map, drawn: () => mine.map?.drawn };
 }
 
 function syncFmt() {
   dlg?.querySelectorAll("[data-mfmt]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mfmt === mode())));
 }
 
-let wired = false;
-function wire() {
-  if (wired) return;
-  wired = true;
-  dlg.querySelector(".map-dialog__bar").addEventListener("click", (e) => {
+function wire(root) {
+  root.querySelector(".map-dialog__bar").addEventListener("click", (e) => {
     const z = e.target.closest("[data-zoom]")?.dataset.zoom;
     if (z && ctx?.map) {
       if (z === "in") ctx.map.zoom(1.4);
@@ -138,17 +128,22 @@ function wire() {
     }
     if (e.target.closest("[data-mapview]")) toggleTable();
     const f = e.target.closest("[data-mfmt]")?.dataset.mfmt;
-    if (f) setMode(f);       // the page's own switch is behind the dialog; this is the same setting
+    if (f) setMode(f);       // the same setting as the page's own switch
   });
-  dlg.querySelector("[data-extra]").addEventListener("change", (e) => {
+  root.querySelector("[data-extra]").addEventListener("change", (e) => {
     ctx?.map?.setExtra(e.target.checked);
     showExtraNote(e.target.checked);
     if (!dlg.querySelector(".map-dialog__table").hidden) renderTable();
   });
-  // the number format switch: arrow figures, tooltips and the table follow it
+}
+
+// the number format switch: arrow figures, tooltips and the table follow it
+function wireFmt() {
+  if (fmtWired) return;
+  fmtWired = true;
   document.addEventListener("numfmt-change", () => {
     syncFmt();
-    if (!dlg?.open || !ctx) return;
+    if (!dlg?.isConnected || !ctx) return;
     ctx.map?.redraw();
     if (!dlg.querySelector(".map-dialog__table").hidden) renderTable();
   });
