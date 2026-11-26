@@ -1778,3 +1778,4 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .topbar__tour { position: relative; display: inline-flex; align-items: center; gap: 6px; }
 .topbar__tour .icon { flex: none; }
 .help-tip--below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--ink); }
+.tour-card__jump { margin: 6px 0 0; }

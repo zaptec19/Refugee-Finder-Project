@@ -13,61 +13,82 @@ import { icon } from "./icons.js";
 
 const EXAMPLE = "situation.html?id=lka-ind";
 
-/** Each step: the page it runs on (home tour), what to point at (a CSS selector, or a list tried in order; none
- *  for a centred card), and at most two short sentences. */
+// The top bar, one card per button (on phones the items inside the menu point at the menu button; the card names them)
+const TOP = {
+  back: { target: ".topbar__back", title: "Back", text: "Goes back one step, and names where it goes. It never takes you off the site." },
+  fmt: { target: ".topbar__fmt", title: "Number format",
+    text: "Indian (1,00,000) or international (100,000). Every number, chart and export follows it." },
+  learnPage: { target: ".topbar__learn", title: "Learn",
+    text: "Plain explanations of the terms and how to read the numbers. It opens in this tab; use Back to return." },
+  coll: { target: ".topbar__coll", title: "My collection",
+    text: "Where everything you pin is kept: numbers, charts, maps and readings, each with its citation. Export it from there." },
+};
+
+/** The situation page, one card per area, in reading order: the page tour, and part 2 of the home tour. */
+export const PAGE_CARDS = [
+  { id: "title", target: "#sit-title", title: "What this page is about",
+    text: "The title names the situation; the search bar at the top keeps it in view while you scroll. Type there to search something else." },
+  { id: "back", ...TOP.back },
+  { id: "fmt", ...TOP.fmt },
+  { id: "steps", target: ".sit__rail", title: "The steps",
+    text: "Jump to any part of the page from this list, or just scroll. The part you are reading is marked." },
+  { id: "map", target: "#mini-globe", title: "The map",
+    text: "Where people came from and where they live, joined by an arrow; point at a country for its name. Click the map to open a larger one." },
+  { id: "brief", target: "#brief", title: "The brief",
+    text: "What happened, why people moved, when and how; each [1] jumps to its source. The label says it was written with AI and lists its sources." },
+  { id: "key", target: "#key-numbers", title: "Key numbers",
+    text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
+  { id: "time", target: "#over-time", title: "Over time",
+    text: "Events and conflict years sit on the line's own years: timing, not proof of cause. Data shows a table, and PNG or CSV downloads it." },
+  { id: "where", target: "#where-people-are", title: "Where people are",
+    text: "This host's share of everyone who left the country of origin, year by year. A rising share can mean people moving here or leaving elsewhere." },
+  { id: "inside", target: "#inside-outside", title: "Inside vs outside",
+    text: "People displaced inside their own country next to people who left it. UNHCR's and IDMC's inside figures are shown side by side, never added." },
+  { id: "compare", target: "#compare", title: "Compare sources",
+    text: "When sources disagree, their figures are drawn side by side. “Why they differ” explains who each one counts, and when." },
+  { id: "context", target: "#context", title: "Context",
+    text: "Deaths in armed conflict and the main events. They show timing, not proof of cause." },
+  { id: "other", target: "#other-angles", title: "Other angles",
+    text: "Returns, asylum claims and figures per 1,000 people, where the data has them. Also who is in the group: the age and sex breakdown." },
+  { id: "limits", target: "#limitations", title: "Limitations",
+    text: "What the data can't tell you, grouped by type. The symbol key explains each icon; read it before you quote a number." },
+  { id: "sources", target: "#sources", title: "Sources and reading",
+    text: "The sources cited in the brief, numbered like its [1] markers, then the datasets and readings. Cite all gives you every reference at once." },
+  { id: "pin", target: ".topbar__coll", title: "Pin and My collection", last: true,
+    text: "Pin numbers, charts and readings with their + buttons. My collection keeps them, ready to export with citations." },
+];
+
 export const TOURS = {
   home: [
-    { page: "home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
-      text: "Ask about a country, a group, or two countries, like “Tamils who fled to India”. Not sure where to start? Try one of the examples under the search bar." },
-    { page: "home", target: [".home__foot", "#globe"], title: "The globe and its colours",
-      text: "Countries are shaded by how many people were displaced from them; the key under the globe and the year button explain the colours. Click a country to preview it, and click again to open it." },
-    { page: "home", target: ".topbar__inner", title: "The top bar",
-      text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. My collection keeps what you pin, and Back takes you one step back." },
-    { page: "home", title: "A real example",
-      text: "Next, the tour opens Sri Lankan refugees in India to show how a situation page works. You can come back home at any time.",
-      go: EXAMPLE, note: "Next: a real example" },
-    { page: "situation", target: "#brief", title: "The brief",
-      text: "What happened, why people moved, when and how, in plain words. Each [1] jumps to its source in the numbered list at the bottom." },
-    { page: "situation", target: "#key-numbers .kn", title: "Key numbers",
-      text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
-    { page: "situation", target: "#over-time", title: "Charts",
-      text: "Events and conflict years sit on the line's own years: they show timing, not proof of cause. Data shows the figures as a table, and PNG or CSV downloads them." },
-    { page: "situation", target: ["#compare", "#limitations"], title: "Before you quote",
-      text: "Compare sources shows where datasets disagree and why. Limitations, with its symbol key, lists what the data can't tell you." },
-    { page: "situation", target: ".topbar__coll", title: "Pin and export", last: true,
-      text: "Pin numbers, charts and readings; their citations come with them. Open My collection to export a Word table, Excel or CSV with references." },
+    { page: "home", part: "Home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
+      text: "Ask about a country, a group or two countries, like “Tamils who fled to India”. Not sure where to start? Try an example." },
+    { page: "home", part: "Home", target: "#globe", title: "The globe",
+      text: "Countries are shaded by how many people were displaced from them. Click a country to preview it, and again to open it." },
+    { page: "home", part: "Home", target: ".home__foot", title: "Colours and years",
+      text: "The key under the globe says what each shade means. The year button changes the year shown, with the full colour legend." },
+    { page: "home", part: "Home", ...TOP.fmt },
+    { page: "home", part: "Home", target: ".topbar__learn", title: "Learn",
+      text: "Plain explanations of the terms (refugee, IDP, OIP…), how the sources differ, and how to read the numbers." },
+    { page: "home", part: "Home", ...TOP.coll },
+    { page: "home", part: "Home", title: "A real example", go: EXAMPLE, note: "Next: a real example",
+      text: "Next, the tour opens Sri Lankan refugees in India and walks through the whole page. You can come back home at any time." },
+    ...PAGE_CARDS.filter((c) => c.id !== "fmt").map((c) => ({ ...c, page: "situation", part: "Example page" })),
   ],
-  situation: [
-    { target: "#sit-title", title: "This page",
-      text: "The title says what this page is about, and the search box at the top keeps it in view. Type there to search something else." },
-    { target: ".sit__rail", title: "The steps",
-      text: "Jump to any part of the page from this list, or just scroll. The part you are reading is marked as you go." },
-    { target: "#brief", title: "The brief",
-      text: "What, why, when and how, with numbered sources: [1] jumps to the list at the bottom. The label under it says it was written with AI and lists its sources." },
-    { target: "#key-numbers .kn", title: "Key numbers",
-      text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
-    { target: ["#over-time", "#where-people-are"], title: "Over time and where people are",
-      text: "Events and conflict bands sit on the line's own years: they show timing, not proof of cause. Data turns a chart into a table, and PNG or CSV downloads it." },
-    { target: ["#inside-outside", "#compare"], title: "Inside vs outside, compare sources",
-      text: "When two sources count the same people, they are shown side by side, never added together. “Why they differ” explains the gaps." },
-    { target: ["#context", "#other-angles"], title: "Context and other angles",
-      text: "Conflict deaths and events give timing, not causes. Other angles adds returns, asylum claims and the age and sex breakdown, where the data has them." },
-    { target: ["#limitations", "#sources"], title: "Limitations and sources",
-      text: "Read the limitations before you quote a number; the symbol key explains each kind. The numbered source list matches the [1] markers in the brief." },
-    { target: ".topbar__coll", title: "Pin, collect, go back", last: true,
-      text: "Pin numbers, charts and readings to My collection, ready to export with their citations. Back in the top bar takes you one step back." },
-  ],
+  situation: [...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)],
   country: [
     { target: "main h1", title: "This country",
-      text: "People who fled from here and people hosted here, on one page. The search box at the top keeps the country's name in view." },
+      text: "People who fled from here and people hosted here, on one page. The search bar at the top keeps its name in view." },
+    { ...TOP.back }, { ...TOP.fmt }, { ...TOP.learnPage },
     { target: "main .card-grid", title: "Key figures",
-      text: "The latest year-end totals. UNHCR's and IDMC's figures for people displaced inside the country are shown side by side, never added." },
-    { target: ["#hosted-chart", "#from-chart"], title: "Over time",
-      text: "Each chart shows a group year by year. Data turns it into a table, and PNG or CSV downloads it." },
-    { target: ["main .top-groups", "#age-sex-wrap"], title: "Who lives here",
-      text: "The largest groups hosted, by country of origin, for the latest year. Refugees and other people in need of protection have separate columns." },
-    { target: "#country-sits h2", title: "Situations", last: true,
-      text: "Every situation involving this country, each with its own page. Open one to see its brief, charts and sources." },
+      text: "The latest year-end totals. UNHCR's and IDMC's figures for people displaced inside are shown side by side, never added." },
+    { target: ["#hosted-chart", "#from-chart"], title: "Charts",
+      text: "Each chart shows a group year by year. Data shows a table, and PNG or CSV downloads it." },
+    { target: "main .top-groups", title: "Largest groups hosted",
+      text: "Who lives here, by country of origin, for the latest year. Refugees and other people in need of protection have separate columns." },
+    { target: "#country-sits h2", title: "Situations",
+      text: "Every situation involving this country, each with its own page and tour." },
+    { target: ".topbar__coll", title: "Pin and My collection", last: true,
+      text: "Pin numbers, charts and readings on any situation page. My collection keeps them, ready to export with citations." },
   ],
   collection: [
     { target: ["main table.coll", "main .empty-state", "main h1"], title: "Your collection",
@@ -77,13 +98,14 @@ export const TOURS = {
   ],
 };
 // saved progress from an older tour is not resumed: it starts again at step 1
-const TOUR_VERSION = 3;
+const TOUR_VERSION = 4;
 const pageKind = () => document.body.dataset.page || "";
 /** The tour the Tour button starts on this page (null: no tour here). */
 export const tourFor = (page = pageKind()) => (page === "home" ? "home" : TOURS[page] ? page : null);
 let TOUR = "home";
 let STEPS = TOURS.home;
 let startY = 0;                    // a page tour puts the reader back here
+let shownHere = 0;                 // cards shown since this page loaded
 const useTour = (t) => { TOUR = t; STEPS = TOURS[t] || TOURS.home; };
 
 let ui = null;          // { ring, card, live }
@@ -154,6 +176,7 @@ function build() {
     const b = e.target.closest("[data-tour]");
     if (!b) return;
     if (b.dataset.tour === "next") next();
+    else if (b.dataset.tour === "jump") jump();
     else if (b.dataset.tour === "back") back();
     else quit();
   });
@@ -180,19 +203,21 @@ async function show(i) {
   const saved = store.get("tour", {}) || {};
   store.set("tour", { ...saved, t: TOUR, i, v: TOUR_VERSION });
   const s = STEPS[i];
-  current = s.target ? await waitFor(s.target) : null;
+  // the first card after a page load may wait for the page to draw (up to 8 s); later cards skip a part the page
+  // doesn't have quickly
+  current = s.target ? await waitFor(s.target, shownHere++ ? 1200 : 8000) : null;
   if (index !== i) return;                       // the reader moved on while we waited
   if (s.target && !current) { advance(i, +1); return; }   // this page doesn't have it: skip the step
-  const n = STEPS.length;
   ui.card.innerHTML = `
     <div class="tour-card__top">
-      <span class="tour-card__count">${i + 1} of ${n}</span>
+      <span class="tour-card__count">${count(i)}</span>
       <button class="tour-card__close" type="button" data-tour="skip" aria-label="Skip the tour">${icon("close", { size: 16 })}</button>
     </div>
     <h2 class="tour-card__title" id="tour-title">${esc(s.title)}</h2>
     <p class="tour-card__text" id="tour-text">${esc(s.text)}</p>
     ${s.note && s.go && pageOf() !== "situation" ? `<p class="tour-card__note">${esc(s.note)}</p>` : ""}
-    <div class="tour-card__progress" aria-hidden="true">${STEPS.map((_, k) => `<span class="${k === i ? "on" : k < i ? "done" : ""}"></span>`).join("")}</div>
+    <div class="tour-card__progress" aria-hidden="true">${partOf(i).map((k) => `<span class="${k === i ? "on" : k < i ? "done" : ""}"></span>`).join("")}</div>
+    ${s.part === "Home" && !s.go ? `<p class="tour-card__jump"><button class="linklike small" type="button" data-tour="jump">Skip to the example page &rsaquo;</button></p>` : ""}
     <div class="tour-card__actions">
       <button class="linklike tour-card__skip" type="button" data-tour="skip">Skip tour</button>
       <span class="tour-card__nav">${i > 0 ? '<button class="btn btn--ghost" type="button" data-tour="back">Back</button>' : ""}
@@ -375,6 +400,20 @@ function advance(from, dir) {
   if (onThisPage(STEPS[i])) { show(i); return; }
   store.set("tour", { t: TOUR, i, v: TOUR_VERSION });
   location.href = STEPS[from].go && dir > 0 ? STEPS[from].go : urlFor(STEPS[i]);
+}
+
+/** The steps in the same part as step i (the home tour: home, then the example page; else the whole tour). */
+const partOf = (i) => STEPS.map((x, k) => (x.part === STEPS[i].part ? k : -1)).filter((k) => k >= 0);
+function count(i) {
+  const ks = partOf(i);
+  return `${STEPS[i].part ? `${STEPS[i].part} · ` : ""}${ks.indexOf(i) + 1} of ${ks.length}`;
+}
+/** Part 1 of the home tour: straight on to the example page. */
+function jump() {
+  const k = STEPS.findIndex((x) => x.part === "Example page");
+  if (k < 0) return;
+  store.set("tour", { t: TOUR, i: k, v: TOUR_VERSION });
+  location.href = EXAMPLE;
 }
 
 function next() {
