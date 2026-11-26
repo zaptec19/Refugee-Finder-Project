@@ -1759,3 +1759,26 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
   --as-5: color-mix(in srgb, var(--c-refugees) 18%, #ffffff);
 }
 .asx-legend__n, .asx-legend__p { margin-left: 2px; }
+
+/* ================================================================ home: colour legend, year popover, footer (26 Nov 2026) */
+.range__pop[popover] { position: fixed; inset: auto; margin: 0; width: 300px; max-width: calc(100vw - 16px); padding: var(--s-4); }
+.range__pop:popover-open { animation: fade-in var(--t-fast) var(--ease); }
+.glegend { margin-top: var(--s-3); }
+.glegend__h { margin: 0 0 var(--s-2); font-size: var(--fs-13); font-weight: 600; color: var(--ink); cursor: help; }
+.glegend__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px var(--s-3); }
+.glegend__item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink); padding: 2px 4px; margin: 0 -4px; border-radius: 4px; cursor: default; font-variant-numeric: tabular-nums; }
+.glegend__item:hover, .glegend__item:focus-visible { background: var(--surface-2); outline: none; }
+.glegend__item:focus-visible { box-shadow: 0 0 0 2px var(--focus); }
+.glegend__sw, .home__key-sw > span { display: inline-block; width: 16px; height: 12px; border-radius: 2px; flex: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent); }
+.glegend__sw--nodata { background-color: var(--g-land); background-image: radial-gradient(circle, var(--g-dots) 0.8px, transparent 1px); background-size: 5px 5px; }
+.glegend__how { margin: var(--s-2) 0 0; }
+/* the globe while a colour is pointed at: that band stays, the rest dim */
+.gl-legend .gl-c { opacity: 0.16; transition: opacity var(--t-fast) var(--ease); }
+.gl-legend .gl-c.is-band { opacity: 1; stroke: var(--accent-ui); stroke-width: 0.9; }
+/* the slim key in the caption */
+.home__key { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 3px; font-size: 11px; line-height: 1.2; color: var(--muted); font-variant-numeric: tabular-nums; }
+.home__key-sw { display: inline-flex; gap: 2px; }
+.home__key-sw > span { width: 14px; height: 8px; }
+/* the footer keeps the page's side padding, so the tour pill and the year button sit fully on screen */
+.home__foot { box-sizing: border-box; padding-inline: max(var(--gutter, 16px), 16px); }
+.glegend__list { grid-template-columns: 1fr; gap: 2px; }

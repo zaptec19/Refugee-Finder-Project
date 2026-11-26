@@ -1,8 +1,8 @@
 // Home: one question, one search box, a few try-chips and a quiet globe. Nothing else.
 import { initPage } from "./layout.js";
 import { getJSON } from "./data.js";
-import { createGlobe, THRESHOLDS } from "./globe.js";
-import { fmt } from "./format.js";
+import { createGlobe, THRESHOLDS, RAMP } from "./globe.js";
+import { fmt, esc } from "./format.js";
 import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
@@ -40,11 +40,11 @@ main.innerHTML = `
       <span class="home__links"><button class="tour-pill" type="button" id="tour-pill" data-start-tour title="A 1-minute tour of the site">${icon("compass", { size: 16 })}<span>Take the tour</span></button></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
-        <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop">Years</button>
-        <div class="range__pop card" id="range-pop" hidden>
+        <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop" popovertarget="range-pop">Years</button>
+        <div class="range__pop card" id="range-pop" popover="auto" role="dialog" aria-label="Year shown on the globe, and what the colours mean">
           <label for="year" class="small">Year shown on the globe: <strong id="year-out" class="tabular"></strong></label>
           <input type="range" id="year" step="1">
-          <p class="small muted" style="margin:6px 0 0">Darker = fewer. Shades start at <span id="thr"></span> people.</p>
+          <div class="glegend" id="glegend"></div>
           <p class="small muted" id="range-why" style="margin:6px 0 0" hidden></p>
         </div>
       </div>
@@ -89,9 +89,32 @@ if (preset) { input.value = preset; presetP.get("exact") === "1" ? searchUI.runE
   slider.max = last;
   slider.value = last;
   out.textContent = last;
-  const thr = () => { document.getElementById("thr").textContent = THRESHOLDS.map((t) => fmt(t)).join(", "); };
-  thr();
-  document.addEventListener("numfmt-change", thr);
+  // the colour legend: the globe's own bands (fixed thresholds, the same every year) and its own colours
+  const dark = () => document.documentElement.dataset.theme === "dark";
+  const bands = () => {
+    const T = THRESHOLDS.map((t) => fmt(t));
+    const names = dark() ? ["dimmest blue", "dim blue", "mid blue", "bright blue", "brightest blue"] : ["palest blue", "light blue", "mid blue", "deep blue", "deepest blue"];
+    return [{ c: -1, sw: "nodata", name: "dotted land", text: "No data" },
+      { c: 0, sw: RAMP[0], name: names[0], text: `Under ${T[0]}` },
+      { c: 1, sw: RAMP[1], name: names[1], text: `${T[0]} – ${T[1]}` },
+      { c: 2, sw: RAMP[2], name: names[2], text: `${T[1]} – ${T[2]}` },
+      { c: 3, sw: RAMP[3], name: names[3], text: `${T[2]} – ${T[3]}` },
+      { c: 4, sw: RAMP[4], name: names[4], text: `${T[3]} or more` }];
+  };
+  const sw = (b) => `<span class="glegend__sw${b.sw === "nodata" ? " glegend__sw--nodata" : ""}" aria-hidden="true"${b.sw === "nodata" ? "" : ` style="background:${b.sw}"`}></span>`;
+  const legendEl = document.getElementById("glegend");
+  const drawLegend = (y) => {
+    legendEl.innerHTML = `<p class="glegend__h" title="The colour bands are fixed: the same for every year.">People displaced from each country, <span class="tabular">${y}</span></p>
+      <ul class="glegend__list" role="list">${bands().map((b) => `<li class="glegend__item" role="listitem" tabindex="0" data-c="${b.c}">${sw(b)}<span>${esc(b.text)}</span><span class="sr-only"> (${esc(b.name)})</span></li>`).join("")}</ul>
+      <p class="small muted glegend__how">${dark() ? "Brighter" : "Darker"} means more people. Point at a colour to see those countries.</p>`;
+  };
+  // the slim always-visible key in the caption: the five shades with the lowest and highest labels
+  const drawKey = () => {
+    const key = document.querySelector(".home__key");
+    if (!key) return;
+    const B = bands();
+    key.innerHTML = `<span class="sr-only">Colour key: </span><span>${esc(B[1].text)}</span><span class="home__key-sw" aria-hidden="true">${B.slice(1).map(sw).join("")}</span><span>${esc(B[5].text)}</span>`;
+  };
   const cap = document.getElementById("globe-cap");
   // B6: say why the globe starts later than UNHCR's records (until 1960 its rows don't name the country of origin)
   const meta = globe._meta || {};
@@ -104,7 +127,7 @@ if (preset) { input.value = preset; presetP.get("exact") === "1" ? searchUI.runE
     w.hidden = false;
   }
   // the caption's first line changes with the year; the second (why the globe starts in 1960) stays
-  cap.innerHTML = `<span class="home__caption-main"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}<span class="home__caption-src map-src">${MAP_SOURCE.home} · ${bordersNoteHTML()}</span>`;
+  cap.innerHTML = `<span class="home__caption-main"></span><span class="home__key" role="note"></span>${why ? `<span class="home__caption-note">From ${years[0]}: UNHCR's figures for ${meta.records_from}–${meta.origin_known_from - 1} don't name the country of origin.</span>` : ""}<span class="home__caption-src map-src">${MAP_SOURCE.home} · ${bordersNoteHTML()}</span>`;
   wireBordersNotes(cap);
   const setCap = (y) => { cap.querySelector(".home__caption-main").innerHTML = `People displaced, by country, ${y}<span class="home__caption-hint"> · click a country for a preview</span>`; };
   setCap(last);
@@ -117,20 +140,41 @@ if (preset) { input.value = preset; presetP.get("exact") === "1" ? searchUI.runE
     onHover: (f) => { if (!previewOpen()) showCountryCard(f, year); },
     onHoverEnd: hideCountryCard,
   });
-  btn.addEventListener("click", () => {
-    pop.hidden = !pop.hidden;
-    btn.setAttribute("aria-expanded", String(!pop.hidden));
-    if (!pop.hidden) slider.focus();
+  drawLegend(last);
+  drawKey();
+  document.addEventListener("numfmt-change", () => { drawLegend(year); drawKey(); });
+  document.addEventListener("theme-change", () => { drawLegend(year); drawKey(); });
+  // pointing at (or focusing) a colour shows the countries in that band
+  const band = (e) => { const li = e.target.closest?.(".glegend__item"); g.highlightBand(li ? +li.dataset.c : null); };
+  legendEl.addEventListener("pointerover", band);
+  legendEl.addEventListener("pointerleave", () => g.highlightBand(null));
+  legendEl.addEventListener("focusin", band);
+  legendEl.addEventListener("focusout", (e) => { if (!legendEl.contains(e.relatedTarget)) g.highlightBand(null); });
+  // the popover (native, popover="auto"): light dismiss closes it on any click or tap outside, Esc, or another
+  // popover; the button stays its toggle. Placed above the button, kept on screen.
+  const place = () => {
+    const r = btn.getBoundingClientRect();
+    const w = pop.offsetWidth;
+    const vw = document.documentElement.clientWidth;
+    pop.style.left = `${Math.round(Math.max(8, Math.min(r.right - w, vw - w - 8)))}px`;
+    pop.style.top = `${Math.round(Math.max(8, r.top - pop.offsetHeight - 8))}px`;
+  };
+  pop.addEventListener("toggle", (e) => {
+    const open = e.newState === "open";
+    btn.setAttribute("aria-expanded", String(open));
+    if (open) { place(); slider.focus(); } else g.highlightBand(null);
   });
+  addEventListener("resize", () => { if (pop.matches(":popover-open")) place(); });
+  input.addEventListener("input", () => { if (pop.matches(":popover-open")) pop.hidePopover(); });     // a search starts
   slider.addEventListener("input", () => {
     const y = slider.value;
     year = +y;
     out.textContent = y;
     g.setValues(globe[y] || {});
     setCap(y);
+    drawLegend(y);
     btn.textContent = `${y} · ${years[0]} – ${last}`;
   });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) { pop.hidden = true; btn.setAttribute("aria-expanded", "false"); btn.focus(); } });
 })().catch((e) => {
   console.error(e);
   document.getElementById("globe-cap").textContent = "The globe could not load. Search still works.";

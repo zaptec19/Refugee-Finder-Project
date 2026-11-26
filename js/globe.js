@@ -228,5 +228,14 @@ export async function createGlobe(svg, { values, rotate = [-55, -12], onPick, on
   });
   // coming back to the page (back button): undo the picked state
   window.addEventListener("pageshow", () => { release(); });
-  return { setValues: colour, redraw: draw, release };
+  /** The colour legend: countries in one band (0..4, -1 = no data) stay, the rest dim; null restores them. */
+  function highlightBand(c) {
+    svg.classList.toggle("gl-legend", c !== null && c !== undefined);
+    features.forEach((f, i) => {
+      const iso = f.properties.iso3;
+      els[i].classList.toggle("is-band", c !== null && c !== undefined && cls(iso ? current[iso] : undefined) === c);
+    });
+  }
+
+  return { setValues: colour, redraw: draw, release, highlightBand };
 }
