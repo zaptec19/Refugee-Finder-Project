@@ -956,13 +956,21 @@ function limitationsHTML() {
     <div class="limx__chips" role="list" aria-label="What the symbols mean">${groups.map(({ g }) =>
       `<details class="limx__chip" role="listitem"><summary>${limIcon(g, 16)}<span>${esc(g.name)}</span></summary><p>${esc(g.meaning)}</p></details>`).join("")}</div>` : "";
   const items = `<div class="limx"><div class="limx__in">${legend}<div class="limx__groups">${groupsHTML}</div></div></div>`;
-  const pct = Math.round((S.demographics_coverage || 0) * 1000) / 10;
+  // UNHCR's demographics file: the share of this group split into women and men, and the share also split into
+  // age groups (UNHCR gives age groups within each sex, so an age split always has a sex split too)
+  const agePct = Math.round((S.demographics_coverage || 0) * 1000) / 10;
   const sexPct = Math.round((S.sex_coverage || 0) * 1000) / 10;
-  const demo = S.type === "pair" ? `
-    <h3 class="sub-h">Demographics coverage${S.demographics_year ? ` (${S.demographics_year})` : ""}</h3>
+  const covRow = (label, v, what) => `<div class="cov__row"><span class="cov__label">${label}</span>
+      <div class="cov__bar" role="img" aria-label="${esc(`${label}: ${v ? `${fmtPct(v)} of the group` : "none of the group"}`)}"><span style="width:${v}%"></span></div>
+      <span class="cov__pct">${v >= 100 ? "all of the group" : v ? `${pctHTML(v)} of the group` : `none (${what})`}</span></div>`;
+  const demo = S.type === "pair" && !S.demographics_year ? `
+    <h3 class="sub-h">How much of this group is broken down</h3>
+    <p class="small muted cov__intro">UNHCR publishes no breakdown by sex or age for this group.</p>` : S.type === "pair" ? `
+    <h3 class="sub-h">How much of this group is broken down (${S.demographics_year})</h3>
+    <p class="small muted cov__intro">The share of this group that UNHCR's demographic data splits by sex, and by age group. The rest is filed as "unknown".</p>
     <div class="cov">
-      <div class="cov__row"><span class="cov__label">Age and sex known</span><div class="cov__bar" role="img" aria-label="${pct}% known"><span style="width:${pct}%"></span></div><span class="cov__pct">${pctHTML(pct)} known</span></div>
-      <div class="cov__row"><span class="cov__label">Sex known</span><div class="cov__bar" role="img" aria-label="${sexPct}% known"><span style="width:${sexPct}%"></span></div><span class="cov__pct">${pctHTML(sexPct)} known</span></div>
+      ${covRow("Split into women and men", sexPct, "all filed as sex unknown")}
+      ${covRow("Split into age groups", agePct, "all filed as age unknown")}
     </div>` : "";
   const missing = S.missing.length ? `<div class="missing"><span>What's missing:</span>${S.missing.map((m) => `<span class="chip chip--static">${esc(m)}</span>`).join("")}</div>` : "";
   return `${items}${demo}${missing}

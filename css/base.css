@@ -1716,3 +1716,9 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
   .topbar__topic-text { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500; }
 }
 @media (prefers-reduced-motion: reduce) { .ask--flash { animation: none; } }
+
+/* demographics coverage: clearer labels and an explanation line (26 Nov 2026) */
+.cov__intro { margin: calc(-1 * var(--s-1)) 0 var(--s-3); max-width: var(--measure); }
+.cov { display: grid; grid-template-columns: 190px minmax(80px, 1fr) auto; align-items: center; gap: var(--s-2) var(--s-3); }
+.cov__row { display: contents; }
+@media (max-width: 860px) { .cov { grid-template-columns: minmax(0, 1fr) auto; } .cov__label { grid-column: 1 / -1; margin-top: var(--s-1); } }
