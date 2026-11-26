@@ -332,7 +332,7 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
     padding: 0 var(--gutter); column-gap: var(--s-2);
   }
   .topbar__right { display: contents; }
-  .topbar__inner > .brand { grid-area: brand; font-size: var(--fs-15); }
+  .topbar__inner > .topbar__lead { grid-area: brand; font-size: var(--fs-15); }
   .topbar__fmt { grid-area: fmt; }
   .topbar__fmt button { padding: 0 7px; font-size: 12px; }
   .topbar__ask, .topbar__ask-slot { grid-area: ask; max-width: none; height: 36px; }
@@ -344,7 +344,7 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
   /* Narrow phones: the guide pill's dot (and aria-pressed) still show on/off, so drop the word to make room for the name. */
   @media (max-width: 420px) {
     .topbar__inner { column-gap: 6px; }
-    .topbar__inner > .brand { font-size: 0.875rem; }
+    .topbar__inner > .topbar__lead { font-size: 0.875rem; }
     .topbar__fmt button { padding: 0 5px; }
     .topbar__guide .pill__state { display: none; }
   }
@@ -1109,11 +1109,11 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
    (it needed 391 px: name, number switch, Guide pill and collection icon, so phones under ~392 px scrolled sideways) */
 @media (max-width: 860px) {
   .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; }
-  .topbar__inner > .brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; }    /* never wider than its column */
+  .topbar__inner > .topbar__lead { min-width: 0; overflow: hidden; text-overflow: ellipsis; }    /* never wider than its column */
 }
 @media (max-width: 420px) {
   .topbar__inner { padding: 0 12px; column-gap: 4px; }
-  .topbar__inner > .brand { font-size: 0.8125rem; }
+  .topbar__inner > .topbar__lead { font-size: 0.8125rem; }
   .topbar__fmt button { padding: 0 4px; font-size: 11px; }
   .topbar__guide { padding: 0 8px; font-size: 12px; gap: 6px; }
   .topbar__coll { padding: 0 4px; }
@@ -1188,7 +1188,7 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
     grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-rows: 56px; grid-template-areas: "brand fmt search menu";
     padding: 0 16px; column-gap: 8px; position: relative;
   }
-  .topbar__inner > .brand { grid-area: brand; font-size: var(--fs-15); }
+  .topbar__inner > .topbar__lead { grid-area: brand; font-size: var(--fs-15); }
   .topbar__fmt { grid-area: fmt; }
   .topbar__fmt button { padding: 0 6px; font-size: 11px; height: 28px; }
   .topbar__search-btn { grid-area: search; display: inline-grid; }
@@ -1782,3 +1782,23 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 /* the footer keeps the page's side padding, so the tour pill and the year button sit fully on screen */
 .home__foot { box-sizing: border-box; padding-inline: max(var(--gutter, 16px), 16px); }
 .glegend__list { grid-template-columns: 1fr; gap: 2px; }
+
+/* ================================================================ Back in the top bar (26 Nov 2026) */
+.topbar__lead { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: var(--fs-17); }
+.topbar__lead > .brand { font-size: inherit; }
+.topbar__back { display: inline-flex; align-items: center; gap: 6px; flex: none; height: 34px; padding: 0 12px 0 8px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-13); font-weight: 500; cursor: pointer; }
+.topbar__back:hover { border-color: var(--accent-ui); background: var(--accent-soft); }
+.topbar__back:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.topbar__back[hidden] { display: none; }
+.topbar__back-label { max-width: 28ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+@media (max-width: 860px) { .topbar__back-label { max-width: 16ch; } }
+@media (max-width: 599px) {
+  .topbar__back { width: 44px; height: 44px; padding: 0; justify-content: center; margin-left: -10px; border-color: transparent; }
+  .topbar__back-label { display: none; }
+  .topbar__lead { gap: 2px; }
+}
+@media (max-width: 599px) {
+  .topbar__lead:has(.topbar__back:not([hidden])) > .brand { font-size: 0.8125rem; letter-spacing: -0.02em; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .topbar__lead:has(.topbar__back:not([hidden])) ~ .topbar__fmt button { padding: 0 4px; }
+}

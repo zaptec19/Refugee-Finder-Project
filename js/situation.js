@@ -1075,7 +1075,7 @@ function setupRail() {
     }
     setCurrent(id);
     lockUntil = Date.now() + 1500;
-    history.pushState(null, "", `#${id}`);
+    history.replaceState(history.state, "", `#${id}`);       // a section, not a page: no extra Back step
     target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     target.querySelector("h2")?.focus({ preventScroll: true });
     setTimeout(() => { if (lockUntil) unlock(); }, 1500);

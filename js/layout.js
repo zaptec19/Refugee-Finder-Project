@@ -5,6 +5,8 @@ import { icon } from "./icons.js";
 import { reducedMotion } from "./motion.js";
 import { externalLinksNewTab } from "./links.js";
 import { hasNotice, showNotice } from "./search-notice.js";
+import { initTrail, setTrailTitle, backTarget, goBack } from "./trail.js";
+import { sideOpen, closeSide } from "./popout.js";
 
 // cross-document view transitions (css: @view-transition): skipped with the system's reduced motion
 window.addEventListener("pageswap", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
@@ -44,6 +46,7 @@ export function initPage({ page, dark = false } = {}) {
   skip.textContent = "Skip to content";
   document.body.prepend(skip);
   externalLinksNewTab();
+  wireBack(page);
   // a search that was changed on the way here says so ("Showing: ... · You searched: ...")
   if (hasNotice()) showNotice();
 
@@ -188,7 +191,10 @@ function topbarHTML(page, dark, theme) {
   const cur = (p) => (p === page ? ' aria-current="page"' : "");
   return `
   <div class="topbar__inner">
-    <a class="brand" href="index.html"${cur("home")}>Refugee Finder</a>
+    <div class="topbar__lead">
+      <button class="topbar__back" type="button" hidden>${icon("back", { size: 18 })}<span class="topbar__back-label"></span></button>
+      <a class="brand" href="index.html"${cur("home")}>Refugee Finder</a>
+    </div>
     <div class="seg topbar__fmt" role="group" aria-label="Number format">
       <button type="button" data-fmt="ind" aria-pressed="${m === "ind"}" title="Indian format: lakh and crore">1,00,000</button>
       <button type="button" data-fmt="intl" aria-pressed="${m === "intl"}" title="International format">100,000</button>
@@ -349,4 +355,42 @@ export function setTopic({ title, type = "Situation", heading = null } = {}) {
     }
   }, { rootMargin: `-${parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-h")) || 64}px 0px 0px 0px` });
   io.observe(h);
+}
+
+// ------------------------------------------------------------------ Back (js/trail.js)
+/** The top bar's Back: names where it goes; closes an open side panel first; ends a running tour like Skip. */
+function wireBack(page) {
+  initTrail(page === "home" ? "Home" : null);
+  const btn = document.querySelector(".topbar__back");
+  if (!btn) return;
+  const label = btn.querySelector(".topbar__back-label");
+  let target = null;
+  const show = (text, full) => {
+    label.textContent = text;
+    btn.title = full;
+    btn.setAttribute("aria-label", full);
+    btn.hidden = false;
+  };
+  const refresh = async () => {
+    if (sideOpen()) { show("Close details", "Close details"); return; }
+    target = await backTarget(page);
+    if (!target) { btn.hidden = true; return; }
+    show(target.label, target.title);
+  };
+  btn.addEventListener("click", () => {
+    if (sideOpen()) { closeSide(); return; }
+    const skip = document.querySelector(".tour-card [data-tour='skip']");
+    if (skip) { skip.click(); return; }                 // a running tour ends as Skip does
+    if (target) goBack(target);
+  });
+  document.addEventListener("sp-settled", refresh);
+  // the page's own title, once it is drawn (most pages draw their h1 by script)
+  const h1 = () => document.querySelector("main h1")?.textContent.trim();
+  if (h1()) setTrailTitle(h1());
+  else {
+    const mo = new MutationObserver(() => { if (h1()) { setTrailTitle(h1()); mo.disconnect(); } });
+    mo.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => mo.disconnect(), 10000);
+  }
+  refresh();
 }
