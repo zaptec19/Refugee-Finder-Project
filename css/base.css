@@ -298,7 +298,8 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
 .home__globe { width: min(560px, 92vw); margin-top: var(--s-8); position: relative; }
 .home__globe svg { width: 100%; height: auto; }
 .home__foot { width: 100%; max-width: var(--page-max); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s-4); margin-top: var(--s-4); font-size: var(--fs-13); }
-.home__foot .range { justify-self: end; }
+.home__foot .range { justify-self: end; grid-column: 3; }
+.home__caption { grid-column: 2; }
 .home__caption { text-align: center; color: var(--muted); }
 
 /* ------------------------------------------------------------------ responsive */
@@ -1333,8 +1334,6 @@ a.cite--missing { color: var(--danger); }
 
 
 
-/* home: the footer's left cell (kept empty so the caption stays centred) */
-.home__links { display: inline-flex; align-items: center; }
 
 /* home: the first-visit welcome card (js/welcome.js); grows out of the tour pill, a bottom sheet on phones */
 dialog.welcome { padding: 0; margin: auto; border: 0 !important; background: transparent !important; box-shadow: none !important;
@@ -1353,13 +1352,13 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 .welcome--sheet .welcome__actions .btn { flex: 1; justify-content: center; }
 /* the pill while the card is out, and when it comes back */
 .topbar__tour.is-away, .topbar__menu-btn.is-away { opacity: 0; }
-.tour-pill--here::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+.help-here::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
   box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75); animation: pill-here 600ms ease-out 2; }
 @keyframes pill-here { from { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75); } to { box-shadow: 0 0 0 12px rgba(34, 211, 238, 0); } }
-.tour-pill--lit { border-color: var(--accent-ui); background: var(--accent-soft); }
-.tour-pill-tip { position: absolute; z-index: 90; padding: 5px 10px; border-radius: 6px; font-size: var(--fs-13); white-space: nowrap; pointer-events: none;
+.help-lit { border-color: var(--accent-ui); background: var(--accent-soft); }
+.help-tip { position: absolute; z-index: 90; padding: 5px 10px; border-radius: 6px; font-size: var(--fs-13); white-space: nowrap; pointer-events: none;
   background: var(--ink); color: var(--bg); box-shadow: var(--shadow-pop); }
-.tour-pill-tip::after { content: ""; position: absolute; top: 100%; left: var(--tip-x, 50%); margin-left: -5px; border: 5px solid transparent; border-top-color: var(--ink); }
+.help-tip::after { content: ""; position: absolute; top: 100%; left: var(--tip-x, 50%); margin-left: -5px; border: 5px solid transparent; border-top-color: var(--ink); }
 /* the tour's closing card */
 .tour-card--done { text-align: center; padding: var(--s-6, 24px); }
 .tour-card__done { display: grid; justify-items: center; gap: var(--s-2, 8px); }
@@ -1464,9 +1463,8 @@ html.theme-swap .home__globe #globe { view-transition-name: none; }
 }
 /* tablets and phones: the caption across the bottom, the tour pill and the year range under it on one row */
 @media (max-width: 860px) {
-  .home__foot { grid-template-columns: auto 1fr auto; grid-template-areas: "cap cap cap" "pill . range"; justify-items: stretch; text-align: left; row-gap: var(--s-2); }
+  .home__foot { grid-template-columns: auto 1fr auto; grid-template-areas: "cap cap cap" ". . range"; justify-items: stretch; text-align: left; row-gap: var(--s-2); }
   .home__caption { grid-area: cap; text-align: center; }
-  .home__links { grid-area: pill; }
   .home__foot .range { grid-area: range; justify-self: end; }
 }
 @media (max-width: 600px) {
@@ -1779,4 +1777,4 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 /* the Tour button (top bar; in the menu on phones) */
 .topbar__tour { position: relative; display: inline-flex; align-items: center; gap: 6px; }
 .topbar__tour .icon { flex: none; }
-.tour-pill-tip--below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--ink); }
+.help-tip--below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--ink); }

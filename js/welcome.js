@@ -1,7 +1,7 @@
-// First visit to the home page: once the load animation has finished, the top bar's Tour button (the menu button on
-// phones) lifts off and grows into a welcome card in the middle of the screen (a bottom sheet on phones), with the page dimmed behind
-// it. "Take the tour" starts the tour; "Maybe later" (or X, Esc, the backdrop) flies the card back into the pill,
-// which then pulses and says "The tour lives here." so the reader sees where it went.
+// First visit to the home page: once the load animation has finished, the top bar's "How to use" button (the menu button
+// on phones) lifts off and grows into a welcome card in the middle of the screen (a bottom sheet on phones), with the page dimmed behind
+// it. "Take the tour" starts the tour; "Maybe later" (or X, Esc, the backdrop) flies the card back into the button,
+// which then pulses and says "Help lives here: How to use" so the reader sees where it went.
 // Shown once: "wv1:tour-offered" is set the moment it appears. ?welcome=1 shows it again (testing, demos).
 // With reduced motion nothing flies: the card fades in and out and the pill gets a plain highlight.
 import { store } from "./store.js";
@@ -53,7 +53,7 @@ function build() {
           <button class="btn btn--primary" type="button" data-w="go">Take the tour</button>
           <button class="btn" type="button" data-w="later">Maybe later</button>
         </div>
-        <p class="welcome__note small muted">You can start it any time from Tour in the ${phone() ? "top bar menu" : "top bar"}.</p>
+        <p class="welcome__note small muted">You can start it any time from How to use in the ${phone() ? "top bar menu" : "top bar"}.</p>
       </div>
     </div>`;
   document.body.append(dlg);
@@ -142,7 +142,7 @@ async function back(pill) {
   await Promise.allSettled(anims.map((a) => a.finished));
   finish(pill);
   pill.focus({ preventScroll: true });
-  pillHere(pill, "The tour lives here.");
+  pillHere(pill, "Help lives here: How to use");
 }
 
 function finish(pill) {
@@ -157,14 +157,14 @@ function finish(pill) {
  *  (`text`). With reduced motion, a plain highlight instead of the ring. Also used on arrival after a tour. */
 export function pillHere(pill, text) {
   if (!pill) return;
-  const cls = reducedMotion() ? "tour-pill--lit" : "tour-pill--here";
-  pill.classList.remove("tour-pill--here", "tour-pill--lit");
+  const cls = reducedMotion() ? "help-lit" : "help-here";
+  pill.classList.remove("help-here", "help-lit");
   void pill.offsetWidth;
   pill.classList.add(cls);
   setTimeout(() => pill.classList.remove(cls), reducedMotion() ? 2000 : 1300);
-  document.querySelector(".tour-pill-tip")?.remove();
+  document.querySelector(".help-tip")?.remove();
   const tip = document.createElement("div");
-  tip.className = "tour-pill-tip";
+  tip.className = "help-tip";
   tip.setAttribute("role", "status");
   tip.textContent = text;
   document.body.append(tip);
@@ -172,7 +172,7 @@ export function pillHere(pill, text) {
   const t = tip.getBoundingClientRect();
   const left = Math.min(Math.max(8, r.left + r.width / 2 - t.width / 2), document.documentElement.clientWidth - t.width - 8);
   const below = r.top - t.height - 10 < 8;                 // the top bar: no room above, so under the button
-  tip.classList.toggle("tour-pill-tip--below", below);
+  tip.classList.toggle("help-tip--below", below);
   tip.style.left = `${left + scrollX}px`;
   tip.style.top = `${below ? r.bottom + scrollY + 10 : r.top + scrollY - t.height - 10}px`;
   tip.style.setProperty("--tip-x", `${r.left + r.width / 2 - left}px`);

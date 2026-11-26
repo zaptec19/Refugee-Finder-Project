@@ -38,7 +38,6 @@ main.innerHTML = `
       <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
-      <span class="home__links" aria-hidden="true"></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
         <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop" popovertarget="range-pop">Years</button>
@@ -58,7 +57,7 @@ let fromTour = null;
 try { fromTour = sessionStorage.getItem("wv1:tour-return"); sessionStorage.removeItem("wv1:tour-return"); } catch { /* storage blocked */ }
 // first visit: once the load animation is done, the tour pill grows into a welcome card (js/welcome.js)
 import("./welcome.js").then((m) => {
-  if (fromTour) { setTimeout(() => m.pillHere(tourAnchor(), "Take the tour again any time"), 450); return; }
+  if (fromTour) { setTimeout(() => m.pillHere(tourAnchor(), "Help lives here: How to use"), 450); return; }
   if (!m.shouldOffer()) return;
   setTimeout(() => {
     if (document.getElementById("q")?.value || document.querySelector("dialog[open], .tour-card")) return;   // busy: ask another time

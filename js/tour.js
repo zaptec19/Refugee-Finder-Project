@@ -1,6 +1,6 @@
 // The tours: one small card at a time, pointing at the part of the screen it describes. Next / Back / Skip, or the
-// arrow keys and Esc; progress dots; the card never covers its target. One "Tour" button in the top bar starts the
-// tour for the page you are on:
+// arrow keys and Esc; progress dots; the card never covers its target. One "How to use" button in the top bar starts
+// the tour for the page you are on:
 //   - home: the home tour (also what the first-visit welcome card starts). It carries on in a real example (Sri Lankan
 //     refugees in India) and ends back home;
 //   - a situation page (any kind, built or built in the browser): the page tour, this page only, top to bottom;
@@ -94,7 +94,7 @@ let raf = 0;
 const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 const pageOf = () => document.body.dataset.page || "";
 
-/** The Tour button (and the welcome card): the tour for this page. */
+/** How to use (and the welcome card): the tour for this page. */
 export function startTour(kind = tourFor()) {
   if (!kind) return;
   useTour(kind);
@@ -273,7 +273,7 @@ function waitFor(sel, ms = 8000) {
       // a list of targets: the first one this page has (e.g. Compare sources, else Limitations)
       const el = sels.map((x) => document.querySelector(x)).find((x) => x && x.getBoundingClientRect().width > 0) || document.querySelector(sels[0]);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
-      // phones: Tour and My collection are inside the top-bar menu, so point at the menu button
+      // phones: How to use and My collection are inside the top-bar menu, so point at the menu button
       const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
       if (menuBtn && menuBtn.getBoundingClientRect().width > 0) return resolve(menuBtn);
       if (performance.now() - t0 > ms) return resolve(null);
@@ -392,7 +392,7 @@ function endHere() {
 
 // ------------------------------------------------------------------ the ending
 // The tour brought the reader to the example page, so it takes them back home: after a short closing card when
-// they finish, straight away when they skip. On arrival the top bar's Tour button pulses (see home.js).
+// they finish, straight away when they skip. On arrival the top bar's How to use button pulses (see home.js).
 // Saved progress is cleared first, so the tour never resumes on its own.
 export const RETURN_KEY = "wv1:tour-return";
 function goHome(kind) {

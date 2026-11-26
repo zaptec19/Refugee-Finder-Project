@@ -1,4 +1,4 @@
-// Shared page frame: top bar (on every page), theme, the Tour button, collection badge, toasts.
+// Shared page frame: top bar (on every page), theme, How to use (the tours), collection badge, toasts.
 import { store, collectionItems } from "./store.js";
 import { mode, setMode, applyNumbers, esc } from "./format.js";
 import { icon } from "./icons.js";
@@ -71,7 +71,7 @@ export function initPage({ page, dark = false } = {}) {
   syncFormatButtons();
   document.addEventListener("numfmt-change", syncFormatButtons);   // also when it changes elsewhere (the map pop-out)
 
-  // the Tour button: the tour for this page (js/tour.js); on phones it sits in the menu
+  // How to use: the tour for this page (js/tour.js); on phones it sits in the menu
   header.querySelector("#tour-btn")?.addEventListener("click", () => {
     header.classList.remove("is-menu-open");
     header.querySelector(".topbar__menu-btn")?.setAttribute("aria-expanded", "false");
@@ -128,7 +128,7 @@ export function initPage({ page, dark = false } = {}) {
     ask.addEventListener("focus", go);
   }
 
-  // phones under 600 px: Learn, Tour, theme and My collection live in a menu; search opens full width
+  // phones under 600 px: Learn, How to use, theme and My collection live in a menu; search opens full width
   const menuBtn = header.querySelector(".topbar__menu-btn");
   const menu = header.querySelector("#topbar-menu");
   const setMenu = (open, { focus = true } = {}) => {
@@ -208,7 +208,7 @@ function topbarHTML(page, dark, theme) {
       <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
       <button class="icon-btn topbar__theme" id="theme-toggle" type="button" aria-pressed="${theme === "dark"}"
         aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}"><span class="topbar__theme-icon">${icon(theme === "dark" ? "sun" : "moon")}</span><span class="menu-only topbar__theme-text">${theme === "dark" ? "Light mode" : "Dark mode"}</span></button>
-${hasTour ? `<button class="pill topbar__tour" id="tour-btn" type="button" aria-label="Take a tour of this page" title="A short tour of this page">${icon("compass", { size: 16 })}<span class="pill__text">Tour</span></button>` : ""}
+${hasTour ? `<button class="pill topbar__tour" id="tour-btn" type="button" aria-label="How to use this page" title="A short tour of this page">${icon("question", { size: 16 })}<span class="pill__text">How to use</span></button>` : ""}
       <a class="collection-btn topbar__coll" href="collection.html"${cur("collection")}>
         <span class="collection-btn__icon">${icon("collection", { size: 20 })}<span class="count-badge" id="coll-count" hidden>0</span></span>
         <span class="label-wide">My collection</span>
@@ -386,7 +386,7 @@ function wireBack(page) {
   refresh();
 }
 
-/** Where the tour lives: the top bar's Tour button, or the menu button on phones (the button is inside the menu). */
+/** Where help lives: the top bar's How to use button, or the menu button on phones (the button is inside the menu). */
 export function tourAnchor() {
   const b = document.getElementById("tour-btn");
   if (b && b.getBoundingClientRect().width > 0) return b;
