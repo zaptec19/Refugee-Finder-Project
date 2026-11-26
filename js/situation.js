@@ -243,9 +243,11 @@ function briefHTML(brief) {
       ? ` <span class="brief__rest" hidden>${rest.map((x, i) => one(x, i + 1)).join(" ")}</span>` : ""}</div>`;
   };
   const srcNames = [...new Set(srcs.map((id) => (SRC[id]?.short || REFS[id]?.authors || id).replace(/^Government of /, "Govt. of ")))];
+  // the label never names a model: "Written with AI from …" (rule 11)
+  const from = `Written with AI from ${esc(srcNames.join(", ") || "the data")}`;
   const label = brief.status === "checked"
-    ? `Checked by ${esc(brief.checked_by || "the team")}${brief.checked_on ? `, ${esc(formatDate(brief.checked_on))}` : ""}`
-    : `Written by ${esc(brief.writer || "Gemini")} from ${esc(srcNames.join(", ") || "the data")}, not yet checked by the team`;
+    ? `${from}. Checked by ${esc(brief.checked_by || "the team")}${brief.checked_on ? `, ${esc(formatDate(brief.checked_on))}` : ""}`
+    : `${from}, not yet checked by the team`;
   const more = brief.more ? `<details class="brief__more"><summary>Read more</summary><div class="brief__v">${esc(brief.more)}</div></details>` : "";
   const anyRest = ["what", "why", "when", "how"].some((p) => Array.isArray(brief[p]) && brief[p].length > 1);
   return `<div class="brief" id="brief-body">${["what", "why", "when", "how"].map(part).join("")}</div>${more}

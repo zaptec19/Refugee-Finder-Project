@@ -82,7 +82,7 @@
     10000000
   ],
   "prompt_version": 3,
-  "writer": "Claude",
+  "writer": "ai",
   "generated_on": "2026-11-19",
   "factpack_hash": "329aa5b529b8b18e",
   "status": "unchecked",

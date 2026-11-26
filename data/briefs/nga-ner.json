@@ -85,7 +85,7 @@
     258359
   ],
   "prompt_version": 3,
-  "writer": "Claude",
+  "writer": "ai",
   "generated_on": "2026-11-22",
   "factpack_hash": "1a1c268ae2fe2f6a",
   "status": "unchecked",
