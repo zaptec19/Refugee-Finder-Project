@@ -1,5 +1,5 @@
 // Home: one question, one search box, a few try-chips and a quiet globe. Nothing else.
-import { initPage } from "./layout.js";
+import { initPage, tourAnchor } from "./layout.js";
 import { getJSON } from "./data.js";
 import { createGlobe, THRESHOLDS, RAMP } from "./globe.js";
 import { fmt, esc } from "./format.js";
@@ -38,7 +38,7 @@ main.innerHTML = `
       <svg id="globe" role="img" aria-label="Globe: countries shaded by the number of people displaced from them. Drag or use the arrow keys to turn it; point at a country to see its main figures, click it for a preview and click it again to open it."></svg>
     </figure>
     <div class="home__foot">
-      <span class="home__links"><button class="tour-pill" type="button" id="tour-pill" data-start-tour title="A 1-minute tour of the site">${icon("compass", { size: 16 })}<span>Take the tour</span></button></span>
+      <span class="home__links" aria-hidden="true"></span>
       <span class="home__caption" id="globe-cap">People displaced, by country</span>
       <div class="range">
         <button type="button" class="btn btn--sm tabular" id="range-btn" aria-expanded="false" aria-controls="range-pop" popovertarget="range-pop">Years</button>
@@ -58,11 +58,11 @@ let fromTour = null;
 try { fromTour = sessionStorage.getItem("wv1:tour-return"); sessionStorage.removeItem("wv1:tour-return"); } catch { /* storage blocked */ }
 // first visit: once the load animation is done, the tour pill grows into a welcome card (js/welcome.js)
 import("./welcome.js").then((m) => {
-  if (fromTour) { setTimeout(() => m.pillHere(document.getElementById("tour-pill"), "Take the tour again any time"), 450); return; }
+  if (fromTour) { setTimeout(() => m.pillHere(tourAnchor(), "Take the tour again any time"), 450); return; }
   if (!m.shouldOffer()) return;
   setTimeout(() => {
     if (document.getElementById("q")?.value || document.querySelector("dialog[open], .tour-card")) return;   // busy: ask another time
-    m.offerTour(document.getElementById("tour-pill"));
+    m.offerTour(tourAnchor());
   }, introRan ? 1300 : 500);
 });
 warmUp();                       // load the search data and model in the background

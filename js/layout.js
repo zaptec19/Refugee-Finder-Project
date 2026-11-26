@@ -1,4 +1,4 @@
-// Shared page frame: top bar (on every page), theme, guide mode, collection badge, toasts.
+// Shared page frame: top bar (on every page), theme, the Tour button, collection badge, toasts.
 import { store, collectionItems } from "./store.js";
 import { mode, setMode, applyNumbers, esc } from "./format.js";
 import { icon } from "./icons.js";
@@ -34,7 +34,7 @@ export function initPage({ page, dark = false } = {}) {
   root.dataset.theme = theme;
   try { localStorage.removeItem("wv1:fx"); } catch { /* an old setting that no longer exists */ }
   document.body.dataset.page = page;
-  document.body.classList.toggle("guide-on", store.get("guide", false) === true);
+  try { localStorage.removeItem("wv1:guide"); } catch { /* the old Guide mode setting */ }
 
   const header = document.createElement("header");
   header.className = "topbar";
@@ -58,7 +58,7 @@ export function initPage({ page, dark = false } = {}) {
     const b = e.target.closest("[data-start-tour]");
     if (!b) return;
     e.preventDefault();
-    import("./tour.js").then((m) => m.startTour());
+    import("./tour.js").then((m) => m.startTour(b.dataset.startTour || "home"));       // Learn: the home tour
   });
 
   // number format switch
@@ -71,15 +71,11 @@ export function initPage({ page, dark = false } = {}) {
   syncFormatButtons();
   document.addEventListener("numfmt-change", syncFormatButtons);   // also when it changes elsewhere (the map pop-out)
 
-  // guide on/off
-  const guide = header.querySelector("#guide-toggle");
-  guide.addEventListener("click", () => {
-    const on = !document.body.classList.contains("guide-on");
-    document.body.classList.toggle("guide-on", on);
-    store.set("guide", on);
-    guide.setAttribute("aria-pressed", String(on));
-    guide.querySelector(".pill__state").textContent = on ? " on" : " off";
-    document.dispatchEvent(new CustomEvent("guide-change", { detail: on }));
+  // the Tour button: the tour for this page (js/tour.js); on phones it sits in the menu
+  header.querySelector("#tour-btn")?.addEventListener("click", () => {
+    header.classList.remove("is-menu-open");
+    header.querySelector(".topbar__menu-btn")?.setAttribute("aria-expanded", "false");
+    import("./tour.js").then((m) => m.startTour());
   });
 
   // theme toggle (every page): one click switches light and dark; the colours cross-fade (View Transitions)
@@ -132,7 +128,7 @@ export function initPage({ page, dark = false } = {}) {
     ask.addEventListener("focus", go);
   }
 
-  // phones under 600 px: Learn, Guide, theme and My collection live in a menu; search opens full width
+  // phones under 600 px: Learn, Tour, theme and My collection live in a menu; search opens full width
   const menuBtn = header.querySelector(".topbar__menu-btn");
   const menu = header.querySelector("#topbar-menu");
   const setMenu = (open, { focus = true } = {}) => {
@@ -187,7 +183,7 @@ export function initPage({ page, dark = false } = {}) {
 
 function topbarHTML(page, dark, theme) {
   const m = mode();
-  const guideOn = store.get("guide", false) === true;
+  const hasTour = ["home", "situation", "country", "collection"].includes(page);
   const cur = (p) => (p === page ? ' aria-current="page"' : "");
   return `
   <div class="topbar__inner">
@@ -212,8 +208,7 @@ function topbarHTML(page, dark, theme) {
       <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
       <button class="icon-btn topbar__theme" id="theme-toggle" type="button" aria-pressed="${theme === "dark"}"
         aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}"><span class="topbar__theme-icon">${icon(theme === "dark" ? "sun" : "moon")}</span><span class="menu-only topbar__theme-text">${theme === "dark" ? "Light mode" : "Dark mode"}</span></button>
-      <button class="pill topbar__guide" id="guide-toggle" type="button" aria-pressed="${guideOn}"
-        title="Guide mode shows short tips step by step"><span class="dot" aria-hidden="true"></span><span class="pill__text">Guide<span class="pill__state">${guideOn ? " on" : " off"}</span></span></button>
+${hasTour ? `<button class="pill topbar__tour" id="tour-btn" type="button" aria-label="Take a tour of this page" title="A short tour of this page">${icon("compass", { size: 16 })}<span class="pill__text">Tour</span></button>` : ""}
       <a class="collection-btn topbar__coll" href="collection.html"${cur("collection")}>
         <span class="collection-btn__icon">${icon("collection", { size: 20 })}<span class="count-badge" id="coll-count" hidden>0</span></span>
         <span class="label-wide">My collection</span>
@@ -280,11 +275,6 @@ export function toast(html, { action, onAction, timeout = 6000 } = {}) {
   t.addEventListener("focusout", (e) => { if (!t.contains(e.relatedTarget)) resume(); });
 }
 
-export function guideTip(tip, nextHref, nextLabel) {
-  if (!tip) return "";
-  return `<aside class="tip" aria-label="Guide tip"><span class="tip__n" aria-hidden="true">${tip.n}</span>
-    <div>${esc(tip.text)}${nextHref ? ` <br><a href="${nextHref}">Next: ${esc(nextLabel)} &rsaquo;</a>` : ""}</div></aside>`;
-}
 
 // ------------------------------------------------------------------ the current topic in the top bar
 /** Situation, pair and country pages: the top bar's search box shows the page's title (Google-style), so the
@@ -329,7 +319,8 @@ export function setTopic({ title, type = "Situation", heading = null } = {}) {
     if (input.value !== input.dataset.topic) return;
     justFocused = true;
     input.select();
-    requestAnimationFrame(() => { if (input.value === input.dataset.topic) input.select(); });
+    // only while it still has focus: select() takes focus in Chrome, which would pull a quick Tab back here
+    requestAnimationFrame(() => { if (document.activeElement === input && input.value === input.dataset.topic) input.select(); });
   });
   input.addEventListener("mouseup", (e) => { if (justFocused) { e.preventDefault(); justFocused = false; } });
   input.addEventListener("keydown", () => { justFocused = false; });
@@ -393,4 +384,11 @@ function wireBack(page) {
     setTimeout(() => mo.disconnect(), 10000);
   }
   refresh();
+}
+
+/** Where the tour lives: the top bar's Tour button, or the menu button on phones (the button is inside the menu). */
+export function tourAnchor() {
+  const b = document.getElementById("tour-btn");
+  if (b && b.getBoundingClientRect().width > 0) return b;
+  return document.querySelector(".topbar__menu-btn") || b;
 }

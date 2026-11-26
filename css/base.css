@@ -73,15 +73,12 @@ small, .small { font-size: var(--fs-13); }
 .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--ink); font-weight: 500; }
 .seg--text button { font-family: var(--font-sans); }
 
-/* pill toggle (Guide on/off) */
+/* pill buttons (the top bar's Tour) */
 .pill {
   display: inline-flex; align-items: center; gap: var(--s-2); height: 32px; padding: 0 var(--s-3);
   border: var(--hair); border-color: var(--line-strong); border-radius: var(--r-pill);
   background: transparent; font-size: var(--fs-13); font-weight: 500; cursor: pointer; color: var(--ink);
 }
-.pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); }
-.pill[aria-pressed="true"] { background: var(--guide-bg); border-color: var(--guide-line); color: var(--guide-ink); }
-.pill[aria-pressed="true"] .dot { background: var(--guide-dot); }
 
 .chip {
   display: inline-flex; align-items: center; height: 30px; padding: 0 var(--s-3);
@@ -141,16 +138,6 @@ small, .small { font-size: var(--fs-13); }
 .collection-btn:hover { background: var(--surface-2); }
 .collection-btn__icon { position: relative; display: inline-grid; }
 
-/* ------------------------------------------------------------------ guide tip */
-.tip {
-  display: flex; gap: var(--s-3); padding: var(--s-3) var(--s-4);
-  background: var(--guide-bg); border: 1px solid var(--guide-line); border-radius: var(--r-card);
-  color: var(--guide-ink); font-size: var(--fs-15); line-height: 1.45;
-}
-.tip__n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--guide-dot); color: #fff;
-  font-size: 12px; font-weight: 600; display: grid; place-items: center; margin-top: 1px; }
-.tip a { color: inherit; font-weight: 600; }
-body:not(.guide-on) .tip { display: none; }
 
 /* ------------------------------------------------------------------ cards */
 .card { background: var(--surface); border: var(--hair); border-radius: var(--r-card); }
@@ -328,7 +315,7 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
   :root { --topbar-h: 100px; }
   .topbar__inner {
     grid-template-columns: 1fr auto auto auto; grid-template-rows: 50px 44px; row-gap: 0;
-    grid-template-areas: "brand fmt guide coll" "ask ask learn theme";
+    grid-template-areas: "brand fmt tour coll" "ask ask learn theme";
     padding: 0 var(--gutter); column-gap: var(--s-2);
   }
   .topbar__right { display: contents; }
@@ -338,15 +325,13 @@ dialog[open] { animation: fade-in var(--t-med) var(--ease); }
   .topbar__ask, .topbar__ask-slot { grid-area: ask; max-width: none; height: 36px; }
   .topbar__learn { grid-area: learn; font-size: var(--fs-13); }
   .topbar__theme { grid-area: theme; }
-  .topbar__guide { grid-area: guide; height: 30px; padding: 0 10px; }
+  .topbar__tour { grid-area: tour; height: 30px; padding: 0 10px; }
   .topbar__coll { grid-area: coll; padding: 0 6px; }
   .topbar__right .label-wide { display: none; }
-  /* Narrow phones: the guide pill's dot (and aria-pressed) still show on/off, so drop the word to make room for the name. */
   @media (max-width: 420px) {
     .topbar__inner { column-gap: 6px; }
     .topbar__inner > .topbar__lead { font-size: 0.875rem; }
     .topbar__fmt button { padding: 0 5px; }
-    .topbar__guide .pill__state { display: none; }
   }
   /* home: same two rows as other pages (Learn and the theme toggle on the second row); the search is on the page itself */
   body.page-home .topbar__ask-slot { visibility: hidden; }
@@ -431,10 +416,8 @@ html { scroll-behavior: smooth; }
 .home__globe { width: min(520px, 92vw, calc(100vh - 380px)); min-width: min(300px, 92vw); }
 .sit-meta .status { margin-left: var(--s-1); }
 @media (max-width: 860px) {
-  .pill__state { display: none; }
   .sit__side { align-items: center; }
   .sit__side .mini-globe { max-width: 210px; }
-  .sit__side .tip { width: 100%; }
 }
 .kn__label { min-height: 2.9em; }
 @media (max-width: 860px) { .kn__label { min-height: 0; } }
@@ -576,7 +559,6 @@ dialog.export { width: min(520px, calc(100vw - 32px)); }
 
 /* ------------------------------------------------------------------ learn, datasets, request, country */
 .learn__head { display: flex; justify-content: space-between; gap: var(--s-6); align-items: flex-start; margin-bottom: var(--s-6); }
-.learn__head .tip { max-width: 360px; }
 .learn__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
 .learn__panel { padding: var(--s-4) var(--s-5); }
 .learn__panel h2 { font-size: var(--fs-17); margin-bottom: var(--s-3); }
@@ -1106,7 +1088,7 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
 .topbar__theme svg { transform-origin: center; }
 
 /* ---------------------------------------------------------------- phone top bar: fit the first row in the screen
-   (it needed 391 px: name, number switch, Guide pill and collection icon, so phones under ~392 px scrolled sideways) */
+   (it needed 391 px: name, number switch, Tour pill and collection icon, so phones under ~392 px scrolled sideways) */
 @media (max-width: 860px) {
   .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; }
   .topbar__inner > .topbar__lead { min-width: 0; overflow: hidden; text-overflow: ellipsis; }    /* never wider than its column */
@@ -1115,12 +1097,12 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
   .topbar__inner { padding: 0 12px; column-gap: 4px; }
   .topbar__inner > .topbar__lead { font-size: 0.8125rem; }
   .topbar__fmt button { padding: 0 4px; font-size: 11px; }
-  .topbar__guide { padding: 0 8px; font-size: 12px; gap: 6px; }
+  .topbar__tour { padding: 0 8px; font-size: 12px; gap: 6px; }
   .topbar__coll { padding: 0 4px; }
 }
-/* the smallest phones: the Guide pill moves to the second row, beside Learn */
+/* the smallest phones: the Tour pill moves to the second row, beside Learn */
 @media (max-width: 350px) {
-  .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-areas: "brand fmt fmt coll" "ask learn guide theme"; }
+  .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-areas: "brand fmt fmt coll" "ask learn tour theme"; }
   .topbar__learn { padding: 6px 6px; }
 }
 
@@ -1179,7 +1161,7 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
 @media (hover: none) { .pin-btn:hover::after { opacity: 0; } }
 
 /* ---------------------------------------------------------------- B5 phone top bar (under 600 px)
-   one row: name, compact number switch, search and menu; Learn, Guide, theme and My collection sit in the menu;
+   one row: name, compact number switch, search and menu; Learn, Tour, theme and My collection sit in the menu;
    nothing closer than 16 px to the screen edge */
 .topbar__menu-btn, .topbar__search-btn, .topbar__search-close, .menu-only { display: none; }
 @media (max-width: 599px) {
@@ -1214,16 +1196,14 @@ html.theme-swap::view-transition-old(root), html.theme-swap::view-transition-new
   }
   .topbar.is-menu-open .topbar__right { display: flex; }
   .topbar__right > * { grid-area: auto !important; }
-  .topbar__right .topbar__link, .topbar__right .topbar__theme, .topbar__right .topbar__guide, .topbar__right .topbar__coll {
+  .topbar__right .topbar__link, .topbar__right .topbar__theme, .topbar__right .topbar__tour, .topbar__right .topbar__coll {
     display: flex; align-items: center; justify-content: flex-start; gap: 10px; width: 100%; height: 44px; padding: 0 12px;
     border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: var(--fs-15); text-align: left;
   }
-  .topbar__right .topbar__link:hover, .topbar__right .topbar__theme:hover, .topbar__right .topbar__guide:hover, .topbar__right .topbar__coll:hover { background: var(--surface-2); }
+  .topbar__right .topbar__link:hover, .topbar__right .topbar__theme:hover, .topbar__right .topbar__tour:hover, .topbar__right .topbar__coll:hover { background: var(--surface-2); }
   .topbar__right .menu-only { display: inline; }
   .topbar__right .label-wide { display: inline; }
-  .topbar__right .topbar__guide .pill__state { display: inline; }
-  .topbar__right .topbar__guide { font-weight: 400; }
-  .topbar__right .topbar__guide .dot { width: 8px; height: 8px; margin: 0 6px; flex: none; }
+  .topbar__right .topbar__tour { font-weight: 400; }
   .topbar__right .topbar__learn::before { content: ""; width: 20px; flex: none; }
   .topbar__right .topbar__theme-icon { display: inline-grid; width: 20px; place-items: center; }
   .topbar__right .collection-btn__icon { width: 20px; }
@@ -1353,15 +1333,8 @@ a.cite--missing { color: var(--danger); }
 
 
 
-/* home: the tour pill (bottom left) */
-.home__links { display: inline-flex; align-items: center; }   /* the footer cell that holds the tour pill */
-.tour-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 9px; border-radius: 999px; font: inherit; font-weight: 500;
-  color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent-ui) 40%, transparent); cursor: pointer;
-  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); position: relative; }
-.tour-pill:hover { border-color: var(--accent-ui); background: var(--accent-soft); }
-:root[data-theme="dark"] .tour-pill:hover { box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 0 14px rgba(34, 211, 238, 0.25); }
-.tour-pill:focus-visible { outline: 2px solid var(--accent-ui); outline-offset: 2px; }
-.tour-pill .icon { flex: none; }
+/* home: the footer's left cell (kept empty so the caption stays centred) */
+.home__links { display: inline-flex; align-items: center; }
 
 /* home: the first-visit welcome card (js/welcome.js); grows out of the tour pill, a bottom sheet on phones */
 dialog.welcome { padding: 0; margin: auto; border: 0 !important; background: transparent !important; box-shadow: none !important;
@@ -1379,7 +1352,7 @@ dialog.welcome.welcome--sheet { margin: auto 0 0; width: 100%; }
 .welcome--sheet .welcome__box { width: 100%; border-radius: 16px 16px 0 0; border-bottom: 0; padding-bottom: calc(var(--s-5, 20px) + env(safe-area-inset-bottom)); }
 .welcome--sheet .welcome__actions .btn { flex: 1; justify-content: center; }
 /* the pill while the card is out, and when it comes back */
-.tour-pill.is-away { opacity: 0; }
+.topbar__tour.is-away, .topbar__menu-btn.is-away { opacity: 0; }
 .tour-pill--here::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
   box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75); animation: pill-here 600ms ease-out 2; }
 @keyframes pill-here { from { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75); } to { box-shadow: 0 0 0 12px rgba(34, 211, 238, 0); } }
@@ -1802,3 +1775,8 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
   .topbar__lead:has(.topbar__back:not([hidden])) > .brand { font-size: 0.8125rem; letter-spacing: -0.02em; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .topbar__lead:has(.topbar__back:not([hidden])) ~ .topbar__fmt button { padding: 0 4px; }
 }
+
+/* the Tour button (top bar; in the menu on phones) */
+.topbar__tour { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+.topbar__tour .icon { flex: none; }
+.tour-pill-tip--below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--ink); }

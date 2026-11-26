@@ -25,7 +25,6 @@ export const sources = () => getJSON("data/web/sources.json");
 export const measures = () => getJSON("data/web/measures.json");
 export const countries = () => getJSON("data/web/countries.json");
 export const glossary = () => getJSON("data/web/glossary.json");
-export const tips = () => getJSON("data/web/tips.json");
 
 export async function byId(listPromise) {
   const list = await listPromise;

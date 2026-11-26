@@ -1,15 +1,15 @@
 // Learn (walkthrough screen 15): glossary, how sources define things, reading the numbers,
 // the organisations behind the data, and a short tour.
-import { initPage, guideTip } from "./layout.js";
+import { initPage } from "./layout.js";
 import { openTerm } from "./popouts.js";
-import { glossary as loadGlossary, tips as loadTips, getJSON } from "./data.js";
+import { glossary as loadGlossary, getJSON } from "./data.js";
 import { esc } from "./format.js";
 import { icon } from "./icons.js";
 import { MAP_SOURCE } from "./config.js";
 
 initPage({ page: "learn" });
 document.body.classList.add("page-learn");
-const [glossary, tips, crosswalk] = await Promise.all([loadGlossary(), loadTips(), getJSON("data/web/crosswalk.json")]);
+const [glossary, crosswalk] = await Promise.all([loadGlossary(), getJSON("data/web/crosswalk.json")]);
 
 const READING = [
   { id: "stocks-flows", title: "Stocks vs flows", diagram: true, body: [
@@ -46,7 +46,7 @@ const ORGS = [
 const main = document.getElementById("main");
 main.innerHTML = `<div class="page page--narrow learn">
   <div class="learn__head"><div><h1>Learn</h1><p class="muted">How to read displacement data, without assuming you already know.</p></div>
-    ${guideTip(tips.learn)}</div>
+    </div>
   <div class="learn__grid">
     <section class="card learn__panel" aria-labelledby="h-gl"><h2 id="h-gl">Glossary</h2>
       <ul class="learn__list">${glossary.filter((g) => !["stock", "flow", "estimate", "series_break"].includes(g.id)).slice(0, 9).map((g) => `<li><button type="button" data-show="g-${g.id}">${esc(g.term)}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>
@@ -76,7 +76,7 @@ main.innerHTML = `<div class="page page--narrow learn">
 
   <section id="tour" class="learn__section"><h2>The 1-minute tour</h2>
     <p><button class="btn btn--primary" type="button" data-start-tour>Start the interactive tour</button>
-      <span class="small muted">A card at a time, pointing at each part of the site. Or read the steps below.</span></p>
+      <span class="small muted">A card at a time, pointing at each part of the site. Or read the steps below. On a situation or country page, Tour in the top bar walks through just that page.</span></p>
     <ol class="tour">
       <li><strong>Ask.</strong> Type a place, a group or a question on the home page. A quick answer comes straight from the data.</li>
       <li><strong>Read the brief.</strong> What happened, why people moved, when and how, before any numbers. <a href="situation.html?id=lka-ind#brief">See an example</a></li>
@@ -85,7 +85,7 @@ main.innerHTML = `<div class="page page--narrow learn">
       <li><strong>Limitations.</strong> What the data can't tell you, next to the numbers. <a href="situation.html?id=lka-ind#limitations">Example</a></li>
       <li><strong>Collect and export.</strong> Pin numbers, charts and readings, then export a Word table, Excel or CSV with references. <a href="collection.html">My collection</a></li>
     </ol>
-    <p class="small muted">Switch <strong>Guide on</strong> in the top bar to see a short tip at each step.</p></section>
+    <p class="small muted">Press <strong>Tour</strong> in the top bar any time: on the home page it shows the whole site; on a situation or country page it walks through that page.</p></section>
 </div>`;
 
 const detail = document.getElementById("detail");

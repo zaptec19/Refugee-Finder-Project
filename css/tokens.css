@@ -81,11 +81,6 @@
   --g-ramp-3: #3A80FF;
   --g-ramp-4: #0B6BFF;
 
-  /* guide mode */
-  --guide-bg: #FFF7DB;
-  --guide-line: #E9C55B;
-  --guide-ink: #3D2F00;
-  --guide-dot: #8A6100;
 
   /* states */
   --ok: #2F6B00;             /* from #3F8F00 so the badge text passes 4.5:1 on its own tinted pill */
@@ -217,10 +212,6 @@
   --g-ramp-3: #2E80DD;
   --g-ramp-4: #3B9BFF;
 
-  --guide-bg: #1C1806;
-  --guide-line: #5A4A12;
-  --guide-ink: #F2E2A8;
-  --guide-dot: #E0B43C;
   --ok: #B6FF3B;
   --ok-soft: rgba(182, 255, 59, 0.10);
   --warn: #E0A532;

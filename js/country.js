@@ -69,7 +69,7 @@ try {
       ${idmcFlows.map((k) => `<div id="flow-${k}"></div>`).join("")}</section>` : ""}
     ${topHTML}
     ${c.demographics !== undefined ? `<section class="learn__section" id="age-sex-wrap"></section>` : ""}
-    <section class="learn__section"><h2>Situations involving ${esc(c.name)}</h2>
+    <section class="learn__section" id="country-sits"><h2>Situations involving ${esc(c.name)}</h2>
       ${Object.entries(groups).map(([g, list]) => `<h3 class="sub-h">${esc(g)} (${list.length})</h3><ul class="plain-list">${list.slice(0, 40).map((s) => `<li><a href="situation.html?id=${esc(s.id)}">${esc(s.title)}</a> <span class="small muted tabular">${s.years ? `${s.years[0]} to ${s.years[1]}` : ""}</span></li>`).join("")}</ul>`).join("") || '<p class="muted">No situations.</p>'}
     </section>
     <p class="small muted">${esc(c.notes.hosted)} ${esc(c.notes.from)} ${esc(c.notes.internal)}</p></div>`;

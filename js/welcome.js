@@ -1,5 +1,5 @@
-// First visit to the home page: once the load animation has finished, the bottom-left "Take the tour" pill lifts off
-// and grows into a welcome card in the middle of the screen (a bottom sheet on phones), with the page dimmed behind
+// First visit to the home page: once the load animation has finished, the top bar's Tour button (the menu button on
+// phones) lifts off and grows into a welcome card in the middle of the screen (a bottom sheet on phones), with the page dimmed behind
 // it. "Take the tour" starts the tour; "Maybe later" (or X, Esc, the backdrop) flies the card back into the pill,
 // which then pulses and says "The tour lives here." so the reader sees where it went.
 // Shown once: "wv1:tour-offered" is set the moment it appears. ?welcome=1 shows it again (testing, demos).
@@ -53,7 +53,7 @@ function build() {
           <button class="btn btn--primary" type="button" data-w="go">Take the tour</button>
           <button class="btn" type="button" data-w="later">Maybe later</button>
         </div>
-        <p class="welcome__note small muted">You can start it any time from the bottom left.</p>
+        <p class="welcome__note small muted">You can start it any time from Tour in the ${phone() ? "top bar menu" : "top bar"}.</p>
       </div>
     </div>`;
   document.body.append(dlg);
@@ -171,8 +171,10 @@ export function pillHere(pill, text) {
   const r = pill.getBoundingClientRect();
   const t = tip.getBoundingClientRect();
   const left = Math.min(Math.max(8, r.left + r.width / 2 - t.width / 2), document.documentElement.clientWidth - t.width - 8);
+  const below = r.top - t.height - 10 < 8;                 // the top bar: no room above, so under the button
+  tip.classList.toggle("tour-pill-tip--below", below);
   tip.style.left = `${left + scrollX}px`;
-  tip.style.top = `${r.top + scrollY - t.height - 10}px`;
+  tip.style.top = `${below ? r.bottom + scrollY + 10 : r.top + scrollY - t.height - 10}px`;
   tip.style.setProperty("--tip-x", `${r.left + r.width / 2 - left}px`);
   setTimeout(() => {
     if (reducedMotion()) { tip.remove(); return; }

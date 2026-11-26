@@ -1,36 +1,90 @@
-// The interactive tour: one small card at a time, pointing at the part of the screen it describes.
-// Next / Back / Skip, or the arrow keys and Esc. Eight cards, one area of the screen each. It starts on the home page and carries on in a real
-// example (Sri Lankan refugees in India). Progress lives in localStorage ("wv1:tour") so a reload or the
-// jump to the example page picks up where it left off; it is cleared when the tour ends.
+// The tours: one small card at a time, pointing at the part of the screen it describes. Next / Back / Skip, or the
+// arrow keys and Esc; progress dots; the card never covers its target. One "Tour" button in the top bar starts the
+// tour for the page you are on:
+//   - home: the home tour (also what the first-visit welcome card starts). It carries on in a real example (Sri Lankan
+//     refugees in India) and ends back home;
+//   - a situation page (any kind, built or built in the browser): the page tour, this page only, top to bottom;
+//   - a country page and My collection: a short page tour.
+// A page tour never leaves the page: it starts at the top, and on Done, Skip or Esc the reader is put back where they
+// were. Cards for parts the page doesn't have are skipped. Progress lives in localStorage ("wv1:tour").
 import { store } from "./store.js";
 import { esc } from "./format.js";
 import { icon } from "./icons.js";
 
 const EXAMPLE = "situation.html?id=lka-ind";
 
-/** Each step: the page it runs on, what to point at (a CSS selector, or a list tried in order; none for a centred
- *  card), and at most two short sentences. Every card covers one area of the screen. */
-export const STEPS = [
-  { page: "home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
-    text: "Type a country, a group of people or a question, like “Tamils who fled to India”. Not sure where to start? Try one of the examples below the search bar." },
-  { page: "home", target: "#globe", title: "The globe",
-    text: "Countries are shaded by how many people were displaced from them. Drag to turn it, and click a country to preview it; click again to open it." },
-  { page: "*", target: ".topbar__fmt", title: "Make it yours",
-    text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. Turn on Guide (top right) for a short tip on each part of a page.",
-    go: EXAMPLE, note: "Next: a real example" },
-  { page: "situation", target: "#brief", title: "Start with the brief",
-    text: "What happened, why people moved, when and how, in plain words. The label under it says it was written with AI and lists its sources." },
-  { page: "situation", target: "#key-numbers .kn", title: "Key numbers",
-    text: "Press ? to see what a number counts and how reliable it is. Click the number itself to trace it back to the original dataset row." },
-  { page: "situation", target: "#over-time", title: "Over time",
-    text: "How the figure changed, with conflict years and key events underneath. They show timing, not proof of cause." },
-  { page: "situation", target: ["#compare", "#limitations"], title: "Before you quote a number",
-    text: "Compare sources shows where datasets disagree and why. Limitations, further down, lists what the data can't tell you." },
-  { page: "situation", target: ".topbar__coll", title: "Pin and export", last: true,
-    text: "Pin numbers, charts and readings; their citations come with them. Open My collection (top right) to export a Word table, Excel or CSV with references." },
-];
-// saved progress from an older tour (17 steps) is not resumed: it starts again at step 1
-const TOUR_VERSION = 2;
+/** Each step: the page it runs on (home tour), what to point at (a CSS selector, or a list tried in order; none
+ *  for a centred card), and at most two short sentences. */
+export const TOURS = {
+  home: [
+    { page: "home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
+      text: "Ask about a country, a group, or two countries, like “Tamils who fled to India”. Not sure where to start? Try one of the examples under the search bar." },
+    { page: "home", target: [".home__foot", "#globe"], title: "The globe and its colours",
+      text: "Countries are shaded by how many people were displaced from them; the key under the globe and the year button explain the colours. Click a country to preview it, and click again to open it." },
+    { page: "home", target: ".topbar__inner", title: "The top bar",
+      text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. My collection keeps what you pin, and Back takes you one step back." },
+    { page: "home", title: "A real example",
+      text: "Next, the tour opens Sri Lankan refugees in India to show how a situation page works. You can come back home at any time.",
+      go: EXAMPLE, note: "Next: a real example" },
+    { page: "situation", target: "#brief", title: "The brief",
+      text: "What happened, why people moved, when and how, in plain words. Each [1] jumps to its source in the numbered list at the bottom." },
+    { page: "situation", target: "#key-numbers .kn", title: "Key numbers",
+      text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
+    { page: "situation", target: "#over-time", title: "Charts",
+      text: "Events and conflict years sit on the line's own years: they show timing, not proof of cause. Data shows the figures as a table, and PNG or CSV downloads them." },
+    { page: "situation", target: ["#compare", "#limitations"], title: "Before you quote",
+      text: "Compare sources shows where datasets disagree and why. Limitations, with its symbol key, lists what the data can't tell you." },
+    { page: "situation", target: ".topbar__coll", title: "Pin and export", last: true,
+      text: "Pin numbers, charts and readings; their citations come with them. Open My collection to export a Word table, Excel or CSV with references." },
+  ],
+  situation: [
+    { target: "#sit-title", title: "This page",
+      text: "The title says what this page is about, and the search box at the top keeps it in view. Type there to search something else." },
+    { target: ".sit__rail", title: "The steps",
+      text: "Jump to any part of the page from this list, or just scroll. The part you are reading is marked as you go." },
+    { target: "#brief", title: "The brief",
+      text: "What, why, when and how, with numbered sources: [1] jumps to the list at the bottom. The label under it says it was written with AI and lists its sources." },
+    { target: "#key-numbers .kn", title: "Key numbers",
+      text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
+    { target: ["#over-time", "#where-people-are"], title: "Over time and where people are",
+      text: "Events and conflict bands sit on the line's own years: they show timing, not proof of cause. Data turns a chart into a table, and PNG or CSV downloads it." },
+    { target: ["#inside-outside", "#compare"], title: "Inside vs outside, compare sources",
+      text: "When two sources count the same people, they are shown side by side, never added together. “Why they differ” explains the gaps." },
+    { target: ["#context", "#other-angles"], title: "Context and other angles",
+      text: "Conflict deaths and events give timing, not causes. Other angles adds returns, asylum claims and the age and sex breakdown, where the data has them." },
+    { target: ["#limitations", "#sources"], title: "Limitations and sources",
+      text: "Read the limitations before you quote a number; the symbol key explains each kind. The numbered source list matches the [1] markers in the brief." },
+    { target: ".topbar__coll", title: "Pin, collect, go back", last: true,
+      text: "Pin numbers, charts and readings to My collection, ready to export with their citations. Back in the top bar takes you one step back." },
+  ],
+  country: [
+    { target: "main h1", title: "This country",
+      text: "People who fled from here and people hosted here, on one page. The search box at the top keeps the country's name in view." },
+    { target: "main .card-grid", title: "Key figures",
+      text: "The latest year-end totals. UNHCR's and IDMC's figures for people displaced inside the country are shown side by side, never added." },
+    { target: ["#hosted-chart", "#from-chart"], title: "Over time",
+      text: "Each chart shows a group year by year. Data turns it into a table, and PNG or CSV downloads it." },
+    { target: ["main .top-groups", "#age-sex-wrap"], title: "Who lives here",
+      text: "The largest groups hosted, by country of origin, for the latest year. Refugees and other people in need of protection have separate columns." },
+    { target: "#country-sits h2", title: "Situations", last: true,
+      text: "Every situation involving this country, each with its own page. Open one to see its brief, charts and sources." },
+  ],
+  collection: [
+    { target: ["main table.coll", "main .empty-state", "main h1"], title: "Your collection",
+      text: "Everything you pinned, with its source and year. Add a note to any row; it goes into the export." },
+    { target: "#export", title: "Export", last: true,
+      text: "Download a Word table, Excel or CSV, with a citation for every row and the definitions used." },
+  ],
+};
+// saved progress from an older tour is not resumed: it starts again at step 1
+const TOUR_VERSION = 3;
+const pageKind = () => document.body.dataset.page || "";
+/** The tour the Tour button starts on this page (null: no tour here). */
+export const tourFor = (page = pageKind()) => (page === "home" ? "home" : TOURS[page] ? page : null);
+let TOUR = "home";
+let STEPS = TOURS.home;
+let startY = 0;                    // a page tour puts the reader back here
+const useTour = (t) => { TOUR = t; STEPS = TOURS[t] || TOURS.home; };
 
 let ui = null;          // { ring, card, live }
 let index = -1;
@@ -40,23 +94,39 @@ let raf = 0;
 const reduced = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 const pageOf = () => document.body.dataset.page || "";
 
-/** Start the tour from the first step (on the home page; from anywhere else it opens the home page first). */
-export function startTour() {
-  store.set("tour", { i: 0, v: TOUR_VERSION });
-  store.set("tour-offered", true);        // someone who has taken the tour doesn't need the welcome card
-  if (pageOf() !== "home") { location.href = "index.html"; return; }
+/** The Tour button (and the welcome card): the tour for this page. */
+export function startTour(kind = tourFor()) {
+  if (!kind) return;
+  useTour(kind);
+  store.set("tour-offered", true);        // someone who has taken a tour doesn't need the welcome card
+  if (kind === "home") {
+    store.set("tour", { t: "home", i: 0, v: TOUR_VERSION });
+    if (pageOf() !== "home") { location.href = "index.html"; return; }
+    show(0);
+    return;
+  }
+  // a page tour: from the top of this page; the reader is put back where they were when it ends
+  startY = Math.round(scrollY);
+  store.set("tour", { t: kind, i: 0, v: TOUR_VERSION, url: location.pathname + location.search, y: startY });
+  window.scrollTo({ top: 0, behavior: "instant" });
   show(0);
 }
 
-/** Called on every page load: carry on if a tour is in progress, or start one with ?tour=1. */
+/** Called on every page load: carry on if a tour is in progress, or start the home tour with ?tour=1. */
 export function resumeTour() {
   const params = new URLSearchParams(location.search);
-  if (params.get("tour") === "1" && pageOf() === "home") { startTour(); return; }
+  if (params.get("tour") === "1" && pageOf() === "home") { startTour("home"); return; }
   const st = store.get("tour", null);
   if (!st || typeof st.i !== "number") return;
-  if (st.v !== TOUR_VERSION || st.i > STEPS.length - 1) {          // progress from the old 17-step tour
-    store.set("tour", { i: 0, v: TOUR_VERSION });
-    if (pageOf() === "home") show(0);
+  if (st.v !== TOUR_VERSION || !TOURS[st.t] || st.i > TOURS[st.t].length - 1) {     // progress from an older tour
+    store.remove("tour");
+    return;
+  }
+  useTour(st.t);
+  if (st.t !== "home") {               // a page tour belongs to its page; elsewhere it is over
+    if (st.url !== location.pathname + location.search) { store.remove("tour"); return; }
+    startY = st.y || 0;
+    show(st.i);
     return;
   }
   const i = firstStepFor(st.i);
@@ -66,6 +136,7 @@ export function resumeTour() {
 
 // the saved step must belong to this page; otherwise the reader has wandered off and the tour stops
 const firstStepFor = (i) => (STEPS[i] && onThisPage(STEPS[i]) ? i : -1);
+const isPageTour = () => TOUR !== "home";
 
 function build() {
   if (ui) return;
@@ -106,7 +177,8 @@ const isTyping = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName || ""
 async function show(i) {
   build();
   index = i;
-  store.set("tour", { i, v: TOUR_VERSION });
+  const saved = store.get("tour", {}) || {};
+  store.set("tour", { ...saved, t: TOUR, i, v: TOUR_VERSION });
   const s = STEPS[i];
   current = s.target ? await waitFor(s.target) : null;
   if (index !== i) return;                       // the reader moved on while we waited
@@ -201,7 +273,7 @@ function waitFor(sel, ms = 8000) {
       // a list of targets: the first one this page has (e.g. Compare sources, else Limitations)
       const el = sels.map((x) => document.querySelector(x)).find((x) => x && x.getBoundingClientRect().width > 0) || document.querySelector(sels[0]);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
-      // phones: Guide and My collection are inside the top-bar menu, so point at the menu button
+      // phones: Tour and My collection are inside the top-bar menu, so point at the menu button
       const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
       if (menuBtn && menuBtn.getBoundingClientRect().width > 0) return resolve(menuBtn);
       if (performance.now() - t0 > ms) return resolve(null);
@@ -292,27 +364,35 @@ function place() {
   card.style.top = `${Math.round(at.top)}px`;
 }
 
-const onThisPage = (st) => st.page === "*" || st.page === pageOf();
+const onThisPage = (st) => !st.page || st.page === "*" || st.page === pageOf();
 const urlFor = (st) => (st.page === "situation" ? EXAMPLE : "index.html");
 
 /** Go one step forward or back; a step on another page opens that page and the tour resumes there. */
 function advance(from, dir) {
   const i = from + dir;
   if (i < 0) return;
-  if (i >= STEPS.length) { end(); return; }
+  if (i >= STEPS.length) { if (isPageTour()) endHere(); else end(); return; }
   if (onThisPage(STEPS[i])) { show(i); return; }
-  store.set("tour", { i, v: TOUR_VERSION });
+  store.set("tour", { t: TOUR, i, v: TOUR_VERSION });
   location.href = STEPS[from].go && dir > 0 ? STEPS[from].go : urlFor(STEPS[i]);
 }
 
 function next() {
-  if (STEPS[index].last) { finish(); return; }
+  if (STEPS[index].last) { if (isPageTour()) { endHere(); return; } finish(); return; }
   advance(index, +1);
+}
+
+/** A page tour ends where it started: on this page, at the reader's own scroll position. */
+function endHere() {
+  const y = startY;
+  end();
+  window.scrollTo({ top: y, behavior: "instant" });
+  document.getElementById("tour-btn")?.focus({ preventScroll: true });
 }
 
 // ------------------------------------------------------------------ the ending
 // The tour brought the reader to the example page, so it takes them back home: after a short closing card when
-// they finish, straight away when they skip. On arrival the home page's tour pill pulses (see home.js).
+// they finish, straight away when they skip. On arrival the top bar's Tour button pulses (see home.js).
 // Saved progress is cleared first, so the tour never resumes on its own.
 export const RETURN_KEY = "wv1:tour-return";
 function goHome(kind) {
@@ -342,6 +422,7 @@ function finish() {
 /** Skip tour, X or Esc: on the example page, back home (no closing card); on the home page, just close. */
 function quit() {
   store.remove("tour");
+  if (isPageTour()) { endHere(); return; }
   if (pageOf() !== "home") { goHome("skip"); return; }
   end();
 }

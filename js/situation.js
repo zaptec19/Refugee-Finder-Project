@@ -1,8 +1,8 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
 import { MAP_SOURCE, NOT_SEPARATE, PART_OF, NO_SHAPE } from "./config.js";
-import { initPage, guideTip, setTopic } from "./layout.js";
+import { initPage, setTopic } from "./layout.js";
 import { buildAuto, retarget } from "./auto-situation.js";
-import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
+import { getJSON, getOptionalJSON, sources as loadSources, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
 import { reducedMotion } from "./motion.js";
 import { arriveMorph } from "./morph.js";
@@ -56,8 +56,8 @@ async function main() {
   const [briefIds, index] = await Promise.all([
     getOptionalJSON("data/briefs/index.json").then((x) => x || []), getJSON("data/web/situations.json")]);
   const isBuilt = index.some((x) => x.id === id);     // only built pages have a file (no 404 for the others)
-  const [built, srcList, tips, glossary, measures, refs, brief] = await Promise.all([
-    isBuilt ? getOptionalJSON(`data/web/situation/${encodeURIComponent(id)}.json`) : null, loadSources(), loadTips(), loadGlossary(), loadMeasures(),
+  const [built, srcList, glossary, measures, refs, brief] = await Promise.all([
+    isBuilt ? getOptionalJSON(`data/web/situation/${encodeURIComponent(id)}.json`) : null, loadSources(), loadGlossary(), loadMeasures(),
     getJSON("data/web/references.json"),
     briefIds.includes(id) ? getOptionalJSON(`data/briefs/${encodeURIComponent(id)}.json`) : null,
   ]);
@@ -86,12 +86,10 @@ async function main() {
         <header class="sit__head">${headHTML()}</header>
         <aside class="sit__side">
           <figure class="mini-globe" id="mini-globe" aria-busy="true" style="margin:0"><div style="aspect-ratio:1"></div></figure>
-          ${guideTip(tips.brief, "#key-numbers", "Key numbers")}
         </aside>
         <div class="sit__main">
           ${steps.map(([k, l], i) => `<section class="step" id="${anchor(k)}" aria-labelledby="h-${k}">
               <div class="step__head"><h2 class="step__title" id="h-${k}" tabindex="-1">${l}</h2></div>
-              ${k !== "brief" && tips[k] ? guideTip(tips[k], steps[i + 1] ? `#${anchor(steps[i + 1][0])}` : null, steps[i + 1]?.[1]) : ""}
               <div class="step__body" data-body="${k}"></div></section>`).join("")}
         </div>
       </div>

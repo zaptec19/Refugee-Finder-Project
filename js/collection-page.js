@@ -1,6 +1,5 @@
 // My collection (walkthrough screens 13 and 14): the key-numbers table, references and export.
-import { initPage, guideTip } from "./layout.js";
-import { tips as loadTips } from "./data.js";
+import { initPage } from "./layout.js";
 import { esc, numHTML, pctHTML, applyNumbers, fmt, fmtPct, mode } from "./format.js";
 import { icon } from "./icons.js";
 import { items, remove, update, add, move } from "./collection.js";
@@ -11,7 +10,6 @@ import { save } from "./charts.js";
 initPage({ page: "collection" });
 document.body.classList.add("page-collection");
 const main = document.getElementById("main");
-const tips = await loadTips();
 let style = store.get("cite-style", "apa");
 
 function render() {
@@ -26,7 +24,6 @@ function render() {
         <button class="btn btn--primary" type="button" id="export" ${list.length ? "" : "disabled"}>Export ${icon("download", { size: 16 })}</button>
       </div>
     </div>
-    ${guideTip(tips.collection)}
     ${list.length ? tableHTML(list) : emptyHTML()}
     ${list.length ? refsHTML(list) : ""}
     <p class="small muted" style="margin-top:32px">Your collection is stored only in this browser (not on any server). Clearing site data removes it; export to keep a copy.</p>
