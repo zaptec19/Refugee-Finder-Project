@@ -153,7 +153,8 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   }
   let t;
   input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(run, 120); });
-  input.addEventListener("focus", () => { if (input.value.trim()) run(); });
+  const isTopic = () => !!input.dataset.topic && input.value.trim() === input.dataset.topic;      // the page's own title (layout.js setTopic)
+  input.addEventListener("focus", () => { if (input.value.trim() && !isTopic()) run(); });
   input.addEventListener("keydown", (e) => {
     if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
     else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
@@ -163,6 +164,7 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   async function enter() {
     const q = input.value.trim();
     if (!q) return;
+    if (isTopic() && (active < 0 || panel.hidden)) { close(); return; }        // Enter on the unchanged title: nothing to do
     // a result picked with the arrow keys: like a click (no notice)
     const o = opts();
     if (active >= 0 && o[active] && !panel.hidden) { morphName(o[active]); location.href = o[active].getAttribute("href"); return; }

@@ -124,7 +124,7 @@ export function initPage({ page, dark = false } = {}) {
       ask.removeEventListener("focus", go);
       const { attachSearch } = await import("./search-ui.js");
       const ui = await attachSearch(ask);
-      if (ask.value.trim()) ui.run();
+      if (ask.value.trim() && ask.value !== ask.dataset.topic) ui.run();      // the page's own title: no results yet
     };
     ask.addEventListener("focus", go);
   }
@@ -151,7 +151,7 @@ export function initPage({ page, dark = false } = {}) {
     const setSearch = (open) => {
       header.classList.toggle("is-searching", open);
       searchBtn.setAttribute("aria-expanded", String(open));
-      if (open) { setMenu(false, { focus: false }); header.querySelector("#ask-top").focus(); }
+      if (open) { setMenu(false, { focus: false }); const a = header.querySelector("#ask-top"); a.focus(); if (a.value === a.dataset.topic) a.select(); }
       else { header.querySelector("#ask-top").dispatchEvent(new Event("search-close")); searchBtn.focus(); }
     };
     searchBtn.addEventListener("click", () => setSearch(true));
@@ -278,4 +278,75 @@ export function guideTip(tip, nextHref, nextLabel) {
   if (!tip) return "";
   return `<aside class="tip" aria-label="Guide tip"><span class="tip__n" aria-hidden="true">${tip.n}</span>
     <div>${esc(tip.text)}${nextHref ? ` <br><a href="${nextHref}">Next: ${esc(nextLabel)} &rsaquo;</a>` : ""}</div></aside>`;
+}
+
+// ------------------------------------------------------------------ the current topic in the top bar
+/** Situation, pair and country pages: the top bar's search box shows the page's title (Google-style), so the
+ *  reader always knows what they are looking at. Focus or a click selects it all (typing replaces it); clearing
+ *  it and leaving puts it back; Enter on the unchanged title does nothing. A small type tag sits before it.
+ *  Phones: the title shows as one line under the bar once the page heading has scrolled away; tapping it opens
+ *  the search with the title selected. On wide screens the box flashes once when the heading leaves the screen. */
+export function setTopic({ title, type = "Situation", heading = null } = {}) {
+  const input = document.getElementById("ask-top");
+  const form = document.getElementById("ask-top-form");
+  const header = document.querySelector(".topbar");
+  if (!input || !form || !title) return;
+  const first = !input.dataset.topic;
+  input.dataset.topic = title;
+  if (first || input.value === "" || input.value === input.dataset.prevTopic) input.value = title;
+  input.dataset.prevTopic = title;
+  input.setAttribute("aria-description", `Current page (${type.toLowerCase()}): ${title}. Type to search something else.`);
+  form.classList.add("has-topic");
+  let tag = form.querySelector(".ask__tag");
+  if (!tag) {
+    tag = document.createElement("span");
+    tag.className = "ask__tag";
+    tag.setAttribute("aria-hidden", "true");
+    input.before(tag);
+  }
+  tag.textContent = type;
+  // phones: the one-line title under the bar
+  let row = header.querySelector(".topbar__topic");
+  if (!row) {
+    row = document.createElement("button");
+    row.type = "button";
+    row.className = "topbar__topic";
+    header.append(row);
+    row.addEventListener("click", () => header.querySelector(".topbar__search-btn")?.click());
+  }
+  row.innerHTML = `<span class="topbar__topic-tag" aria-hidden="true">${esc(type)}</span><span class="topbar__topic-text">${esc(title)}</span>`;
+  row.setAttribute("aria-label", `Current page: ${title}. Search something else`);
+  if (!first) return;
+
+  let justFocused = false;
+  input.addEventListener("focus", () => {
+    if (input.value !== input.dataset.topic) return;
+    justFocused = true;
+    input.select();
+    requestAnimationFrame(() => { if (input.value === input.dataset.topic) input.select(); });
+  });
+  input.addEventListener("mouseup", (e) => { if (justFocused) { e.preventDefault(); justFocused = false; } });
+  input.addEventListener("keydown", () => { justFocused = false; });
+  input.addEventListener("blur", () => {
+    justFocused = false;
+    setTimeout(() => { if (!input.value.trim() && document.activeElement !== input) input.value = input.dataset.topic; }, 150);
+  });
+  input.addEventListener("search-close", () => { if (!input.value.trim()) input.value = input.dataset.topic; });
+
+  // the page heading: out of view -> the phone row shows; on wide screens the box flashes once
+  const h = heading || document.querySelector("main h1");
+  if (!h || !("IntersectionObserver" in window)) return;
+  let flashed = false;
+  const io = new IntersectionObserver(([e]) => {
+    const out = !e.isIntersecting && e.boundingClientRect.top < 0;
+    document.documentElement.classList.toggle("topic-out", out);
+    if (out && !flashed && !reducedMotion() && document.documentElement.clientWidth >= 600) {
+      flashed = true;
+      form.classList.remove("ask--flash");
+      void form.offsetWidth;
+      form.classList.add("ask--flash");
+      setTimeout(() => form.classList.remove("ask--flash"), 300);
+    }
+  }, { rootMargin: `-${parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-h")) || 64}px 0px 0px 0px` });
+  io.observe(h);
 }

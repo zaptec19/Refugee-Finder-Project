@@ -1,6 +1,6 @@
 // Situation page: header, step rail, mini globe and the ten steps (walkthrough screens 3 to 12).
 import { MAP_SOURCE, NOT_SEPARATE, PART_OF, NO_SHAPE } from "./config.js";
-import { initPage, guideTip } from "./layout.js";
+import { initPage, guideTip, setTopic } from "./layout.js";
 import { buildAuto, retarget } from "./auto-situation.js";
 import { getJSON, getOptionalJSON, sources as loadSources, tips as loadTips, glossary as loadGlossary, measures as loadMeasures } from "./data.js";
 import { esc, fmt, fmtPct, numHTML, pctHTML, fillTemplate, applyNumbers } from "./format.js";
@@ -96,6 +96,9 @@ async function main() {
       </div>
     </div>`;
 
+  // the top bar's search box shows this page's title (a built pair page is tagged "Pair")
+  setTopic({ title: document.getElementById("sit-title")?.textContent.trim() || S.title, type: S.auto ? "Pair" : "Situation",
+    heading: document.getElementById("sit-title") });
   const render = {
     brief: () => briefHTML(brief), key_numbers: keyNumbers, over_time: overTime, where_people_are: wherePeople,
     inside_outside: insideOutside, compare: compareSources, context, other_angles: otherAngles,

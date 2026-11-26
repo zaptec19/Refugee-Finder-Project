@@ -3,7 +3,7 @@
 // (OIP) are never added, UNHCR and IDMC IDP figures are never added, and IDMC's yearly new displacements (a count of
 // movements) get their own bar charts instead of sharing an axis with the year-end totals.
 import { MAP_SOURCE, NOT_SEPARATE, PART_OF, NO_SHAPE } from "./config.js";
-import { initPage } from "./layout.js";
+import { initPage, setTopic } from "./layout.js";
 import { getJSON, glossary as loadGlossary } from "./data.js";
 import { esc, numHTML, applyNumbers, fmt } from "./format.js";
 import { chartBlock, Plot, base, C, inkOf, isolatedMarks } from "./charts.js";
@@ -72,6 +72,7 @@ try {
     </section>
     <p class="small muted">${esc(c.notes.hosted)} ${esc(c.notes.from)} ${esc(c.notes.internal)}</p></div>`;
   applyNumbers(main);
+  setTopic({ title: main.querySelector("h1")?.textContent.trim(), type: "Country", heading: main.querySelector("h1") });
   main.querySelectorAll("[data-term-help]").forEach((b) => b.addEventListener("click", () => openTerm(G[b.dataset.termHelp], b)));
 
   // year-end totals: every series with data is drawn; a one-year series (or a lone year) as a labelled dot

@@ -1693,3 +1693,26 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .limx__key { display: grid; grid-template-columns: 22px 1fr; gap: var(--s-2); color: var(--muted); line-height: 1.4; }
 .limx__key strong { color: var(--ink); font-weight: 600; }
 .limx__key .lim__icon { padding-top: 1px; }
+
+/* ================================================================ the current topic in the top bar (26 Nov 2026) */
+.ask__tag { flex: none; margin-right: -2px; padding: 1px 6px; border-radius: 4px; background: var(--surface-2); color: var(--muted);
+  font-size: 11px; font-weight: 600; font-variant: all-small-caps; letter-spacing: 0.06em; line-height: 1.5; white-space: nowrap; }
+.topbar__ask.has-topic input { color: var(--ink); text-overflow: ellipsis; }
+.topbar__ask.has-topic input:focus { text-overflow: clip; }
+.ask--flash { animation: ask-flash 300ms ease-out; }
+@keyframes ask-flash { 0% { border-color: var(--accent-ui); box-shadow: 0 0 0 3px var(--accent-soft); } 100% { } }
+.topbar__topic { display: none; }
+@media (max-width: 599px) {
+  .topbar__ask .ask__tag { display: none; }
+  /* the title, one line under the bar, once the page heading has scrolled away (an overlay: nothing below moves) */
+  html.topic-out { --topbar-h: 88px; }
+  html.topic-out .topbar { height: 56px; }
+  html.topic-out .topbar__topic {
+    display: flex; align-items: center; gap: 8px; position: absolute; left: 0; right: 0; top: 56px; height: 32px; padding: 0 16px;
+    background: var(--bg-raised, var(--surface)); border: 0; border-bottom: 1px solid var(--line); color: var(--ink); font: inherit; font-size: var(--fs-13); text-align: left; cursor: pointer;
+  }
+  .topbar.is-searching .topbar__topic { display: none; }
+  .topbar__topic-tag { flex: none; color: var(--muted); font-size: 11px; font-weight: 600; font-variant: all-small-caps; letter-spacing: 0.06em; }
+  .topbar__topic-text { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500; }
+}
+@media (prefers-reduced-motion: reduce) { .ask--flash { animation: none; } }
