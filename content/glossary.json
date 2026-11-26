@@ -47,5 +47,12 @@
    "plain": "A point where a source changed how it counts, so figures before and after are not directly comparable.",
    "how_sources_differ": "For example, UNHCR added 'other people in need of international protection' in 2018; some people were counted in other groups before."},
   {"id": "refugee_convention", "term": "1951 Refugee Convention",
-   "plain": "The UN treaty that defines who is a refugee and what rights they have. Countries that have not joined it, such as India, handle refugees under their own laws and policies."}
+   "plain": "The UN treaty that defines who is a refugee and what rights they have. Countries that have not joined it, such as India, handle refugees under their own laws and policies."},
+  {"id": "demographics", "term": "Demographics", "measure_ids": ["demo_total", "demo_women", "demo_men", "demo_sex_unknown"],
+   "plain": "UNHCR's breakdown of a group by sex and age group (0–4, 5–11, 12–17, 18–59, 60 and over), reported when the host country gives it.",
+   "how_sources_differ": "Only UNHCR publishes it here, for refugees and some other groups. Coverage varies a lot between host countries and years, so part of a group is often recorded without sex or age.",
+   "source_ids": ["unhcr-demographics-2026"]},
+  {"id": "age_unknown", "term": "Age unknown", "measure_ids": ["demo_age_unknown"],
+   "plain": "People in UNHCR's demographic data whose age group isn't given. It includes everyone whose sex isn't recorded, because UNHCR gives age groups only within each sex.",
+   "source_ids": ["unhcr-demographics-2026"]}
 ]

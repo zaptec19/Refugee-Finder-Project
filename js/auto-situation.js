@@ -291,6 +291,15 @@ export async function buildAuto(id, { MEAS, measure = null } = {}) {
     brief_sources: [], footnotes: {}, raw_files: {}, raw_rows: {},
   };
   await fillMain(S, main, N, MEAS);
+  // who is in this group: age and sex (data/web/demo/<o>.json, made by build_web.py for pairs without a page file)
+  const idx = await getOptionalJSON("data/web/demo-index.json");
+  const demo = idx?.includes(o) ? (await getOptionalJSON(`data/web/demo/${o.toLowerCase()}.json`))?.[h] || null : null;
+  S.demo_group = `${N[o].d ? `${N[o].d} refugees` : `Refugees from ${N[o].p}`} in ${N[h].p}`;
+  S.demographics = demo ? { ...demo, group: S.demo_group, source_id: UNHCR.replace("pop", "demographics"), n_parts: 1, note: null, traceable: true } : null;
+  S.missing_items = demo ? [...(demo.sex.women + demo.sex.men === 0 ? [{ item: "Sex", why: "women and men are not reported for this group." }] : []),
+    ...(demo.age.age_known === 0 ? [{ item: "Age", why: "no age groups are reported for this group." }] : [])] : [];
+  S.steps.other_angles = true;
+  if (demo) S.datasets.push(S.demographics.source_id);
   return S;
 }
 

@@ -468,6 +468,8 @@ const AMOUNT_COLS = new Set([
   "new_displacement", "new_displacement_rounded", "total_displacement", "total_displacement_rounded",
   // team-typed government figures
   "value",
+  // UNHCR demographics (API download)
+  "Female 0 - 4", "Female 5 - 11", "Female 12 - 17", "Female 18 - 59", "Female 60", "Female other", "Female total", "Male 0 - 4", "Male 5 - 11", "Male 12 - 17", "Male 18 - 59", "Male 60", "Male other", "Male total", "Total",
 ]);
 
 function citations(pt) {

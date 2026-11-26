@@ -73,6 +73,9 @@
   "missing": [
     "undocumented Afghans"
   ],
+  "missing_why": {
+    "undocumented Afghans": "UNHCR's refugee figures don't include Afghans without documents, and no open dataset counts them."
+  },
   "reading": [
     "monsutti-2005",
     "unhcr-ssar-2012"

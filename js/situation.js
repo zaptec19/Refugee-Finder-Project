@@ -12,6 +12,7 @@ import { figuresFor } from "./map-figures.js";
 import { chartBlock, Plot, base, C, MEASURE_COLOR, yearAt, MARGIN, inkOf, isolatedMarks } from "./charts.js";
 import { openPopover, openPanel, bindGlossary } from "./popouts.js";
 import { openSide } from "./popout.js";
+import { ageSexBlock } from "./agesex.js";
 import { traceContext, openTrace as openTraceIn, linkNumbers, LABEL } from "./trace.js";
 import { pin, syncPins } from "./collection.js";
 import { cite, referenceList, loadCiteEngine } from "./cite.js";
@@ -903,17 +904,16 @@ function otherAngles(el) {
       <div class="kn__sub">${numHTML(o.per_1000.numerator)} ÷ ${numHTML(o.per_1000.denominator)} × 1,000 · ${o.per_1000.year}</div>
       <div class="kn__src small muted">Sources: UNHCR; World Bank (population)</div></article>`);
   }
-  if (o.demographics) {
-    const d = o.demographics.split;
-    const f = d.f_total || 0;
-    const m = d.m_total || 0;
-    cards.push(`<article class="card kn kn--small"><div class="kn__label">Women and men among refugees, ${o.demographics.year}</div>
-      <div class="sexbar" role="img" aria-label="Women ${fmt(f)}, men ${fmt(m)}"><span style="flex:${f};background:var(--c-stateless)"></span><span style="flex:${m};background:var(--c-oip)"></span></div>
-      <div class="kn__sub">Women ${numHTML(f)} · men ${numHTML(m)} · not split ${numHTML((d.total || 0) - f - m)}</div>
-      <div class="kn__src small muted">Source: UNHCR demographics</div></article>`);
-  }
   if (cards.length) el.insertAdjacentHTML("beforeend", `<div class="card-grid" style="margin-top:16px">${cards.join("")}</div>`);
-  if (!blocks.length && !cards.length) return `<p class="muted">No other angles in the data for this situation.</p>`;
+  // who is in this group: age and sex (pairs, two-host pages and all hosts of an origin)
+  const hasDemo = S.demographics !== undefined && S.type !== "idp";
+  if (hasDemo) {
+    const group = S.demographics?.group || S.demo_group || S.title;
+    ageSexBlock(el, S.demographics, { group, idBase: S.id, missing: S.missing_items || [],
+      requestHref: `request.html?about=${encodeURIComponent(S.title)}`, onTrace: (pt, origin) => openTrace(pt, origin) });
+    bindGlossary(el.querySelector(".asx"), GLOSS);
+  }
+  if (!blocks.length && !cards.length && !hasDemo) return `<p class="muted">No other angles in the data for this situation.</p>`;
 }
 
 // =================================================================== 10 limitations
@@ -933,11 +933,12 @@ const limGroup = (kind) => LIM_GROUPS.find((g) => g.kinds.includes(kind)) || LIM
 const limIcon = (g, size = 20) => `<span class="lim__icon lim__icon--${g.id}" role="img" aria-label="${esc(g.name)}">${icon(g.icon, { size })}</span>`;
 const LIM_SHOW = 3;          // a group with more items shows its first 2 and the rest under "Show all (n)"
 function limitationsHTML() {
+  const hasDemo = S.demographics !== undefined && S.type !== "idp";
   const item = (l) => {
     const g = limGroup(l.kind);
     return `<li class="lim">${limIcon(g)}
       <div><div class="lim__text">${esc(l.text)}</div><div class="lim__detail muted">${fillTemplate({ text: l.detail || "", nums: l.nums, pcts: l.pcts })}</div>
-      ${limSources(l)}${reviewNote(l.to_check)}</div></li>`;
+      ${limSources(l)}${l.link === "age-sex" && hasDemo ? `<a class="small lim__link" href="#age-sex">See the age and sex breakdown &rsaquo;</a>` : ""}${reviewNote(l.to_check)}</div></li>`;
   };
   const groups = LIM_GROUPS.map((g) => ({ g, list: S.limitations.filter((l) => limGroup(l.kind) === g) })).filter((x) => x.list.length);
   const groupsHTML = groups.map(({ g, list }) => {
@@ -956,24 +957,10 @@ function limitationsHTML() {
     <div class="limx__chips" role="list" aria-label="What the symbols mean">${groups.map(({ g }) =>
       `<details class="limx__chip" role="listitem"><summary>${limIcon(g, 16)}<span>${esc(g.name)}</span></summary><p>${esc(g.meaning)}</p></details>`).join("")}</div>` : "";
   const items = `<div class="limx"><div class="limx__in">${legend}<div class="limx__groups">${groupsHTML}</div></div></div>`;
-  // UNHCR's demographics file: the share of this group split into women and men, and the share also split into
-  // age groups (UNHCR gives age groups within each sex, so an age split always has a sex split too)
-  const agePct = Math.round((S.demographics_coverage || 0) * 1000) / 10;
-  const sexPct = Math.round((S.sex_coverage || 0) * 1000) / 10;
-  const covRow = (label, v, what) => `<div class="cov__row"><span class="cov__label">${label}</span>
-      <div class="cov__bar" role="img" aria-label="${esc(`${label}: ${v ? `${fmtPct(v)} of the group` : "none of the group"}`)}"><span style="width:${v}%"></span></div>
-      <span class="cov__pct">${v >= 100 ? "all of the group" : v ? `${pctHTML(v)} of the group` : `none (${what})`}</span></div>`;
-  const demo = S.type === "pair" && !S.demographics_year ? `
-    <h3 class="sub-h">How much of this group is broken down</h3>
-    <p class="small muted cov__intro">UNHCR publishes no breakdown by sex or age for this group.</p>` : S.type === "pair" ? `
-    <h3 class="sub-h">How much of this group is broken down (${S.demographics_year})</h3>
-    <p class="small muted cov__intro">The share of this group that UNHCR's demographic data splits by sex, and by age group. The rest is filed as "unknown".</p>
-    <div class="cov">
-      ${covRow("Split into women and men", sexPct, "all filed as sex unknown")}
-      ${covRow("Split into age groups", agePct, "all filed as age unknown")}
-    </div>` : "";
-  const missing = S.missing.length ? `<div class="missing"><span>What's missing:</span>${S.missing.map((m) => `<span class="chip chip--static">${esc(m)}</span>`).join("")}</div>` : "";
-  return `${items}${demo}${missing}
+  const mi = hasDemo ? [] : (S.missing_items || []);
+  const missing = mi.length ? `<h3 class="sub-h">What's missing</h3><ul class="asx-missing">${mi.map((x) => `<li><strong>${esc(x.item)}:</strong> ${esc(x.why)}</li>`).join("")}</ul>
+    <p class="small"><a href="request.html?about=${encodeURIComponent(S.title)}">Know a source? Request data &rsaquo;</a></p>` : "";
+  return `${items}${missing}
     <p style="margin-top:20px"><a href="learn.html#organisations">About the organisations: UNHCR, IDMC and UCDP, their mandates and limits &rsaquo;</a></p>`;
 }
 

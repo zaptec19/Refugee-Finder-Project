@@ -1722,3 +1722,40 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .cov { display: grid; grid-template-columns: 190px minmax(80px, 1fr) auto; align-items: center; gap: var(--s-2) var(--s-3); }
 .cov__row { display: contents; }
 @media (max-width: 860px) { .cov { grid-template-columns: minmax(0, 1fr) auto; } .cov__label { grid-column: 1 / -1; margin-top: var(--s-1); } }
+
+/* ================================================================ who is in this group: age and sex (26 Nov 2026) */
+:root {
+  --as-1: color-mix(in srgb, var(--c-refugees) 100%, var(--surface));
+  --as-2: color-mix(in srgb, var(--c-refugees) 80%, var(--surface));
+  --as-3: color-mix(in srgb, var(--c-refugees) 62%, var(--surface));
+  --as-4: color-mix(in srgb, var(--c-refugees) 45%, var(--surface));
+  --as-5: color-mix(in srgb, var(--c-refugees) 30%, var(--surface));
+}
+.asx { margin-top: var(--s-8); scroll-margin-top: calc(var(--topbar-h) + var(--s-4)); }
+.asx__intro { max-width: var(--measure); margin: 0 0 var(--s-4); }
+.asx__h4 { margin: var(--s-4) 0 var(--s-2); font-size: var(--fs-15); font-weight: 600; }
+.asx-chart .asx__h4:first-child { margin-top: 0; }
+.asx-bar { display: flex; height: 16px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
+.asx-seg { display: block; min-width: 3px; }
+.asx-seg--women { background: var(--as-1); }
+.asx-seg--men { background: var(--as-3); }
+.asx-seg--age1 { background: var(--as-1); } .asx-seg--age2 { background: var(--as-2); } .asx-seg--age3 { background: var(--as-3); }
+.asx-seg--age4 { background: var(--as-4); } .asx-seg--age5 { background: var(--as-5); }
+.asx-seg--unknown { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line-strong); outline: 1px dotted var(--muted); outline-offset: -1px; }
+.asx-legend { list-style: none; margin: var(--s-2) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-5); font-size: var(--fs-13); }
+.asx-legend li { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.asx-sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.asx-legend__n { font-variant-numeric: tabular-nums; font-weight: 600; }
+.asx-legend__p { color: var(--muted); font-variant-numeric: tabular-nums; }
+.asx__sentence { margin: var(--s-3) 0 0; max-width: var(--measure); }
+.asx-notes, .asx-missing { margin: 0; padding-left: 1.2em; max-width: var(--measure); display: flex; flex-direction: column; gap: var(--s-1); }
+.lim__link { display: inline-block; margin-top: 2px; }
+@media (max-width: 599px) { .asx-legend { gap: var(--s-1) var(--s-3); } }
+:root[data-theme="dark"] {
+  --as-1: var(--c-refugees);
+  --as-2: color-mix(in srgb, var(--c-refugees) 74%, #ffffff);
+  --as-3: color-mix(in srgb, var(--c-refugees) 52%, #ffffff);
+  --as-4: color-mix(in srgb, var(--c-refugees) 34%, #ffffff);
+  --as-5: color-mix(in srgb, var(--c-refugees) 18%, #ffffff);
+}
+.asx-legend__n, .asx-legend__p { margin-left: 2px; }

@@ -8,7 +8,8 @@ import { getJSON, glossary as loadGlossary } from "./data.js";
 import { esc, numHTML, applyNumbers, fmt } from "./format.js";
 import { chartBlock, Plot, base, C, inkOf, isolatedMarks } from "./charts.js";
 import { renderMiniGlobe } from "./minimap.js";
-import { openTerm } from "./popouts.js";
+import { openTerm, bindGlossary } from "./popouts.js";
+import { ageSexBlock } from "./agesex.js";
 
 initPage({ page: "country" });
 document.body.classList.add("page-country");
@@ -67,6 +68,7 @@ try {
       These are not added to the totals above and are not drawn on the same axis.</p>
       ${idmcFlows.map((k) => `<div id="flow-${k}"></div>`).join("")}</section>` : ""}
     ${topHTML}
+    ${c.demographics !== undefined ? `<section class="learn__section" id="age-sex-wrap"></section>` : ""}
     <section class="learn__section"><h2>Situations involving ${esc(c.name)}</h2>
       ${Object.entries(groups).map(([g, list]) => `<h3 class="sub-h">${esc(g)} (${list.length})</h3><ul class="plain-list">${list.slice(0, 40).map((s) => `<li><a href="situation.html?id=${esc(s.id)}">${esc(s.title)}</a> <span class="small muted tabular">${s.years ? `${s.years[0]} to ${s.years[1]}` : ""}</span></li>`).join("")}</ul>`).join("") || '<p class="muted">No situations.</p>'}
     </section>
@@ -74,6 +76,12 @@ try {
   applyNumbers(main);
   setTopic({ title: main.querySelector("h1")?.textContent.trim(), type: "Country", heading: main.querySelector("h1") });
   main.querySelectorAll("[data-term-help]").forEach((b) => b.addEventListener("click", () => openTerm(G[b.dataset.termHelp], b)));
+  // who are the refugees hosted here: age and sex (sums over origins; plain numbers, like the rest of this page)
+  const asw = main.querySelector("#age-sex-wrap");
+  if (asw) {
+    ageSexBlock(asw, c.demographics, { group: c.demographics?.group || `refugees hosted in ${c.name}`, idBase: `country-${iso.toLowerCase()}` });
+    bindGlossary(asw, Object.values(G));
+  }
 
   // year-end totals: every series with data is drawn; a one-year series (or a lone year) as a labelled dot
   const lines = (obj) => Object.entries(obj).filter(([, v]) => v.some(([, x]) => x != null))

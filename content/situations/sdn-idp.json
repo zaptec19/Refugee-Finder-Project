@@ -52,6 +52,10 @@
     "IDPs by state",
     "returns inside Sudan by year"
   ],
+  "missing_why": {
+    "IDPs by state": "the figures here are national totals; no state-level series is used.",
+    "returns inside Sudan by year": "the datasets used here don't give returns inside Sudan year by year."
+  },
   "reading": [
     "flint-dewaal-2008",
     "idmc-grid-2025"

@@ -134,7 +134,17 @@
   "rows": 1482383,
   "clean_file_bytes": 7444518,
   "measures": [
-   "demographics"
+   "demographics",
+   "demo_total",
+   "demo_women",
+   "demo_men",
+   "demo_sex_unknown",
+   "demo_age_0_4",
+   "demo_age_5_11",
+   "demo_age_12_17",
+   "demo_age_18_59",
+   "demo_age_60",
+   "demo_age_unknown"
   ]
  },
  {

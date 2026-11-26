@@ -484,5 +484,135 @@
    2016,
    2016
   ]
+ },
+ {
+  "id": "demo_total",
+  "label": "Refugees in the demographic data",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "All refugees in this group in UNHCR's demographic data for the year (the row's Total).",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_women",
+  "label": "Refugee women",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Refugees recorded as female, all ages (the row's 'Female total').",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_men",
+  "label": "Refugee men",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Refugees recorded as male, all ages (the row's 'Male total').",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_sex_unknown",
+  "label": "Refugees with sex not recorded",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: Total minus 'Female total' and 'Male total'. UNHCR gives no sex for these people.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_0_4",
+  "label": "Refugees aged 0–4",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female 0 - 4' plus 'Male 0 - 4'.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_5_11",
+  "label": "Refugees aged 5–11",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female 5 - 11' plus 'Male 5 - 11'.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_12_17",
+  "label": "Refugees aged 12–17",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female 12 - 17' plus 'Male 12 - 17'.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_18_59",
+  "label": "Refugees aged 18–59",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female 18 - 59' plus 'Male 18 - 59'.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_60",
+  "label": "Refugees aged 60 and over",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female 60' plus 'Male 60'.",
+  "years_in_data": null
+ },
+ {
+  "id": "demo_age_unknown",
+  "label": "Refugees with age unknown",
+  "source_ids": [
+   "unhcr-demographics-2026"
+  ],
+  "kind": "stock",
+  "unit": "people",
+  "start_year": 2001,
+  "group": "refugees",
+  "plain": "Worked out from the row: 'Female other' plus 'Male other' (age unknown), plus everyone whose sex isn't recorded (UNHCR gives age groups only within each sex).",
+  "years_in_data": null
  }
 ]
