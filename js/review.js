@@ -12,7 +12,7 @@ export function reviewNote(text, tag = "div") {
   return `<${tag} class="review-note"><strong>Review note:</strong> ${esc(text)}</${tag}>`;
 }
 
-const UNVERIFIED_TIP = "Not yet checked against the original document. Shown exactly as the source gives it.";
+const UNVERIFIED_TIP = "Still to be confirmed against the original document. Shown exactly as the source gives it.";
 
 /** Neutral tag for a figure or source whose details are still being confirmed. */
 export function unverifiedTag(note) {

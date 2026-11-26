@@ -19,7 +19,7 @@ export const STEPS = [
     text: "Switch between Indian (1,00,000) and international (100,000) numbers; everything follows it, even exports. Turn on Guide (top right) for a short tip on each part of a page.",
     go: EXAMPLE, note: "Next: a real example" },
   { page: "situation", target: "#brief", title: "Start with the brief",
-    text: "What happened, why people moved, when and how, in plain words. The label under it says that AI wrote it and whether the team has checked it." },
+    text: "What happened, why people moved, when and how, in plain words. The label under it says it was written with AI and lists its sources." },
   { page: "situation", target: "#key-numbers .kn", title: "Key numbers",
     text: "Press ? to see what a number counts and how reliable it is. Click the number itself to trace it back to the original dataset row." },
   { page: "situation", target: "#over-time", title: "Over time",
