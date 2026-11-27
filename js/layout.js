@@ -349,9 +349,10 @@ export function setTopic({ title, type = "Situation", heading = null } = {}) {
 }
 
 // ------------------------------------------------------------------ Back (js/trail.js)
-/** The top bar's Back: names where it goes; closes an open side panel first; ends a running tour like Skip. */
+/** The top bar's Back (js/trail.js): the previous brief, or Home; never on the home page. While the side panel is open
+ *  it reads "Close details" and closes it; a running tour ends as Skip does. */
 function wireBack(page) {
-  initTrail(page === "home" ? "Home" : null);
+  initTrail(page);
   const btn = document.querySelector(".topbar__back");
   if (!btn) return;
   const label = btn.querySelector(".topbar__back-label");
@@ -362,9 +363,10 @@ function wireBack(page) {
     btn.setAttribute("aria-label", full);
     btn.hidden = false;
   };
-  const refresh = async () => {
+  const refresh = () => {
+    if (page === "home") { btn.hidden = true; return; }
     if (sideOpen()) { show("Close details", "Close details"); return; }
-    target = await backTarget(page);
+    target = backTarget(page);
     if (!target) { btn.hidden = true; return; }
     show(target.label, target.title);
   };
@@ -375,6 +377,7 @@ function wireBack(page) {
     if (target) goBack(target);
   });
   document.addEventListener("sp-settled", refresh);
+  document.addEventListener("trail-change", refresh);
   // the page's own title, once it is drawn (most pages draw their h1 by script)
   const h1 = () => document.querySelector("main h1")?.textContent.trim();
   if (h1()) setTrailTitle(h1());

@@ -15,7 +15,7 @@ const EXAMPLE = "situation.html?id=lka-ind";
 
 // The top bar, one card per button (on phones the items inside the menu point at the menu button; the card names them)
 const TOP = {
-  back: { target: ".topbar__back", title: "Back", text: "Goes back one step, and names where it goes. It never takes you off the site." },
+  back: { target: ".topbar__back", title: "Back", text: "Back goes to the brief you were reading before, or to the home page. It names where it goes." },
   fmt: { target: ".topbar__fmt", title: "Number format",
     text: "Indian (1,00,000) or international (100,000). Every number, chart and export follows it." },
   learnPage: { target: ".topbar__learn", title: "Learn",

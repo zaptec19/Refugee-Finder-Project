@@ -3,7 +3,6 @@ import { initPage, tourAnchor } from "./layout.js";
 import { getJSON } from "./data.js";
 import { createGlobe, THRESHOLDS, RAMP } from "./globe.js";
 import { fmt, esc } from "./format.js";
-import { noteSearch } from "./trail.js";
 import { icon } from "./icons.js";
 import { attachSearch } from "./search-ui.js";
 import { warmUp } from "./search.js";
@@ -67,8 +66,6 @@ import("./welcome.js").then((m) => {
 warmUp();                       // load the search data and model in the background
 const input = document.getElementById("q");
 const searchUI = await attachSearch(input);
-// the query typed here: Back from the page it leads to says "Back to search" and brings it back
-input.addEventListener("input", () => noteSearch(input.value.trim()));
 document.querySelectorAll("[data-q]").forEach((b) => b.addEventListener("click", () => {
   input.value = b.dataset.q;
   input.focus();
