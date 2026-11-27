@@ -47,7 +47,7 @@ try {
       <tbody>${top.map((o) => `<tr><td><a href="situation.html?id=${o.origin_iso3.toLowerCase()}-${iso.toLowerCase()}">${esc(o.name)}</a></td>
         <td class="num">${cell(o.refugees ?? o.value)}</td>${hostsOip ? `<td class="num">${oipByOrigin ? cell(o.oip) : ""}</td>` : ""}</tr>`).join("")}</tbody></table></div>
       ${hostsOip && !oipByOrigin ? `<p class="small muted">OIP not split by origin in this data.</p>` : ""}
-      <p class="small muted">Refugees and other people in need of international protection are separate UNHCR groups; the columns are never added. UNHCR, year-end ${topYear}.</p></section>` : "";
+      <p class="small muted">${hostsOip ? "Refugees and other people in need of international protection are separate UNHCR groups; the columns are never added. " : ""}UNHCR, year-end ${topYear}.</p></section>` : "";
 
   const idmcFlows = ["idmc_conflict_new", "idmc_disaster_new"].filter((k) => (c.internal[k] || []).some(([, v]) => v != null));
   main.innerHTML = `<div class="page page--narrow">
