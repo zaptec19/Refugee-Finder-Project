@@ -1779,3 +1779,14 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .topbar__tour .icon { flex: none; }
 .help-tip--below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--ink); }
 .tour-card__jump { margin: 6px 0 0; }
+
+/* home top bar: no number switch and no Learn (the other pages keep both); the rest spread evenly (27 Nov 2026) */
+body.page-home .topbar__inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+@media (max-width: 860px) {
+  :root:has(body.page-home) { --topbar-h: 56px; }
+  body.page-home .topbar__inner { grid-template-columns: minmax(0, 1fr) auto auto auto; grid-template-rows: 56px; grid-template-areas: "brand theme tour coll"; }
+  body.page-home .topbar__ask-slot { display: none; }
+}
+@media (max-width: 599px) {
+  body.page-home .topbar__inner, body.page-home .topbar__inner { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand menu"; }
+}

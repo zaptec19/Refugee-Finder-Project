@@ -66,13 +66,11 @@ export const TOURS = {
       text: "Countries are shaded by how many people were displaced from them. Click a country to preview it, and again to open it." },
     { page: "home", part: "Home", target: ".home__foot", title: "Colours and years",
       text: "The key under the globe says what each shade means. The year button changes the year shown, with the full colour legend." },
-    { page: "home", part: "Home", ...TOP.fmt },
-    { page: "home", part: "Home", target: ".topbar__learn", title: "Learn",
-      text: "Plain explanations of the terms (refugee, IDP, OIP…), how the sources differ, and how to read the numbers." },
     { page: "home", part: "Home", ...TOP.coll },
     { page: "home", part: "Home", title: "A real example", go: EXAMPLE, note: "Next: a real example",
       text: "Next, the tour opens Sri Lankan refugees in India and walks through the whole page. You can come back home at any time." },
-    ...PAGE_CARDS.filter((c) => c.id !== "fmt").map((c) => ({ ...c, page: "situation", part: "Example page" })),
+    // the example page: every page card, with the number format and Learn (the home top bar has neither)
+    ...[...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)].map((c) => ({ ...c, page: "situation", part: "Example page" })),
   ],
   situation: [...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)],
   country: [

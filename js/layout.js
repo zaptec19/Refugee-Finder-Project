@@ -191,10 +191,10 @@ function topbarHTML(page, dark, theme) {
       <button class="topbar__back" type="button" hidden>${icon("back", { size: 18 })}<span class="topbar__back-label"></span></button>
       <a class="brand" href="index.html"${cur("home")}>Refugee Finder</a>
     </div>
-    <div class="seg topbar__fmt" role="group" aria-label="Number format">
+${page === "home" ? "" : `    <div class="seg topbar__fmt" role="group" aria-label="Number format">
       <button type="button" data-fmt="ind" aria-pressed="${m === "ind"}" title="Indian format: lakh and crore">1,00,000</button>
       <button type="button" data-fmt="intl" aria-pressed="${m === "intl"}" title="International format">100,000</button>
-    </div>
+    </div>`}
     ${page === "home" ? '<span class="topbar__ask-slot" aria-hidden="true"></span>' : `
     <form class="ask topbar__ask" id="ask-top-form" role="search" action="index.html" method="get" onsubmit="return false">
       ${icon("search")}
@@ -205,7 +205,7 @@ function topbarHTML(page, dark, theme) {
     <button class="icon-btn topbar__search-btn" type="button" aria-label="Search" aria-expanded="false" aria-controls="ask-top-form">${icon("search")}</button>`}
     <button class="icon-btn topbar__menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="topbar-menu">${icon("menu")}<span class="count-dot" aria-hidden="true" hidden></span></button>
     <nav class="topbar__right" id="topbar-menu" aria-label="Site">
-      <a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>
+      ${page === "home" ? "" : `<a class="topbar__link topbar__learn" href="learn.html"${cur("learn")}>Learn</a>`}
       <button class="icon-btn topbar__theme" id="theme-toggle" type="button" aria-pressed="${theme === "dark"}"
         aria-label="${theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}"><span class="topbar__theme-icon">${icon(theme === "dark" ? "sun" : "moon")}</span><span class="menu-only topbar__theme-text">${theme === "dark" ? "Light mode" : "Dark mode"}</span></button>
 ${hasTour ? `<button class="pill topbar__tour" id="tour-btn" type="button" aria-label="How to use this page" title="A short tour of this page">${icon("question", { size: 16 })}<span class="pill__text">How to use</span></button>` : ""}
