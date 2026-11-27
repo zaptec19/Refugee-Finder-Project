@@ -12,12 +12,16 @@ const AGES = [["demo_age_0_4", "0–4"], ["demo_age_5_11", "5–11"], ["demo_age
 const SOURCE = "Source: UNHCR Refugee Data Finder, demographics (2026 release). Year-end figures.";
 const term = (id, word) => `<span class="term" tabindex="0" data-term="${id}">${word}</span>`;
 
+/** The people type the block counts (the page's own: refugees, asylum seekers or OIP), as words. */
+const words = (D) => D.words || "refugees";
+const cap = (t) => t[0].toUpperCase() + t.slice(1);
+
 /** The block's figures by measure id: values and shares exactly as the pipeline gives them. */
 function figures(D) {
   const s = D.sex;
   const a = D.age;
   const out = {
-    demo_total: { label: "All refugees", value: D.total, pct: null },
+    demo_total: { label: `All ${words(D)}`, value: D.total, pct: null },
     demo_women: { label: "Women", value: s.women, pct: s.pct.women },
     demo_men: { label: "Men", value: s.men, pct: s.pct.men },
     demo_sex_unknown: { label: "Sex not recorded", value: s.sex_unknown, pct: s.pct.sex_unknown },
@@ -28,10 +32,10 @@ function figures(D) {
 }
 
 /** A stacked bar with a legend row under it (labels never sit on small segments). */
-function bar(kind, segs, total, words) {
+function bar(kind, segs, total, words, who = "refugees") {
   const shown = segs.filter((x) => x.value > 0);
   const said = shown.map((x) => `${x.label} ${fmt(x.value)} (${fmtPct(x.pct)})`).join(", ");
-  return `<div class="asx-bar asx-bar--${kind}" role="img" aria-label="${esc(`${words} of ${fmt(total)} refugees: ${said}.`)}">
+  return `<div class="asx-bar asx-bar--${kind}" role="img" aria-label="${esc(`${words} of ${fmt(total)} ${who}: ${said}.`)}">
       ${shown.map((x) => `<span class="asx-seg asx-seg--${x.cls}" style="flex-grow:${x.value}" data-v="${x.value}"></span>`).join("")}</div>
     <ul class="asx-legend">${shown.map((x) => `<li><i class="asx-sw asx-seg--${x.cls}" aria-hidden="true"></i><span class="asx-legend__what">${x.labelHTML || esc(x.label)}</span>
       <span class="asx-legend__n">${x.trace ? `<span class="num-link" role="button" tabindex="0" data-m="${x.m}">${numHTML(x.value)}</span>` : numHTML(x.value)}</span>
@@ -49,7 +53,7 @@ export function ageSexBlock(host, D, { id = "age-sex", group = "this group", mis
       <p class="small"><a href="${esc(requestHref)}">Know a source? Request data &rsaquo;</a></p>` : "";
   if (!D) {
     wrap.innerHTML = `<h3 class="sub-h" id="${id}-h">Who is in this group: age and sex</h3>
-      <p>UNHCR has no age or sex figures for this group.</p>
+      <p>UNHCR has no age or sex breakdown for this group.</p>
       <p class="small muted">So this data can't tell you how many are women, men or children. ${SOURCE.replace("Source: ", "Checked: ")}</p>${missingHTML}`;
     return wrap;
   }
@@ -62,7 +66,7 @@ export function ageSexBlock(host, D, { id = "age-sex", group = "this group", mis
   const ageKnown = D.age.age_known > 0;
 
   wrap.innerHTML = `<h3 class="sub-h" id="${id}-h">Who is in this group: age and sex</h3>
-    <p class="asx__intro">UNHCR reports refugees by sex and age group when the host country gives it that information (its ${term("demographics", "demographics")}). Here's how much of that is known for ${esc(group)} in ${D.year}.</p>
+    <p class="asx__intro">UNHCR reports ${esc(words(D))} by sex and age group when the host country gives it that information (its ${term("demographics", "demographics")}). Here's how much of that is known for ${esc(group)} in ${D.year}.</p>
     <div class="asx__bars"></div>
     <div class="asx__time"></div>
     <h4 class="asx__h4">What this means for your research</h4>
@@ -75,21 +79,21 @@ export function ageSexBlock(host, D, { id = "age-sex", group = "this group", mis
     .map((r) => ({ ...r, raw_ref: trace ? (D.raw_ref ?? null) : undefined }));
   chartBlock(wrap.querySelector(".asx__bars"), {
     id: `${idBase}-age-sex`, filename: `${idBase}_age_sex_${D.year}`,
-    title: `Sex and age of ${esc(group)}, ${D.year} (${numHTML(D.total)} refugees)`,
+    title: `Sex and age of ${esc(group)}, ${D.year} (${numHTML(D.total)} ${esc(words(D))})`,
     summary: `Two stacked bars: sex (women, men, not recorded) and age group (0–4 to 60 and over, age unknown) of ${group} in ${D.year}.`,
     source: `${SOURCE}${D.note ? ` ${esc(D.note)}.` : ""}`,
     draw: () => {
       const d = document.createElement("div");
       d.className = "asx-chart";
-      d.innerHTML = `<h4 class="asx__h4">Sex</h4>${bar("sex", sexSegs, D.total, "Sex")}
+      d.innerHTML = `<h4 class="asx__h4">Sex</h4>${bar("sex", sexSegs, D.total, "Sex", words(D))}
         <p class="asx__sentence">${fillTemplate(D.sentences.sex)}</p>
         <h4 class="asx__h4">Age</h4>
-        ${ageKnown ? bar("age", ageSegs, D.total, "Age group") : ""}
+        ${ageKnown ? bar("age", ageSegs, D.total, "Age group", words(D)) : ""}
         <p class="asx__sentence">${fillTemplate(D.sentences.age)}</p>`;
       return d;
     },
     table: { columns: [{ key: "part", label: "", type: "text" }, { key: "group", label: "Group", type: "text" },
-      { key: "value", label: "Refugees", type: "num" }, { key: "share", label: "Share of the group", type: "pct" }], rows },
+      { key: "value", label: cap(words(D)), type: "num" }, { key: "share", label: "Share of the group", type: "pct" }], rows },
     onTrace: trace ? (row, t) => onTrace(point(D, row.m, F, group), { el: t, flyFrom: t.querySelector("[data-num]") }) : undefined,
   });
 
@@ -109,7 +113,7 @@ export function ageSexBlock(host, D, { id = "age-sex", group = "this group", mis
           Plot.lineY(pts, { x: "year", y: "v", stroke: "k", strokeWidth: 2 }),
           Plot.text(pts.filter((p) => p.year === ser[ser.length - 1][0]), { x: "year", y: "v", text: "k", dx: 8, textAnchor: "start", fill: "k", lineWidth: w < 520 ? 5 : 16, className: "end-label" }),
           Plot.tip(pts, Plot.pointerX({ x: "year", y: "v", title: (p) => `${p.k}, ${p.year}: ${fmtPct(p.v)}` }))] }),
-      table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "total", label: "Refugees", type: "num" },
+      table: { columns: [{ key: "year", label: "Year", type: "year" }, { key: "total", label: cap(words(D)), type: "num" },
         { key: "sk", label: "Sex recorded", type: "num" }, { key: "sp", label: "Share", type: "pct" },
         { key: "ak", label: "Age recorded", type: "num" }, { key: "ap", label: "Share", type: "pct" }],
         rows: ser.map((r) => ({ year: r[0], total: r[1], sk: r[2], ak: r[3], sp: r[4], ap: r[5] })) },
@@ -152,6 +156,6 @@ export function ageSexBlock(host, D, { id = "age-sex", group = "this group", mis
 function point(D, m, F, group) {
   const f = F[m];
   return { value: f.value, unit: "people", year: D.year, measure_id: m, source_id: D.source_id || "unhcr-demographics-2026",
-    raw_ref: D.raw_ref || null, note: D.note || null, label: `${f.label === "All refugees" ? "Refugees" : f.label}, ${group}, ${D.year}` };
+    raw_ref: D.raw_ref || null, note: D.note || null, label: `${f.label === `All ${words(D)}` ? cap(words(D)) : f.label}, ${group}, ${D.year}` };
 }
 

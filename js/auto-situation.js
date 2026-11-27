@@ -58,6 +58,9 @@ function peak(s) {
 
 // Same rule as build_web.py over_time_headline: first year, a turning point (peak or low) if the series turns, latest year.
 function overTimeHeadline(subject, s) {
+  // never start on a 0 ("0 or not reported"): the title starts at the first figure above 0
+  const lead = s.findIndex((p) => p.value > 0);
+  if (lead > 0) s = s.slice(lead);
   if (s.length < 2) return null;
   const first = s[0];
   const last = s[s.length - 1];
@@ -217,10 +220,13 @@ async function fillMain(S, measure, N, MEAS) {
       raw_ref: pp.raw_ref, footnote: null, years: pky,
       explainer: explainer(MEAS, measure, { what: `The highest year-end figure in UNHCR's series for this group (${s[0].year} to ${s[s.length - 1].year}).` }) });
   } else if (!notRecorded && s.length > 1) {
-    const fp = s[0];
-    kn.push({ label: `In ${fp.year}`, value: fp.value, year: fp.year, measure_id: measure, source_id: UNHCR, sub: "first year in UNHCR's data", unit: "people",
+    // never a 0 ("0 or not reported"): the first year with a figure above 0
+    const fp = s.find((p) => p.value > 0) || s[0];
+    const lead0 = fp !== s[0];
+    kn.push({ label: lead0 ? `First figure (${fp.year})` : `In ${fp.year}`, value: fp.value, year: fp.year, measure_id: measure, source_id: UNHCR,
+      sub: lead0 ? `UNHCR shows 0 or no report before ${fp.year}` : "first year in UNHCR's data", unit: "people",
       raw_ref: fp.raw_ref, footnote: null,
-      explainer: explainer(MEAS, measure, { what: `The first year-end figure in UNHCR's series for this group (${fp.year}). The latest figure (${lp.year}) is also the highest on record.` }) });
+      explainer: explainer(MEAS, measure, { what: `The first year-end figure above 0 in UNHCR's series for this group (${fp.year}). ${lead0 ? `Before ${fp.year} UNHCR's data shows 0, which can mean 0 or not reported. ` : ""}The latest figure (${lp.year}) is also the highest on record.` }) });
   }
   if (S.share.length) {
     const ls = S.share[S.share.length - 1];
@@ -255,11 +261,34 @@ async function fillMain(S, measure, N, MEAS) {
   return S;
 }
 
-/** Point a built pair page at another people type (?m=asylum_seekers): key numbers, charts and headlines follow it. */
+/** Point a built pair page at another people type (?m=asylum_seekers): key numbers, charts, headlines and the age
+ *  and sex block follow it. */
 export async function retarget(S, measure, MEAS) {
   if (S.type !== "pair" || !CROSS.includes(measure) || measure === S.main_measure) return S;
   const N = await loadNames();
-  return fillMain(S, measure, N, MEAS);
+  await fillMain(S, measure, N, MEAS);
+  await attachDemo(S, N);
+  return S;
+}
+
+/** Who is in this group: age and sex, for the page's own people type only (data/web/demo/<o>.json for refugees,
+ *  <o>-<measure>.json for asylum seekers and OIP; demo-index.json says which exist). No row for this type: null, and
+ *  the block says UNHCR has no age or sex breakdown for this group (never another type's or another year's). */
+async function attachDemo(S, N) {
+  const o = S.origin_iso3, h = S.host_iso3, m = S.main_measure;
+  const idx = await getOptionalJSON("data/web/demo-index.json");
+  const has = !!idx && !Array.isArray(idx) && (idx[o] || []).includes(m);
+  const file = m === "refugees" ? `${o.toLowerCase()}.json` : `${o.toLowerCase()}-${m}.json`;
+  const demo = has ? (await getOptionalJSON(`data/web/demo/${file}`))?.[h] || null : null;
+  const src = UNHCR.replace("pop", "demographics");
+  S.demo_group = groupTitle(N, o, m, h);
+  const words = { refugees: "refugees", asylum_seekers: "asylum seekers", oip: "people in need of international protection" }[m];
+  S.demographics = demo ? { ...demo, measure: m, words, group: S.demo_group, source_id: src, n_parts: 1, note: null, traceable: true } : null;
+  S.missing_items = demo ? [...(demo.sex.women + demo.sex.men === 0 ? [{ item: "Sex", why: "women and men are not reported for this group." }] : []),
+    ...(demo.age.age_known === 0 ? [{ item: "Age", why: "no age groups are reported for this group." }] : [])] : [];
+  S.steps = { ...(S.steps || {}), other_angles: true };
+  S.datasets = (S.datasets || []).filter((d) => d !== src);
+  if (demo) S.datasets.push(src);
 }
 
 /** Parse "<o>-<h>" / "<c>-idp" into ISO3 codes, or null. */
@@ -309,15 +338,7 @@ export async function buildAuto(id, { MEAS, measure = null } = {}) {
     brief_sources: [], footnotes: {}, raw_files: {}, raw_rows: {},
   };
   await fillMain(S, main, N, MEAS);
-  // who is in this group: age and sex (data/web/demo/<o>.json, made by build_web.py for pairs without a page file)
-  const idx = await getOptionalJSON("data/web/demo-index.json");
-  const demo = idx?.includes(o) ? (await getOptionalJSON(`data/web/demo/${o.toLowerCase()}.json`))?.[h] || null : null;
-  S.demo_group = `${N[o].d ? `${N[o].d} refugees` : `Refugees from ${N[o].p}`} in ${N[h].p}`;
-  S.demographics = demo ? { ...demo, group: S.demo_group, source_id: UNHCR.replace("pop", "demographics"), n_parts: 1, note: null, traceable: true } : null;
-  S.missing_items = demo ? [...(demo.sex.women + demo.sex.men === 0 ? [{ item: "Sex", why: "women and men are not reported for this group." }] : []),
-    ...(demo.age.age_known === 0 ? [{ item: "Age", why: "no age groups are reported for this group." }] : [])] : [];
-  S.steps.other_angles = true;
-  if (demo) S.datasets.push(S.demographics.source_id);
+  await attachDemo(S, N);
   return S;
 }
 

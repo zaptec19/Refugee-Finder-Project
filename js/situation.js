@@ -442,7 +442,9 @@ function overTime(el) {
       if (p) openTrace(point(p, l.measure || l.key, pointLabel(l.measure || l.key, row.year)), { el: t, flyFrom: t.querySelector("[data-num]") });
     },
   });
-  el.insertAdjacentHTML("beforeend", `<p class="note">${icon("info", { size: 16 })}<span>${CORRELATION} Displacement (${esc(srcShort(lines[0].pts[0].source_id))}) and events come from separate sources. <a href="learn.html#correlation">Why?</a></span></p>`);
+  // the correlation note only where the chart puts conflict years or events next to displacement
+  const showsContext = conflictYears.length > 0 || S.events.some((e) => { const y = parseInt(e.date, 10); return y >= domain[0] && y <= domain[1]; });
+  if (showsContext) el.insertAdjacentHTML("beforeend", `<p class="note">${icon("info", { size: 16 })}<span>${CORRELATION} Displacement (${esc(srcShort(lines[0].pts[0].source_id))}) and events come from separate sources. <a href="learn.html#correlation">Why?</a></span></p>`);
   el.addEventListener("click", (e) => { if (e.target.closest?.(".ev")) onEventClick(e); });
   el.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.closest?.(".ev")) { e.preventDefault(); onEventClick(e); } });
   el.addEventListener("pointerover", (e) => { const g = e.target.closest?.(".ev"); if (g && e.pointerType !== "touch") showEventTip(g); });
@@ -846,7 +848,8 @@ function context(el) {
     return `<li><span class="ev-list__date tabular">${esc(formatDate(e.date))}</span><div><strong>${esc(e.title)}</strong><p>${esc(e.note || "")}</p>
       <p class="small muted">Source: ${esc(srcIds.map((id) => (SRC[id] ? SRC[id].short : REFS[id] ? `${REFS[id].authors} (${REFS[id].year})` : id)).join("; "))}</p>${reviewNote(e.to_check)}</div></li>`;
   }).join("")}</ol>` : "";
-  el.insertAdjacentHTML("beforeend", list + evs + `<p class="note" style="margin-top:16px">${icon("info", { size: 16 })}<span>${CORRELATION}</span></p>`);
+  // the correlation note only when this step shows conflict data or events
+  el.insertAdjacentHTML("beforeend", list + evs + (list || evs || deaths.length ? `<p class="note" style="margin-top:16px">${icon("info", { size: 16 })}<span>${CORRELATION}</span></p>` : ""));
 }
 function runsLabel(yrs) {
   const ys = [...new Set(yrs)].sort((a, b) => a - b);
