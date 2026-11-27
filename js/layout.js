@@ -202,7 +202,7 @@ function topbarHTML(page, dark, theme) {
   return `
   <div class="topbar__inner">
     <div class="topbar__lead">
-      <button class="topbar__back" type="button" hidden>${icon("back", { size: 18 })}<span class="topbar__back-label"></span><span class="topbar__back-short" aria-hidden="true">Back</span></button>
+      <button class="topbar__back" type="button" hidden>${icon("back", { size: 18 })}<span class="topbar__back-label"></span></button>
       <a class="brand" href="index.html"${cur("home")}>Refugee Finder</a>
     </div>
 ${page === "home" ? "" : `    <div class="seg topbar__fmt" role="group" aria-label="Number format">
