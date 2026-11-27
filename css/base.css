@@ -1765,7 +1765,19 @@ html.sp-on.sp-narrow .sit__main { grid-column: 1; grid-row: 3; }
 .topbar__back:hover { border-color: var(--accent-ui); background: var(--accent-soft); }
 .topbar__back:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .topbar__back[hidden] { display: none; }
-.topbar__back-label { max-width: 28ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* the label is capped (about 22 characters; the full "Back to …" is the tooltip and aria-label) so the search box
+   keeps room for the page title; from 861 to 1279 px it is just "Back", and the search box drops its type tag */
+.topbar__back-label { max-width: 22ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.topbar__back-short { display: none; }
+@media (min-width: 861px) and (max-width: 1279px) {
+  .topbar__back-label { display: none; }
+  .topbar__back-short { display: inline; }
+  /* tighter gaps and How to use as its icon (its name stays in the tooltip and aria-label) */
+  body:not(.page-home) .topbar__inner { column-gap: 12px; }
+  body:not(.page-home) .topbar__tour .pill__text { display: none; }
+  body:not(.page-home) .topbar__tour { padding: 0 8px; }
+}
+@media (min-width: 600px) and (max-width: 1365px) { .topbar__ask .ask__tag { display: none; } }
 @media (max-width: 860px) { .topbar__back-label { max-width: 16ch; } }
 @media (max-width: 599px) {
   .topbar__back { width: 44px; height: 44px; padding: 0; justify-content: center; margin-left: -10px; border-color: transparent; }
