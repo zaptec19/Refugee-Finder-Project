@@ -767,7 +767,7 @@ function compareSources(el) {
     return `<div class="cbar">
       <div class="cbar__label">${esc(src.short === "Govt. of India" ? "Govt. of India (MHA)" : src.short || c.source_id)}
         ${c.status === "to_confirm" ? unverifiedTag() : ""}</div>
-      <div class="cbar__track">${segs}<button class="cbar__val" type="button" data-cmp="${i}" aria-label="${esc(src.short)}: where this number comes from">${numHTML(c.value)}</button></div>
+      <div class="cbar__track">${segs}</div><button class="cbar__val" type="button" data-cmp="${i}" aria-label="${esc(src.short)}: where this number comes from">${numHTML(c.value)}</button>
       ${c.parts?.length ? `<div class="cbar__parts small muted">${c.parts.map((p) => `${numHTML(p.value)} ${esc(p.label.replace(/ \(Govt\. of India\)/, "").toLowerCase())}`).join(" + ")}</div>` : ""}
     </div>`;
   }).join("");
