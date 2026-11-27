@@ -42,7 +42,11 @@ export function arriveMorph() {
   let revealed;
   const onReveal = window.wv1Revealed ? Promise.resolve() : new Promise((r) => { revealed = r; });
   if (revealed) {
-    addEventListener("pagereveal", (e) => { e.viewTransition?.skipTransition(); revealed(); }, { once: true });
+    addEventListener("pagereveal", (e) => {
+      const vt = e.viewTransition;
+      if (vt) { for (const k of ["ready", "finished", "updateCallbackDone"]) vt[k]?.catch?.(() => {}); try { vt.skipTransition(); } catch { /* already over */ } }
+      revealed();
+    }, { once: true });
     setTimeout(revealed, 800);
   }
   const root = document.documentElement;
@@ -81,7 +85,13 @@ export function arriveMorph() {
       clearTimeout(timer);
       await onReveal;
       await new Promise((r) => requestAnimationFrame(r));
-      try { await document.startViewTransition(clear).finished; } catch { clear(); }
+      // only while the page is visible and no other transition is starting; any failure just clears the stand-ins
+      if (document.visibilityState !== "visible") { clear(); return; }
+      try {
+        const vt = document.startViewTransition(clear);
+        vt.ready.catch(() => {}); vt.updateCallbackDone.catch(() => {});
+        await vt.finished;
+      } catch { clear(); }
     },
   };
 }

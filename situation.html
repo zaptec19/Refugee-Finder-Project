@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/base.css">
   <script>/* theme before first paint: ?theme= > saved choice > system setting */(function(){var t=null;try{var q=new URLSearchParams(location.search).get("theme");t=q==="light"||q==="dark"?q:JSON.parse(localStorage.getItem("wv1:theme"))}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t})()</script>
   <script>/* a page transition the browser drops (aborted: "Page already revealed") is not an error: silence only that rejection */addEventListener("unhandledrejection",function(e){var r=e.reason;if(r&&r.name==="InvalidStateError"&&/^Transition was aborted/.test(r.message||""))e.preventDefault()})</script>
-  <script>addEventListener("pagereveal",function(e){window.wv1Revealed=true;try{if(e.viewTransition&&sessionStorage.getItem("wv1:morph"))e.viewTransition.skipTransition()}catch(x){}},{once:true})</script>
+  <script>addEventListener("pagereveal",function(e){window.wv1Revealed=true;var v=e.viewTransition;if(!v)return;["ready","finished","updateCallbackDone"].forEach(function(k){try{v[k]&&v[k].catch(function(){})}catch(x){}});try{if(sessionStorage.getItem("wv1:morph"))v.skipTransition()}catch(x){}},{once:true})</script>
   <script type="module" src="js/situation.js"></script>
 </head>
 <body>

@@ -374,11 +374,20 @@ async function fillMade(pt, ctx, sum) {
   el.removeAttribute("aria-busy");
 }
 
+/** Is there a rows file for this origin and measure? (data/web/rows-index.json: build_web.py writes only these,
+ *  so a missing one is never requested and never 404s.) */
+let rowsIndex;
+async function hasRows(o, m) {
+  rowsIndex ||= getOptionalJSON("data/web/rows-index.json").then((x) => x || {});
+  return ((await rowsIndex)[o] || []).includes(m);
+}
+
 /** The rows a labelled sum was made from (data/web/rows/<origin>-<measure>.json). */
 async function rowsHTML(pt, ctx, sum) {
   const { S, SRC, MEAS } = ctx;
   const n = +sum[1];
   const fileMeasure = ROWS_FILE[pt.measure_id] || pt.measure_id;
+  if (!(await hasRows(S.origin_iso3, fileMeasure))) return `<p class="small">${esc(pt.note || "")}.</p>`;
   const [doc, names] = await Promise.all([getJSON(`data/web/rows/${S.origin_iso3.toLowerCase()}-${fileMeasure}.json`), loadCountries()]);
   let rows = doc.years[String(pt.year)] || [];
   const codes = /\(([A-Z]{3}(?:, [A-Z]{3})*)\)/.exec(pt.note || "")?.[1]?.split(", ");
@@ -416,14 +425,17 @@ async function rawHTML(pt, ctx) {
   let ref = pt.raw_ref;
   let rawRows = S.raw_rows || {};
   let rawFiles = S.raw_files || {};
-  if (!ref && pt.hostIso) {
+  if (!ref && pt.hostIso && await hasRows(S.origin_iso3, pt.measure_id)) {
     const doc = await getJSON(`data/web/rows/${S.origin_iso3.toLowerCase()}-${pt.measure_id}.json`);
     const r = (doc.years[String(pt.year)] || []).find((x) => x[0] === pt.hostIso && same(x[1], pt.value));
     if (r) ref = `${doc.file.replace("{year}", pt.year)}#L${r[2]}`;
   }
   if (!ref) return `<p class="small muted">No row reference for this figure.</p>`;
   if (!rawRows[ref] && pt.hostIso) {
-    const pair = await getOptionalJSON(`data/web/situation/${S.origin_iso3.toLowerCase()}-${pt.hostIso.toLowerCase()}.json`);
+    // only a pair that has a page file (situations.json lists them), so nothing is requested that isn't there
+    const pid = `${S.origin_iso3.toLowerCase()}-${pt.hostIso.toLowerCase()}`;
+    const built = (await getJSON("data/web/situations.json").catch(() => [])).some((x) => x.id === pid);
+    const pair = built ? await getOptionalJSON(`data/web/situation/${pid}.json`) : null;
     if (pair?.raw_rows?.[ref]) { rawRows = pair.raw_rows; rawFiles = pair.raw_files; }
   }
   if (!rawRows[ref]) {

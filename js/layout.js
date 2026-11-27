@@ -8,9 +8,22 @@ import { hasNotice, showNotice } from "./search-notice.js";
 import { initTrail, setTrailTitle, backTarget, goBack } from "./trail.js";
 import { sideOpen, closeSide } from "./popout.js";
 
-// cross-document view transitions (css: @view-transition): skipped with the system's reduced motion
-window.addEventListener("pageswap", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
-window.addEventListener("pagereveal", (e) => { if (reducedMotion()) e.viewTransition?.skipTransition(); });
+// cross-document view transitions (css: @view-transition): skipped with the system's reduced motion.
+// A transition the browser aborts ("Page already revealed") rejects its promises; quiet() handles them so nothing
+// ever throws, and skipTransition() on a transition that is already over is guarded too.
+export function quietTransition(vt) {
+  if (!vt) return vt;
+  for (const k of ["ready", "finished", "updateCallbackDone"]) {
+    try { vt[k]?.catch?.(() => {}); } catch { /* not a promise in this browser */ }
+  }
+  return vt;
+}
+export function skipTransition(vt) {
+  if (!quietTransition(vt)) return;
+  try { vt.skipTransition(); } catch { /* already finished or aborted */ }
+}
+window.addEventListener("pageswap", (e) => { quietTransition(e.viewTransition); if (reducedMotion()) skipTransition(e.viewTransition); });
+window.addEventListener("pagereveal", (e) => { quietTransition(e.viewTransition); if (reducedMotion()) skipTransition(e.viewTransition); });
 
 /** The theme for this page: ?theme= (chart exports) > the reader's saved choice > the home page's dark >
  *  the system setting. The inline script in each page's <head> applies the same rule before first paint. */
@@ -104,8 +117,9 @@ export function initPage({ page, dark = false } = {}) {
     };
     if (!document.startViewTransition || reducedMotion()) { apply(); return; }
     root.classList.add("theme-swap");                  // a plain 250 ms cross-fade of the whole page
-    const vt = document.startViewTransition(apply);
-    vt.finished.finally(() => root.classList.remove("theme-swap"));
+    let vt;
+    try { vt = quietTransition(document.startViewTransition(apply)); } catch { root.classList.remove("theme-swap"); apply(); return; }
+    vt.finished.catch(() => {}).finally(() => root.classList.remove("theme-swap"));
   };
   themeBtn.dataset.icon = theme === "dark" ? "sun" : "moon";
   syncTheme(false);
