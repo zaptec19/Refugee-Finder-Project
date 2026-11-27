@@ -298,6 +298,9 @@ function waitFor(sel, ms = 8000) {
     (function poll() {
       // a list of targets: the first one this page has (e.g. Compare sources, else Limitations)
       const el = sels.map((x) => document.querySelector(x)).find((x) => x && x.getBoundingClientRect().width > 0) || document.querySelector(sels[0]);
+      // phones: the number switch card points at the menu button too, like Learn (one place to look on a phone)
+      const menuVis = document.querySelector(".topbar__menu-btn");
+      if (el?.matches(".topbar__fmt") && phoneCard() && menuVis && menuVis.getBoundingClientRect().width > 0) return resolve(menuVis);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
       // phones: How to use and My collection are inside the top-bar menu, so point at the menu button
       const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
