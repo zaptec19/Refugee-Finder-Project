@@ -56,20 +56,38 @@ function peak(s) {
   return [mx, s.filter((p) => p.value === mx).map((p) => p.year)];
 }
 
+// Same rule as build_web.py over_time_headline: first year, a turning point (peak or low) if the series turns, latest year.
 function overTimeHeadline(subject, s) {
   if (s.length < 2) return null;
-  const [pk, pky] = peak(s);
   const first = s[0];
   const last = s[s.length - 1];
-  const after = pky.length ? s.filter((p) => p.year > pky[pky.length - 1]) : [];
-  if (after.length) {
-    const low = after.reduce((a, b) => (b.value < a.value || (b.value === a.value && b.year > a.year) ? b : a));
-    if (pk && low.value <= 0.7 * pk) return { text: `${subject} fell from {n0} (${pky[0]}) to {n1} (${low.year})`, nums: [pk, low.value], years: [pky[0], low.year] };
-    if (pk >= 1.3 * Math.max(first.value, 1)) return { text: `${subject} rose from {n0} (${first.year}) to a peak of {n1} (${pky[0]})`, nums: [first.value, pk], years: [first.year, pky[0]] };
+  const inner = s.slice(1, -1);
+  let turn = null;
+  if (inner.length) {
+    const hi = inner.reduce((a, b) => (b.value > a.value ? b : a));
+    const lo = inner.reduce((a, b) => (b.value < a.value ? b : a));
+    const endsHi = Math.max(first.value, last.value, 1);
+    const endsLo = Math.min(first.value, last.value);
+    // both legs must be big on the series' own scale (at least 15% of its highest value)
+    const top = Math.max(...s.map((p) => p.value));
+    const big = (t) => Math.abs(t.value - first.value) >= 0.15 * top && Math.abs(last.value - t.value) >= 0.15 * top;
+    const up = hi.value >= 1.3 * endsHi && big(hi) ? hi.value / endsHi : 0;
+    const down = lo.value <= 0.7 * endsLo && big(lo) ? Math.max(endsLo, 1) / Math.max(lo.value, 1) : 0;
+    if (up || down) turn = up >= down ? hi : lo;
   }
-  if (last.value >= 1.3 * Math.max(first.value, 1)) return { text: `${subject} rose from {n0} (${first.year}) to {n1} (${last.year})`, nums: [first.value, last.value], years: [first.year, last.year] };
+  const leg = (a, b) => (b.value > a.value ? "rose" : "fell");
+  if (turn) {
+    const tail = last.value >= 1.1 * turn.value ? `then rose to {n2} (${last.year})`
+      : last.value <= 0.9 * turn.value ? `then fell to {n2} (${last.year})` : `and was {n2} in ${last.year}`;
+    return { text: `${subject} ${leg(first, turn)} from {n0} (${first.year}) to {n1} (${turn.year}), ${tail}`,
+      nums: [first.value, turn.value, last.value], years: [first.year, turn.year, last.year] };
+  }
+  if (last.value >= 1.3 * Math.max(first.value, 1) || last.value <= 0.7 * first.value) {
+    return { text: `${subject} ${leg(first, last)} from {n0} (${first.year}) to {n1} (${last.year})`, nums: [first.value, last.value], years: [first.year, last.year] };
+  }
   const lo = Math.min(...s.map((p) => p.value));
-  return { text: `${subject} stayed between {n0} and {n1} from ${first.year} to ${last.year}`, nums: [lo, pk], years: [first.year, last.year] };
+  const hi = Math.max(...s.map((p) => p.value));
+  return { text: `${subject} stayed between {n0} and {n1} from ${first.year} to ${last.year}`, nums: [lo, hi], years: [first.year, last.year] };
 }
 
 function autoLimitations(s) {
