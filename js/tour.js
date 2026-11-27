@@ -70,7 +70,10 @@ export const TOURS = {
     { page: "home", part: "Home", title: "A real example", go: EXAMPLE, note: "Next: a real example",
       text: "Next, the tour opens Sri Lankan refugees in India and walks through the whole page. You can come back home at any time." },
     // the example page: every page card, with the number format and Learn (the home top bar has neither)
-    ...[...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)].map((c) => ({ ...c, page: "situation", part: "Example page" })),
+    ...[...PAGE_CARDS.slice(0, 2),
+      { ...TOP.fmt, id: "fmt", text: "Indian (1,00,000) or international (100,000); every number, chart and export follows it. You'll find it on every page except home." },
+      { ...TOP.learnPage, id: "learn", text: "Plain explanations of the terms and how to read the numbers. On every page except home." },
+      ...PAGE_CARDS.slice(3)].map((c) => ({ ...c, page: "situation", part: "Example page" })),
   ],
   situation: [...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)],
   country: [
