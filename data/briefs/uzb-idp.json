@@ -1,0 +1,78 @@
+{
+  "id": "uzb-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Uzbekistan, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's figure for people displaced by conflict and violence was 3400 in every year from 2009 to 2014, the last year with a figure.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records one armed conflict for Uzbekistan: over the government, with JIG, in 2004.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Uzbekistan list floods.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main years of displacement in the data are 2009 to 2014.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC has no conflict figure for Uzbekistan after 2014.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2024, IDMC recorded 360 new displacements by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Uzbekistan.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    360,
+    3400
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "63ef418f2959b850",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

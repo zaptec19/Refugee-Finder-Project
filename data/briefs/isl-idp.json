@@ -1,0 +1,77 @@
+{
+  "id": "isl-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Iceland, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's year-end count of people still displaced by disasters stayed between 3401 and 3700 from 2023 to 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "IDMC's disaster records for Iceland list volcanic activity.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The fact pack records no armed conflict for Iceland.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main years of displacement in the data are 2023 to 2025.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's data for Iceland starts in 2017.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC recorded 104 new displacements by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Iceland.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    104,
+    3401,
+    3700
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "8b574fb432d5c8b8",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
