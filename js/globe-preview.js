@@ -38,6 +38,7 @@ function ensure() {
   return card;
 }
 
+// one name for the country throughout the card: the globe's display name (the header), e.g. "Tanzania"
 function html(iso, name, c) {
   const head = `<header class="globe-preview__head"><h2 id="gp-name" class="globe-preview__name">${esc(name)}</h2>
     <button class="icon-btn globe-preview__close" type="button" aria-label="Close preview" data-gp-close>
@@ -51,8 +52,8 @@ function html(iso, name, c) {
     .sort((a, b) => b.latest.value - a.latest.value)[0];
   return `${head}
     <dl class="globe-preview__rows">
-      <div><dt>Refugees from ${esc(c.name || name)}</dt><dd>${fig(from)}</dd></div>
-      <div><dt>Refugees hosted in ${esc(c.name || name)}</dt><dd>${fig(hosted)}</dd></div>
+      <div><dt>Refugees from ${esc(name)}</dt><dd>${fig(from)}</dd></div>
+      <div><dt>Refugees hosted in ${esc(name)}</dt><dd>${fig(hosted)}</dd></div>
     </dl>
     <p class="globe-preview__src small muted">UNHCR, year-end; latest year with a figure.</p>
     ${top ? `<p class="globe-preview__top small"><span class="muted">Top situation:</span> <a href="situation.html?id=${esc(top.id)}">${esc(top.title)}</a></p>` : ""}
