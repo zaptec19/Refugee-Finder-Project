@@ -1813,3 +1813,10 @@ body.page-home .topbar__inner { grid-template-columns: auto minmax(0, 1fr) auto;
 .inline-pin .icon, .inline-pin svg { display: block; }
 .btn:disabled, .btn[disabled] { opacity: 0.45; cursor: not-allowed; box-shadow: none; filter: saturate(0.4); }
 .btn:disabled:hover { transform: none; }
+
+/* the tour can highlight several things at once: each has its own ring, and one layer dims the rest of the page
+   (with a hole for each); the rings then draw only their outline */
+.tour-dim { position: fixed; inset: 0; z-index: 89; background: rgba(10, 12, 16, 0.55); pointer-events: none; }
+.tour-dim[hidden] { display: none; }
+.tour-ring--multi { box-shadow: 0 0 0 3px var(--accent); }
+.tour-ring--extra[hidden] { display: none; }

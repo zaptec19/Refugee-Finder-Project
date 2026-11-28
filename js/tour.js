@@ -59,21 +59,27 @@ export const PAGE_CARDS = [
 ];
 
 export const TOURS = {
+  // the home tour, 9 cards: 2 on home, then 7 on a real example (Sri Lankan refugees in India)
   home: [
     { page: "home", part: "Home", target: "#q", avoid: [".home__search", ".home__try"], side: true, title: "Ask anything",
       text: "Ask about a country, a group or two countries, like “Tamils who fled to India”. Not sure where to start? Try an example." },
-    { page: "home", part: "Home", target: "#globe", title: "The globe",
-      text: "Countries are shaded by how many people were displaced from them. Click a country to preview it, and again to open it." },
-    { page: "home", part: "Home", target: ".home__foot", title: "Colours and years",
-      text: "The key under the globe says what each shade means. The year button changes the year shown, with the full colour legend." },
-    { page: "home", part: "Home", ...TOP.coll },
-    { page: "home", part: "Home", title: "A real example", go: EXAMPLE, note: "Next: a real example",
-      text: "Next, the tour opens Sri Lankan refugees in India and walks through the whole page. You can come back home at any time." },
-    // the example page: every page card, with the number format and Learn (the home top bar has neither)
-    ...[...PAGE_CARDS.slice(0, 2),
-      { ...TOP.fmt, id: "fmt", text: "Indian (1,00,000) or international (100,000); every number, chart and export follows it. You'll find it on every page except home." },
-      { ...TOP.learnPage, id: "learn", text: "Plain explanations of the terms and how to read the numbers. On every page except home." },
-      ...PAGE_CARDS.slice(3)].map((c) => ({ ...c, page: "situation", part: "Example page" })),
+    { page: "home", part: "Home", target: "#globe", marks: [".home__key", "#range-btn"], side: true, title: "The globe", go: EXAMPLE, note: "Next: a real example",
+      text: "Shading shows people displaced from each country. Click a country to preview it, click again to open it. The year button changes the year and shows the colour key." },
+    { page: "situation", part: "Example page", id: "top", target: [".topbar__back", ".topbar__fmt"], marks: [".topbar__fmt", ".topbar__learn"], phoneMenu: true,
+      title: "Top bar",
+      text: "Back takes you to the previous brief or Home. Switch between Indian (1,00,000) and international (100,000) numbers, and open Learn for plain explanations." },
+    { page: "situation", part: "Example page", id: "title-map", target: "#sit-title", marks: ["#mini-globe"], title: "Title and map",
+      text: "The title names the situation. The map joins origin and host; click it for a bigger map." },
+    { page: "situation", part: "Example page", id: "brief", target: "#brief", title: "The brief",
+      text: "What happened, why people moved, when and how; the label says it was written with AI and lists its sources. Each [1] takes you to its source at the bottom of the page." },
+    { page: "situation", part: "Example page", id: "key", target: "#key-numbers", title: "Key numbers",
+      text: "Press ? to see what a number counts and how reliable it is. Click the number to see where it comes from, in a panel beside the page." },
+    { page: "situation", part: "Example page", id: "time", target: "#over-time", title: "Over time",
+      text: "Data shows a table, and PNG or CSV downloads it. Conflict years and events show timing, not cause." },
+    { page: "situation", part: "Example page", id: "quote", target: ["#compare", "#limitations"], title: "Before you quote a number",
+      text: "See where people are, who is displaced inside vs outside, how sources compare and why they differ, and what the data can't tell you. Use the steps on the left to jump there; Other angles has returns, asylum claims and age and sex." },
+    { page: "situation", part: "Example page", id: "pin", target: ".topbar__coll", title: "Pin and My collection", last: true,
+      text: "Pin numbers, charts and readings with their + buttons. My collection keeps them, ready to export with citations." },
   ],
   situation: [...PAGE_CARDS.slice(0, 3), { id: "learn", ...TOP.learnPage }, ...PAGE_CARDS.slice(3)],
   country: [
@@ -99,7 +105,7 @@ export const TOURS = {
   ],
 };
 // saved progress from an older tour is not resumed: it starts again at step 1
-const TOUR_VERSION = 4;
+const TOUR_VERSION = 5;
 const pageKind = () => document.body.dataset.page || "";
 /** The tour the Tour button starts on this page (null: no tour here). */
 export const tourFor = (page = pageKind()) => (page === "home" ? "home" : TOURS[page] ? page : null);
@@ -172,7 +178,12 @@ function build() {
   card.setAttribute("aria-modal", "false");
   card.setAttribute("aria-labelledby", "tour-title");
   card.setAttribute("aria-describedby", "tour-text");
-  document.body.append(ring, card);
+  // several things highlighted at once ("marks"): each gets its own ring, and one layer dims the rest of the page
+  const dim = document.createElement("div");
+  dim.className = "tour-dim";
+  dim.setAttribute("aria-hidden", "true");
+  dim.hidden = true;
+  document.body.append(dim, ring, card);
   card.addEventListener("click", (e) => {
     const b = e.target.closest("[data-tour]");
     if (!b) return;
@@ -187,7 +198,7 @@ function build() {
   // follow layout changes that happen without scrolling (charts drawing, sections opening)
   const ro = new ResizeObserver(queue);
   ro.observe(document.body);
-  ui = { ring, card, ro };
+  ui = { ring, card, ro, dim, extras: [] };
 }
 
 function onKey(e) {
@@ -206,7 +217,7 @@ async function show(i) {
   const s = STEPS[i];
   // the first card after a page load may wait for the page to draw (up to 8 s); later cards skip a part the page
   // doesn't have quickly
-  current = s.target ? await waitFor(s.target, shownHere++ ? 1200 : 8000) : null;
+  current = s.target ? await waitFor(s.target, shownHere++ ? 1200 : 8000, s) : null;
   if (index !== i) return;                       // the reader moved on while we waited
   if (s.target && !current) { advance(i, +1); return; }   // this page doesn't have it: skip the step
   ui.card.innerHTML = `
@@ -216,16 +227,17 @@ async function show(i) {
     </div>
     <h2 class="tour-card__title" id="tour-title">${esc(s.title)}</h2>
     <p class="tour-card__text" id="tour-text">${esc(s.text)}</p>
-    ${s.note && s.go && pageOf() !== "situation" ? `<p class="tour-card__note">${esc(s.note)}</p>` : ""}
+    ${s.note && s.go && !s.target && pageOf() !== "situation" ? `<p class="tour-card__note">${esc(s.note)}</p>` : ""}
     <div class="tour-card__progress" aria-hidden="true">${partOf(i).map((k) => `<span class="${k === i ? "on" : k < i ? "done" : ""}"></span>`).join("")}</div>
     ${s.part === "Home" && !s.go ? `<p class="tour-card__jump"><button class="linklike small" type="button" data-tour="jump">Skip to the example page &rsaquo;</button></p>` : ""}
     <div class="tour-card__actions">
       <button class="linklike tour-card__skip" type="button" data-tour="skip">Skip tour</button>
       <span class="tour-card__nav">${i > 0 ? '<button class="btn btn--ghost" type="button" data-tour="back">Back</button>' : ""}
-      <button class="btn btn--primary" type="button" data-tour="next">${s.last ? "Done" : "Next"}</button></span>
+      <button class="btn btn--primary" type="button" data-tour="next">${s.last ? "Done" : s.go && s.target ? esc(s.note || "Next") : "Next"}</button></span>
     </div>`;
   ui.card.classList.toggle("tour-card--center", !current);
   ui.ring.classList.toggle("tour-ring--full", !current);
+  if (!current) drawMarks([], null, 0, 0, 0);
   if (!current) ui.ring.style.left = ui.ring.style.top = ui.ring.style.width = ui.ring.style.height = "";
   document.body.classList.add("touring");
   if (current) settle(current, i);
@@ -267,7 +279,7 @@ const cardH = () => ui?.card?.offsetHeight || 220;
  *  target's top just below the top bar. Targets in the top bar never scroll the page. */
 function scrollToTarget(el, instant = false) {
   if (inTopbar(el)) return;
-  const r = el.getBoundingClientRect();
+  const r = rectOf(el);
   const top0 = areaTop() + 12;
   const bottom = areaBottom();
   const need = phoneCard() ? r.height : r.height + GAP + cardH();
@@ -291,7 +303,7 @@ function settle(el, i) {
   }, ms));
 }
 
-function waitFor(sel, ms = 8000) {
+function waitFor(sel, ms = 8000, step = null) {
   const t0 = performance.now();
   const sels = Array.isArray(sel) ? sel : [sel];
   return new Promise((resolve) => {
@@ -300,7 +312,7 @@ function waitFor(sel, ms = 8000) {
       const el = sels.map((x) => document.querySelector(x)).find((x) => x && x.getBoundingClientRect().width > 0) || document.querySelector(sels[0]);
       // phones: the number switch card points at the menu button too, like Learn (one place to look on a phone)
       const menuVis = document.querySelector(".topbar__menu-btn");
-      if (el?.matches(".topbar__fmt") && phoneCard() && menuVis && menuVis.getBoundingClientRect().width > 0) return resolve(menuVis);
+      if ((step?.phoneMenu || el?.matches(".topbar__fmt")) && phoneCard() && menuVis && menuVis.getBoundingClientRect().width > 0) return resolve(menuVis);
       if (el && el.getBoundingClientRect().width > 0) return resolve(el);
       // phones: How to use and My collection are inside the top-bar menu, so point at the menu button
       const menuBtn = el?.closest("#topbar-menu") && document.querySelector(".topbar__menu-btn");
@@ -321,9 +333,50 @@ const hit = (a, b, m = 4) => a.left < b.right + m && b.left < a.right + m && a.t
 const union = (rs) => box(Math.min(...rs.map((r) => r.left)), Math.min(...rs.map((r) => r.top)),
   Math.max(...rs.map((r) => r.right)) - Math.min(...rs.map((r) => r.left)), Math.max(...rs.map((r) => r.bottom)) - Math.min(...rs.map((r) => r.top)));
 
+/** The target's box: with the step's "also" elements, one box around them all (e.g. Back, the number switch and
+ *  Learn). On phones a step that points at the menu button is just that button. */
+function rectOf(el) {
+  const s = STEPS[index];
+  const r = el.getBoundingClientRect();
+  if (!s?.also || el.matches(".topbar__menu-btn")) return r;
+  const rs = [r, ...s.also.map((x) => document.querySelector(x)).filter((e) => e && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect())];
+  return union(rs);
+}
+
+/** The other things a step highlights at the same time ("marks"), padded like the ring. None when, on a phone, the
+ *  step points at the menu button. */
+function markBoxes(pad) {
+  const s = STEPS[index];
+  if (!s?.marks || !current || current.matches(".topbar__menu-btn")) return [];
+  return s.marks.map((x) => document.querySelector(x)).filter((e) => e && e !== current && e.getBoundingClientRect().width > 0)
+    .map((e) => { const r = e.getBoundingClientRect(); return box(r.left - pad, r.top - pad, r.width + pad * 2, r.height + pad * 2); });
+}
+/** One ring per mark, and one dim layer with a hole for the target and for each mark (the main ring stops dimming). */
+function drawMarks(M, H, pad, vw, vh) {
+  const multi = M.length > 0;
+  ui.ring.classList.toggle("tour-ring--multi", multi);
+  ui.dim.hidden = !multi;
+  while (ui.extras.length < M.length) {
+    const x = document.createElement("div");
+    x.className = "tour-ring tour-ring--multi tour-ring--extra";
+    x.setAttribute("aria-hidden", "true");
+    document.body.insertBefore(x, ui.card);
+    ui.extras.push(x);
+  }
+  ui.extras.forEach((x, k) => {
+    const b = M[k];
+    x.hidden = !b;
+    if (b) Object.assign(x.style, { left: `${b.left}px`, top: `${b.top}px`, width: `${b.width}px`, height: `${b.height}px` });
+  });
+  if (!multi) { ui.dim.style.clipPath = ""; return; }
+  const holes = [box(H.left - pad, H.top - pad, H.width + pad * 2, H.height + pad * 2), ...M]
+    .map((b) => `M${b.left} ${b.top}H${b.right}V${b.bottom}H${b.left}Z`).join("");
+  ui.dim.style.clipPath = `path(evenodd, "M0 0H${vw}V${vh}H0Z${holes}")`;
+}
+
 /** The part of the target to highlight: all of it, or its top part when it is taller than the free screen. */
 function highlight(el) {
-  const r = el.getBoundingClientRect();
+  const r = rectOf(el);
   if (inTopbar(el)) return box(r.left, r.top, r.width, r.height);
   if (phoneCard()) {
     // phones: the part of the target that is on screen above the docked card (a target near the end of a short
@@ -353,12 +406,15 @@ function place() {
   Object.assign(ui.ring.style, {
     left: `${H.left - pad}px`, top: `${H.top - pad}px`, width: `${H.width + pad * 2}px`, height: `${H.height + pad * 2}px`,
   });
+  const M = markBoxes(pad);
+  drawMarks(M, H, pad, vw, vh);
   if (phone) { card.style.left = card.style.top = card.style.width = ""; return; }   // docked at the bottom of the screen
   // what the card must keep clear: the highlighted part and anything the step names
   const s = STEPS[index];
   const keep = [box(H.left - pad, H.top - pad, H.width + pad * 2, H.height + pad * 2),
     ...(s.avoid || []).map((sel) => document.querySelector(sel)).filter(Boolean).map((e) => e.getBoundingClientRect())];
-  const U = union(keep);
+  const U = union(keep);              // the card is placed around the main target (and what it must avoid) ...
+  keep.push(...M);                     // ... and never covers the other things the step highlights
   const top0 = areaTop() + 8;
   card.style.width = "";
   const w0 = card.offsetWidth;
@@ -369,7 +425,7 @@ function place() {
     let w = w0;
     if (where === "right" || where === "left") {
       const space = where === "right" ? vw - 16 - (U.right + GAP) : U.left - GAP - 16;
-      if (space < 280) return null;
+      if (space < 260) return null;          // a narrower card beside the target beats one on top of it
       w = Math.min(w0, space);
     }
     card.style.width = `${w}px`;
@@ -455,6 +511,7 @@ function finish() {
   ui.card.classList.remove("tour-card--docked");
   ui.card.style.left = ui.card.style.top = ui.card.style.width = "";
   ui.ring.classList.add("tour-ring--full");
+  drawMarks([], null, 0, 0, 0);
   ui.ring.style.left = ui.ring.style.top = ui.ring.style.width = ui.ring.style.height = "";
   setTimeout(() => {
     if (away) { goHome("done"); return; }
@@ -482,6 +539,8 @@ function end() {
   if (ui) {
     ui.ring.remove();
     ui.card.remove();
+    ui.dim.remove();
+    ui.extras.forEach((x) => x.remove());
     document.removeEventListener("keydown", onKey);
     window.removeEventListener("resize", queue);
     window.removeEventListener("scroll", queue);
