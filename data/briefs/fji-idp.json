@@ -1,0 +1,78 @@
+{
+  "id": "fji-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Fiji, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's year-end count of people still displaced by disasters rose from 1109 in 2019 to 13580 in 2020.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "IDMC's disaster records for Fiji list storms.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The fact pack records no armed conflict for Fiji in these years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The count fell to 259 by 2024; 2020 is the main year of displacement in the data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's data starts in 2009.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC recorded 1500 new displacements by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Fiji.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    259,
+    1109,
+    1500,
+    13580
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "943bad6f2445f81f",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

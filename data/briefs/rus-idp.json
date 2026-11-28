@@ -1,0 +1,88 @@
+{
+  "id": "rus-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Russia, as counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 578 people displaced by conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records an interstate armed conflict between Russia and Ukraine from 2022 to 2025, and armed conflict over the government of Russia in 2023 and 2024.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Russia list floods, storms, wildfires, earthquakes and mass movements.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures rose from 80000 in 2009 to 170517 in 2024, the main year of displacement in the data.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "For 2013, IDMC estimated 34900 IDPs while UNHCR's file shows none.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC recorded 2653 new displacements by conflict and violence and 3622 by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Russia.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    578,
+    2653,
+    3622,
+    34900,
+    80000,
+    170517
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "b81e1a970891aad9",
+  "status": "failed_check",
+  "check": {
+    "attempts": 2,
+    "bad_numbers": [
+      "when: 3 numbers in this part (at most 2; years don't count)"
+    ],
+    "bad_sources": []
+  }
+}

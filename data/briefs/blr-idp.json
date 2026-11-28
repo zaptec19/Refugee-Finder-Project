@@ -1,0 +1,75 @@
+{
+  "id": "blr-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Belarus, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "In 2024, the latest year with a figure, IDMC recorded 443 new displacements by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "IDMC's disaster records for Belarus list wildfires.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The fact pack records no armed conflict for Belarus.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC records new displacements by disasters year by year, starting in 2023.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The data shows no year-end count of people still displaced.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where people went inside Belarus.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "New displacements count movements, not people, and are shown on their own chart.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    443
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "fcb83d61b7a54ca4",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
