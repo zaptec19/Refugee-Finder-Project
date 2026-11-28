@@ -8,6 +8,7 @@
 // situations' aliases. Everything the question was changed by (a spelling fix, another name for a country, a year,
 // a dropped word, a match by meaning) is listed in `changes`, for the notice on the page the reader lands on.
 import { getJSON } from "./data.js";
+import { SEARCH_DEMONYMS } from "./config.js";
 import { loadNames, groupTitle, CROSS } from "./auto-situation.js";
 
 const STOP = new Set(("in into to from of the a an and or who which that are is were was be been living live lived lives " +
@@ -23,11 +24,7 @@ const IDP_CUE = /\bidps?\b|\binternally\b|\binternal displacement\b|\binside\b|\
 const DISASTER = /\b(floods?|flooding|cyclones?|typhoons?|hurricanes?|storms?|earthquakes?|quakes?|droughts?|landslides?|tsunamis?|wildfires?|disasters?|monsoons?)\b/;
 const PEOPLE_WORDS = ["refugee", "refugees", "asylum", "seeker", "seekers", "displaced", "internally", "internal", "displacement",
   "idp", "idps", "protection", "international", "inside", "stateless", "returnees", "returns", "migrants"];
-// Common adjectives for countries whose UNHCR nationality field has none (search words only, never a page title).
-// "Congolese" can mean either Congo: the pair that has a page wins, else the Democratic Republic of the Congo.
-const SEARCH_DEMONYMS = { COD: ["Congolese"], COG: ["Congolese"], MMR: ["Burmese"], BIH: ["Bosnian"], CZE: ["Czech"],
-  MKD: ["Macedonian"], TWN: ["Taiwanese"], FJI: ["Fijian"], DJI: ["Djiboutian"], PNG: ["Papua New Guinean"], QAT: ["Qatari"],
-  SRB: ["Serbian"], MNE: ["Montenegrin"], ESH: ["Sahrawi"], GNB: ["Bissau-Guinean"], GNQ: ["Equatorial Guinean"] };
+// SEARCH_DEMONYMS (config.js): adjectives for countries whose UNHCR nationality field has none (search words only)
 const YEARS = /\b(?:since|after|from|before|in)?\s*(?:19|20)\d{2}s?\b(\s*(?:-|to|–)\s*(?:19|20)\d{2})?/gi;
 
 export const norm = (t) => (t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/['’]s\b/g, "")

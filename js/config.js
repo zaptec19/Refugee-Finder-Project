@@ -44,3 +44,10 @@ export const PART_OF = {
   MYT: { iso: "FRA", name: "France", at: [45.15, -12.8], km: 150 },
   SJM: { iso: "NOR", name: "Norway", at: [16, 78.5], km: 600 },
 };
+
+// Common adjectives for countries whose UNHCR nationality field has none (search words only, never a page title). Used by
+// search-intent.js (where Enter goes) and search.js (which countries a question names).
+// "Congolese" can mean either Congo: the pair that has a page wins, else the Democratic Republic of the Congo.
+export const SEARCH_DEMONYMS = { COD: ["Congolese"], COG: ["Congolese"], MMR: ["Burmese"], BIH: ["Bosnian"], CZE: ["Czech"],
+  MKD: ["Macedonian"], TWN: ["Taiwanese"], FJI: ["Fijian"], DJI: ["Djiboutian"], PNG: ["Papua New Guinean"], QAT: ["Qatari"],
+  SRB: ["Serbian"], MNE: ["Montenegrin"], ESH: ["Sahrawi"], GNB: ["Bissau-Guinean"], GNQ: ["Equatorial Guinean"] };

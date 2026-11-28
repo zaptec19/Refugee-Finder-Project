@@ -7,6 +7,7 @@
 // Nothing is hard-coded: no keyword or synonym lists. Every word comes from the data.
 import MiniSearch from "https://cdn.jsdelivr.net/npm/minisearch@7.1.0/+esm";
 import { getJSON } from "./data.js";
+import { SEARCH_DEMONYMS } from "./config.js";
 
 let state = "idle";             // idle (model not asked for yet) -> loading -> ready | keyword (model failed: keyword only)
 const listeners = new Set();
@@ -59,7 +60,7 @@ function load() {
     for (const iso of span.keys()) {
       const c = countries[iso];
       if (!c) continue;
-      for (const n of new Set([c.name, c.demonym, ...(c.other_names || [])].filter(Boolean))) {
+      for (const n of new Set([c.name, c.demonym, ...(c.other_names || []), ...(SEARCH_DEMONYMS[iso] || [])].filter(Boolean))) {
         const t = norm(n).replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
         if (t.length >= 4) placeNames.push([iso, ` ${t} `]);
       }
@@ -151,6 +152,7 @@ const DISASTER_RE = /\b(floods?|flooding|flooded|cyclones?|typhoons?|hurricanes?
 const DISASTER_BOOST = 1.15;
 const PLACE_BONUS = 0.2;          // added when the situation's origin or host is a country the question names
 const PLACE_DAMP = 0.85;          // applied to situations in none of the countries the question names
+const PLACE_BOTH = 0.1;           // added again for each further named country the situation involves (origin and host)
 const DISASTER_DAMP = 0.9;
 // Weak matches are hidden (B4, tuned on tests/search_queries.json with tests/search_fp.py): a situation needs at
 // least MIN_SCORE and REL_FLOOR of the top score (the weakest right answer in the tests scores 1.075; unrelated
@@ -218,7 +220,8 @@ export async function search(q) {
     if (disaster) score *= s.type === "idp" && s.disaster_latest ? DISASTER_BOOST : s.type === "idp" ? 1 : DISASTER_DAMP;
     if (named.size) {
       // the question names a country: situations about it move up, situations elsewhere move down
-      if ([s.origin_iso3, s.host_iso3, ...(s.hosts || [])].some((iso) => named.has(iso))) score += PLACE_BONUS;
+      const hits = new Set([s.origin_iso3, s.host_iso3, ...(s.hosts || [])].filter((iso) => named.has(iso))).size;
+      if (hits) score += PLACE_BONUS + PLACE_BOTH * (hits - 1);
       else score *= PLACE_DAMP;
     }
     score += Math.log10(((s.latest && s.latest.value) || 0) + 10) * 0.004;     // tiny tie-break toward larger situations
