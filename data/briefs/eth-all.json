@@ -1,0 +1,99 @@
+{
+  "id": "eth-all",
+  "what": [
+    {
+      "text": "Refugees from Ethiopia live in host countries including Sudan, Kenya, Uganda, South Africa, and Germany.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2025, 164215 refugees from Ethiopia were living across all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Inside the country, 2378000 people were internally displaced by conflict and protected or assisted by UNHCR at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Displacement occurred alongside Armed conflict over Eritrea territory, Ethiopia, which was active from 1964 to 1991 involving opposition groups ELF and EPLF.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Fighting was also driven by Armed conflict over the government of Ethiopia, active from 1976 to 1991 involving groups such as EPRP and TPLF, and active again from 2020 to 2022 involving TPLF and GLF.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Other active struggles included Armed conflict over Ogaden territory, Ethiopia between 1976 and 1983 involving WSLF, and Armed conflict over Oromiya territory, Ethiopia, active from 2019 to 2025 involving OLA.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Refugee counts rose during major conflict periods, reaching 2567998 refugees from Ethiopia in all host countries combined by the end of 1980.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In a later period, IDMC recorded 5142356 new internal displacements from conflict and violence inside Ethiopia during 2021.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources do not say what routes people took or how they live in host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugee and asylum seeker figures are tracked as year-end totals for all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Internal displacement is measured separately as year-end counts of conflict IDPs protected or assisted by UNHCR and IDMC estimates of internal displacement.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    164215,
+    2378000,
+    2567998,
+    5142356
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "95c7b6a3f6cbb9df",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

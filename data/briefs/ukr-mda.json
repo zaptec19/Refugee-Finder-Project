@@ -1,0 +1,85 @@
+{
+  "id": "ukr-mda",
+  "what": [
+    {
+      "text": "This page follows refugees from Ukraine living in Moldova, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 148852 Ukrainian refugees in Moldova, 2.8% of all refugees from Ukraine.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The largest numbers of Ukrainian refugees live in Germany, Poland, Czechia and the United Kingdom.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records an interstate armed conflict between Russia and Ukraine from 2022 to 2025, at war level in every year.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Before that, it records armed conflict over Novorossiya territory in Ukraine from 2014 to 2022, with the DPR, the LPR and the United Armed Forces of Novorossiya.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2014 at 17 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2022 to 2025, and the data shows a large change between 2021 and 2022.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Moldova.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Moldova only; the gender of part of this group is known, and there is no breakdown by age.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unhcr-demographics-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    17,
+    148852
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "6dc44a49ca1e5c22",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

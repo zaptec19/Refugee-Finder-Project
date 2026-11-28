@@ -1,0 +1,99 @@
+{
+  "id": "ven-arg",
+  "what": [
+    {
+      "text": "The number of other people in need of international protection from Venezuela in Argentina reached 174216 at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, Argentina hosted 2.9 percent of all Venezuelan people in need of international protection.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Venezuela also live in host countries including Spain, Brazil, United States, Mexico, and Costa Rica.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The dataset does not list specific active conflicts or dated events to explain the causes of Venezuelan displacement.",
+      "source_ids": [
+        "ucdp-ov-26.1",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Although internal displacement figures from disasters are tracked, no specific disaster hazard types are recorded in the provided sources.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The count of other people in need of international protection from Venezuela in Argentina was 127152 at the end of 2018.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "This population grew over the following years to reach a peak of 215541 at the end of 2023.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "During the same timeframe, asylum seeker totals in Argentina peaked in 2021 before falling by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people used to travel or how they live in Argentina.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Counts for refugees, asylum seekers, and other people in need of international protection represent year-end totals on 31 December.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Internal disaster displacement metrics count movements during each year rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-ov-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    31,
+    127152,
+    174216,
+    215541
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "b0bdca32f3c4c9f3",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

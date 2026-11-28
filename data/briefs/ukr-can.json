@@ -1,0 +1,101 @@
+{
+  "id": "ukr-can",
+  "what": [
+    {
+      "text": "At the end of 2025, there were 172945 refugees from Ukraine living in Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Across other host countries at the end of 2025, Germany hosted 1173192 refugees from Ukraine, alongside populations in Poland, Czechia, the United Kingdom, and Spain.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Between 2014 and 2022, the Armed conflict over Novorossiya territory, Ukraine involved the Government of Ukraine fighting against opposition groups United Armed Forces of Novorossiya, DPR, and LPR.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "In 2014, additional conflict occurred in the Armed conflict over Donetsk territory, Ukraine involving DPR, the Armed conflict over Lugansk territory, Ukraine involving LPR, and the Armed conflict over the government of Ukraine involving Maidan.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "From 2022 to 2025, the Interstate armed conflict between Russia and Ukraine took place involving the Government of Russia against the Government of Ukraine.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "At the end of 2021, UNHCR reported 1228 refugees from Ukraine living in Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2022, in the same year the Interstate armed conflict between Russia and Ukraine began, IDMC recorded 16870323 new internal displacements from conflict and violence inside Ukraine.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "In the following years through 2025, the year-end total of refugees from Ukraine residing in Canada continued to rise while conflict remained active.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which travel routes displaced people used or where and how they live in their host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugee figures represent year-end totals on 31 December of people outside their country of origin needing international protection under UNHCR's mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Counts for new internal conflict displacements by IDMC reflect movement events during each year rather than individual people, as one person may be displaced more than once.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    31,
+    1228,
+    172945,
+    1173192,
+    16870323
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "2fd932299a719e8a",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

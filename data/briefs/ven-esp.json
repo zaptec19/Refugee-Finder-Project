@@ -1,0 +1,104 @@
+{
+  "id": "ven-esp",
+  "what": [
+    {
+      "text": "Venezuelan refugees reside in several host countries, including Spain, Brazil, United States, Mexico, and Costa Rica.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2025, Spain hosted 169051 refugees from Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "This reflects a large increase compared to 2006, when 20 refugees from Venezuela were recorded in Spain.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack does not contain recorded conflicts or specific events explaining the causes of displacement from Venezuela.",
+      "source_ids": [
+        "ucdp-ov-26.1"
+      ]
+    },
+    {
+      "text": "No opposition groups, active conflict years, or specific event titles are documented in the available data.",
+      "source_ids": [
+        "ucdp-ov-26.1"
+      ]
+    },
+    {
+      "text": "Furthermore, the data pack records no specific disaster hazard types for displacement events inside Venezuela.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main displacement years identified in the data span from 2021 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Year-end totals for refugees from Venezuela in Spain rose significantly by 2019, reaching 35243.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The number of asylum seekers from Venezuela in Spain also expanded in later years, reaching 114690 at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say what travel routes people took to reach Spain or where and how they live in the host country.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Instead, the data reports year-end totals of refugees and asylum seekers from Venezuela in Spain counted at the end of each year under UNHCR's mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Data for disaster displacements inside Venezuela counts new displacement movements during each year rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-ov-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    20,
+    35243,
+    114690,
+    169051
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "10244d072af8f4c9",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

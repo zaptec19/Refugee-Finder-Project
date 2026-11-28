@@ -1,0 +1,93 @@
+{
+  "id": "hti-usa",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Haiti in the United States: people who have asked for international protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 151119 Haitian asylum seekers in the United States, 63.9% of all asylum seekers from Haiti.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Haiti, a separate group, live mostly in Brazil, France and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Haiti in 2004, with FLRN and OP Lavalas, and again from 2024 to 2025 with Viv Ansanm.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data, 2023 to 2025, fall in the same period as the most recent conflict.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2000 at 19425 asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure reached its highest point, 170305, at the end of 2024 and was lower at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The data shows large changes from year to year between 2009 and 2023.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers are counted separately from refugees, as year-end totals, and there is no breakdown by gender or age for this group.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "unhcr-demographics-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "unhcr-demographics-2026"
+  ],
+  "numbers": [
+    19425,
+    151119,
+    170305
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "35ce02664e8285b8",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

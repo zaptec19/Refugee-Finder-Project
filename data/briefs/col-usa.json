@@ -1,0 +1,97 @@
+{
+  "id": "col-usa",
+  "what": [
+    {
+      "text": "Asylum seekers and refugees from Colombia live in several host countries, including Ecuador, Venezuela, Canada, Costa Rica, and the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2025, there were 190214 Colombian asylum seekers with pending protection claims in the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, 5460 refugees from Colombia were residing in the United States under UNHCR's mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Displacement occurred alongside the Armed conflict over the government of Colombia, which was active from 1995 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "During the period from 1995 to 2025, the Government of Colombia fought against opposition groups including ELN, FARC, EPL–Los Pelusos, FARC-EMC, FARC - Segunda Marquetalia, and EMBF.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The count of asylum seekers from Colombia in the United States stood at 2489 at the end of 2000.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure for pending asylum claims in the United States reached a peak of 250260 by the end of 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Following that peak, the total number of pending asylum applications in the United States decreased by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes displaced individuals traveled or where and how they live in host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figures count asylum seekers from Colombia in the United States as year-end totals of people whose protection claims have not yet been decided.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugee numbers record people outside Colombia needing international protection counted under UNHCR's mandate at year end.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    2489,
+    5460,
+    190214,
+    250260
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "2c00cf48087f8185",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

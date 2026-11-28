@@ -1,0 +1,88 @@
+{
+  "id": "esh-dza",
+  "what": [
+    {
+      "text": "Refugees from Western Sahara reside in host countries including Algeria, France, Cuba, Angola, and Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2025, Algeria hosted 173600 refugees from Western Sahara.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Algeria accounted for 99.4% of all refugees from Western Sahara in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources don't say what specific conflicts or events caused people to flee Western Sahara.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "No specific opposition groups or active conflict periods are listed in the provided data.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Refugee counts in Algeria stood at 20000 at the end of 1975.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The population reached a peak of 173600 in 2024 and remained at that level in 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The data notes major shifts between 1975 and 1976, between 1980 and 1981, and between 2023 and 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say what routes people traveled or how refugees live in host locations.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Instead, the data reports year-end totals of refugees from Western Sahara in Algeria counted under UNHCR mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    20000,
+    173600
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "2ff46c4ac06d6acb",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

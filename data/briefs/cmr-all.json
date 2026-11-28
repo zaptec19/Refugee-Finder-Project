@@ -1,0 +1,92 @@
+{
+  "id": "cmr-all",
+  "what": [
+    {
+      "text": "This page follows refugees from Cameroon in all host countries combined, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 140366 refugees from Cameroon.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Nigeria hosts the largest share, 76.7%, followed by Chad, the United States and France.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Ambazonia territory in Cameroon from 2017 to 2025, with Ambazonia insurgents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict over the government of Cameroon with JAS in 2020 and from 2022 to 2025, and with the Islamic State group in several years from 2015.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series starts in 1989 at 60 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure reached its highest point, 147352, at the end of 2022, and the main years of displacement in the data are 2020 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The data shows large changes between 2017 and 2018 and between 2020 and 2021.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals summed over every host country; people displaced inside Cameroon are counted separately by UNHCR and by IDMC.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    60,
+    140366,
+    147352
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "9bab6b69510b4208",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

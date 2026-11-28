@@ -1,0 +1,91 @@
+{
+  "id": "esh-all",
+  "what": [
+    {
+      "text": "By the end of 2025, there were 174607 refugees from Western Sahara living across all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main country of asylum was Algeria with 173600 refugees at year end, while others resided in France, Cuba, Angola, and Venezuela.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The provided sources do not detail the causes of displacement from Western Sahara.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "No specific events, active conflicts, or opposition groups are recorded in the fact pack.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "In 1975, the year-end refugee total for Western Sahara was recorded at 20000.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Data notes highlight big changes between 1975 and 1976 and between 1980 and 1981, followed by very slow, steady change from 1981 to 2004.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "After another big change between 2023 and 2024, the count reached 174607 by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say what travel routes people used or how they live in host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees and asylum seekers are counted as year-end totals on 31 December in all host countries combined under UNHCR's mandate.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugee returns represent a yearly count of refugees returning to Western Sahara from all host countries during each year.",
+      "source_ids": [
+        "unhcr-solutions-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "unhcr-solutions-2026"
+  ],
+  "numbers": [
+    31,
+    20000,
+    173600,
+    174607
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "efe012bb481d7669",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

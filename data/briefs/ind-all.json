@@ -1,0 +1,97 @@
+{
+  "id": "ind-all",
+  "what": [
+    {
+      "text": "Asylum seekers from India reside in host countries including the United States, Canada, Italy, Australia, and South Korea.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025, the United States hosted 98011 asylum seekers from India.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Across all host countries combined, there were 181121 asylum seekers from India at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The Armed conflict over Kashmir territory, India was active from 1995 to 2025 and involved Kashmir insurgents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The Armed conflict over the government of India was active from 1996 to 2025, involving PWG, MCC, CPI-ML-J, and CPI-Maoist.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The Interstate armed conflict between India and Pakistan was active during 1996 to 2003, 2013 to 2020, and in 2025, involving the Government of Pakistan.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The year-end count of asylum seekers from India in all host countries combined stood at 9786 in 2000.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The total grew over the following years, reaching a peak of 202933 asylum seekers in 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Main displacement years for the origin were recorded from 2023 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources do not provide information on displacement routes or living conditions.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Instead, figures report asylum seekers from India as year-end totals in all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    9786,
+    98011,
+    181121,
+    202933
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "4d9daf9adcacdbcb",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

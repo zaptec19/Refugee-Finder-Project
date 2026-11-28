@@ -1,0 +1,87 @@
+{
+  "id": "hnd-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Honduras, counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 100637 people living in internal displacement because of conflict and violence, and UNHCR counted 423845 internally displaced people of concern to it.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Honduras live mostly in Mexico and the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict for Honduras; IDMC counts displacement from conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Storms, floods, mass movements and extreme temperatures are the disasters recorded for Honduras in IDMC's data.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures rose from 29356 in 2014 to 247090 in 2019 and were lower by the end of 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2015 to 2022.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements in each year, which count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    29356,
+    100637,
+    247090,
+    423845
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "3f457a9845b104f4",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "id": "hnd-all",
+  "what": [
+    {
+      "text": "Asylum seekers from Honduras live in host countries including the United States, Mexico, Spain, Guatemala, and Italy.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, there were 168464 Honduran asylum seekers recorded across all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "This population reached 237701 asylum seekers at the end of 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The sources do not report specific events or conflict causes for displacement from Honduras.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "No opposition groups or active conflict periods are listed in the provided data.",
+      "source_ids": [
+        "ucdp-ov-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main displacement years recorded for Honduran asylum seekers span from 2019 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2000, host countries reported 1187 Honduran asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2019, the year-end total of asylum seekers reached 122480 people.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources do not say which routes people take or how they live in host countries.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers from Honduras are counted as year-end totals on 31 December across all host countries combined.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Internal displacement caused by conflict is recorded as year-end totals of people living in displacement.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-ov-26.1",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    31,
+    1187,
+    122480,
+    168464,
+    237701
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "7686b9c97f24f309",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

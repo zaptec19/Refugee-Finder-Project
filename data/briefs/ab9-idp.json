@@ -1,0 +1,107 @@
+{
+  "id": "ab9-idp",
+  "what": [
+    {
+      "text": "Internal displacement occurs inside the Abyei area due to conflict, violence, and disasters.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "By the end of 2025, 57756 people were living in internal displacement inside the Abyei area because of conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In addition, 26000 people were still displaced by disasters inside the Abyei area at the end of 2019.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Displacement in the region is driven by conflict and violence as well as natural hazards.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Floods are the specific disaster hazard recorded as causing displacement in the area.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources do not provide details on specific conflict events or armed opposition groups.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "Main displacement waves occurred in 2015 and between 2022 and 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2015, the count of people living in internal displacement from conflict reached 82000.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "During 2022, IDMC reported 55750 new displacement movements caused by conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources do not detail specific travel routes or living conditions for displaced populations.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Conflict displacement data measures people living in internal displacement inside the Abyei area at the end of each year.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "New displacement data counts the number of movement events during the year rather than the number of displaced individuals.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    26000,
+    55750,
+    57756,
+    82000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "a339fcb6a23ce594",
+  "status": "live",
+  "check": {
+    "attempts": 2,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

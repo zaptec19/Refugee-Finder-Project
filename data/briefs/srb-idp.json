@@ -1,0 +1,100 @@
+{
+  "id": "srb-idp",
+  "what": [
+    {
+      "text": "Displaced people from Serbia and Kosovo live internally as well as in host countries including France, Germany, Switzerland, the United States, and Italy.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR recorded 209453 people forced from their homes by conflict who were living inside Serbia and Kosovo whom UNHCR protects or assists.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR recorded 18522 refugees from Serbia and Kosovo living in France.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The provided sources do not detail specific conflict names or active opposition groups to explain the causes of conflict displacement.",
+      "source_ids": [
+        "ucdp-ov-26.1"
+      ]
+    },
+    {
+      "text": "The only recorded disaster hazard type associated with displacement inside Serbia and Kosovo in the dataset is Flood.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "In 2014, IDMC recorded 33237 new internal displacements from disasters inside Serbia and Kosovo during that year.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "In 2015, the count of asylum seekers from Serbia and Kosovo across all host countries combined reached a year-end total of 53292.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "By 2025, the year-end total of asylum seekers across all host countries combined was lower than in 2015.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources do not say what routes people took when moving.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR internal displacement figures count people displaced inside Serbia and Kosovo by conflict whom UNHCR protects or assists at the end of the year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Disaster figures from IDMC count the number of new internal displacement movements during each year rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-ov-26.1",
+    "idmc-disaster-2026",
+    "idmc-conflict-2026"
+  ],
+  "numbers": [
+    18522,
+    33237,
+    53292,
+    209453
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "5b39ed5805fc90bb",
+  "status": "live",
+  "check": {
+    "attempts": 2,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
