@@ -1,0 +1,83 @@
+{
+  "id": "tjk-uzb",
+  "what": [
+    {
+      "text": "This page follows refugees from Tajikistan in Uzbekistan, as counted by UNHCR at the end of each year from 1995 to 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2005, the last year in UNHCR's series for this group, it counted 39202 refugees, 71.6% of all Tajik refugees that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Today refugees from Tajikistan live mostly in Germany, the United States, the United Kingdom and Austria.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Tajikistan from 1992 to 1998, at war level in some of those years, and again in 2000 and from 2010 to 2011.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The opponents it records include the Forces of Mullo Abdullo in 2000 and from 2010 to 2011.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1995 at 5 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure reached its highest level from 2002 to 2005, and the main years of displacement in the data are 2000 to 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they lived in Uzbekistan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Uzbekistan only, reported to UNHCR, and the series ends in 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    5,
+    39202
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "3cce44b8b5e4aadf",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "id": "gha-all",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Ghana in all host countries combined: people who have asked for international protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 22470 asylum seekers from Ghana.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Canada hosts the largest share, 44.7%, followed by the United States, Côte d'Ivoire and Brazil.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict and no dated events for Ghana, so it does not say why people left.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2016 to 2018 and 2024 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series starts in 2000 at 989 asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure is at its highest at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals of asylum seekers summed over every host country; refugees from Ghana are counted separately.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    989,
+    22470
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "ff8051b7d418a090",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

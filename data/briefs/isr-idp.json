@@ -1,0 +1,86 @@
+{
+  "id": "isr-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Israel, as counted by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 31382 people living in internal displacement because of conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Few people from Israel are refugees abroad; small numbers live in the United Kingdom, Germany, Canada and Spain.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Palestine territory in Israel in several periods, most recently from 2021 to 2025 with Hamas, PIJ, Fatah and the Palestinian Mujahideen Movement.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict over Southern Lebanon territory with Hezbollah in 2006 and from 2023 to 2025, and wildfires are the disasters recorded for Israel in IDMC's data.",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's year-end figure was 200000 in 2023, the main year of displacement in the data.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "It was lower in 2024 and again at the end of 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements in each year, which count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    31382,
+    200000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "11cddfb8411d8b2e",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "chn-ind",
+  "what": [
+    {
+      "text": "This page follows refugees from China living in India, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 63169 Chinese refugees in India, 41.0% of all refugees from China.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "India is the largest host of refugees from China, followed by the United States, France and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records an armed conflict over East Turkestan territory in China with ETIM in 2008.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records interstate armed conflicts between China and Vietnam in 1987 to 1988 and between China and India in 2020; the fact pack does not link these to the refugee figures.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1992 at 80000 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 110098, at the end of 2015 and 2016, and was lower by the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in India.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for India only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    63169,
+    80000,
+    110098
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "aaaecd202445a6a2",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

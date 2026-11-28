@@ -1,0 +1,85 @@
+{
+  "id": "mrt-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced by disasters inside Mauritania, as counted by IDMC.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC reports a year-end figure only for 2020 and 2022: people still displaced by disasters, 23284 at the end of 2022.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Mauritania, a separate group, live mostly in Senegal, Mali and France.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Floods are the disasters recorded for Mauritania in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "UCDP records armed conflict over the government of Mauritania with AQIM in 2010 only.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's year-end figure was 1560 in 2020, and the main year of displacement in the data is 2022.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC also recorded 5700 new displacements from disasters during 2025, a count of movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    1560,
+    5700,
+    23284
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "3771a6bd3e19f75f",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

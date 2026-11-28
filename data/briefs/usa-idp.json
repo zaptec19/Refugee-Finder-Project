@@ -1,0 +1,86 @@
+{
+  "id": "usa-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside the United States, as counted by IDMC, mostly by disasters.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 43987 people still displaced by disasters inside the country; IDMC reports this figure only for some years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC also recorded 732462 new displacements from disasters during 2025, a yearly count of movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Floods, mass movements, storms and wildfires are among the disasters recorded for the United States in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The fact pack records no conflict-related displacement inside the country.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's year-end figure for disaster displacement rose from 12896 in 2019 to 104611 in 2020, the main year of displacement in the data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "It was lower in the following years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count each forced move during a year, so someone forced to move twice is counted twice; they are a separate count from the year-end figure.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    12896,
+    43987,
+    104611,
+    732462
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "b696008366a8a561",
+  "status": "failed_check",
+  "check": {
+    "attempts": 2,
+    "bad_numbers": [],
+    "bad_sources": [
+      "how: new displacements (a yearly count of movements) written as people or a year-end total: 'IDMC's new displacements count each forced move during a year, so some'"
+    ]
+  }
+}

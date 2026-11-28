@@ -1,0 +1,84 @@
+{
+  "id": "hti-mex",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Haiti in Mexico: people who have asked for international protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 50961 Haitian asylum seekers in Mexico, 21.6% of all asylum seekers from Haiti.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Haiti, a separate group, live mostly in Brazil, France and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Haiti in 2004, with FLRN and OP Lavalas, and again from 2024 to 2025 with Viv Ansanm.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2021 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2003 at 6 asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure reached its highest point, 78905, at the end of 2024 and was lower at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Mexico.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers are counted separately from refugees, as year-end totals for Mexico only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    6,
+    50961,
+    78905
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "38b6d291e6ee35ee",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "phl-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside the Philippines, counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 28324 people living in internal displacement because of conflict and violence, and UNHCR counted 43500 internally displaced people of concern to it.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Few people from the Philippines are refugees abroad.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of the Philippines with the CPP from 2003 to 2025, and over Mindanao territory with groups including the ASG and MILF from 2003 to 2020.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2016 to 2024; earthquakes, floods, mass movements, storms and volcanic activity are the disasters recorded in IDMC's data.",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures rose from 125000 in 2009 to 445268 in 2017, and the main years of displacement in the data are 2017 and 2018.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The figure was much lower by the end of 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements in each year, which count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    28324,
+    43500,
+    125000,
+    445268
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "ccac28c46a984430",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "id": "lka-fra",
+  "what": [
+    {
+      "text": "This page follows refugees from Sri Lanka living in France, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 34976 Sri Lankan refugees in France, 23.6% of all refugees from Sri Lanka.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "India hosts the most Sri Lankan refugees, followed by France, Switzerland and the United Kingdom.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Eelam territory in Sri Lanka from 1990 to 2001, in 2003 and from 2005 to 2009, with the LTTE, at war level in many of those years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict over the government of Sri Lanka with the JVP in 1990.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1995 at 15531 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2008 to 2025, and the figure is at its highest at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in France.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for France only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    15531,
+    34976
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "5e8d7a8b71776980",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

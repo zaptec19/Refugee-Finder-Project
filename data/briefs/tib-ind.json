@@ -1,0 +1,82 @@
+{
+  "id": "tib-ind",
+  "what": [
+    {
+      "text": "This page follows Tibetan refugees in India as counted by UNHCR at the end of each year from 1964 to 1974.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 1974, the last year in UNHCR's series for this group, it counted 59900 refugees, 88.1% of all Tibetan refugees it counted that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "In 2025 the largest number of Tibetan refugees in UNHCR's data live in Nepal.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict and no dated events for this group, so it does not say why people left.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 1964 to 1974.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1964 at 44000 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure rose to its highest point at the end of 1974, when the series ends.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in India.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for India only, reported to UNHCR, and the series ends in 1974.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    44000,
+    59900
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "7c6d6a7068137c8b",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

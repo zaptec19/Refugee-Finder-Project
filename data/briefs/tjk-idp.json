@@ -1,0 +1,88 @@
+{
+  "id": "tjk-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Tajikistan, as recorded by UNHCR and IDMC, shown side by side and never added together.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's data gives 25285 internally displaced people in Tajikistan for 1996.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC records 15000 new displacements from conflict and violence in 2021, a count of movements, not people.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Tajikistan in 2010 and 2011, with the Forces of Mullo Abdullo and the IMU.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records an interstate armed conflict between Kyrgyzstan and Tajikistan in 2021 and 2022, and earthquakes are the disasters recorded for Tajikistan in IDMC's data.",
+      "source_ids": [
+        "ucdp-acd-26.1",
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures for Tajikistan cover 2010 to 2025, and its 2021 count of new displacements falls in the years of the conflict with Kyrgyzstan.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The fact pack names no main years of displacement for this page.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "idmc-conflict-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    15000,
+    25285
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "de1944b8ef0b6c13",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

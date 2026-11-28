@@ -1,0 +1,84 @@
+{
+  "id": "moz-tza",
+  "what": [
+    {
+      "text": "This page follows refugees from Mozambique in Tanzania, as counted by UNHCR at the end of each year from 1964 to 1997.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 1997, the last year in UNHCR's series for this group, it counted 33202 refugees, 98.7% of all Mozambican refugees that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Few refugees from Mozambique are recorded in UNHCR's data today.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Mozambique territory between Portugal and Frelimo from 1964 to 1974.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict over the government of Mozambique from 1977 to 1992, at war level in many of those years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1964 at 10000 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 75152, at the end of 1992, and the main years of displacement in the data are 1969 to 1974 and 1987 to 1993.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they lived in Tanzania.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Tanzania only, reported to UNHCR, and the series ends in 1997.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    10000,
+    33202,
+    75152
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "ad0d41841b09e44c",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

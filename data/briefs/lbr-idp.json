@@ -1,0 +1,87 @@
+{
+  "id": "lbr-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Liberia, counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC's year-end figure for people living in internal displacement because of conflict and violence stayed at 23000 from 2009 to 2014.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "UNHCR's last figure for internally displaced people in Liberia is 237822, for 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Liberia in 2003, with LURD and MODEL, at war level.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Floods are the disasters recorded for Liberia in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "The main years of displacement in the data are 2009 to 2014.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also recorded 22059 new displacements from disasters during 2024, a count of movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count each forced move, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    22059,
+    23000,
+    237822
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "e51ce9a87708e785",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

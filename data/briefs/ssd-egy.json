@@ -1,0 +1,83 @@
+{
+  "id": "ssd-egy",
+  "what": [
+    {
+      "text": "This page follows refugees from South Sudan living in Egypt, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 26954 South Sudanese refugees in Egypt, 1.1% of all refugees from South Sudan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Uganda hosts the most South Sudanese refugees, followed by Sudan, Ethiopia and Kenya.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of South Sudan from 2011 to 2021, with the SPLM/A - IO among the opponents, and again in 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records an interstate armed conflict between South Sudan and Sudan in 2012.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2012 at 178 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2019 to 2025, and the figure is at its highest at the end of 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Egypt.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Egypt only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    178,
+    26954
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "b591aff3141370c6",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "bdi-uga",
+  "what": [
+    {
+      "text": "This page follows refugees from Burundi living in Uganda, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 43677 Burundian refugees in Uganda, 13.7% of all refugees from Burundi.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Tanzania hosts the most Burundian refugees, followed by Rwanda, the Democratic Republic of the Congo and Uganda.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Burundi in many years from 1991, at war level in some of them.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "In its most recent periods the opponents it records include RED-TABARA and FPB from 2014 to 2015, and RED-TABARA and FNL-Ubugabo-Burihabwa from 2019 to 2024.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1996 at 5 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure reached its highest point, 48466, at the end of 2020, and the main years of displacement in the data are 2015 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Uganda.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Uganda only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    5,
+    43677,
+    48466
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "a5196cb05be58dba",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "idn-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Indonesia, as counted by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 35672 people living in internal displacement because of conflict and violence; UNHCR reports no figure above zero for that year.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Indonesia live mostly in Papua New Guinea.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Aceh territory with GAM from 2003 to 2005, and over West Papua territory with the OPM from 2018 to 2025.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Earthquakes, floods, mass movements, storms and volcanic activity are the disasters recorded for Indonesia in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures rose from 70000 in 2009 to 200000 in 2010, and the main years of displacement in the data are 2010 to 2012.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The figure was much lower by the end of 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living or which routes they took.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements from disasters in each year, which count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    35672,
+    70000,
+    200000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "50f95dc355dfa8a4",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
