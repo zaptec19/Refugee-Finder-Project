@@ -83,11 +83,10 @@
     5913638
   ],
   "prompt_version": 3,
-  "writer": "ai",
+  "writer": "AI",
   "generated_on": "2026-11-19",
   "factpack_hash": "3a48b39944144d29",
-  "status": "unchecked",
-  "checked_by": null,
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

@@ -2,20 +2,20 @@
   "id": "som-idp",
   "what": [
     {
-      "text": "This page follows people displaced inside Somalia.",
+      "text": "People have experienced internal displacement inside Somalia, while refugees from Somalia reside in host countries including Kenya, Ethiopia, Uganda, Germany, and Yemen.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, 3347408 people were living in internal displacement inside Somalia because of conflict and violence.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "At the end of 2025, UNHCR and IDMC gave the same figure: 3347408 people living in internal displacement because of conflict.",
-      "source_ids": [
-        "idmc-conflict-2026",
-        "unhcr-pop-2026"
-      ]
-    },
-    {
-      "text": "Refugees from Somalia live mainly in Kenya and Ethiopia.",
+      "text": "At the end of 2025, there were 319471 refugees from Somalia living in Kenya.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -23,19 +23,19 @@
   ],
   "why": [
     {
-      "text": "UCDP records armed conflict over the government of Somalia in every year from 2006 to 2025, with ARS/UIC, Al-Shabaab and Hizbul Islam among the government's opponents.",
+      "text": "Armed conflict over the government of Somalia was active from 2006 to 2025 between the Government of Somalia and opposition groups ARS/UIC, Al-Shabaab, and Hizbul Islam.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "UCDP also records armed conflict with the Islamic State group in 2019 to 2021 and in 2025.",
+      "text": "Armed conflict over Somaliland territory, Somalia occurred in 2018 involving the Republic of Somaliland, while Armed conflict with the Islamic State group, Somalia was active from 2019 to 2021 and in 2025 involving IS.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Drought and floods are the disasters recorded for Somalia in IDMC's data.",
+      "text": "In addition to armed conflicts, disaster hazards recorded in Somalia include Drought and Flood.",
       "source_ids": [
         "idmc-disaster-2026"
       ]
@@ -43,50 +43,63 @@
   ],
   "when": [
     {
-      "text": "IDMC's figures rose from 1500000 in 2009 to a peak of 3864000 in 2022.",
+      "text": "The number of people living in internal displacement inside Somalia because of conflict and violence stood at 824551 at the end of 2017.",
       "source_ids": [
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "The main years of displacement in the data are 2018 to 2025, and new displacements from disasters were highest in 2023 in IDMC's records.",
+      "text": "In 2023, new internal displacements inside Somalia from disasters reached 2043426 movements during the year.",
       "source_ids": [
-        "idmc-conflict-2026",
         "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "During these same years, armed conflict over the government of Somalia remained active.",
+      "source_ids": [
+        "ucdp-acd-26.1"
       ]
     }
   ],
   "how": [
     {
-      "text": "IDMC's new displacements count movements, not people: someone forced to move twice is counted twice.",
+      "text": "The sources don't say which specific routes displaced people take or what their living conditions are.",
       "source_ids": [
+        "unhcr-pop-2026",
         "idmc-conflict-2026"
       ]
     },
     {
-      "text": "The sources don't say where displaced people in Somalia are living or which routes they took.",
+      "text": "Conflict internal displacement is measured as year-end totals of people protected or assisted by UNHCR, alongside year-end population estimates by IDMC.",
       "source_ids": [
+        "unhcr-pop-2026",
         "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Disaster displacement statistics record the count of new movements during each year rather than individual people.",
+      "source_ids": [
+        "idmc-disaster-2026"
       ]
     }
   ],
   "sources": [
-    "idmc-conflict-2026",
     "unhcr-pop-2026",
+    "idmc-conflict-2026",
     "ucdp-acd-26.1",
     "idmc-disaster-2026"
   ],
   "numbers": [
-    1500000,
-    3347408,
-    3864000
+    319471,
+    824551,
+    2043426,
+    3347408
   ],
   "prompt_version": 3,
-  "writer": "ai",
-  "generated_on": "2026-11-18",
-  "factpack_hash": "a438ef4c5d71ad6c",
-  "status": "unchecked",
-  "checked_by": null,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "36426fde14faa0dd",
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

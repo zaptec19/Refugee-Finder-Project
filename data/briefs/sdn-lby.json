@@ -2,19 +2,19 @@
   "id": "sdn-lby",
   "what": [
     {
-      "text": "This page follows refugees from Sudan living in Libya, which UNHCR's data lists as the Libyan Arab Jamahiriya.",
+      "text": "Refugees fleeing Sudan live across host countries in the region, including Chad, South Sudan, Libya, Ethiopia, and Uganda.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "At the end of 2025, UNHCR counted 551727 Sudanese refugees there, 19.6% of all Sudanese refugees.",
+      "text": "By the end of 2025, Libya hosted 551727 refugees from Sudan.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Chad and South Sudan host more.",
+      "text": "Additionally, 87439 asylum seekers from Sudan were recorded in Libya at the end of 2025.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -22,13 +22,19 @@
   ],
   "why": [
     {
-      "text": "UCDP records armed conflict over the government of Sudan from 1990 to 2018 and from 2020 to 2025, at war level from 2023.",
+      "text": "The Armed conflict over the government of Sudan was active from 1990 to 2018 with opposition groups SPLM/A, NDA, JEM, SLM/A, NRF, SLM/A - MM, SLFA, SSDM/A, SPLM/A-North, SRF, SSLM/A, Darfur Joint Resistance Forces, and SARC.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "From 2020 to 2025 the opposing groups include the RSF, the SLM/A, the SPLM/A-North and the SFA.",
+      "text": "The Armed conflict over the government of Sudan continued from 2020 to 2025, involving opposition groups SLM/A, RSF, SPLM/A-North, and SFA.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "Other active conflicts recorded include the Armed conflict over Abyei territory, Sudan against Republic of South Sudan in 2011, and the Interstate armed conflict between South Sudan and Sudan against Government of Sudan in 2012.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
@@ -36,60 +42,59 @@
   ],
   "when": [
     {
-      "text": "UNHCR's figure rose from 199388 at the end of 2024 to 551727 at the end of 2025.",
+      "text": "Refugee figures for Sudanese in Libya remained lower in earlier years before rising sharply to 199388 at the end of 2024.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Big changes came between 2023 and 2024 and again between 2024 and 2025, and 2025 is the main year of displacement in the data.",
+      "text": "By the end of 2025, the year-end refugee figure from Sudan in Libya reached 551727.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Returns from Libya to Sudan were highest in 2011 in UNHCR's returns data.",
+      "text": "This movement occurred during active conflict over the government of Sudan between 2020 and 2025.",
       "source_ids": [
-        "unhcr-solutions-2026"
+        "ucdp-acd-26.1"
       ]
     }
   ],
   "how": [
     {
-      "text": "These are year-end totals of refugees in Libya only, and UNHCR adds notes to some of them.",
+      "text": "The sources do not detail the travel routes or living conditions of displaced Sudanese people in Libya.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Gender and age are known for only part of this group.",
+      "text": "Refugees and asylum seekers are recorded as year-end counts under UNHCR mandate.",
       "source_ids": [
-        "unhcr-demographics-2026"
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "The sources don't say which routes people took or where in Libya they live.",
+      "text": "Internal displacement metrics for Sudan distinguish between year-end population totals and annual counts of new movements.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
     "unhcr-pop-2026",
     "ucdp-acd-26.1",
-    "unhcr-solutions-2026",
-    "unhcr-demographics-2026"
+    "idmc-conflict-2026"
   ],
   "numbers": [
+    87439,
     199388,
     551727
   ],
   "prompt_version": 3,
-  "writer": "ai",
-  "generated_on": "2026-11-22",
-  "factpack_hash": "630b02e17b50783a",
-  "status": "unchecked",
-  "checked_by": null,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "a73da44724e82757",
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

@@ -81,11 +81,10 @@
     272400
   ],
   "prompt_version": 3,
-  "writer": "ai",
+  "writer": "AI",
   "generated_on": "2026-11-22",
   "factpack_hash": "4230d9a28ec17f6d",
-  "status": "unchecked",
-  "checked_by": null,
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

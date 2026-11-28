@@ -85,11 +85,10 @@
     1205729
   ],
   "prompt_version": 3,
-  "writer": "ai",
+  "writer": "AI",
   "generated_on": "2026-11-22",
   "factpack_hash": "4a3871c3aceb41af",
-  "status": "unchecked",
-  "checked_by": null,
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

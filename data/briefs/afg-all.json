@@ -77,11 +77,10 @@
     6403144
   ],
   "prompt_version": 3,
-  "writer": "ai",
+  "writer": "AI",
   "generated_on": "2026-11-18",
   "factpack_hash": "e0534993008cb797",
-  "status": "unchecked",
-  "checked_by": null,
+  "status": "live",
   "check": {
     "attempts": 1,
     "bad_numbers": [],

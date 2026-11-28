@@ -2,19 +2,19 @@
   "id": "afg-irn-pak",
   "what": [
     {
-      "text": "This page follows refugees from Afghanistan in Iran and Pakistan combined, the countries that host the most Afghan refugees.",
+      "text": "Refugees who were displaced from Afghanistan live in host countries including Pakistan, Iran, Germany, France, and United Kingdom.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "At the end of 2025, UNHCR counted 1158538 Afghan refugees in Pakistan and 758339 in Iran.",
+      "text": "At the end of 2025, Pakistan hosted 1158538 refugees from Afghanistan.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "From 2025, UNHCR also counts some Afghans in Iran and Pakistan as other people in need of international protection, a separate group.",
+      "text": "In the same year, Iran hosted 758339 refugees from Afghanistan.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
@@ -22,87 +22,93 @@
   ],
   "why": [
     {
-      "text": "Soviet forces entered Afghanistan on 27 December 1979, and UCDP records armed conflict over the government of Afghanistan in every year from 1978 to 2025.",
+      "text": "Causes include the Armed conflict over the government of Afghanistan active from 1978 to 2025, involving groups such as PDPA, Taleban, NRF, and AFF.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "Over that span the government's opponents in UCDP's records include the PDPA, Hizb-i Islami-yi Afghanistan and the Taleban, and UCDP also records armed conflict with the Islamic State group from 2015.",
+      "text": "Fighting also involved the Armed conflict with the Islamic State group, Afghanistan active from 2015 to 2025 against IS, and the Interstate armed conflict between Afghanistan and Pakistan active from 2024 to 2025 against Government of Pakistan.",
       "source_ids": [
         "ucdp-acd-26.1"
       ]
     },
     {
-      "text": "The Taliban took control of Kabul on 15 August 2021, and new arrivals in Iran and Pakistan followed.",
+      "text": "Key events during these periods include the Soviet intervention in 1979 when Soviet forces entered Afghanistan, and the Taliban taking control of Kabul in 2021.",
       "source_ids": [
-        "unhcr-pop-2026"
+        "ucdp-acd-26.1",
+        "un-news-2021-kabul"
       ]
     }
   ],
   "when": [
     {
-      "text": "UNHCR's figures for Iran and Pakistan rise steeply from 1980 and peak at 6314110 in 1990.",
+      "text": "Refugees from Afghanistan in Iran and Pakistan combined numbered 500000 in 1979 and reached 6314110 in 1990.",
       "source_ids": [
-        "unhcr-pop-2026",
-        "ucdp-acd-26.1"
+        "unhcr-pop-2026"
       ]
     },
     {
-      "text": "In 2002, after the fall of the Taliban government, returns from Pakistan and Iran were the largest in UNHCR's returns data.",
+      "text": "After Soviet forces entered Afghanistan in 1979, refugee figures in Iran and Pakistan rose steeply from 1980, while in 2002 returns from Pakistan and Iran were the largest in UNHCR data following the fall of the Taliban government.",
       "source_ids": [
+        "ucdp-acd-26.1",
         "unhcr-solutions-2026"
       ]
     },
     {
-      "text": "Pakistan announced a plan in October 2023 to return foreigners without valid documents, and by the end of 2025 Iran and Pakistan together hosted 1916877 Afghan refugees.",
+      "text": "New arrivals in Iran and Pakistan followed when the Taliban took control of Kabul in 2021, and large returns of Afghans followed after Pakistan announced a repatriation plan in 2023.",
       "source_ids": [
+        "un-news-2021-kabul",
         "unhcr-pak-afg-returns-9",
-        "unhcr-pop-2026"
+        "unhcr-solutions-2026"
       ]
     }
   ],
   "how": [
     {
-      "text": "Many Afghans in Iran and Pakistan are not counted as refugees, so these figures are not a count of every Afghan living there.",
+      "text": "The sources don't say what travel routes people used or details of their living conditions.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Iran's 2022 figure follows a recount, so read UNHCR's footnote before comparing 2021 with 2022.",
+      "text": "Refugee figures for Iran and Pakistan represent year-end totals for those two host countries combined, rather than a complete total for all host countries.",
       "source_ids": [
         "unhcr-pop-2026"
       ]
     },
     {
-      "text": "Returns in 2025 were on the scale of 2002, mostly from Iran.",
+      "text": "Internal displacement inside Afghanistan is measured separately through year-end totals of conflict-displaced people whom UNHCR protects or assists, alongside internal displacement estimates recorded by IDMC.",
       "source_ids": [
-        "unhcr-solutions-2026"
+        "unhcr-pop-2026",
+        "idmc-conflict-2026"
       ]
     }
   ],
   "sources": [
     "unhcr-pop-2026",
     "ucdp-acd-26.1",
+    "un-news-2021-kabul",
     "unhcr-solutions-2026",
-    "unhcr-pak-afg-returns-9"
+    "unhcr-pak-afg-returns-9",
+    "idmc-conflict-2026"
   ],
   "numbers": [
+    500000,
     758339,
     1158538,
-    1916877,
     6314110
   ],
   "prompt_version": 3,
-  "writer": "ai",
-  "generated_on": "2026-11-18",
-  "factpack_hash": "a3d5c52ac0d1a406",
-  "status": "unchecked",
-  "checked_by": null,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "3c2943e8513116ee",
+  "status": "failed_check",
   "check": {
-    "attempts": 1,
-    "bad_numbers": [],
+    "attempts": 2,
+    "bad_numbers": [
+      "how: number word 'two' is not in the fact pack"
+    ],
     "bad_sources": []
   }
 }

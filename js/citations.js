@@ -25,7 +25,7 @@ function shortTitle(t) {
  */
 export function citeNumbering({ brief, S, SRC, REFS }) {
   const order = [];
-  if (brief && brief.status !== "failed_check") {
+  if (brief && brief.status !== "failed_check" && brief.status !== "needs_rewrite") {
     for (const p of ["what", "why", "when", "how"]) {
       for (const sen of Array.isArray(brief[p]) ? brief[p] : []) {
         for (const id of sen.source_ids || []) if (!order.includes(id)) order.push(id);

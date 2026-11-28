@@ -222,7 +222,8 @@ function headHTML() {
 
 // =================================================================== 3 brief
 function briefHTML(brief) {
-  if (!brief || brief.status === "failed_check") {
+  // every brief that passed the automatic checks is live; one that failed them (or was held back) is "coming soon"
+  if (!brief || brief.status === "failed_check" || brief.status === "needs_rewrite") {
     return `<div class="empty-state">
       <h3>Brief coming soon</h3>
       <p class="muted" style="margin:0">A plain-language summary (what happened, why people moved, when and how) has not been written for this situation yet.
@@ -241,16 +242,15 @@ function briefHTML(brief) {
       ? ` <span class="brief__rest" hidden>${rest.map((x, i) => one(x, i + 1)).join(" ")}</span>` : ""}</div>`;
   };
   const srcNames = [...new Set(srcs.map((id) => (SRC[id]?.short || REFS[id]?.authors || id).replace(/^Government of /, "Govt. of ")))];
-  // rule 11: "Written with AI from [sources]", plus "· Checked by [name], [date]" only once a brief has been checked;
-  // never a model name, never an "unchecked" notice
-  const label = `Written with AI from ${esc(srcNames.join(", ") || "the data")}${brief.checked_by
-    ? ` · Checked by ${esc(brief.checked_by)}${brief.checked_on ? `, ${esc(formatDate(brief.checked_on))}` : ""}` : ""}`;
+  // rule 11: only ever "Written with AI from [sources]", whatever the brief file holds (never a model name, a
+  // writer, a checking status or a checking notice)
+  const label = `Written with AI from ${esc(srcNames.join(", ") || "the data")}`;
   const more = brief.more ? `<details class="brief__more"><summary>Read more</summary><div class="brief__v">${esc(brief.more)}</div></details>` : "";
   const anyRest = ["what", "why", "when", "how"].some((p) => Array.isArray(brief[p]) && brief[p].length > 1);
   return `<div class="brief" id="brief-body">${["what", "why", "when", "how"].map(part).join("")}</div>${more}
     ${anyRest ? `<button class="linklike brief__toggle" type="button" aria-expanded="false" aria-controls="brief-body"
       onclick="const open=this.getAttribute('aria-expanded')!=='true';this.setAttribute('aria-expanded',open);this.textContent=open?'Show less ⌃':'Read more ⌄';document.querySelectorAll('#brief-body .brief__rest').forEach(e=>e.hidden=!open)">Read more ⌄</button>` : ""}
-    <p style="margin-top:16px"><span class="brief-label${brief.status === "checked" ? " brief-label--checked" : ""}" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
+    <p style="margin-top:16px"><span class="brief-label" data-brief-label>${icon("info", { size: 14 })}${label}</span></p>
     <p class="small muted brief__sources">Sources: ${CITES.order.map((id) => markerHTML(CITES, id, { withName: true })).join(" · ")}</p>`;
 }
 
