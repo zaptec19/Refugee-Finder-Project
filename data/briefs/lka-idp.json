@@ -1,0 +1,91 @@
+{
+  "id": "lka-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Sri Lanka, as counted by IDMC and by UNHCR, shown side by side and never added together.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 4806 people displaced by conflict and violence, while UNHCR counted 4099 IDPs of concern.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "IDMC and UNHCR count differently, so their figures don't match.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over Eelam territory in Sri Lanka with the LTTE in 2003 and from 2005 to 2009, at war level in most of those years.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Sri Lanka list floods, storms, erosion and mass movements.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures fell from 400000 in 2009 to 4806 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2009 and 2010, at the end of the war.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2019, IDMC recorded 1700 new displacements by conflict and violence: these count movements, not people.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Sri Lanka.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    1700,
+    4099,
+    4806,
+    400000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "7f1f4aa60b9c2ee4",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
