@@ -1,0 +1,83 @@
+{
+  "id": "mwi-all",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from Malawi in all host countries: people who have asked for international protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 1779 Malawian asylum seekers, and Israel hosted 44.5% of them.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "After Israel, the largest hosts are South Africa, Ireland and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict and no dated events for Malawi, so it does not say why people left.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2007 to 2008, 2012 to 2013 and 2015.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series starts in 2000 at 5 asylum seekers, and the figure was at its highest, 8206, at the end of 2008.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "It was lower by 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals summed over every host country that reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    5,
+    1779,
+    8206
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "db6b42743384584a",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

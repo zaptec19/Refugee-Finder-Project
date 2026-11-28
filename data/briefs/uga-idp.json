@@ -1,0 +1,81 @@
+{
+  "id": "uga-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside Uganda, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 2000 people displaced by conflict and violence, while UNHCR's file shows no figure above zero.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Uganda from 2003 to 2011 and from 2013 to 2017, with the LRA and ADF as opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Uganda list floods, storms, mass movements and wildfires.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures fell from 435000 in 2009 to 2000 in 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main year of displacement in the data is 2009.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC recorded 1978 new displacements by conflict and violence and 29474 by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-conflict-2026",
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Uganda.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    29474,
+    435000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "1a87b8b6e456e54c",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

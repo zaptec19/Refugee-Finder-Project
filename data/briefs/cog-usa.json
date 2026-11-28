@@ -1,0 +1,84 @@
+{
+  "id": "cog-usa",
+  "what": [
+    {
+      "text": "This page follows asylum seekers from the Republic of the Congo in the United States: people who have asked for international protection and are waiting for a decision.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 1408 asylum seekers from the Republic of the Congo in the United States, 14.9% of all asylum seekers from the Republic of the Congo.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Refugees from the Republic of the Congo, a separate group, live mostly in France, South Africa, the United States and Canada.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Congo from 1997 to 1999 and in 2002 and 2016.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The fact pack does not give other reasons why people left.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2000 at 387 asylum seekers.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 4176, at the end of 2024; the main years of displacement in the data are 2021 and 2023 to 2024.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Asylum seekers are counted separately from refugees, as year-end totals for the United States only.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    387,
+    1408,
+    4176
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "97a51eb68af4a97d",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

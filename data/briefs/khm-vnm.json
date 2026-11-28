@@ -1,0 +1,84 @@
+{
+  "id": "khm-vnm",
+  "what": [
+    {
+      "text": "This page follows refugees from Cambodia living in Vietnam, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2011, the last year with a figure, UNHCR counted 990 Cambodian refugees in Vietnam, 6.5% of all refugees from Cambodia that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Today, France hosts the most Cambodian refugees, followed by Thailand, Switzerland and the United States.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Cambodia from 1967 to 1975 and from 1978 to 1998, with the KR among the opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records an interstate armed conflict between Cambodia and Vietnam from 1975 to 1977.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group runs from 1971, at 57000 refugees, to 2011.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 150000, at the end of 1978, the main year of displacement in the data.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Vietnam.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Vietnam only, reported to UNHCR from 1971 to 2011.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    990,
+    57000,
+    150000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "2dc0f7976c9741c3",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

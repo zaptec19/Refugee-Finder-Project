@@ -1,0 +1,84 @@
+{
+  "id": "hrv-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Croatia, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's last figure for people displaced by conflict and violence is 2059, for 2011.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "For 2011, UNHCR's file shows no figure above zero, which may mean none or not reported.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict for Croatia in these years, so it does not say why people were displaced.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Croatia list wildfires.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figure stayed between 2059 and 2400 from 2009 to 2011.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data are 2009 to 2011.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC recorded 27 new displacements by disasters: these count movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Croatia.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "unhcr-pop-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    27,
+    2400
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "b14ce3b5e6dd54e3",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

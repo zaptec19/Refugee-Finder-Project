@@ -1,0 +1,85 @@
+{
+  "id": "bih-che",
+  "what": [
+    {
+      "text": "This page follows refugees from Bosnia and Herzegovina living in Switzerland, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 1109 refugees from Bosnia and Herzegovina in Switzerland, 4.5% of all refugees from Bosnia and Herzegovina.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Serbia and Kosovo is the largest host of refugees from Bosnia and Herzegovina, followed by France and Denmark.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflicts in Bosnia-Herzegovina from 1992 to 1995, over Serb, Croat and Bihaca Krajina territory.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data, 1997 to 2006, come after those conflicts ended.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1995 at 4499 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 10410, at the end of 1997, and has fallen since then.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in Switzerland.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Switzerland only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    1109,
+    4499,
+    10410
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "c35eb4c9125a1e3a",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
