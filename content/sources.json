@@ -535,7 +535,7 @@
     "label": "Natural Earth country borders, India point of view (maps)",
     "organisation": "Natural Earth",
     "dataset": "Admin 0 – Countries, India point of view (country borders for the maps)",
-    "release": "v5.1.2 (layer 5.1.1), 1:10m; simplified by this site for 1:110m and 1:50m maps",
+    "release": "v5.1.2 (layer 5.1.1); used at 1:110m (home globe) and 1:50m (situation and country maps), simplified by this site from the 1:10m download",
     "url": "https://www.naturalearthdata.com/",
     "licence": "Public domain",
     "licence_url": "https://www.naturalearthdata.com/about/terms-of-use/",
@@ -552,7 +552,7 @@
       ],
       "title": "Admin 0 – Countries, India point of view",
       "version": "5.1.2",
-      "medium": "1:10m",
+      "medium": "1:110m and 1:50m maps",
       "URL": "https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2",
       "accessed": {
         "date-parts": [
