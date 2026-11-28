@@ -1,0 +1,77 @@
+{
+  "id": "rou-idp",
+  "what": [
+    {
+      "text": "This page follows internal displacement in Romania, as recorded by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "In 2025, IDMC recorded 246 new displacements by conflict and violence: these count movements, not people.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict for Romania, so it does not say why people were displaced by violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's disaster records for Romania list floods.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's data for Romania starts in 2008.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The data shows no year-end count of people still displaced.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "In 2025, IDMC also recorded 1325 new displacements by disasters, again counting movements, not people.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The sources don't say where people went inside Romania.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    246,
+    1325
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-29",
+  "factpack_hash": "8bd5ce09262d9285",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
