@@ -63,7 +63,7 @@ import("./welcome.js").then((m) => {
     m.offerTour(tourAnchor());
   }, introRan ? 1300 : 500);
 });
-warmUp();                       // load the search data and model in the background
+warmUp();                       // load the search data in the background (the model waits for the first search)
 const input = document.getElementById("q");
 const searchUI = await attachSearch(input);
 document.querySelectorAll("[data-q]").forEach((b) => b.addEventListener("click", () => {

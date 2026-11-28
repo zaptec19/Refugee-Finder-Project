@@ -8,7 +8,7 @@
 import MiniSearch from "https://cdn.jsdelivr.net/npm/minisearch@7.1.0/+esm";
 import { getJSON } from "./data.js";
 
-let state = "loading";          // loading -> ready | keyword (model failed: keyword only)
+let state = "idle";             // idle (model not asked for yet) -> loading -> ready | keyword (model failed: keyword only)
 const listeners = new Set();
 export const engineState = () => state;
 export const onEngineChange = (cb) => listeners.add(cb);
@@ -67,7 +67,7 @@ function load() {
     placeNames.sort((a, b) => b[1].length - a[1].length);
     return { sits, byId, ms, cs, span, vectors, meta, rowIndex, placeNames };
   })();
-  ready.then(startModel).catch((e) => { console.error(e); setState("keyword"); });
+  ready.catch((e) => { console.error(e); setState("keyword"); });
   return ready;
 }
 
@@ -77,6 +77,7 @@ let seq = 0;
 const pending = new Map();
 function startModel({ meta }) {
   if (worker) return;
+  setState("loading");
   try {
     worker = new Worker(new URL("./search-worker.js", import.meta.url), { type: "module" });
   } catch (e) {
@@ -108,9 +109,19 @@ async function embed(text, model) {
   return vec;
 }
 
-/** Start loading data and the model in the background (call early, e.g. on page load). */
+/** Load the search data in the background (call early, e.g. on page load). Keyword search works from this alone;
+ *  the model (a download from Hugging Face) waits for startSmart(). */
 export function warmUp() {
   load();
+}
+
+/** The reader has started to search (first click into a search box, or first keystroke): download the model now.
+ *  Keyword results show in the meantime, and blended ones replace them when it is ready. */
+let smartAsked = false;
+export function startSmart() {
+  if (smartAsked) return;
+  smartAsked = true;
+  load().then(startModel).catch(() => {});
 }
 
 // ------------------------------------------------------------------ query parsing
@@ -152,6 +163,7 @@ const isosOf = (s) => [s.origin_iso3, s.host_iso3, ...(s.hosts || [])].filter(Bo
 
 /** @returns {Promise<{items: object[], quick: object|null, years: number[]|null, mode: string}>} */
 export async function search(q) {
+  startSmart();
   const idx = await load();
   const years = parseYears(q);
   const text = stripYears(q) || q;
@@ -242,6 +254,6 @@ export async function rank(q, k = 3) {
   return { mode: r.mode, ids: r.items.filter((i) => i.s).slice(0, k).map((i) => i.s.id), quick: r.quick?.id ?? null,
            quickMeasure: r.quick?.latest?.measure_id ?? null, gap: r.gap, top: r.topScore };
 }
-globalThis.wv1Search = { rank, search, engineState, warmUp, setKwWeight: (w) => { KW_WEIGHT = w; },
+globalThis.wv1Search = { rank, search, engineState, warmUp, startSmart, setKwWeight: (w) => { KW_WEIGHT = w; },
                          setQuick: (min, gap) => { QA_MIN = min; QA_GAP = gap; },
                          setStrict: (on, min = MIN_SCORE, rel = REL_FLOOR) => { STRICT = !!on; MIN_SCORE = min; REL_FLOOR = rel; } };

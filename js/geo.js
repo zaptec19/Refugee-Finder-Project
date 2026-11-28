@@ -27,6 +27,10 @@ export function worldFeatures(res = 110) {
       fc.features.forEach((f, i) => {
         const iso = (f.id && byM49.get(String(f.id).padStart(3, "0"))) || byName.get((f.properties.name || "").toLowerCase()) || null;
         f.properties.iso3 = iso;
+        // readers see the site's short display name (countries.json), the same as in titles and search;
+        // Natural Earth's own name is kept for reference
+        f.properties.ne_name = f.properties.name;
+        if (iso && cs[iso]?.name) f.properties.name = cs[iso].name;
         if (geoms[i]) geoms[i].properties = { ...(geoms[i].properties || {}), iso3: iso };
         if (iso && !byIso.has(iso)) byIso.set(iso, f);
       });

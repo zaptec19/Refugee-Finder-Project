@@ -8,7 +8,7 @@ import { intent, warmIntent } from "./search-intent.js";
 import { rememberNotice } from "./search-notice.js";
 import { esc, numHTML, fmt } from "./format.js";
 import { icon } from "./icons.js";
-import { search, engineState, onEngineChange } from "./search.js";
+import { search, engineState, onEngineChange, startSmart, warmUp } from "./search.js";
 import { leaveMorph } from "./morph.js";
 import { pairLatest, loadNames } from "./auto-situation.js";
 
@@ -21,6 +21,14 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
   panel.hidden = true;
   panel.setAttribute("role", "listbox");
   panel.setAttribute("aria-label", "Search results");
+  // the search model downloads only once the reader starts to search: the first click into the box or keystroke.
+  // The search data (keyword results) loads straight away.
+  const askSmart = () => startSmart();
+  input.addEventListener("focus", askSmart, { once: true });
+  input.addEventListener("pointerdown", askSmart, { once: true });
+  input.addEventListener("keydown", askSmart, { once: true });
+  if (document.activeElement === input) askSmart();      // the top bar attaches this on the box's first focus
+  warmUp();
   // The top bar has its own backdrop-filter, and a child's backdrop-filter can then only blur the top bar, not the page:
   // the panel was see-through over the page. So the top bar's panel lives in <body> (fixed, placed under the bar).
   const bar = input.closest(".ask") || panelParent;

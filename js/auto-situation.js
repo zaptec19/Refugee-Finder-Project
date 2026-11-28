@@ -273,7 +273,9 @@ async function fillMain(S, measure, N, MEAS) {
   if (notRecorded) lims.unshift({ kind: "missing", auto: true, text: "No record in UNHCR's data", detail: notRecorded });
   else if (s.some((p) => p.value === 0)) lims.push({ kind: "missing", auto: true, text: "Some years show 0", detail: `In UNHCR's data a 0 can mean 0 or not reported; it doesn't distinguish. ${s.filter((p) => p.value === 0).length} of ${s.length} years show 0.` });
   S.limitations = lims;
-  S.years = [s[0].year, s[s.length - 1].year];
+  // from the first year with a figure above 0 (as build_web.py first_last and the key card): an earlier 0 can mean
+  // "not reported"
+  S.years = [(s.find((p) => p.value > 0) || s[0]).year, s[s.length - 1].year];
   S.steps = { ...(S.steps || {}), key_numbers: true, over_time: s.length >= 2 || notRecorded, where_people_are: S.share.length > 0, limitations: true, sources: true };
   S.not_recorded = !!notRecorded;
   return S;
