@@ -1,0 +1,85 @@
+{
+  "id": "tjk-tkm",
+  "what": [
+    {
+      "text": "This page follows refugees from Tajikistan in Turkmenistan, as counted by UNHCR at the end of each year from 1993 to 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2005, the last year in UNHCR's series for this group, it counted 11173 refugees, 20.4% of all Tajik refugees that year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Today refugees from Tajikistan live mostly in Germany, the United States, the United Kingdom and Austria.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of Tajikistan from 1992 to 1998, at war level in some of those years, and again in 2000 and from 2010 to 2011.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data, 1993 to 2005, begin during the first of these periods.",
+      "source_ids": [
+        "unhcr-pop-2026",
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 1993 at 15000 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure was at its highest, 20000, at the end of 1995, and was lower when the series ends in 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they lived in Turkmenistan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for Turkmenistan only, reported to UNHCR, and the series ends in 2005.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    11173,
+    15000,
+    20000
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "5e3f16e45da637cf",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

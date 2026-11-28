@@ -1,0 +1,84 @@
+{
+  "id": "vnm-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced by disasters inside Vietnam, as counted by IDMC.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 15267 people still displaced by disasters; IDMC reports this year-end figure only for some years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "Refugees from Vietnam, a separate group, live mostly in France, the United Kingdom and Germany.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "Floods, mass movements and storms are among the disasters recorded for Vietnam in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "The fact pack records no conflict-related displacement inside the country.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's year-end figure rose from 7206 in 2019 to 161812 in 2020, the main year of displacement in the data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "It was lower in the following years.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    },
+    {
+      "text": "IDMC also counts new displacements from disasters, which count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-disaster-2026",
+    "unhcr-pop-2026"
+  ],
+  "numbers": [
+    7206,
+    15267,
+    161812
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "4af95f72309644c8",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

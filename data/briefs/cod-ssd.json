@@ -1,0 +1,83 @@
+{
+  "id": "cod-ssd",
+  "what": [
+    {
+      "text": "This page follows refugees from the Democratic Republic of the Congo living in South Sudan, as counted by UNHCR at the end of each year.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, UNHCR counted 14647 of these refugees in South Sudan, 1.2% of all refugees from the Democratic Republic of the Congo.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "Uganda hosts the most refugees from the country, followed by Burundi, Zambia and Rwanda.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "UCDP records armed conflict over the government of DR Congo in periods from 2006, and in every year from 2016 to 2025, with Kamuina Nsapu, RNL, CNPSC and M23 among the opponents.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    },
+    {
+      "text": "It also records armed conflict with the Islamic State group from 2017 to 2025, and over Katanga territory with Kata Katanga in 2013 to 2014 and 2020.",
+      "source_ids": [
+        "ucdp-acd-26.1"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "UNHCR's series for this group starts in 2011 at its highest point, 22186 refugees.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "The figure fell to a low in 2022 and then rose again; the main years of displacement in the data are 2011 to 2021 and 2023 to 2025.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say which routes people took or where they live in South Sudan.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    },
+    {
+      "text": "These are year-end totals for South Sudan only, reported to UNHCR.",
+      "source_ids": [
+        "unhcr-pop-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "unhcr-pop-2026",
+    "ucdp-acd-26.1"
+  ],
+  "numbers": [
+    14647,
+    22186
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "c1225c9989425460",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}

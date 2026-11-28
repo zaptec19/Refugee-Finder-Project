@@ -1,0 +1,77 @@
+{
+  "id": "xkx-idp",
+  "what": [
+    {
+      "text": "This page follows people displaced inside the place IDMC lists under the code XKX, as counted by IDMC.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "At the end of 2025, IDMC counted 15533 people living in internal displacement there because of conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "why": [
+    {
+      "text": "The fact pack records no armed conflict and no dated events for XKX; IDMC counts displacement from conflict and violence.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "Mass movements are the disasters recorded for XKX in IDMC's data.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "when": [
+    {
+      "text": "IDMC's figures stayed between 15533 and 19700 from 2009 to 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "The main years of displacement in the data run through the whole period, 2009 to 2025.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    }
+  ],
+  "how": [
+    {
+      "text": "The sources don't say where displaced people are living.",
+      "source_ids": [
+        "idmc-conflict-2026"
+      ]
+    },
+    {
+      "text": "IDMC's new displacements count movements, not people, so someone forced to move twice is counted twice.",
+      "source_ids": [
+        "idmc-disaster-2026"
+      ]
+    }
+  ],
+  "sources": [
+    "idmc-conflict-2026",
+    "idmc-disaster-2026"
+  ],
+  "numbers": [
+    15533,
+    19700
+  ],
+  "prompt_version": 3,
+  "writer": "AI",
+  "generated_on": "2026-11-28",
+  "factpack_hash": "0393b21704bf0d3c",
+  "status": "live",
+  "check": {
+    "attempts": 1,
+    "bad_numbers": [],
+    "bad_sources": []
+  }
+}
