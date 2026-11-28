@@ -161,6 +161,24 @@ function pairSeries(doc, h) {
   return out.sort((a, b) => a.year - b.year);
 }
 
+/** The search's quick answer for a pair: the latest figure of the people type asked (else the type the pair page
+ *  leads with: the largest latest value), straight from the origin's rows file. null when UNHCR has no row for the pair. */
+export async function pairLatest(o, h, measure = null) {
+  o = o.toUpperCase(); h = h.toUpperCase();
+  const types = measure && CROSS.includes(measure) ? [measure] : CROSS;
+  let best = null;
+  for (const m of types) {
+    const s = pairSeries(await rowsDoc(o, m), h);
+    if (!s.length) continue;
+    const lp = s[s.length - 1];
+    const key = [lp.value, Math.max(...s.map((x) => x.value))];
+    if (!best || key[0] > best.key[0] || (key[0] === best.key[0] && key[1] > best.key[1])) best = { key, m, lp };
+  }
+  if (!best) return null;
+  const N = await loadNames();
+  return { measure_id: best.m, value: best.lp.value, year: best.lp.year, note: best.lp.note || null, title: groupTitle(N, o, best.m, h) };
+}
+
 /** All hosts together, per year (what build_web.py's sum_by_origin gives). */
 function totals(doc) {
   const t = new Map();

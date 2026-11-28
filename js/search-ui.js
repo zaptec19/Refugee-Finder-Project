@@ -10,6 +10,7 @@ import { esc, numHTML, fmt } from "./format.js";
 import { icon } from "./icons.js";
 import { search, engineState, onEngineChange } from "./search.js";
 import { leaveMorph } from "./morph.js";
+import { pairLatest, loadNames } from "./auto-situation.js";
 
 const GROUP_LABEL = { situation: "Situation", country: "Country", group: "Group" };
 
@@ -70,7 +71,14 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     const res = await search(pre.corrected);               // a spelling fix: list results for the fixed question
     const top = res.quick || res.items.find((i) => i.s)?.s || null;
     const it = top ? await intent(q, { exact, top }) : pre;
-    return { q, it, res };
+    // a question naming two countries goes to their pair page: its figure, straight from UNHCR's rows, is the quick answer
+    const pm = /^situation\.html\?id=([a-z]{3})-([a-z]{3})(?:&m=(\w+))?$/.exec(it?.target?.href || "");
+    let pair = null;
+    if (pm && pm[2] !== "idp" && pm[2] !== "all") {
+      const [fig, N] = await Promise.all([pairLatest(pm[1], pm[2], pm[3] || null).catch(() => null), loadNames()]);
+      pair = { o: pm[1].toUpperCase(), h: pm[2].toUpperCase(), fig, originName: N[pm[1].toUpperCase()]?.n || pm[1].toUpperCase() };
+    }
+    return { q, it, res, pair };
   }
   async function run({ exact = false } = {}) {
     const q = input.value.trim();
@@ -80,9 +88,9 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     const c = await compute(q);
     if (input.value.trim() !== q) return;          // a newer query is on its way
     current = c;
-    render(q, c.res, c.it);
+    render(q, c.res, c.it, c.pair);
   }
-  function render(q, res, it) {
+  function render(q, res, it, pair = null) {
     const groups = { situation: [], country: [], group: [] };
     const goal = it?.target;
     const goalHref = goal?.href;
@@ -94,23 +102,41 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     const quickHref = top ? `situation.html?id=${top.id}` : "";
     const quickIsGoal = !!top && quickHref === goalHref;
     // the place the question names comes first, so Enter and the first option are the same
-    const goalHTML = goal && !quickIsGoal ? `
+    const goalHTML = goal && !quickIsGoal && !pair?.fig ? `
       <a class="results__item results__intent" role="option" data-opt data-intent href="${esc(goalHref)}">
         <span>${esc(goal.title)}</span><span class="small muted">${/country\.html/.test(goalHref) ? "Country" : "Situation"}</span></a>` : "";
     const changed = it?.changed && (goal || it.corrected !== it.q) ? `
       <p class="results__changed small" data-changed>Showing results for <strong>${esc(goal ? goal.title : it.corrected)}</strong>
         <span aria-hidden="true">·</span> <a href="#" data-exact>Search instead for <q>${esc(q)}</q></a></p>` : "";
-    const quick = top && top.latest ? `
+    const pairQuick = pair?.fig && goal && !quickIsGoal ? (() => {
+      const pm = measures[pair.fig.measure_id];
+      return `
+      <a class="results__quick" href="${esc(goalHref)}" role="option" data-opt data-intent>
+        <span class="eyebrow">Quick answer</span>
+        <span class="results__qa"><span>${esc(pair.fig.title)}, ${pair.fig.year}:</span> <strong class="num">${numHTML(pair.fig.value)}</strong></span>
+        <span class="small muted">${esc(pm?.label || "")}${pm?.kind === "stock" ? " at year end" : ""}${pair.fig.value === 0 ? ` · ${esc(pair.fig.note || "0 or not reported (UNHCR doesn't distinguish)")}` : ""} · Source: UNHCR</span>
+      </a>`; })() : "";
+    const quick = pairQuick || (top && top.latest ? `
       <a class="results__quick" href="${esc(quickHref)}" role="option" data-opt${quickIsGoal ? " data-intent" : ""}>
         <span class="eyebrow">Quick answer</span>
         <span class="results__qa"><span>${esc(top.title)}, ${top.latest.year}:</span> <strong class="num">${numHTML(top.latest.value)}</strong></span>
         <span class="small muted">${m?.kind === "flow"
           ? `New displacements${/disaster/.test(top.latest.measure_id) ? " from disasters" : /conflict/.test(top.latest.measure_id) ? " from conflict" : ""} in ${top.latest.year}, a yearly count (movements, not people)`
           : `${esc(m?.label || "")}${m?.kind === "stock" ? " at year end" : ""}`} · Source: ${esc(sourceShort(top.latest.measure_id))}</span>
-      </a>` : "";
-    const groupHTML = ["situation", "country", "group"].filter((g) => groups[g].length).map((g) => `
-      <div class="results__group"><p class="eyebrow">${GROUP_LABEL[g]}</p>
-        ${groups[g].slice(0, g === "situation" ? 5 : 3).map((r) => `<a class="results__item" role="option" data-opt href="${esc(r.href)}">
+      </a>` : "");
+    // a pair question: the other situations for the origin country it names, under their own heading
+    const otherFor = pair ? (r) => {
+      const ids = String(r.s?.id || /id=([a-z0-9-]+)/.exec(r.href || "")?.[1] || "").toUpperCase().split("-");
+      return r.s?.origin_iso3 === pair.o || ids.includes(pair.o);
+    } : null;
+    if (otherFor) {
+      groups.other = groups.situation.filter(otherFor);
+      groups.situation = groups.situation.filter((r) => !otherFor(r));
+    }
+    const label = (g) => (g === "other" ? `Other situations for ${pair.originName}` : GROUP_LABEL[g]);
+    const groupHTML = ["other", "situation", "country", "group"].filter((g) => groups[g]?.length).map((g) => `
+      <div class="results__group"><p class="eyebrow">${esc(label(g))}</p>
+        ${groups[g].slice(0, g === "situation" || g === "other" ? 5 : 3).map((r) => `<a class="results__item" role="option" data-opt href="${esc(r.href)}">
           <span>${esc(r.title)}</span><span class="small muted tabular">${r.years ? `${r.years[0]} to ${r.years[1]}` : ""}</span></a>`).join("")}
       </div>`).join("");
     const note = engineState() === "loading" ? `<p class="results__note small muted">${icon("info", { size: 14 })} Smart search loading; showing name matches for now.</p>` : "";
@@ -172,7 +198,7 @@ export async function attachSearch(input, { panelParent = input.closest("form") 
     if (input.value.trim() !== q) return;
     current = c;
     const goal = c.it.target;
-    if (!goal) { render(q, c.res, c.it); return; }           // nothing it names: stay, with the panel open
+    if (!goal) { render(q, c.res, c.it, c.pair); return; }           // nothing it names: stay, with the panel open
     if (c.it.changed) rememberNotice({ typed: q, shown: goal.title, href: goal.href });
     const a = panel.querySelector("[data-intent]");
     if (a && !panel.hidden) morphName(a);
