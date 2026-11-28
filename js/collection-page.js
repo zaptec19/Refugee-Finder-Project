@@ -21,7 +21,7 @@ function render() {
       <div><h1>My collection</h1><p class="muted">${sub}</p></div>
       <div class="coll-actions">
         <button class="btn" type="button" id="add-note">+ Add a note</button>
-        <button class="btn btn--primary" type="button" id="export" ${list.length ? "" : "disabled"}>Export ${icon("download", { size: 16 })}</button>
+        <button class="btn btn--primary" type="button" id="export" ${list.length ? "" : 'disabled title="Pin something first: there is nothing to export yet"'}>Export ${icon("download", { size: 16 })}</button>
       </div>
     </div>
     ${list.length ? tableHTML(list) : emptyHTML()}
@@ -42,7 +42,7 @@ function render() {
 
 function emptyHTML() {
   return `<div class="empty-state" style="margin-top:24px"><h3>Nothing pinned yet</h3>
-    <p class="muted">Use the ${icon("pin", { size: 14 })} button next to any number, chart or reading to collect it here with its source and citation.</p>
+    <p class="muted">Use the <span class="inline-pin" aria-label="pin">${icon("pin", { size: 14 })}</span> button next to any number, chart or reading to collect it here with its source and citation.</p>
     <p><a href="situation.html?id=lka-ind">Open an example: Sri Lankan refugees in India &rsaquo;</a></p></div>`;
 }
 

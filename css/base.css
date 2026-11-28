@@ -1805,3 +1805,11 @@ body.page-home .topbar__inner { grid-template-columns: auto minmax(0, 1fr) auto;
 @media (max-width: 599px) {
   body.page-home .topbar__inner, body.page-home .topbar__inner { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand menu"; }
 }
+
+/* collection: the pin icon sits inside the sentence (a small outlined chip like the real button), and Export looks
+   unavailable while there is nothing to export */
+.inline-pin { display: inline-grid; place-items: center; width: 20px; height: 20px; margin: 0 2px; vertical-align: -4px;
+  border: 1px solid var(--line-strong); border-radius: 5px; color: var(--ink); }
+.inline-pin .icon, .inline-pin svg { display: block; }
+.btn:disabled, .btn[disabled] { opacity: 0.45; cursor: not-allowed; box-shadow: none; filter: saturate(0.4); }
+.btn:disabled:hover { transform: none; }
